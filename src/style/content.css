@@ -1,0 +1,411 @@
+body .page-container .content {
+  flex: 1;
+  width: 60vw;
+  height: calc(100vh - 60px - 20px);
+  overflow-y: auto;
+}
+
+body .page-container .content.is-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body .page-container .content.is-loading svg {
+  animation: 1s rotateSvg linear infinite;
+}
+
+body .page-container .content.is-loading svg circle {
+  fill: none;
+  stroke: #FFFFFF;
+  stroke-width: 4px;
+  stroke-linecap: round;
+  stroke-dasharray: 10, 10;
+  animation: 1.5s animateStroke linear infinite;
+}
+
+body .page-container .content.is-loading .try-container {
+  padding: 15px;
+  background: rgb(45, 45, 45, 0.3);
+  border: 1px solid rgb(255, 255, 255, 0.1);
+  border-radius: 10px;
+  animation: 0.4s appearTryContainer;
+}
+
+@keyframes appearTryContainer {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+}
+
+body .page-container .content.is-loading .try-container textarea {
+  width: 30vw;
+  height: 40vh;
+  border-radius: 10px;
+  background: transparent;
+  border: 1px solid rgb(255, 255, 255, 0.1);
+  color: #FFFFFF;
+  font-family: 'Poppins';
+  font-size: 12px;
+  padding: 10px;
+}
+
+body .page-container .content.is-loading .try-container .button {
+  margin-inline: auto;
+  background: #050505;
+  color: #FFFFFF;
+  text-align: center;
+  width: fit-content;
+  padding: 10px;
+  padding-inline: 34px;
+  border-radius: 10px;
+}
+
+body .page-container .content:not(.is-loading) {
+  box-sizing: border-box;
+  padding-inline: 20px;
+  color: #FFFFFF;
+}
+
+body .page-container .content:not(.is-loading) a {
+  color: #007fff;
+}
+
+body .page-container .content:not(.is-loading) .ref {
+  display: inline-block;
+  color: #f08d49;
+}
+
+body .page-container .content:not(.is-loading) .separator {
+  margin-top: 30px;
+  width: 100%;
+  height: 1px;
+  background: #FFFFFF;
+  opacity: 0.2;
+}
+
+body .page-container .content:not(.is-loading) .h1 {
+  font-size: 40px;
+  margin-top: 10px;
+  font-weight: 700;
+}
+
+body .page-container .content:not(.is-loading) .h2 {
+  font-size: 30px;
+  margin-top: 10px;
+  margin-top: 36px;
+  font-weight: 600;
+}
+
+body .page-container .content:not(.is-loading) .h3 {
+  font-size: 25px;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+body .page-container .content:not(.is-loading) .text,
+body .page-container .content:not(.is-loading) .pg-title {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 17px;
+  margin-block: 5px;
+}
+
+body .page-container .content:not(.is-loading) .pg-title {
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+body .page-container .content:not(.is-loading) .code {
+  display: inline-block;
+  background: rgb(45, 45, 45, 0.3);
+  border: 1px solid rgb(255, 255, 255, 0.1);
+  padding-inline: 7px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  user-select: all;
+}
+
+body .page-container .content:not(.is-loading) .sb {
+  display: inline-block;
+  font-weight: 600;
+}
+
+body .page-container .content:not(.is-loading) .docs-ref {
+  display: inline-block;
+}
+
+body .page-container .content:not(.is-loading) ul.with-numbers {
+  list-style-type: decimal;
+}
+
+body .page-container .content:not(.is-loading) ul li:has(.syntax-highlight) {
+  margin-block: 10px;
+}
+
+body .page-container .content:not(.is-loading) .syntax-highlight {
+  padding: 10px;
+  background: rgb(45, 45, 45, 0.3);
+  border: 1px solid rgb(255, 255, 255, 0.1);
+  margin-block: 5px;
+  border-radius: 10px;
+  user-select: text;
+  position: relative;
+}
+
+body .page-container .content:not(.is-loading) .shi {
+  display: inline-block;
+}
+
+body .page-container .content:not(.is-loading) .syntax-highlight .spacer,
+body .page-container .content:not(.is-loading) .shi .spacer {
+  display: inline-block;
+  width: calc(10px * var(--id));
+}
+
+body .page-container .content:not(.is-loading) .category-title {
+  background: rgb(45, 45, 45, 0.3);
+  border: 1px solid rgb(255, 255, 255, 0.1);
+  padding: 9px;
+  border-radius: 10px;
+}
+
+body .page-container .content:not(.is-loading) .category-title .spacer {
+  display: inline-block;
+  width: calc(10px * var(--id));
+}
+
+body .page-container .content:not(.is-loading) .subtext {
+  margin-left: 20px;
+}
+
+body .page-container .content:not(.is-loading) .text + .category-title,
+body .page-container .content:not(.is-loading) .subtext + .category-title {
+  margin-top: 20px;
+}
+
+body .page-container .content:not(.is-loading) table {
+  border-spacing: 0px;
+  background: rgb(45, 45, 45, 0.3);
+  border: 1px solid rgb(255, 255, 255, 0.1);
+  padding: 7px;
+  border-radius: 20px;
+  margin-top: 20px;
+}
+
+body .page-container .content:not(.is-loading) table tr.as-definitions th {
+  background: #202020;
+}
+
+body .page-container .content:not(.is-loading) table tr.as-definitions th:first-child {
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+body .page-container .content:not(.is-loading) table tr.as-definitions th:last-child {
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+body .page-container .content:not(.is-loading) table tr th,
+body .page-container .content:not(.is-loading) table tr td {
+  padding: 10px;
+}
+
+body .page-container .content:not(.is-loading) table tr:not(:last-child) td {
+  border-bottom: 2px solid #ffffff0d;
+}
+
+body .page-container .content:not(.is-loading) .alert {
+  background: rgb(45, 45, 45, 0.3);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-block: 20px;
+}
+
+body .page-container .content:not(.is-loading) .alert .alert-header {
+  display: flex;
+  align-items: center;
+  padding-left: 16px;
+  padding-block: 7px;
+  color: #FFFFFF;
+  gap: 10px;
+}
+
+body .page-container .content:not(.is-loading) .alert .alert-header .alert-title {
+  font-weight: 500;
+}
+
+body .page-container .content:not(.is-loading) .alert .alert-content {
+  padding: 15px;
+}
+
+body .page-container .content:not(.is-loading) .alert[data-type="important"] {
+  border-left: 3px solid #00b0ff;
+}
+
+body .page-container .content:not(.is-loading) .alert[data-type="important"] .alert-header {
+  background: #00b0ff17;
+}
+
+body .page-container .content:not(.is-loading) .alert[data-type="important"] .alert-header .alert-title {
+  color: #00b0ff;
+}
+
+body .page-container .content:not(.is-loading) .alert[data-type="note"] {
+  border-left: 3px solid #00ff4b;
+}
+
+body .page-container .content:not(.is-loading) .alert[data-type="note"] .alert-header {
+  background: #00ff4b21;
+}
+
+body .page-container .content:not(.is-loading) .alert[data-type="note"] .alert-header .alert-title {
+  color: #00ff4b;
+}
+
+body .page-container .content:not(.is-loading) .alert[data-type="warning"] {
+  border-left: 3px solid #ff9100;
+}
+
+body .page-container .content:not(.is-loading) .alert[data-type="warning"] .alert-header {
+  background: #ff91001a;
+}
+
+body .page-container .content:not(.is-loading) .alert[data-type="warning"] .alert-header .alert-title {
+  color: #ff9100;
+}
+
+body .page-container .content:not(.is-loading) .github-ref {
+  width: 100%;
+  background: #202020;
+  border: 1px solid #ffffff26;
+  height: 190px;
+  border-radius: 10px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  transition: 0.4s gap, 0.4s background;
+}
+
+body .page-container .content:not(.is-loading) .github-ref + .github-ref {
+  margin-top: 10px;
+}
+
+body .page-container .content:not(.is-loading) a.github-ref {
+  text-decoration: none;
+  color: #FFFFFF;
+}
+
+body .page-container .content:not(.is-loading) .github-ref:hover {
+  gap: 20px;
+}
+
+body .page-container .content:not(.is-loading) .github-ref:active {
+  gap: 70px;
+}
+
+body .page-container .content:not(.is-loading) .github-ref.is-loading {
+  justify-content: center;
+}
+
+body .page-container .content:not(.is-loading) .github-ref.is-loading svg {
+  animation: 1s rotateSvg linear infinite;
+}
+
+body .page-container .content:not(.is-loading) .github-ref.is-loading svg circle {
+  fill: none;
+  stroke: #FFFFFF;
+  stroke-width: 4px;
+  stroke-linecap: round;
+  stroke-dasharray: 10, 10;
+  animation: 1.5s animateStroke linear infinite;
+}
+
+body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) {
+  justify-content: space-around;
+  overflow: hidden;
+  background: transparent;
+}
+
+body .page-container .content:not(.is-loading) .github-ref:not(.is-loading)::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--url);
+  background-position: center;
+  opacity: 0.1;
+  filter: blur(10px);
+}
+
+body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info {
+  z-index: 1;
+  width: 440px;
+}
+
+body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info .repo-title {
+  font-size: 29px;
+  font-weight: 500;
+}
+
+body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info .repo-description {
+  font-size: 19px;
+}
+
+body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info .repo-owner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  margin-top: 10px;
+  opacity: 0.7;
+}
+
+body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info .repo-owner img {
+  width: 18px;
+  border-radius: 50%;
+}
+
+body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info .repo-language {
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .illustration {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 10px;
+}
+
+body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .illustration .container {
+  background: #0c0c0c94;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  padding: 10px;
+  box-sizing: border-box;
+  z-index: 2;
+  border-radius: 10px;
+  min-width: 136px;
+  border: 1px solid #ffffff42;
+  transition: 0.4s background;
+}
+
+body .page-container .content:not(.is-loading) .github-ref:not(.is-loading):hover .illustration .container {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .illustration .container .icon {
+  width: 21px;
+  filter: invert(0.8);
+  padding-right: 10px;
+}
+
+body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .illustration .container .title {
+  font-size: 19px;
+}

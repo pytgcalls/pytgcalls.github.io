@@ -1,0 +1,72 @@
+@import url("content.css");
+@import url("header.css");
+@import url("leftsidebar.css");
+@import url("sections.css");
+@import url("splash.css");
+
+body {
+  background: #050505;
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+  height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
+
+body .shadow-element {
+  height: 0px;
+  width: 0px;
+  box-shadow: 0px 0px 400px 30px var(--color);
+  position: fixed;
+  top: var(--x);
+  left: var(--y);
+  z-index: -1;
+  transform: scale(0);
+  opacity: 0;
+  animation: 3s moveShadow forwards linear;
+}
+
+@keyframes moveShadow {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+body .page-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+::-webkit-scrollbar {
+	width: 5px;
+}
+
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	background: transparent;
+	transition: 0.4s background;
+}
+
+:root:hover ::-webkit-scrollbar-thumb {
+	background: #666666a1;
+	border-radius: 10px;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border: none;
+}
