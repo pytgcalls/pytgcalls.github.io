@@ -1,0 +1,257 @@
+body .page-container .left-container .search-bar {
+  margin-top: 10px;
+  width: 23vw;
+  background: rgb(45, 45, 45, 0.3);
+  border: 1px solid rgb(255, 255, 255, 0.1);
+  margin-left: 10px;
+  border-radius: 10px;
+  height: 43px;
+  overflow: hidden;
+  box-sizing: border-box;
+  transition: 0.3s height;
+  animation: 0.3s appearLeftSidebar linear;
+}
+
+body .page-container .left-container .search-bar.expanded {
+  height: calc(100vh - 60px - 20px - 43px - 10px);
+}
+
+body .page-container .left-container .search-bar .search-input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body .page-container .left-container .search-bar .search-input img {
+  filter: invert(1);
+  padding-inline: 15px;
+}
+
+body .page-container .left-container .search-bar .search-input input {
+  flex: 1;
+  font-size: 18px;
+  padding-block: 11px;
+  padding-left: 10px;
+  color: #FFFFFF;
+  background: transparent;
+  border: none;
+}
+
+body .page-container .left-container .search-bar .results.is-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body .page-container .left-container .search-bar .results.is-loading svg {
+  --scale: 0.5;
+  animation: 1s rotateSvg linear infinite;
+}
+
+body .page-container .left-container .search-bar .results.is-loading svg circle {
+  fill: none;
+  stroke: #FFFFFF;
+  stroke-width: 4px;
+  stroke-linecap: round;
+  stroke-dasharray: 10, 10;
+  animation: 1.5s animateStroke linear infinite;
+}
+
+body .page-container .left-container .search-bar .results.is-loading span {
+  color: white;
+}
+
+body .page-container .left-container .left-sidebar {
+  margin-top: 10px;
+  width: 23vw;
+  background: rgb(45, 45, 45, 0.3);
+  border: 1px solid rgb(255, 255, 255, 0.1);
+  height: calc(100vh - 60px - 20px - 43px - 10px);
+  margin-left: 10px;
+  border-radius: 10px;
+  position: relative;
+  transition: 0.3s height;
+  animation: 0.3s appearLeftSidebar linear;
+}
+
+body .page-container .left-container .left-sidebar:not(.expanded) {
+  height: 43px;
+  overflow: hidden !important;
+}
+
+@keyframes appearLeftSidebar {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+}
+
+body .page-container .left-container .left-sidebar .collapsed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.7);
+  transform: translateY(-100%);
+  opacity: 0;
+  cursor: pointer;
+  transition: 0.3s transform, 0.3s opacity;
+}
+
+body .page-container .left-container .left-sidebar:not(.expanded) .collapsed {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+body .page-container .left-container .left-sidebar.is-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body .page-container .left-container .left-sidebar.is-loading svg {
+  animation: 2s rotateSvg linear infinite;
+}
+
+@keyframes rotateSvg {
+  from {
+    transform: rotate(0deg) scale(var(--scale, 1.0));
+  }
+  to {
+    transform: rotate(360deg) scale(var(--scale, 1.0));
+  }
+}
+
+body .page-container .left-container .left-sidebar.is-loading svg circle {
+  fill: none;
+  stroke: #FFFFFF;
+  stroke-width: 4px;
+  stroke-linecap: round;
+  stroke-dasharray: 10, 10;
+  animation: 2s animateStroke linear infinite;
+}
+
+@keyframes animateStroke {
+  from {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -35;
+  }
+  to {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -124;
+  }
+}
+
+body .page-container .left-container .left-sidebar:not(.is-loading) {
+  padding: 15px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+body .page-container .left-container .left-sidebar:not(.is-loading) .microtag {
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 500;
+}
+
+body .page-container .left-container .left-sidebar:not(.is-loading) .microtag:not(:first-child) {
+  margin-top: 25px;
+}
+
+body .page-container .left-container .left-sidebar:not(.is-loading) .elements {
+  max-height: 37px;
+  overflow: hidden;
+  transition: 0.3s max-height;
+}
+
+body .page-container .left-container .left-sidebar:not(.is-loading) .elements.expanded {
+  max-height: calc(37px * var(--items));
+}
+
+body .page-container .left-container .left-sidebar:not(.is-loading) .elements .element:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+body .page-container .left-container .left-sidebar:not(.is-loading) .elements .element:first-child img {
+  filter: invert(1);
+  transform: translateX(-20px);
+  transition: 0.4s transform;
+}
+
+body .page-container .left-container .left-sidebar:not(.is-loading) .elements.expanded .element:first-child img {
+  transform: rotate(180deg) translateX(20px);
+}
+
+body .page-container .left-container .left-sidebar:not(.is-loading) .elements .element:not(:first-child) {
+  margin-left: 30px;
+}
+
+body .page-container .left-container .left-sidebar:not(.is-loading) .element {
+  color: #FFFFFF;
+  padding: 6px;
+  padding-left: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.5s background, 0.5s transform;
+}
+
+body .page-container .left-container .left-sidebar:not(.is-loading) .element.active {
+  background: rgb(255, 255, 255, 0.15);
+  pointer-events: none;
+}
+
+body .page-container .left-container .left-sidebar:not(.is-loading) .elements:not(.expanded):has(.active:not(:first-child)) .element:first-child {
+  background: rgb(255, 255, 255, 0.15);
+}
+
+body .page-container .left-container .left-sidebar:not(.is-loading) .element:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+body .page-container .left-container .left-sidebar:not(.is-loading) .element:active {
+  background: rgba(255, 255, 255, 0.08);
+  transform: scale(0.95);
+}
+
+body .page-container .left-container .left-sidebar.faster {
+  --animation-timing: 0.01s;
+}
+
+body .page-container .left-container .left-sidebar:not(.disappear) .element,
+body .page-container .left-container .left-sidebar:not(.disappear) .microtag,
+body .page-container .left-container .left-sidebar:not(.disappear) .elements {
+  transform: translateX(-100%);
+  opacity: 1;
+  animation: 0.3s appearElement forwards calc(var(--id) * var(--animation-timing, 0.02s));
+}
+
+@keyframes appearElement {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+body .page-container .left-container .left-sidebar.disappear .element,
+body .page-container .left-container .left-sidebar.disappear .microtag,
+body .page-container .left-container .left-sidebar.disappear .elements {
+  transform: translateX(0);
+  animation: 0.3s disappearElement forwards calc(var(--id) * var(--animation-timing, 0.02s));
+}
+
+@keyframes disappearElement {
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
