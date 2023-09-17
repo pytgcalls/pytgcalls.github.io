@@ -2,9 +2,11 @@ class HomePage {
   #COLORS = ['red', 'green', 'blue', 'yellow'];
 
   #leftSidebar;
+  #leftContainer;
   #content;
   #pageSections;
   #headerDescription;
+  #headerMenu;
   #precachedResponse;
   #selectedElement;
   #searchBar;
@@ -17,6 +19,16 @@ class HomePage {
   init() {
     document.body.innerHTML = '';
 
+    const headerMenu = document.createElement('div');
+    headerMenu.classList.add('menu');
+    headerMenu.addEventListener('click', () => {
+      const state = leftContainer.classList.toggle('show');
+      headerMenu.classList.toggle('show', state);
+    });
+    headerMenu.appendChild(document.createElement('div'));
+    headerMenu.appendChild(document.createElement('div'));
+    headerMenu.appendChild(document.createElement('div'));
+    this.#headerMenu = headerMenu;
     const headerIcon = document.createElement('img');
     headerIcon.src = 'src/assets/splash/telegram-logo.svg';
     const headerTitle = document.createElement('div');
@@ -27,6 +39,7 @@ class HomePage {
     headerDescription.classList.add('description');
     const header = document.createElement('div');
     header.classList.add('header');
+    header.appendChild(headerMenu);
     header.appendChild(headerTitle);
     header.appendChild(headerDescription);
 
@@ -40,6 +53,7 @@ class HomePage {
     leftContainer.classList.add('left-container');
     leftContainer.appendChild(searchBar);
     leftContainer.appendChild(leftSidebar);
+    this.#leftContainer = leftContainer;
 
     const content = document.createElement('div');
     content.classList.add('content');
@@ -185,12 +199,30 @@ class HomePage {
     this.#searchBar = searchBar;
 
     searchInput.addEventListener('input', () => {
-      const value = searchText.value.trim();
+      const useInputValueAsRef = window.innerWidth < 1330;
 
-      searchBar.classList.toggle('expanded', !!value.length);
-      this.#leftSidebar.classList.toggle('expanded', !value.length);
+      if (useInputValueAsRef) {
+        searchBar.classList.toggle('expanded', !!searchInput.value.length);
+        this.#leftSidebar.classList.toggle('expanded', !searchInput.value.length);
+      }
 
       this.#handleSearchValue(searchText, searchResults);
+    });
+
+    searchInput.addEventListener('focusin', () => {
+      const useInputValueAsRef = window.innerWidth < 1330;
+      if (!useInputValueAsRef) {
+        searchBar.classList.add('expanded');
+        this.#leftSidebar.classList.remove('expanded');
+      }
+    });
+
+    searchInput.addEventListener('focusout', () => {
+      const useInputValueAsRef = window.innerWidth < 1330;
+      if (!useInputValueAsRef) {
+        searchBar.classList.remove('expanded');
+        this.#leftSidebar.classList.add('expanded');
+      }
     });
 
     return searchBar;
@@ -513,6 +545,9 @@ class HomePage {
   #loadContent(fileName) {
     const content = this.#createCustomContent();
     const pageSections = this.#createCustomPageSections();
+
+    this.#leftContainer.classList.remove('show');
+    this.#headerMenu.classList.remove('show');
 
     const XML = new XMLHttpRequest();
     XML.open('GET', 'https://raw.githubusercontent.com/pytgcalls/docsdata/master/' + fileName, true);

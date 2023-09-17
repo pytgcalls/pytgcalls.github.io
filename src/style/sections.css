@@ -2,6 +2,12 @@ body .page-container .sections {
   width: 20vw;
 }
 
+@media screen and (max-width: 1330px) {
+  body .page-container .sections {
+    display: none;
+  }
+}
+
 body .page-container .sections.is-loading {
   display: flex;
   align-items: center;
