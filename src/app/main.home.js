@@ -574,13 +574,10 @@ class HomePage {
     } catch(e) {
       content.classList.add('is-loading');
       content.textContent = 'Rendering failed';
-
-      const pageSectionsIcon = document.createElement('img');
-      pageSectionsIcon.classList.add('failed');
-      pageSectionsIcon.src = '/src/icons/heartCrack.svg';
       pageSections.classList.add('is-loading');
       pageSections.textContent = '';
-      pageSections.appendChild(pageSectionsIcon);
+
+      throw e;
     }
   }
 
