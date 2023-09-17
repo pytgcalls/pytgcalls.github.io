@@ -8,6 +8,7 @@ class HomePage {
   #precachedResponse;
   #selectedElement;
   #searchBar;
+  #currentlyTabId;
 
   #hasIndexed = false;
   #isCurrentlyIndexing = false;
@@ -102,6 +103,9 @@ class HomePage {
             selectedTabElement = tab;
             tabsContainer.style.setProperty('--id', id.toString());
             tab.classList.add('active');
+            
+            this.#leftSidebar.classList.add('expanded');
+            this.#searchBar.classList.remove('expanded');
           });
           tab.textContent = file.getAttribute('id');
           tabsContainer.append(tab);
@@ -144,6 +148,7 @@ class HomePage {
     content.appendChild(utils.createLoadingItem());
 
     if (typeof this.#precachedResponse != 'undefined') {
+      this.#currentlyTabId = id;
       this.#handleResponseWithContent(this.#precachedResponse, content, id);
     } else {
       content.addEventListener('animationend', () => {
@@ -189,6 +194,145 @@ class HomePage {
     });
 
     return searchBar;
+  }
+
+  #handleSearchValue(input, results) {
+    if (typeof this.#precachedResponse == 'undefined') {
+      return;
+    }
+
+    const domHelper = new DOMParser();
+    const dom = domHelper.parseFromString(this.#precachedResponse, 'application/xml');
+
+    const onSearchReady = (text) => {
+      const resultsFragment = document.createDocumentFragment();
+
+      const filesListElement = dom.querySelector('config > files-list[id="' + this.#currentlyTabId + '"]');
+      if (!filesListElement) {
+        throw new Error("Can't handle files-list element");
+      }
+
+      for(const file in this.#indexes) {
+        if (!file.startsWith(filesListElement.getAttribute('basepath'))) {
+          continue;
+        }
+
+        const fileDataKeys = this.#indexes[file];
+
+        const foundInName = file.toLowerCase().indexOf(text.toLowerCase()) != -1;
+        const foundInKeys = fileDataKeys.toLowerCase().indexOf(text.toLowerCase()) != -1;
+        
+        if (foundInName || foundInKeys) {
+          const fileDataTitle = document.createElement('div');
+          fileDataTitle.classList.add('file-data-title');
+          fileDataTitle.textContent = this.#parseCategoryName(file.replaceAll('/', ' > '));
+          const fileData = document.createElement('div');
+          fileData.classList.add('file-data');
+          fileData.addEventListener('click', () => {
+            this.#loadContent(file);
+          });
+          fileData.appendChild(fileDataTitle);
+
+          if (!foundInName) {
+            const splitting = fileDataKeys.toLowerCase().split(text.toLowerCase());
+            const beforeSplitting = this.#splitSearchResult(splitting[0], true);
+            const afterSplitting = this.#splitSearchResult(splitting[1], false);
+
+            const highlightedWord = document.createElement('span');
+            highlightedWord.classList.add('highlighted');
+            highlightedWord.textContent = text;
+            const fileDataDescription = document.createElement('div');
+            fileDataDescription.classList.add('file-data-description');
+            fileDataDescription.appendChild(document.createTextNode(beforeSplitting));
+            fileDataDescription.appendChild(highlightedWord);
+            fileDataDescription.appendChild(document.createTextNode(afterSplitting));
+            fileData.appendChild(fileDataDescription);
+          }
+          
+          resultsFragment.appendChild(fileData);
+        }
+      }
+
+      results.textContent = '';
+      results.classList.remove('is-loading');
+      results.appendChild(resultsFragment);
+    };
+
+    if (this.#isCurrentlyIndexing) {
+      return;
+    } else if (!this.#hasIndexed) {
+      if (typeof this.#precachedResponse != 'undefined') {
+        this.#isCurrentlyIndexing = true;
+
+        const indexingText = document.createElement('span');
+        indexingText.textContent = 'Indexing... (0/0)';
+
+        results.classList.add('is-loading');
+        results.textContent = '';
+        results.appendChild(utils.createLoadingItem(50));
+        results.appendChild(indexingText);
+
+        const filesListElements = dom.querySelectorAll('config > files-list file');
+
+        indexingText.textContent = 'Indexing... (0/' + filesListElements.length + ')';
+
+        let i = 0;
+        for(const [id, file] of filesListElements.entries()) {
+          let fullPath = file.textContent;
+
+          if (file.parentElement.hasAttribute('basepath')) {
+            fullPath = file.parentElement.getAttribute('basepath') + file.textContent;
+          }
+
+          const XML = new XMLHttpRequest();
+          XML.open('GET', 'https://raw.githubusercontent.com/pytgcalls/docsdata/master/' + fullPath, true);
+          
+          setTimeout(() => {
+            XML.send();
+          }, 5 * id);
+
+          XML.addEventListener('readystatechange', (e) => {
+            if (e.target.readyState == 4) {
+              i++;
+              indexingText.textContent = 'Indexing... (' + i + '/' + filesListElements.length + ')';
+
+              if (e.target.status == 200) {
+                this.#indexes[fullPath] = sourceParser.handleSearchIndexByText(e.target.response);
+              }
+
+              if (i == filesListElements.length) {
+                this.#isCurrentlyIndexing = false;
+                this.#hasIndexed = true;
+                
+                if (input.value.trim().length) {
+                  onSearchReady(input.value.trim());
+                }
+              }
+            }
+          });
+        }
+      }
+    } else if(input.value.trim().length) {
+      onSearchReady(input.value.trim());
+    }
+  }
+
+  #splitSearchResult(text, isZeroSplit = false) {
+    if (isZeroSplit) {
+      let newText = text.split("").reverse().join("");
+
+      if (newText.length > 30) {
+        newText = '...' + newText.slice(0, 30).split("").reverse().join("");
+      }
+
+      return newText;
+    } else {
+      if (text.length > 30) {
+        text = text.slice(0, 30) + '...';
+      }
+
+      return text;
+    }
   }
 
   #handleResponseWithContent(response, content, id) {
@@ -494,131 +638,6 @@ class HomePage {
           this.#iterPageSectionsData(element, currentDom, 1);
         }
       }
-    }
-  }
-
-  #handleSearchValue(input, results) {
-    const onSearchReady = (text) => {
-      const resultsFragment = document.createDocumentFragment();
-
-      for(const file in this.#indexes) {
-        const fileDataKeys = this.#indexes[file];
-
-        const foundInName = file.toLowerCase().indexOf(text.toLowerCase()) != -1;
-        const foundInKeys = fileDataKeys.toLowerCase().indexOf(text.toLowerCase()) != -1;
-        
-        if (foundInName || foundInKeys) {
-          const fileDataTitle = document.createElement('div');
-          fileDataTitle.classList.add('file-data-title');
-          fileDataTitle.textContent = this.#parseCategoryName(file.replaceAll('/', ' > '));
-          const fileData = document.createElement('div');
-          fileData.classList.add('file-data');
-          fileData.addEventListener('click', () => {
-            this.#loadContent(file);
-          });
-          fileData.appendChild(fileDataTitle);
-
-          if (!foundInName) {
-            const splitting = fileDataKeys.toLowerCase().split(text.toLowerCase());
-            const beforeSplitting = this.#splitSearchResult(splitting[0], true);
-            const afterSplitting = this.#splitSearchResult(splitting[1], false);
-
-            const highlightedWord = document.createElement('span');
-            highlightedWord.classList.add('highlighted');
-            highlightedWord.textContent = text;
-            const fileDataDescription = document.createElement('div');
-            fileDataDescription.classList.add('file-data-description');
-            fileDataDescription.appendChild(document.createTextNode(beforeSplitting));
-            fileDataDescription.appendChild(highlightedWord);
-            fileDataDescription.appendChild(document.createTextNode(afterSplitting));
-            fileData.appendChild(fileDataDescription);
-          }
-          
-          resultsFragment.appendChild(fileData);
-        }
-      }
-
-      results.textContent = '';
-      results.classList.remove('is-loading');
-      results.appendChild(resultsFragment);
-    };
-
-    if (this.#isCurrentlyIndexing) {
-      return;
-    } else if (!this.#hasIndexed) {
-      if (typeof this.#precachedResponse != 'undefined') {
-        this.#isCurrentlyIndexing = true;
-
-        const indexingText = document.createElement('span');
-        indexingText.textContent = 'Indexing... (0/0)';
-
-        results.classList.add('is-loading');
-        results.textContent = '';
-        results.appendChild(utils.createLoadingItem(50));
-        results.appendChild(indexingText);
-
-        const domHelper = new DOMParser();
-        const dom = domHelper.parseFromString(this.#precachedResponse, 'application/xml');
-        const filesListElements = dom.querySelectorAll('config > files-list file');
-
-        indexingText.textContent = 'Indexing... (0/' + filesListElements.length + ')';
-
-        let i = 0;
-        for(const [id, file] of filesListElements.entries()) {
-          let fullPath = file.textContent;
-
-          if (file.parentElement.hasAttribute('basepath')) {
-            fullPath = file.parentElement.getAttribute('basepath') + file.textContent;
-          }
-
-          const XML = new XMLHttpRequest();
-          XML.open('GET', 'https://raw.githubusercontent.com/pytgcalls/docsdata/master/' + fullPath, true);
-          
-          setTimeout(() => {
-            XML.send();
-          }, 10 * id);
-
-          XML.addEventListener('readystatechange', (e) => {
-            if (e.target.readyState == 4) {
-              i++;
-              indexingText.textContent = 'Indexing... (' + i + '/' + filesListElements.length + ')';
-
-              if (e.target.status == 200) {
-                this.#indexes[fullPath] = sourceParser.handleSearchIndexByText(e.target.response);
-              }
-
-              if (i == filesListElements.length) {
-                this.#isCurrentlyIndexing = false;
-                this.#hasIndexed = true;
-                
-                if (input.value.trim().length) {
-                  onSearchReady(input.value.trim());
-                }
-              }
-            }
-          });
-        }
-      }
-    } else if(input.value.trim().length) {
-      onSearchReady(input.value.trim());
-    }
-  }
-
-  #splitSearchResult(text, isZeroSplit = false) {
-    if (isZeroSplit) {
-      let newText = text.split("").reverse().join("");
-
-      if (newText.length > 30) {
-        newText = '...' + newText.slice(0, 30).split("").reverse().join("");
-      }
-
-      return newText;
-    } else {
-      if (text.length > 30) {
-        text = text.slice(0, 30) + '...';
-      }
-
-      return text;
     }
   }
 }
