@@ -45,6 +45,7 @@ body .page-container .left-container .search-bar .results {
   box-sizing: border-box;
   flex: 1;
   overflow-y: auto;
+  width: 100%;
 }
 
 @supports (overflow-y: overlay) {
