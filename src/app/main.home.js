@@ -388,13 +388,21 @@ class HomePage {
 
     button.addEventListener('click', () => {
       if (inputElement.value.length) {
-        const content = this.#createCustomContent();
-        const data = sourceParser.getContentByData(inputElement.value);
-        content.classList.remove('is-loading');
-        content.textContent = '';
-        content.appendChild(data);
-
-        this.#handlePageSections(data, pageSections);
+        const domHelper = new DOMParser();
+        const dom = domHelper.parseFromString(inputElement.value, 'application/xml');
+        if (dom.querySelector('config > option')) {
+          sourceParser.saveAsConfigFromDom(dom);
+          alert('Config updated. Files list wont change');
+          inputElement.value = '';
+        } else {
+          const content = this.#createCustomContent();
+          const data = sourceParser.getContentByData(inputElement.value);
+          content.classList.remove('is-loading');
+          content.textContent = '';
+          content.appendChild(data);
+  
+          this.#handlePageSections(data, pageSections);
+        }
       }
     });
   }
