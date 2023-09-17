@@ -15,7 +15,7 @@ body .page-container .sections.is-loading img.failed {
 }
 
 body .page-container .sections.is-loading svg {
-  animation: 2s rotateSvg linear infinite;
+  animation: 0.9s rotateSvg linear infinite;
 }
 
 body .page-container .sections.is-loading svg circle {

@@ -212,6 +212,8 @@ class HomePage {
         throw new Error("Can't handle files-list element");
       }
 
+      let hasResults = false;
+
       for(const file in this.#indexes) {
         if (!file.startsWith(filesListElement.getAttribute('basepath'))) {
           continue;
@@ -223,6 +225,8 @@ class HomePage {
         const foundInKeys = fileDataKeys.toLowerCase().indexOf(text.toLowerCase()) != -1;
         
         if (foundInName || foundInKeys) {
+          hasResults = true;
+
           const fileDataTitle = document.createElement('div');
           fileDataTitle.classList.add('file-data-title');
           fileDataTitle.textContent = this.#parseCategoryName(file.replaceAll('/', ' > '));
@@ -253,8 +257,21 @@ class HomePage {
         }
       }
 
+      if (!hasResults) {
+        const errorImage = document.createElement('img');
+        errorImage.classList.add('image');
+        errorImage.src = '/src/icons/heartCrack.svg';
+        const errorText = document.createElement('div');
+        errorText.textContent = 'No results found.';
+        const error = document.createElement('div');
+        error.classList.add('error');
+        error.appendChild(errorImage);
+        error.appendChild(errorText);
+        resultsFragment.append(error);
+      }
+
       results.textContent = '';
-      results.classList.remove('is-loading');
+      results.classList.toggle('is-loading', !hasResults);
       results.appendChild(resultsFragment);
     };
 
@@ -344,6 +361,15 @@ class HomePage {
     const currentFilesListElement = dom.querySelector('config > files-list[id="'+id+'"]');
     const basePathForMainFiles = currentFilesListElement.getAttribute('basepath');
 
+    const collapsedDomain = document.createElement('div');
+    collapsedDomain.classList.add('collapsed');
+    collapsedDomain.addEventListener('click', () => {
+      this.#leftSidebar.classList.add('expanded');
+      this.#searchBar.classList.remove('expanded');
+    });
+    collapsedDomain.textContent = 'Press here to expand';
+    listFragment.append(collapsedDomain);
+
     let i = 0;
     for(const file of currentFilesListElement.childNodes) {
       if (file instanceof Element) {
@@ -409,15 +435,6 @@ class HomePage {
         }
       }
     }
-
-    const collapsedDomain = document.createElement('div');
-    collapsedDomain.classList.add('collapsed');
-    collapsedDomain.addEventListener('click', () => {
-      this.#leftSidebar.classList.add('expanded');
-      this.#searchBar.classList.remove('expanded');
-    });
-    collapsedDomain.textContent = 'Press here to expand';
-    listFragment.append(collapsedDomain);
 
     let element = document.createElement('div');
     element.classList.add('microtag');
