@@ -202,8 +202,8 @@ class HomePage {
       const useInputValueAsRef = window.innerWidth < 1330;
 
       if (useInputValueAsRef) {
-        searchBar.classList.toggle('expanded', !!searchInput.value.length);
-        this.#leftSidebar.classList.toggle('expanded', !searchInput.value.length);
+        searchBar.classList.toggle('expanded', !!searchText.value.trim().length);
+        this.#leftSidebar.classList.toggle('expanded', !searchText.value.trim().length);
       }
 
       this.#handleSearchValue(searchText, searchResults);
