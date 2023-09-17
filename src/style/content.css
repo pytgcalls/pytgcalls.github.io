@@ -13,7 +13,7 @@ body .page-container .content.is-loading {
 }
 
 body .page-container .content.is-loading svg {
-  animation: 1s rotateSvg linear infinite;
+  animation: 0.9s rotateSvg linear infinite;
 }
 
 body .page-container .content.is-loading svg circle {
@@ -312,7 +312,7 @@ body .page-container .content:not(.is-loading) .github-ref.is-loading {
 }
 
 body .page-container .content:not(.is-loading) .github-ref.is-loading svg {
-  animation: 1s rotateSvg linear infinite;
+  animation: 0.9s rotateSvg linear infinite;
 }
 
 body .page-container .content:not(.is-loading) .github-ref.is-loading svg circle {

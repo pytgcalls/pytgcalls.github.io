@@ -11,8 +11,12 @@ body .page-container .left-container .search-bar {
   display: flex;
   align-items: center;
   flex-direction: column;
-  transition: 0.3s height;
-  animation: 0.3s appearLeftSidebar linear;
+  transition: 0.4s height, 0.4s border-radius;
+  animation: 0.4s appearLeftSidebar linear;
+}
+
+body .page-container .left-container .search-bar:not(.expanded) {
+  border-radius: 24px;
 }
 
 body .page-container .left-container .search-bar.expanded {
@@ -60,9 +64,19 @@ body .page-container .left-container .search-bar .results.is-loading {
   justify-content: center;
 }
 
+body .page-container .left-container .search-bar .results.is-loading .error {
+  text-align: center;
+  color: #FFFFFF;
+}
+
+body .page-container .left-container .search-bar .results.is-loading .error .image {
+  filter: invert(1);
+  width: 78px;
+}
+
 body .page-container .left-container .search-bar .results.is-loading svg {
   --scale: 0.5;
-  animation: 1s rotateSvg linear infinite;
+  animation: 0.9s rotateSvg linear infinite;
 }
 
 body .page-container .left-container .search-bar .results.is-loading svg circle {
@@ -122,8 +136,8 @@ body .page-container .left-container .left-sidebar {
   margin-left: 10px;
   border-radius: 10px;
   position: relative;
-  transition: 0.3s height;
-  animation: 0.3s appearLeftSidebar linear;
+  transition: 0.4s height;
+  animation: 0.4s appearLeftSidebar linear;
 }
 
 body .page-container .left-container .left-sidebar:not(.expanded) {
@@ -155,7 +169,7 @@ body .page-container .left-container .left-sidebar .collapsed {
   transform: translateY(-100%);
   opacity: 0;
   cursor: pointer;
-  transition: 0.3s transform, 0.3s opacity;
+  transition: 0.4s transform, 0.4s opacity;
 }
 
 body .page-container .left-container .left-sidebar:not(.expanded) .collapsed {
@@ -222,10 +236,14 @@ body .page-container .left-container .left-sidebar:not(.is-loading) .microtag:no
   margin-top: 25px;
 }
 
+body .page-container .left-container .left-sidebar:not(.is-loading) .collapsed:first-child + .microtag {
+  margin-top: 0;
+}
+
 body .page-container .left-container .left-sidebar:not(.is-loading) .elements {
   max-height: 37px;
   overflow: hidden;
-  transition: 0.3s max-height;
+  transition: 0.4s max-height;
 }
 
 body .page-container .left-container .left-sidebar:not(.is-loading) .elements.expanded {
@@ -258,7 +276,7 @@ body .page-container .left-container .left-sidebar:not(.is-loading) .element {
   padding-left: 15px;
   border-radius: 10px;
   cursor: pointer;
-  transition: 0.5s background, 0.5s transform;
+  transition: 0.4s background, 0.4s transform;
 }
 
 body .page-container .left-container .left-sidebar:not(.is-loading) .element.active {
@@ -280,7 +298,7 @@ body .page-container .left-container .left-sidebar:not(.is-loading) .element:act
 }
 
 body .page-container .left-container .left-sidebar.faster {
-  --animation-delay: 0.01s;
+  --animation-delay: 0.4s;
   --animation-timing: 0.15s;
 }
 
@@ -289,7 +307,7 @@ body .page-container .left-container .left-sidebar:not(.disappear) .microtag,
 body .page-container .left-container .left-sidebar:not(.disappear) .elements {
   transform: translateX(-100%);
   opacity: 1;
-  animation: var(--animation-timing, 0.3s) appearElement forwards calc(var(--id) * var(--animation-delay, 0.02s));
+  animation: var(--animation-timing, 0.4s) appearElement forwards calc(var(--id) * var(--animation-delay, 0.02s));
 }
 
 @keyframes appearElement {
@@ -303,7 +321,7 @@ body .page-container .left-container .left-sidebar.disappear .element,
 body .page-container .left-container .left-sidebar.disappear .microtag,
 body .page-container .left-container .left-sidebar.disappear .elements {
   transform: translateX(0);
-  animation: var(--animation-timing, 0.3s) disappearElement forwards calc(var(--id) * var(--animation-delay, 0.02s));
+  animation: var(--animation-timing, 0.4s) disappearElement forwards calc(var(--id) * var(--animation-delay, 0.02s));
 }
 
 @keyframes disappearElement {
