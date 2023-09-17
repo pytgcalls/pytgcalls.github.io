@@ -238,7 +238,8 @@ body .page-container .left-container .left-sidebar.is-loading svg circle {
   stroke-width: 4px;
   stroke-linecap: round;
   stroke-dasharray: 10, 10;
-  animation: 2s animateStroke linear infinite;
+  opacity: 0;
+  animation: 2s animateStroke linear infinite, 0.4s appearSvg 0.4s forwards;
 }
 
 @keyframes animateStroke {
@@ -334,7 +335,7 @@ body .page-container .left-container .left-sidebar:not(.is-loading) .element:act
 }
 
 body .page-container .left-container .left-sidebar.faster {
-  --animation-delay: 0.4s;
+  --animation-delay: 0.003s;
   --animation-timing: 0.15s;
 }
 
