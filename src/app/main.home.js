@@ -210,7 +210,7 @@ class HomePage {
             if (file.textContent != '.xml' && file.textContent.endsWith('.xml')) {
               listFragment.append(this.#createSidebarFileElement(
                 i.toString(),
-                file.textContent,
+                this.#parseCategoryName(file.textContent).replace(basePathForMainFiles ?? '', ''),
                 basePathForMainFiles ? (basePathForMainFiles + file.textContent) : undefined
               ));
             }
@@ -234,7 +234,7 @@ class HomePage {
               } else {
                 const elementText = document.createElement('div');
                 elementText.classList.add('text');
-                elementText.textContent = this.#parseCategoryName(basePathForGroupFiles);
+                elementText.textContent = this.#parseCategoryName(basePathForGroupFiles).replace(basePathForMainFiles ?? '', '');
                 const elementIcon = document.createElement('img');
                 elementIcon.src = 'src/icons/chevrondown.svg';
                 const element = document.createElement('div');
@@ -250,12 +250,12 @@ class HomePage {
                 for(const file of groupFilesList) {
                   elementsGroup.append(this.#createSidebarFileElement(
                     i.toString(), 
-                    this.#parseCategoryName(file.textContent),
+                    this.#parseCategoryName(file.textContent).replace(basePathForGroupFiles ?? '', ''),
                     basePathForGroupFiles + file.textContent
                   ));
                 }
 
-                elementsGroup.style.setProperty('--items', (elementsGroup.childNodes.length - 1).toString());
+                elementsGroup.style.setProperty('--items', elementsGroup.childNodes.length.toString());
                 element.addEventListener('click', () => elementsGroup.classList.toggle('expanded'));
 
                 listFragment.append(elementsGroup);
@@ -323,7 +323,7 @@ class HomePage {
       this.#selectedElement = element;
     });
     element.style.setProperty('--id', id);
-    element.textContent = this.#parseCategoryName(textContent);
+    element.textContent = textContent;
     return element;
   }
 
@@ -402,10 +402,6 @@ class HomePage {
   #parseCategoryName(fileName) {
     if (fileName.endsWith('.xml')) {
       fileName = fileName.slice(0, -4);
-    }
-
-    if (fileName.startsWith('PyTgCalls/')) {
-      fileName = fileName.slice(10);
     }
 
     if (fileName.endsWith('/')) {
