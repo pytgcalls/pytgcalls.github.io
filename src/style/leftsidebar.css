@@ -8,6 +8,9 @@ body .page-container .left-container .search-bar {
   height: 43px;
   overflow: hidden;
   box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
   transition: 0.3s height;
   animation: 0.3s appearLeftSidebar linear;
 }
@@ -20,6 +23,7 @@ body .page-container .left-container .search-bar .search-input {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
 }
 
 body .page-container .left-container .search-bar .search-input img {
@@ -35,6 +39,18 @@ body .page-container .left-container .search-bar .search-input input {
   color: #FFFFFF;
   background: transparent;
   border: none;
+}
+
+body .page-container .left-container .search-bar .results {
+  box-sizing: border-box;
+  flex: 1;
+  overflow-y: auto;
+}
+
+@supports (overflow-y: overlay) {
+  body .page-container .left-container .search-bar .results {
+    overflow-y: overlay;
+  }
 }
 
 body .page-container .left-container .search-bar .results.is-loading {
@@ -61,6 +77,41 @@ body .page-container .left-container .search-bar .results.is-loading span {
   color: white;
 }
 
+body .page-container .left-container .search-bar .results:not(.is-loading) {
+  padding: 7px;
+}
+
+body .page-container .left-container .search-bar .results:not(.is-loading) .file-data {
+  padding: 9px;
+  padding-inline: 15px;
+  color: white;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: 0.4s background, 0.4s transform;
+}
+
+body .page-container .left-container .search-bar .results:not(.is-loading) .file-data:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+body .page-container .left-container .search-bar .results:not(.is-loading) .file-data:active {
+  background: rgba(255, 255, 255, 0.08);
+  transform: scale(0.95);
+}
+
+
+body .page-container .left-container .search-bar .results:not(.is-loading) .file-data-title {
+  font-weight: 600;
+}
+
+body .page-container .left-container .search-bar .results:not(.is-loading) .file-data-description {
+  opacity: 0.8;
+}
+
+body .page-container .left-container .search-bar .results:not(.is-loading) .file-data-description .highlighted {
+  background: #007fff;
+}
+
 body .page-container .left-container .left-sidebar {
   margin-top: 10px;
   width: 23vw;
@@ -84,6 +135,10 @@ body .page-container .left-container .left-sidebar:not(.expanded) {
     transform: scale(0.9);
     opacity: 0;
   }
+}
+
+body .page-container .left-container .left-sidebar:not(.expanded) *:not(.collapsed) {
+  visibility: hidden;
 }
 
 body .page-container .left-container .left-sidebar .collapsed {

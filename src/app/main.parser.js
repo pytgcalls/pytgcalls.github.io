@@ -400,6 +400,21 @@ class SourceParser {
     container.appendChild(titleElement);
     return container;
   }
+  
+  handleSearchIndexByText(text) {
+    const domHelper = new DOMParser();
+    const dom = domHelper.parseFromString(text, 'application/xml');
+    const childs = dom.querySelectorAll('h1, h2, h3, text, subtext, category-title');
+
+    let finalText = '';
+
+    for(const child of childs) {
+      this.#tryToReduceTags(child);
+      finalText += ' ' + child.textContent;
+    }
+
+    return finalText;
+  }
 }
 
 const sourceParser = new SourceParser();

@@ -483,7 +483,48 @@ class HomePage {
 
   #handleSearchValue(input, results) {
     const onSearchReady = (text) => {
-      alert('INDEXING HAS BEEN COMPLETED AND SEARCH IS READY WIP');
+      const resultsFragment = document.createDocumentFragment();
+
+      for(const file in this.#indexes) {
+        const fileDataKeys = this.#indexes[file];
+
+        const foundInName = file.toLowerCase().indexOf(text.toLowerCase()) != -1;
+        const foundInKeys = fileDataKeys.toLowerCase().indexOf(text.toLowerCase()) != -1;
+        
+        if (foundInName || foundInKeys) {
+          const fileDataTitle = document.createElement('div');
+          fileDataTitle.classList.add('file-data-title');
+          fileDataTitle.textContent = this.#parseCategoryName(file.replaceAll('/', ' > '));
+          const fileData = document.createElement('div');
+          fileData.classList.add('file-data');
+          fileData.addEventListener('click', () => {
+            this.#loadContent(file);
+          });
+          fileData.appendChild(fileDataTitle);
+
+          if (!foundInName) {
+            const splitting = fileDataKeys.toLowerCase().split(text.toLowerCase());
+            const beforeSplitting = this.#splitSearchResult(splitting[0], true);
+            const afterSplitting = this.#splitSearchResult(splitting[0], false);
+
+            const highlightedWord = document.createElement('span');
+            highlightedWord.classList.add('highlighted');
+            highlightedWord.textContent = text;
+            const fileDataDescription = document.createElement('div');
+            fileDataDescription.classList.add('file-data-description');
+            fileDataDescription.appendChild(document.createTextNode(beforeSplitting));
+            fileDataDescription.appendChild(highlightedWord);
+            fileDataDescription.appendChild(document.createTextNode(afterSplitting));
+            fileData.appendChild(fileDataDescription);
+          }
+          
+          resultsFragment.appendChild(fileData);
+        }
+      }
+
+      results.textContent = '';
+      results.classList.remove('is-loading');
+      results.appendChild(resultsFragment);
     };
 
     if (this.#isCurrentlyIndexing) {
@@ -519,7 +560,7 @@ class HomePage {
           
           setTimeout(() => {
             XML.send();
-          }, 50 * id);
+          }, 10 * id);
 
           XML.addEventListener('readystatechange', (e) => {
             if (e.target.readyState == 4) {
@@ -527,7 +568,7 @@ class HomePage {
               indexingText.textContent = 'Indexing... (' + i + '/' + filesListElements.length + ')';
 
               if (e.target.status == 200) {
-                
+                this.#indexes[fullPath] = sourceParser.handleSearchIndexByText(e.target.response);
               }
 
               if (i == filesListElements.length) {
@@ -544,6 +585,24 @@ class HomePage {
       }
     } else if(input.value.trim().length) {
       onSearchReady(input.value.trim());
+    }
+  }
+
+  #splitSearchResult(text, isZeroSplit = false) {
+    if (isZeroSplit) {
+      let newText = text.split("").reverse().join("");
+
+      if (newText.length > 30) {
+        newText = '...' + newText.slice(0, 30).split("").reverse().join("");
+      }
+
+      return newText;
+    } else {
+      if (text.length > 30) {
+        text = text.slice(0, 30) + '...';
+      }
+
+      return text;
     }
   }
 }
