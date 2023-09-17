@@ -12,6 +12,7 @@ body {
   width: 100%;
   box-sizing: border-box;
   margin: 0;
+  overscroll-behavior: none;
   user-select: none;
   -ms-user-select: none;
   -moz-user-select: none;
@@ -21,7 +22,7 @@ body {
 body .shadow-element {
   height: 0px;
   width: 0px;
-  box-shadow: 0px 0px 400px 30px var(--color);
+  box-shadow: 0px 0px 400px 60px var(--color);
   position: fixed;
   top: var(--x);
   left: var(--y);
@@ -39,6 +40,12 @@ body .shadow-element {
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@media screen and (max-width: 1330px) {
+  body .shadow-element {
+    display: none;
   }
 }
 
