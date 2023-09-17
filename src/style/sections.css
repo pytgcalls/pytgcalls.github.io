@@ -8,6 +8,12 @@ body .page-container .sections.is-loading {
   justify-content: center;
 }
 
+body .page-container .sections.is-loading img.failed {
+  filter: invert(0.7);
+  height: 50px;
+  width: 50px;
+}
+
 body .page-container .sections.is-loading svg {
   animation: 2s rotateSvg linear infinite;
 }
