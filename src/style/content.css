@@ -22,7 +22,14 @@ body .page-container .content.is-loading svg circle {
   stroke-width: 4px;
   stroke-linecap: round;
   stroke-dasharray: 10, 10;
-  animation: 1.5s animateStroke linear infinite;
+  opacity: 0;
+  animation: 1.5s animateStroke linear infinite, 0.4s appearSvg 0.2s forwards;
+}
+
+@keyframes appearSvg {
+  to {
+    opacity: 1;
+  }
 }
 
 body .page-container .content.is-loading .try-container {

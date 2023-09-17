@@ -15,6 +15,7 @@ class HomePage {
   #hasIndexed = false;
   #isCurrentlyIndexing = false;
   #indexes = {};
+  #indexes_caching = {};
 
   init() {
     document.body.innerHTML = '';
@@ -324,6 +325,24 @@ class HomePage {
         const filesListElements = dom.querySelectorAll('config > files-list file');
 
         indexingText.textContent = 'Indexing... (0/' + filesListElements.length + ')';
+        
+        const handleIndexingWithResponse = (i, fullPath, response, status) => {
+          indexingText.textContent = 'Indexing... (' + i + '/' + filesListElements.length + ')';
+
+          if (status == 200) {
+            this.#indexes[fullPath] = sourceParser.handleSearchIndexByText(response);
+            this.#indexes_caching[fullPath] = response;
+          }
+
+          if (i == filesListElements.length) {
+            this.#isCurrentlyIndexing = false;
+            this.#hasIndexed = true;
+            
+            if (input.value.trim().length) {
+              onSearchReady(input.value.trim());
+            }
+          }
+        };
 
         let i = 0;
         for(const [id, file] of filesListElements.entries()) {
@@ -333,32 +352,24 @@ class HomePage {
             fullPath = file.parentElement.getAttribute('basepath') + file.textContent;
           }
 
-          const XML = new XMLHttpRequest();
-          XML.open('GET', 'https://raw.githubusercontent.com/pytgcalls/docsdata/master/' + fullPath, true);
-          
-          setTimeout(() => {
-            XML.send();
-          }, 5 * id);
+          if (this.#indexes_caching[fullPath]) {
+            i++;
+            handleIndexingWithResponse(i, fullPath, this.#indexes_caching[fullPath], 200);
+          } else {
+            const XML = new XMLHttpRequest();
+            XML.open('GET', 'https://raw.githubusercontent.com/pytgcalls/docsdata/master/' + fullPath, true);
+            
+            setTimeout(() => {
+              XML.send();
+            }, 5 * id);
 
-          XML.addEventListener('readystatechange', (e) => {
-            if (e.target.readyState == 4) {
-              i++;
-              indexingText.textContent = 'Indexing... (' + i + '/' + filesListElements.length + ')';
-
-              if (e.target.status == 200) {
-                this.#indexes[fullPath] = sourceParser.handleSearchIndexByText(e.target.response);
+            XML.addEventListener('readystatechange', (e) => {
+              if (e.target.readyState == 4) {
+                i++;
+                handleIndexingWithResponse(i, fullPath, e.target.response, e.target.status);
               }
-
-              if (i == filesListElements.length) {
-                this.#isCurrentlyIndexing = false;
-                this.#hasIndexed = true;
-                
-                if (input.value.trim().length) {
-                  onSearchReady(input.value.trim());
-                }
-              }
-            }
-          });
+            });
+          }
         }
       }
     } else if(input.value.trim().length) {
@@ -549,14 +560,19 @@ class HomePage {
     this.#leftContainer.classList.remove('show');
     this.#headerMenu.classList.remove('show');
 
-    const XML = new XMLHttpRequest();
-    XML.open('GET', 'https://raw.githubusercontent.com/pytgcalls/docsdata/master/' + fileName, true);
-    XML.send();
-    XML.addEventListener('readystatechange', (e) => {
-      if (e.target.readyState == 4 && e.target.status == 200) {
-        this.#handleResponse(content, pageSections, e.target.response);
-      }
-    });
+    if (this.#indexes_caching[fileName]) {
+      this.#handleResponse(content, pageSections, this.#indexes_caching[fileName]);
+    } else {
+      const XML = new XMLHttpRequest();
+      XML.open('GET', 'https://raw.githubusercontent.com/pytgcalls/docsdata/master/' + fileName, true);
+      XML.send();
+      XML.addEventListener('readystatechange', (e) => {
+        if (e.target.readyState == 4 && e.target.status == 200) {
+          this.#indexes_caching[fileName] = e.target.response;
+          this.#handleResponse(content, pageSections, e.target.response);
+        }
+      });
+    }
   }
 
   #handleResponse(content, pageSections, response) {

@@ -24,7 +24,8 @@ body .page-container .sections.is-loading svg circle {
   stroke-width: 4px;
   stroke-linecap: round;
   stroke-dasharray: 10, 10;
-  animation: 2s animateStroke linear infinite;
+  opacity: 0;
+  animation: 2s animateStroke linear infinite, 0.4s appearSvg 0.2s forwards;
 }
 
 body .page-container .sections:not(.is-loading) {
