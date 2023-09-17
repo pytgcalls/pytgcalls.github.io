@@ -10,17 +10,16 @@ body .page-container .left-container {
     position: absolute;
     bottom: 0;
     transform: translateX(-100%);
-    opacity: 0;
+    z-index: 1;
     width: 100vw;
     padding-inline: 20px;
     pointer-events: none;
     background: black;
-    transition: 0.4s transform, 0.4s opacity;
+    transition: 0.4s transform cubic-bezier(0.97,-0.02, 0, 0.98);
   }
 
   body .page-container .left-container.show {
     pointer-events: all;
-    opacity: 1;
     transform: translateX(0);
   }
 
