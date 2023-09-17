@@ -280,7 +280,8 @@ body .page-container .left-container .left-sidebar:not(.is-loading) .element:act
 }
 
 body .page-container .left-container .left-sidebar.faster {
-  --animation-timing: 0.01s;
+  --animation-delay: 0.01s;
+  --animation-timing: 0.15s;
 }
 
 body .page-container .left-container .left-sidebar:not(.disappear) .element,
@@ -288,7 +289,7 @@ body .page-container .left-container .left-sidebar:not(.disappear) .microtag,
 body .page-container .left-container .left-sidebar:not(.disappear) .elements {
   transform: translateX(-100%);
   opacity: 1;
-  animation: 0.3s appearElement forwards calc(var(--id) * var(--animation-timing, 0.02s));
+  animation: var(--animation-timing, 0.3s) appearElement forwards calc(var(--id) * var(--animation-delay, 0.02s));
 }
 
 @keyframes appearElement {
@@ -302,7 +303,7 @@ body .page-container .left-container .left-sidebar.disappear .element,
 body .page-container .left-container .left-sidebar.disappear .microtag,
 body .page-container .left-container .left-sidebar.disappear .elements {
   transform: translateX(0);
-  animation: 0.3s disappearElement forwards calc(var(--id) * var(--animation-timing, 0.02s));
+  animation: var(--animation-timing, 0.3s) disappearElement forwards calc(var(--id) * var(--animation-delay, 0.02s));
 }
 
 @keyframes disappearElement {
