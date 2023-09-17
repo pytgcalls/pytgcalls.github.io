@@ -180,7 +180,7 @@ class SourceParser {
   }
 
   #tryToReduceTags(element) {
-    for(const child of element.childNodes) {
+    const handleItem = (child) => {
       if (!(child instanceof Text) && child.tagName.toUpperCase() == 'CONFIG') {
         const currentOptionData = this.#OPTIONS[child.getAttribute('id')];
 
@@ -196,6 +196,12 @@ class SourceParser {
           throw new Error("A config key that doesn't exist has been requested "+child.getAttribute('id'));
         }
       }
+    };
+
+    handleItem(element);
+
+    for(const child of element.childNodes) {
+      handleItem(child); 
     }
   }
 
