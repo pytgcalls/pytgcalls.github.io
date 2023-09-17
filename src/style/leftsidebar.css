@@ -75,7 +75,7 @@ body .page-container .left-container .search-bar .results.is-loading svg circle 
 }
 
 body .page-container .left-container .search-bar .results.is-loading span {
-  color: white;
+  color: #FFFFFF;
 }
 
 body .page-container .left-container .search-bar .results:not(.is-loading) {
@@ -85,7 +85,7 @@ body .page-container .left-container .search-bar .results:not(.is-loading) {
 body .page-container .left-container .search-bar .results:not(.is-loading) .file-data {
   padding: 9px;
   padding-inline: 15px;
-  color: white;
+  color: #FFFFFF;
   cursor: pointer;
   border-radius: 10px;
   transition: 0.4s background, 0.4s transform;

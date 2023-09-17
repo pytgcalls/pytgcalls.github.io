@@ -9,6 +9,7 @@ body .page-container .content.is-loading {
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #FFFFFF;
 }
 
 body .page-container .content.is-loading svg {

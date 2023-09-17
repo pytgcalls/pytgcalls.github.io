@@ -358,13 +358,34 @@ class HomePage {
     XML.send();
     XML.addEventListener('readystatechange', (e) => {
       if (e.target.readyState == 4 && e.target.status == 200) {
-        const data = sourceParser.getContentByData(e.target.response);
-        content.classList.remove('is-loading');
-        content.textContent = '';
-        content.appendChild(data);
-        this.#handlePageSections(data, pageSections);
+        this.#handleResponse(content, pageSections, e.target.response);
       }
     });
+  }
+
+  #handleResponse(content, pageSections, response) {
+    try {
+      const data = sourceParser.getContentByData(response);
+      content.classList.remove('is-loading');
+      content.textContent = '';
+      content.appendChild(data);
+
+      const sectionsFragment = document.createDocumentFragment();
+      this.#iterPageSectionsData(data, sectionsFragment);
+      pageSections.classList.remove('is-loading');
+      pageSections.textContent = '';
+      pageSections.appendChild(sectionsFragment);
+    } catch(e) {
+      content.classList.add('is-loading');
+      content.textContent = 'Rendering failed';
+
+      const pageSectionsIcon = document.createElement('img');
+      pageSectionsIcon.classList.add('failed');
+      pageSectionsIcon.src = '/src/icons/heartCrack.svg';
+      pageSections.classList.add('is-loading');
+      pageSections.textContent = '';
+      pageSections.appendChild(pageSectionsIcon);
+    }
   }
 
   #tryCustomCode() {
@@ -396,12 +417,7 @@ class HomePage {
           inputElement.value = '';
         } else {
           const content = this.#createCustomContent();
-          const data = sourceParser.getContentByData(inputElement.value);
-          content.classList.remove('is-loading');
-          content.textContent = '';
-          content.appendChild(data);
-  
-          this.#handlePageSections(data, pageSections);
+          this.#handleResponse(content, pageSections, inputElement.value);
         }
       }
     });
@@ -417,14 +433,6 @@ class HomePage {
     }
 
     return fileName;
-  }
-
-  #handlePageSections(data, pageSections) {
-    const sectionsFragment = document.createDocumentFragment();
-    this.#iterPageSectionsData(data, sectionsFragment);
-    pageSections.classList.remove('is-loading');
-    pageSections.textContent = '';
-    pageSections.appendChild(sectionsFragment);
   }
 
   #iterPageSectionsData(container, currentDom, childsLimit = Infinity) {
