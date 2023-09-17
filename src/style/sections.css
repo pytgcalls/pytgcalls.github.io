@@ -14,12 +14,6 @@ body .page-container .sections.is-loading {
   justify-content: center;
 }
 
-body .page-container .sections.is-loading img.failed {
-  filter: invert(0.7);
-  height: 50px;
-  width: 50px;
-}
-
 body .page-container .sections.is-loading svg {
   animation: 0.9s rotateSvg linear infinite;
 }
@@ -59,6 +53,9 @@ body .page-container .sections:not(.is-loading) .h1 {
   font-size: 20px;
 }
 
+body .page-container .sections:not(.is-loading) .h1,
+body .page-container .sections:not(.is-loading) .h2,
+body .page-container .sections:not(.is-loading) .h3,
 body .page-container .sections:not(.is-loading) .pg-title,
 body .page-container .sections:not(.is-loading) .category-title {
   white-space: nowrap;
