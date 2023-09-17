@@ -505,7 +505,7 @@ class HomePage {
           if (!foundInName) {
             const splitting = fileDataKeys.toLowerCase().split(text.toLowerCase());
             const beforeSplitting = this.#splitSearchResult(splitting[0], true);
-            const afterSplitting = this.#splitSearchResult(splitting[0], false);
+            const afterSplitting = this.#splitSearchResult(splitting[1], false);
 
             const highlightedWord = document.createElement('span');
             highlightedWord.classList.add('highlighted');
