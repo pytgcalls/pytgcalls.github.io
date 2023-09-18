@@ -51,6 +51,10 @@ body .page-container .left-container .search-bar {
   animation: 0.4s appearLeftSidebar linear;
 }
 
+body.disable-blur .page-container .left-container .search-bar {
+  border: none;
+}
+
 body .page-container .left-container .search-bar:not(.expanded) {
   border-radius: 24px;
 }
@@ -176,6 +180,10 @@ body .page-container .left-container .left-sidebar {
   animation: 0.4s appearLeftSidebar linear;
 }
 
+body.disable-blur .page-container .left-container .left-sidebar {
+  border: none;
+}
+
 body .page-container .left-container .left-sidebar:not(.expanded) {
   height: 43px;
   overflow: hidden !important;
@@ -238,8 +246,7 @@ body .page-container .left-container .left-sidebar.is-loading svg circle {
   stroke-width: 4px;
   stroke-linecap: round;
   stroke-dasharray: 10, 10;
-  opacity: 0;
-  animation: 2s animateStroke linear infinite, 0.4s appearSvg 0.4s forwards;
+  animation: 2s animateStroke linear infinite;
 }
 
 @keyframes animateStroke {
