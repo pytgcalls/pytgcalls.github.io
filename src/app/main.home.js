@@ -40,6 +40,9 @@ class HomePage {
     headerDescription.classList.add('description');
     const header = document.createElement('div');
     header.classList.add('header');
+    header.addEventListener('dblclick', () => {
+      document.body.classList.toggle('disable-blur');
+    });
     header.appendChild(headerMenu);
     header.appendChild(headerTitle);
     header.appendChild(headerDescription);
@@ -184,7 +187,7 @@ class HomePage {
     const searchIcon = document.createElement('img');
     searchIcon.src = '/src/icons/magnifyingGlass.svg';
     const searchText = document.createElement('input');
-    searchText.placeholder = 'Your text';
+    searchText.placeholder = 'Search docs';
     const searchInput = document.createElement('div');
     searchInput.classList.add('search-input');
     searchInput.appendChild(searchIcon);
@@ -205,6 +208,7 @@ class HomePage {
       if (useInputValueAsRef) {
         searchBar.classList.toggle('expanded', !!searchText.value.trim().length);
         this.#leftSidebar.classList.toggle('expanded', !searchText.value.trim().length);
+        this.#leftSidebar.scrollTo(0, 0);
       }
 
       this.#handleSearchValue(searchText, searchResults);
@@ -215,6 +219,7 @@ class HomePage {
       if (!useInputValueAsRef) {
         searchBar.classList.add('expanded');
         this.#leftSidebar.classList.remove('expanded');
+        this.#leftSidebar.scrollTo(0, 0);
       }
     });
 
@@ -238,6 +243,12 @@ class HomePage {
     const dom = domHelper.parseFromString(this.#precachedResponse, 'application/xml');
 
     const onSearchReady = (text) => {
+      if (!text.length) {
+        results.textContent = '';
+        results.classList.toggle('is-loading', !hasResults);
+        return;
+      }
+
       const resultsFragment = document.createDocumentFragment();
 
       const filesListElement = dom.querySelector('config > files-list[id="' + this.#currentlyTabId + '"]');
@@ -337,10 +348,7 @@ class HomePage {
           if (i == filesListElements.length) {
             this.#isCurrentlyIndexing = false;
             this.#hasIndexed = true;
-            
-            if (input.value.trim().length) {
-              onSearchReady(input.value.trim());
-            }
+            onSearchReady(input.value.trim());
           }
         };
 
@@ -372,7 +380,7 @@ class HomePage {
           }
         }
       }
-    } else if(input.value.trim().length) {
+    } else {
       onSearchReady(input.value.trim());
     }
   }

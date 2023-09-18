@@ -32,6 +32,10 @@ body .shadow-element {
   animation: 3s moveShadow forwards linear;
 }
 
+body.disable-blur .shadow-element {
+  display: none;
+}
+
 @keyframes moveShadow {
   from {
     opacity: 0;

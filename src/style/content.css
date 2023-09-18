@@ -22,8 +22,7 @@ body .page-container .content.is-loading svg circle {
   stroke-width: 4px;
   stroke-linecap: round;
   stroke-dasharray: 10, 10;
-  opacity: 0;
-  animation: 1.5s animateStroke linear infinite, 0.4s appearSvg 0.2s forwards;
+  animation: 1.5s animateStroke linear infinite;
 }
 
 @keyframes appearSvg {
@@ -38,6 +37,10 @@ body .page-container .content.is-loading .try-container {
   border: 1px solid rgb(255, 255, 255, 0.1);
   border-radius: 10px;
   animation: 0.4s appearTryContainer;
+}
+
+body.disable-blur .page-container .content.is-loading .try-container {
+  border: none;
 }
 
 @keyframes appearTryContainer {
@@ -134,6 +137,10 @@ body .page-container .content:not(.is-loading) .code {
   user-select: all;
 }
 
+body.disable-blur .page-container .content:not(.is-loading) .code {
+  border: none;
+}
+
 body .page-container .content:not(.is-loading) .sb {
   display: inline-block;
   font-weight: 600;
@@ -161,6 +168,10 @@ body .page-container .content:not(.is-loading) .syntax-highlight {
   position: relative;
 }
 
+body.disable-blur .page-container .content:not(.is-loading) .syntax-highlight {
+  border: none;
+}
+
 body .page-container .content:not(.is-loading) .shi {
   display: inline-block;
 }
@@ -176,6 +187,10 @@ body .page-container .content:not(.is-loading) .category-title {
   border: 1px solid rgb(255, 255, 255, 0.1);
   padding: 9px;
   border-radius: 10px;
+}
+
+body.disable-blur .page-container .content:not(.is-loading) .category-title {
+  border: none;
 }
 
 body .page-container .content:not(.is-loading) .category-title .spacer {
@@ -199,6 +214,10 @@ body .page-container .content:not(.is-loading) table {
   padding: 7px;
   border-radius: 20px;
   margin-top: 20px;
+}
+
+body.disable-blur .page-container .content:not(.is-loading) table {
+  border: none;
 }
 
 body .page-container .content:not(.is-loading) table tr.as-definitions th {
