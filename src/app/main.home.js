@@ -45,7 +45,7 @@ class HomePage {
       const state = this.#pageSections.classList.toggle('show');
       headerCompass.classList.toggle('show', state);
     });
-    headerCompass.src = '/src/icons/compass.svg';
+    headerCompass.src = './src/icons/compass.svg';
     this.#headerCompass = headerCompass;
     const headerDescription = document.createElement('div');
     headerDescription.classList.add('description');
@@ -269,7 +269,7 @@ class HomePage {
 
   #createSidebarSearchBar() {
     const searchIcon = document.createElement('img');
-    searchIcon.src = '/src/icons/magnifyingGlass.svg';
+    searchIcon.src = './src/icons/magnifyingGlass.svg';
     const searchText = document.createElement('input');
     searchText.placeholder = 'Search docs';
     const searchInput = document.createElement('div');
@@ -388,7 +388,7 @@ class HomePage {
       if (!hasResults) {
         const errorImage = document.createElement('img');
         errorImage.classList.add('image');
-        errorImage.src = '/src/icons/heartCrack.svg';
+        errorImage.src = './src/icons/heartCrack.svg';
         const errorText = document.createElement('div');
         errorText.textContent = 'No results found.';
         const error = document.createElement('div');
