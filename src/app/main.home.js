@@ -5,6 +5,7 @@ class HomePage {
   #leftContainer;
   #content;
   #pageSections;
+  #headerCompass;
   #headerDescription;
   #headerMenu;
   #precachedResponse;
@@ -25,6 +26,8 @@ class HomePage {
     headerMenu.addEventListener('click', () => {
       const state = leftContainer.classList.toggle('show');
       headerMenu.classList.toggle('show', state);
+      this.#pageSections.classList.remove('show');
+      headerCompass.classList.remove('show');
     });
     headerMenu.appendChild(document.createElement('div'));
     headerMenu.appendChild(document.createElement('div'));
@@ -36,6 +39,14 @@ class HomePage {
     headerTitle.classList.add('title');
     headerTitle.textContent = 'NTgCalls';
     headerTitle.appendChild(headerIcon);
+    const headerCompass = document.createElement('img');
+    headerCompass.classList.add('header-compass');
+    headerCompass.addEventListener('click', () => {
+      const state = this.#pageSections.classList.toggle('show');
+      headerCompass.classList.toggle('show', state);
+    });
+    headerCompass.src = '/src/icons/compass.svg';
+    this.#headerCompass = headerCompass;
     const headerDescription = document.createElement('div');
     headerDescription.classList.add('description');
     const header = document.createElement('div');
@@ -45,6 +56,7 @@ class HomePage {
     });
     header.appendChild(headerMenu);
     header.appendChild(headerTitle);
+    header.appendChild(headerCompass);
     header.appendChild(headerDescription);
 
     this.#headerDescription = headerDescription;
@@ -75,6 +87,10 @@ class HomePage {
     
     document.body.appendChild(header);
     document.body.appendChild(pageContainer);
+    
+    setTimeout(() => {
+      this.#initTooltip(headerTitle);
+    }, 500);
 
     for(let i = 0; i < 4; i++) {
       if (this.#COLORS[i]) {
@@ -93,7 +109,71 @@ class HomePage {
     this.#loadSidebar('PyTgCalls');
   }
 
-  #createPageTabs() {
+  #initTooltip(element) {
+    if (window.innerWidth < 1330) {
+      const elementRect = element.getBoundingClientRect();
+
+      const createTooltip = (element, hasTabs = false) => {
+        const tooltipTriangle = document.createElement('div');
+        tooltipTriangle.classList.add('triangle');
+        const tooltipText = document.createElement('div');
+        tooltipText.classList.add('tooltip-text');
+        tooltipText.appendChild(element);
+        const tooltip = document.createElement('div');
+        tooltip.classList.add('tooltip');
+        tooltip.classList.toggle('has-tabs', hasTabs);
+        tooltip.style.setProperty('--center-x', elementRect.left + 'px');
+        tooltip.style.setProperty('--center-y', elementRect.top + 'px');
+        tooltip.appendChild(tooltipTriangle);
+        tooltip.appendChild(tooltipText);
+  
+        document.body.appendChild(tooltip);
+
+        const width = tooltip.getBoundingClientRect();
+        tooltip.style.setProperty('--center-x', (elementRect.left + elementRect.width / 2 - width.width / 2) + 'px');
+        tooltip.classList.add('visible');
+  
+        const handler = () => {
+          tooltip.classList.add('remove');
+          tooltip.addEventListener('animationend', () => {
+            tooltip.remove();
+          }, { once: true });
+  
+          window.removeEventListener('resize', handler);
+          document.body.removeEventListener('click', handler);
+        };
+  
+        window.addEventListener('resize', handler);
+        document.body.addEventListener('click', handler);
+
+        return handler;
+      };
+
+      let handler;
+      if (localStorage.getItem('showSuggestions') != 'true') {
+        localStorage.setItem('showSuggestions', 'true');
+        handler = createTooltip(document.createTextNode('Click here to select the documentation of your favorite library'));
+        setTimeout(() => {
+          handler();
+        }, 5000);
+      }
+
+      let currentHandler = handler;
+      
+      element.addEventListener('click', (e) => {
+        e.stopPropagation();
+        currentHandler && currentHandler();
+        currentHandler = createTooltip(this.#createPageTabs({
+          onChange: () => {
+            this.#leftContainer.classList.add('show');
+            this.#headerMenu.classList.add('show');
+          }
+        }), true);
+      });
+    }
+  }
+
+  #createPageTabs({ onChange }) {
     if (typeof this.#precachedResponse != 'undefined') {
       const domHelper = new DOMParser();
       const dom = domHelper.parseFromString(this.#precachedResponse, 'application/xml');
@@ -124,11 +204,15 @@ class HomePage {
             
             this.#leftSidebar.classList.add('expanded');
             this.#searchBar.classList.remove('expanded');
+
+            if (typeof onChange == 'function') {
+              onChange();
+            }
           });
           tab.textContent = file.getAttribute('id');
           tabsContainer.append(tab);
 
-          if (!id) {
+          if (file.getAttribute('id') == this.#currentlyTabId || (typeof this.#currentlyTabId == 'undefined' && !id)) {
             tab.classList.add('active');
             selectedTabElement = tab;
             tabsContainer.style.setProperty('--id', id.toString());
@@ -176,7 +260,7 @@ class HomePage {
         XML.addEventListener('readystatechange', (e) => {
           if (e.target.readyState == 4 && e.target.status == 200) {
             this.#precachedResponse = e.target.response;
-            this.#headerDescription.appendChild(this.#createPageTabs());
+            this.#headerDescription.appendChild(this.#createPageTabs({ onChange: false }));
           }
         });
       }, { once: true });
@@ -595,7 +679,9 @@ class HomePage {
       pageSections.classList.remove('is-loading');
       pageSections.textContent = '';
       pageSections.appendChild(sectionsFragment);
+      this.#headerCompass.classList.add('visible');
     } catch(e) {
+      this.#headerCompass.classList.remove('visible');
       content.classList.add('is-loading');
       content.textContent = 'Rendering failed';
       pageSections.classList.add('is-loading');
@@ -673,6 +759,8 @@ class HomePage {
 
           cloned.addEventListener('click', () => {
             element.scrollIntoView({ behavior: 'smooth' });
+            this.#pageSections.classList.remove('show');
+            this.#headerCompass.classList.remove('show');
           });
 
           let hasRefElement = false;

@@ -165,6 +165,8 @@ body .page-container .content:not(.is-loading) .syntax-highlight {
   margin-block: 5px;
   border-radius: 10px;
   user-select: text;
+  overflow-x: auto;
+  overflow-y: hidden;
   position: relative;
 }
 
