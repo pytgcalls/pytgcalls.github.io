@@ -92,7 +92,9 @@ body .tooltip {
   padding: 10px;
   border-radius: 10px;
   border: 1px solid #ffffff45;
+  box-shadow: 0px 0px 17px 5px black;
   opacity: 0;
+  z-index: 4;
 }
 
 body .tooltip.visible {
@@ -130,7 +132,7 @@ body .tooltip .triangle {
   width: 10px;
   height: 10px;
   background: white;
-  top: -4px;
+  top: -7px;
   transform: translateX(-50%) rotate(45deg);
   border-top: 1px solid #ffffff45;
   border-left: 1px solid #ffffff45;
