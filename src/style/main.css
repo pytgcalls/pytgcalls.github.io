@@ -81,3 +81,61 @@ input:focus, textarea:focus {
   outline: none;
   border: none;
 }
+
+body .tooltip {
+  position: fixed;
+  top: calc(var(--center-y) + 49px);
+  left: var(--center-x);
+  width: min(100%, 80vw);
+  color: black;
+  background: white;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ffffff45;
+  opacity: 0;
+}
+
+body .tooltip.visible {
+  opacity: 1;
+  animation: 0.8s appearTooltip cubic-bezier(0.42, 0, 0, 0.98);
+}
+
+body .tooltip.has-tabs {
+  width: auto;
+  padding: 3px;
+  background: black;
+}
+
+body .tooltip.remove {
+  animation: 0.4s removeTooltip cubic-bezier(0.42, 0, 0, 0.98) forwards;
+}
+
+@keyframes appearTooltip {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) scale(0.4);
+  }
+}
+
+@keyframes removeTooltip {
+  to {
+    opacity: 0;
+    transform: translateY(-50%) scale(0.4);
+  }
+}
+
+body .tooltip .triangle {
+  position: absolute;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  background: white;
+  top: -4px;
+  transform: translateX(-50%) rotate(45deg);
+  border-top: 1px solid #ffffff45;
+  border-left: 1px solid #ffffff45;
+}
+
+body .tooltip.has-tabs .triangle {
+  background: #000000;
+}

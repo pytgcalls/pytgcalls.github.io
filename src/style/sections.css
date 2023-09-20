@@ -4,7 +4,21 @@ body .page-container .sections {
 
 @media screen and (max-width: 1330px) {
   body .page-container .sections {
-    display: none;
+    position: absolute;
+    bottom: 0;
+    transform: translateX(100%);
+    z-index: 1;
+    width: 100vw;
+    padding-inline: 20px;
+    pointer-events: none;
+    background: black;
+    height: calc(100vh - 61px) !important;
+    transition: 0.4s transform cubic-bezier(0.97,-0.02, 0, 0.98);
+  }
+
+  body .page-container .sections.show {
+    pointer-events: all;
+    transform: translateX(0);
   }
 }
 
