@@ -167,13 +167,14 @@ class HomePage {
           onChange: () => {
             this.#leftContainer.classList.add('show');
             this.#headerMenu.classList.add('show');
-          }
+          },
+          isSecondaryInstance: true
         }), true);
       });
     }
   }
 
-  #createPageTabs({ onChange }) {
+  #createPageTabs({ onChange, isSecondaryInstance = false }) {
     if (typeof this.#precachedResponse != 'undefined') {
       const domHelper = new DOMParser();
       const dom = domHelper.parseFromString(this.#precachedResponse, 'application/xml');
@@ -216,7 +217,10 @@ class HomePage {
             tab.classList.add('active');
             selectedTabElement = tab;
             tabsContainer.style.setProperty('--id', id.toString());
-            this.#loadSidebar(file.getAttribute('id'));
+            
+            if (!isSecondaryInstance) {
+              this.#loadSidebar(file.getAttribute('id'));
+            }
           }
         }
       }
