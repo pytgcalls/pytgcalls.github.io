@@ -12,7 +12,8 @@ body .page-container .sections {
     padding-inline: 20px;
     pointer-events: none;
     background: black;
-    height: calc(100vh - 61px) !important;
+    z-index: 4;
+    height: calc(calc(100 * var(--vh)) - 61px) !important;
     transition: 0.4s transform cubic-bezier(0.97,-0.02, 0, 0.98);
   }
 
@@ -43,7 +44,7 @@ body .page-container .sections.is-loading svg circle {
 }
 
 body .page-container .sections:not(.is-loading) {
-  height: calc(100vh - 60px - 20px);
+  height: calc(calc(100 * var(--vh)) - 60px - 20px);
   padding-left: 18px;
   padding-top: 15px;
   box-sizing: border-box;
