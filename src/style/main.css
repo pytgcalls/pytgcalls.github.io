@@ -8,7 +8,7 @@ body {
   background: #050505;
   font-family: 'Poppins', sans-serif;
   overflow: hidden;
-  height: 100vh;
+  height: calc(100 * var(--vh));
   width: 100%;
   box-sizing: border-box;
   margin: 0;

@@ -2,7 +2,7 @@ body .page-container .left-container {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  height: calc(100vh - 61px);
+  height: calc(calc(100 * var(--vh)) - 61px);
 }
 
 @media screen and (max-width: 1330px) {
@@ -15,6 +15,7 @@ body .page-container .left-container {
     padding-inline: 20px;
     pointer-events: none;
     background: black;
+    z-index: 4;
     transition: 0.4s transform cubic-bezier(0.97,-0.02, 0, 0.98);
   }
 
@@ -60,7 +61,7 @@ body .page-container .left-container .search-bar:not(.expanded) {
 }
 
 body .page-container .left-container .search-bar.expanded {
-  height: calc(100vh - 60px - 20px - 43px - 10px);
+  height: calc(calc(100 * var(--vh)) - 60px - 20px - 43px - 10px);
 }
 
 body .page-container .left-container .search-bar .search-input {
