@@ -66,7 +66,7 @@ class SourceParser {
         }
 
         if (['TEXT', 'ITEM'].includes(element.tagName.toUpperCase())) {
-          const spacesMultiplier = '<br/>'.repeat(element.tagName.toUpperCase() == 'ITEM' ? 1 : 2);
+          const spacesMultiplier = '<br/>'.repeat(element.tagName.toUpperCase() === 'ITEM' ? 1 : 2);
           element.innerHTML = element.innerHTML.replace('\n\n', spacesMultiplier);
           containsCustomTags = true;
         }
@@ -78,7 +78,7 @@ class SourceParser {
 
           this.#handleSyntaxHighlight(element, newElement);
           elementDom.appendChild(newElement);
-        } else if (element.tagName.toUpperCase() == 'GITHUB-REF') {
+        } else if (element.tagName.toUpperCase() === 'GITHUB-REF') {
           this.#handleGithubRef(newElement);
           elementDom.appendChild(newElement);
         } else {
@@ -119,7 +119,7 @@ class SourceParser {
   }
 
   #checkAndManageElement(element, newElement, elementDom) {
-    if (element.tagName.toUpperCase() == 'A') {
+    if (element.tagName.toUpperCase() === 'A') {
       if (element.getAttribute('href').startsWith('https')) {
         newElement = document.createElement('a');
         newElement.href = element.getAttribute('href');
@@ -127,19 +127,19 @@ class SourceParser {
       } else {
         throw new Error("UnsupportedLink");
       }
-    } else if (element.tagName.toUpperCase() == 'LIST') {
+    } else if (element.tagName.toUpperCase() === 'LIST') {
       newElement = document.createElement('ul');
 
-      if (element.getAttribute('style') == 'numbers') {
+      if (element.getAttribute('style') === 'numbers') {
         newElement.classList.add('with-numbers');
       }
-    } else if (element.tagName.toUpperCase() == 'ITEM' && elementDom.tagName == 'UL') {
+    } else if (element.tagName.toUpperCase() === 'ITEM' && elementDom.tagName === 'UL') {
       newElement = document.createElement('li');
-    } else if (element.tagName.toUpperCase() == 'BOLD' || element.tagName.toUpperCase() == 'B') {
+    } else if (element.tagName.toUpperCase() === 'BOLD' || element.tagName.toUpperCase() === 'B') {
       newElement = document.createElement('b');
-    } else if (element.tagName.toUpperCase() == 'BR') {
+    } else if (element.tagName.toUpperCase() === 'BR') {
       newElement = document.createElement('br');
-    } else if (element.tagName.toUpperCase() == 'CATEGORY-TITLE') {
+    } else if (element.tagName.toUpperCase() === 'CATEGORY-TITLE') {
       newElement.classList.toggle(element.tagName.toLowerCase());
 
       let newContent = element.innerHTML.replaceAll('\n', '<br/>');
@@ -147,20 +147,20 @@ class SourceParser {
         newContent = newContent.slice(5);
       }
       element.innerHTML = newContent;
-    } else if (element.tagName.toUpperCase() == 'TABLE') {
+    } else if (element.tagName.toUpperCase() === 'TABLE') {
       newElement = document.createElement('table');
-    } else if (element.tagName.toUpperCase() == 'DEFINITIONS') {
+    } else if (element.tagName.toUpperCase() === 'DEFINITIONS') {
       newElement = document.createElement('tr');
       newElement.classList.add('as-definitions');
-    } else if (element.tagName.toUpperCase() == 'ITEM' && elementDom.tagName == 'TABLE') {
+    } else if (element.tagName.toUpperCase() === 'ITEM' && elementDom.tagName === 'TABLE') {
       newElement = document.createElement('tr');
-    } else if (element.tagName.toUpperCase() == 'COLUMN') {
+    } else if (element.tagName.toUpperCase() === 'COLUMN') {
       if (elementDom.classList.contains('as-definitions')) {
         newElement = document.createElement('th');
       } else {
         newElement = document.createElement('td');
       }
-    } else if(element.tagName.toUpperCase() == 'GITHUB-REF') {
+    } else if(element.tagName.toUpperCase() === 'GITHUB-REF') {
       newElement = document.createElement('a');
       newElement.classList.add('github-ref');
       newElement.setAttribute('target', '_blank');
@@ -181,7 +181,7 @@ class SourceParser {
 
   #tryToReduceTags(element) {
     const handleItem = (child) => {
-      if (!(child instanceof Text) && child.tagName.toUpperCase() == 'CONFIG') {
+      if (!(child instanceof Text) && child.tagName.toUpperCase() === 'CONFIG') {
         const currentOptionData = this.#OPTIONS[child.getAttribute('id')];
 
         if (currentOptionData) {
@@ -206,9 +206,9 @@ class SourceParser {
   }
 
   #handlePostQueryElement(element, newElement) {
-    if (element.tagName.toUpperCase() == 'CATEGORY-TITLE') {
+    if (element.tagName.toUpperCase() === 'CATEGORY-TITLE') {
       newElement.innerHTML = this.#handleTabsWithSpacer(newElement.innerHTML);
-    } else if (element.tagName.toUpperCase() == 'ALERT') {
+    } else if (element.tagName.toUpperCase() === 'ALERT') {
       const elementHeaderImage = document.createElement('img');
       const elementHeaderText = document.createElement('div');
       elementHeaderText.classList.add('alert-title');
@@ -286,7 +286,7 @@ class SourceParser {
     let firstRowSpacesCount = 0;
     const firstRow = code.split('<br/>')[0];
     for(let char of firstRow) {
-      if (char == ' ') {
+      if (char === ' ') {
         firstRowSpacesCount++;
       } else {
         break;
@@ -309,7 +309,7 @@ class SourceParser {
       throw new Error('github ref doesnt have link');
     }
 
-    if (element.getAttribute('user').indexOf('/') != -1 || element.getAttribute('reponame').indexOf('/') != -1) {
+    if (element.getAttribute('user').indexOf('/') !== -1 || element.getAttribute('reponame').indexOf('/') !== -1) {
       throw new Error('github ref has an invalid format');
     }
 
@@ -324,7 +324,7 @@ class SourceParser {
       XML.open('GET', 'https://api.github.com/repos/' + element.getAttribute('user') + '/' + element.getAttribute('reponame'), true);
       XML.send();
       XML.addEventListener('readystatechange', (e) => {
-        if (e.target.readyState == 4 && e.target.status == 200) {
+        if (e.target.readyState === 4 && e.target.status === 200) {
           const response = JSON.parse(e.target.response);
 
           if (response['message']) {

@@ -150,7 +150,7 @@ class HomePage {
       };
 
       let handler;
-      if (localStorage.getItem('showSuggestions') != 'true') {
+      if (localStorage.getItem('showSuggestions') !== 'true') {
         localStorage.setItem('showSuggestions', 'true');
         handler = createTooltip(document.createTextNode('Click here to select the documentation of your favorite library'));
         setTimeout(() => {
@@ -191,7 +191,7 @@ class HomePage {
           tab.classList.add('tab');
           tab.addEventListener('click', () => {
             if (typeof selectedTabElement != 'undefined') {
-              if (selectedTabElement == tab) {
+              if (selectedTabElement === tab) {
                 return;
               }
 
@@ -213,7 +213,7 @@ class HomePage {
           tab.textContent = file.getAttribute('id');
           tabsContainer.append(tab);
 
-          if (file.getAttribute('id') == this.#currentlyTabId || (typeof this.#currentlyTabId == 'undefined' && !id)) {
+          if (file.getAttribute('id') === this.#currentlyTabId || (typeof this.#currentlyTabId == 'undefined' && !id)) {
             tab.classList.add('active');
             selectedTabElement = tab;
             tabsContainer.style.setProperty('--id', id.toString());
@@ -262,7 +262,7 @@ class HomePage {
         XML.open('GET', 'https://raw.githubusercontent.com/pytgcalls/docsdata/master/config.xml?cache='+String(Math.random()), true);
         XML.send();
         XML.addEventListener('readystatechange', (e) => {
-          if (e.target.readyState == 4 && e.target.status == 200) {
+          if (e.target.readyState === 4 && e.target.status === 200) {
             this.#precachedResponse = e.target.response;
             this.#headerDescription.appendChild(this.#createPageTabs({ onChange: false }));
           }
@@ -353,8 +353,8 @@ class HomePage {
 
         const fileDataKeys = this.#indexes[file];
 
-        const foundInName = file.toLowerCase().indexOf(text.toLowerCase()) != -1;
-        const foundInKeys = fileDataKeys.toLowerCase().indexOf(text.toLowerCase()) != -1;
+        const foundInName = file.toLowerCase().indexOf(text.toLowerCase()) !== -1;
+        const foundInKeys = fileDataKeys.toLowerCase().indexOf(text.toLowerCase()) !== -1;
         
         if (foundInName || foundInKeys) {
           hasResults = true;
@@ -428,12 +428,12 @@ class HomePage {
         const handleIndexingWithResponse = (i, fullPath, response, status) => {
           indexingText.textContent = 'Indexing... (' + i + '/' + filesListElements.length + ')';
 
-          if (status == 200) {
+          if (status === 200) {
             this.#indexes[fullPath] = sourceParser.handleSearchIndexByText(response);
             this.#indexes_caching[fullPath] = response;
           }
 
-          if (i == filesListElements.length) {
+          if (i === filesListElements.length) {
             this.#isCurrentlyIndexing = false;
             this.#hasIndexed = true;
             onSearchReady(input.value.trim());
@@ -460,7 +460,7 @@ class HomePage {
             }, 5 * id);
 
             XML.addEventListener('readystatechange', (e) => {
-              if (e.target.readyState == 4) {
+              if (e.target.readyState === 4) {
                 i++;
                 handleIndexingWithResponse(i, fullPath, e.target.response, e.target.status);
               }
@@ -516,7 +516,7 @@ class HomePage {
 
         switch (file.tagName.toUpperCase()) {
           case 'FILE':
-            if (file.textContent != '.xml' && file.textContent.endsWith('.xml')) {
+            if (file.textContent !== '.xml' && file.textContent.endsWith('.xml')) {
               listFragment.append(this.#createSidebarFileElement(
                 i.toString(),
                 this.#parseCategoryName(file.textContent).replace(basePathForMainFiles ?? '', ''),
@@ -575,7 +575,7 @@ class HomePage {
       }
     }
 
-    if (window.location.protocol != 'https:') {
+    if (window.location.protocol !== 'https:') {
       let element = document.createElement('div');
       element.classList.add('microtag');
       element.style.setProperty('--id', (i++).toString());
@@ -587,7 +587,7 @@ class HomePage {
       element.style.setProperty('--id', (i++).toString());
       element.addEventListener('click', () => {
         if (typeof this.#selectedElement != 'undefined') {
-          if (this.#selectedElement == element) {
+          if (this.#selectedElement === element) {
             return;
           }
 
@@ -613,7 +613,7 @@ class HomePage {
     element.classList.add('element');
     element.addEventListener('click', () => {
       if (typeof this.#selectedElement != 'undefined') {
-        if (this.#selectedElement == element) {
+        if (this.#selectedElement === element) {
           return;
         }
 
@@ -665,7 +665,7 @@ class HomePage {
       XML.open('GET', 'https://raw.githubusercontent.com/pytgcalls/docsdata/master/' + fileName, true);
       XML.send();
       XML.addEventListener('readystatechange', (e) => {
-        if (e.target.readyState == 4 && e.target.status == 200) {
+        if (e.target.readyState === 4 && e.target.status === 200) {
           this.#indexes_caching[fileName] = e.target.response;
           this.#handleResponse(content, pageSections, e.target.response);
         }
@@ -751,14 +751,14 @@ class HomePage {
       }
 
       if (element instanceof Element) {
-        if (element.getAttribute('noref') == 'true') {
+        if (element.getAttribute('noref') === 'true') {
           continue;
         }
 
-        if (element.tagName.toUpperCase() == 'TD' || (element.classList.length && ['H1', 'H2', 'H3', 'CATEGORY-TITLE', 'PG-TITLE'].includes(element.classList[0].toUpperCase()))) {
+        if (element.tagName.toUpperCase() === 'TD' || (element.classList.length && ['H1', 'H2', 'H3', 'CATEGORY-TITLE', 'PG-TITLE'].includes(element.classList[0].toUpperCase()))) {
           let cloned = element.cloneNode(true);
 
-          if (element.tagName.toUpperCase() == 'TD') {
+          if (element.tagName.toUpperCase() === 'TD') {
             cloned = document.createElement('div');
             cloned.classList.add('pg-title');
           }
@@ -796,12 +796,12 @@ class HomePage {
           const cloned = element.cloneNode(false);
           currentDom.append(cloned);
           this.#iterPageSectionsData(element, cloned);
-        } else if (element.tagName.toUpperCase() == 'TABLE') {
+        } else if (element.tagName.toUpperCase() === 'TABLE') {
           const clonedTable = document.createElement('div');
           clonedTable.classList.add('subtext');
           currentDom.append(clonedTable);
           this.#iterPageSectionsData(element, clonedTable);
-        } else if (element.tagName.toUpperCase() == 'TR') {
+        } else if (element.tagName.toUpperCase() === 'TR') {
           this.#iterPageSectionsData(element, currentDom, 1);
         }
       }
