@@ -73,6 +73,17 @@ body .page-container .content.is-loading .try-container .button {
   border-radius: 10px;
 }
 
+body .page-container .content .page {
+  animation: 0.4s appearPage cubic-bezier(0.42, 0, 0, 0.97);
+}
+
+@keyframes appearPage {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+}
+
 body .page-container .content:not(.is-loading) {
   box-sizing: border-box;
   padding-inline: 20px;
