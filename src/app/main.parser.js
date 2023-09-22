@@ -231,15 +231,15 @@ class SourceParser {
         
         switch (element.getAttribute('type')) {
           case 'important':
-            elementHeaderImage.src = 'src/icons/important.svg';
+            elementHeaderImage.src = '/src/icons/important.svg';
             elementHeaderText.textContent = 'Important!';
           break;
           case 'note':
-            elementHeaderImage.src = 'src/icons/note.svg';
+            elementHeaderImage.src = '/src/icons/note.svg';
             elementHeaderText.textContent = 'Note';
           break;
           case 'warning':
-            elementHeaderImage.src = 'src/icons/warning.svg';
+            elementHeaderImage.src = '/src/icons/warning.svg';
             elementHeaderText.textContent = 'Warning!';
           break;
         }
@@ -363,16 +363,16 @@ class SourceParser {
             const repoIllustration = document.createElement('div');
             repoIllustration.classList.add('illustration');
             repoIllustration.appendChild(this.#createIconNameContainerForGithub(
-              './src/icons/codefork.svg', String(response['forks'])
+              '/src/icons/codefork.svg', String(response['forks'])
             ));
             repoIllustration.appendChild(this.#createIconNameContainerForGithub(
-              './src/icons/eye.svg', String(response['subscribers_count'])
+              '/src/icons/eye.svg', String(response['subscribers_count'])
             ));
             repoIllustration.appendChild(this.#createIconNameContainerForGithub(
-              './src/icons/gavel.svg', response['license'] ? String(response['license']['spdx_id']) : '-'
+              '/src/icons/gavel.svg', response['license'] ? String(response['license']['spdx_id']) : '-'
             ));
             repoIllustration.appendChild(this.#createIconNameContainerForGithub(
-              './src/icons/star.svg', String(response['stargazers_count'])
+              '/src/icons/star.svg', String(response['stargazers_count'])
             ));
 
             element.classList.remove('is-loading');
