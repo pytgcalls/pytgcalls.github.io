@@ -1,5 +1,6 @@
 body .page-container .sections {
   width: 20vw;
+  height: 100%;
 }
 
 @media screen and (max-width: 1330px) {
@@ -7,13 +8,11 @@ body .page-container .sections {
     position: absolute;
     bottom: 0;
     transform: translateX(100%);
-    z-index: 1;
-    width: 100vw;
+    width: 100%;
     padding-inline: 20px;
     pointer-events: none;
     background: black;
     z-index: 4;
-    height: calc(calc(100 * var(--vh)) - 61px) !important;
     transition: 0.4s transform cubic-bezier(0.97,-0.02, 0, 0.98);
   }
 
@@ -44,7 +43,6 @@ body .page-container .sections.is-loading svg circle {
 }
 
 body .page-container .sections:not(.is-loading) {
-  height: calc(calc(100 * var(--vh)) - 60px - 20px);
   padding-left: 18px;
   padding-top: 15px;
   box-sizing: border-box;

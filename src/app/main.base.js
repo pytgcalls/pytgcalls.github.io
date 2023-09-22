@@ -8,11 +8,4 @@ window.addEventListener('load', () => {
       }
     });
   }
-
-  const updateVh = () => {
-    document.body.style.setProperty('--vh', (window.innerHeight * 0.01)+'px');
-  };
-
-  updateVh();
-  window.addEventListener('resize', updateVh);
 });

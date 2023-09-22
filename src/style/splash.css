@@ -3,7 +3,7 @@ body .splash {
   align-items: center;
   justify-content: center;
   position: relative;
-  height: calc(100 * var(--vh));
+  height: 100%;
   overflow: hidden;
   animation: 0.2s hideSplash 1.2s forwards;
 }

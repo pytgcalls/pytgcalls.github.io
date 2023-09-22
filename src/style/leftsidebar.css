@@ -1,17 +1,15 @@
 body .page-container .left-container {
-  display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  height: calc(calc(100 * var(--vh)) - 61px);
+  height: 100%;
+  display: flex;
 }
 
 @media screen and (max-width: 1330px) {
   body .page-container .left-container {
     position: absolute;
-    bottom: 0;
     transform: translateX(-100%);
-    z-index: 1;
-    width: 100vw;
+    width: 100%;
     padding-inline: 20px;
     pointer-events: none;
     background: black;
@@ -61,7 +59,7 @@ body .page-container .left-container .search-bar:not(.expanded) {
 }
 
 body .page-container .left-container .search-bar.expanded {
-  height: calc(calc(100 * var(--vh)) - 60px - 20px - 43px - 10px);
+  height: 100%;
 }
 
 body .page-container .left-container .search-bar .search-input {

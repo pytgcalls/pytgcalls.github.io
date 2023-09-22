@@ -1,8 +1,15 @@
 body .page-container .content {
-  flex: 1;
+  box-sizing: border-box;
+  padding-inline: 20px;
+  overflow-y: scroll;
   width: 60vw;
-  height: calc(calc(100 * var(--vh)) - 60px - 20px);
-  overflow-y: auto;
+  height: 100%;
+}
+
+@media screen and (max-width: 1330px) {
+  body .page-container .content {
+    width: 100%;
+  }
 }
 
 body .page-container .content.is-loading {
@@ -76,6 +83,7 @@ body .page-container .content.is-loading .try-container .button {
 body .page-container .content:not(.is-loading) {
   box-sizing: border-box;
   padding-inline: 20px;
+  padding-bottom: 20px;
   color: #FFFFFF;
 }
 
