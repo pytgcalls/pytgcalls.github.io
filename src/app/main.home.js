@@ -575,30 +575,32 @@ class HomePage {
       }
     }
 
-    let element = document.createElement('div');
-    element.classList.add('microtag');
-    element.style.setProperty('--id', (i++).toString());
-    element.textContent = 'DEVELOPMENT';
-    listFragment.append(element);
-    
-    element = document.createElement('div');
-    element.classList.add('element');
-    element.style.setProperty('--id', (i++).toString());
-    element.addEventListener('click', () => {
-      if (typeof this.#selectedElement != 'undefined') {
-        if (this.#selectedElement == element) {
-          return;
-        }
-
-        this.#selectedElement.classList.remove('active');
-      }
+    if (window.location.protocol != 'https:') {
+      let element = document.createElement('div');
+      element.classList.add('microtag');
+      element.style.setProperty('--id', (i++).toString());
+      element.textContent = 'DEVELOPMENT';
+      listFragment.append(element);
       
-      element.classList.add('active');
-      this.#selectedElement = element;
-      this.#tryCustomCode();
-    });
-    element.textContent = 'Add your custom code';
-    listFragment.append(element);
+      element = document.createElement('div');
+      element.classList.add('element');
+      element.style.setProperty('--id', (i++).toString());
+      element.addEventListener('click', () => {
+        if (typeof this.#selectedElement != 'undefined') {
+          if (this.#selectedElement == element) {
+            return;
+          }
+
+          this.#selectedElement.classList.remove('active');
+        }
+        
+        element.classList.add('active');
+        this.#selectedElement = element;
+        this.#tryCustomCode();
+      });
+      element.textContent = 'Add your custom code';
+      listFragment.append(element);
+    }
     
     content.textContent = '';
     content.classList.remove('is-loading');
