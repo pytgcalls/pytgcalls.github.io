@@ -1,11 +1,21 @@
 window.addEventListener('load', () => {
   const splashScreen = document.querySelector('body .splash');
   if (splashScreen) {
-    splashScreen.addEventListener('animationend', (e) => {
-      if (e.target == splashScreen) {
-        splashScreen.remove();
-        homePage.init();
-      }
+    let promisesList = [];
+    
+    promisesList.push(new Promise((resolve) => {
+      splashScreen.addEventListener('animationend', (e) => {
+        if (e.target == splashScreen) {
+          resolve();
+        }
+      });
+    }));
+
+    promisesList.push(utils.loadConfig());
+
+    Promise.all(promisesList).then(() => {
+      splashScreen.remove();
+      homePage.init(window.location.pathname);
     });
   }
 

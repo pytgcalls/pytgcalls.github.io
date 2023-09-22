@@ -18,7 +18,7 @@ class HomePage {
   #indexes = {};
   #indexes_caching = {};
 
-  init() {
+  init(pathName) {
     document.body.innerHTML = '';
 
     const headerMenu = document.createElement('div');
@@ -45,7 +45,7 @@ class HomePage {
       const state = this.#pageSections.classList.toggle('show');
       headerCompass.classList.toggle('show', state);
     });
-    headerCompass.src = './src/icons/compass.svg';
+    headerCompass.src = '/src/icons/compass.svg';
     this.#headerCompass = headerCompass;
     const headerDescription = document.createElement('div');
     headerDescription.classList.add('description');
@@ -106,7 +106,32 @@ class HomePage {
       }
     }
 
-    this.#loadSidebar('PyTgCalls');
+    if (typeof pathName == 'string') {
+      this.#chooseRightTab(pathName);
+    } else {
+      this.#loadSidebar('NTgCalls', pathName);
+    }
+  }
+
+  #chooseRightTab(pathName) {
+    utils.loadConfig().then((config) => {
+      const domHelper = new DOMParser();
+      const dom = domHelper.parseFromString(config, 'application/xml');
+      const filesListElements = dom.querySelectorAll('config > files-list');
+
+      let found = false;
+      for(const element of filesListElements) {
+        if (decodeURI(pathName).startsWith(this.#parseCategoryUrl(element.getAttribute('basepath')))) {
+          found = true;
+          this.#loadSidebar(element.getAttribute('id'), pathName);
+        }
+      }
+
+      if (!found) {
+        window.history.pushState('', '', '/');
+        this.#loadSidebar('NTgCalls');
+      }
+    });
   }
 
   #initTooltip(element) {
@@ -174,10 +199,10 @@ class HomePage {
     }
   }
 
-  #createPageTabs({ onChange, isSecondaryInstance = false }) {
-    if (typeof this.#precachedResponse != 'undefined') {
+  #createPageTabs({ onChange }) {
+    utils.loadConfig().then((config) => {
       const domHelper = new DOMParser();
-      const dom = domHelper.parseFromString(this.#precachedResponse, 'application/xml');
+      const dom = domHelper.parseFromString(config, 'application/xml');
       const filesListElements = dom.querySelectorAll('config > files-list');
 
       let selectedTabElement;
@@ -206,6 +231,8 @@ class HomePage {
             this.#leftSidebar.classList.add('expanded');
             this.#searchBar.classList.remove('expanded');
 
+            window.history.pushState('', '', '/' + file.getAttribute('basepath'));
+
             if (typeof onChange == 'function') {
               onChange();
             }
@@ -217,18 +244,13 @@ class HomePage {
             tab.classList.add('active');
             selectedTabElement = tab;
             tabsContainer.style.setProperty('--id', id.toString());
-            
-            if (!isSecondaryInstance) {
-              this.#loadSidebar(file.getAttribute('id'));
-            }
           }
         }
       }
       
-      return tabsContainer;
-    }
-
-    return document.createDocumentFragment();
+      this.#headerDescription.textContent = '';
+      this.#headerDescription.appendChild(tabsContainer);
+    });
   }
 
   #switchSidebarWithAnimation(id) {
@@ -246,34 +268,26 @@ class HomePage {
     }, { once: true });
   }
 
-  #loadSidebar(id) {
+  #loadSidebar(id, pathName = false) {
     const content = this.#leftSidebar;
 
     content.classList.add('is-loading');
     content.textContent = '';
     content.appendChild(utils.createLoadingItem());
-
-    if (typeof this.#precachedResponse != 'undefined') {
-      this.#currentlyTabId = id;
-      this.#handleResponseWithContent(this.#precachedResponse, content, id);
-    } else {
-      content.addEventListener('animationend', () => {
-        const XML = new XMLHttpRequest();
-        XML.open('GET', 'https://raw.githubusercontent.com/pytgcalls/docsdata/master/config.xml?cache='+String(Math.random()), true);
-        XML.send();
-        XML.addEventListener('readystatechange', (e) => {
-          if (e.target.readyState == 4 && e.target.status == 200) {
-            this.#precachedResponse = e.target.response;
-            this.#headerDescription.appendChild(this.#createPageTabs({ onChange: false }));
-          }
-        });
-      }, { once: true });
-    }
+    
+    this.#currentlyTabId = id;
+    utils.loadConfig().then((config) => {
+      if (!this.#headerDescription.hasChildNodes()) {
+        this.#createPageTabs({ onChange: false });
+      }
+      
+      this.#handleResponseWithContent(config, content, id, pathName);
+    });
   }
 
   #createSidebarSearchBar() {
     const searchIcon = document.createElement('img');
-    searchIcon.src = './src/icons/magnifyingGlass.svg';
+    searchIcon.src = '/src/icons/magnifyingGlass.svg';
     const searchText = document.createElement('input');
     searchText.placeholder = 'Search docs';
     const searchInput = document.createElement('div');
@@ -323,94 +337,90 @@ class HomePage {
   }
 
   #handleSearchValue(input, results) {
-    if (typeof this.#precachedResponse == 'undefined') {
-      return;
-    }
+    utils.loadConfig().then((config) => {
+      const domHelper = new DOMParser();
+      const dom = domHelper.parseFromString(config, 'application/xml');
 
-    const domHelper = new DOMParser();
-    const dom = domHelper.parseFromString(this.#precachedResponse, 'application/xml');
+      const onSearchReady = (text) => {
+        if (!text.length) {
+          results.textContent = '';
+          results.classList.toggle('is-loading', !hasResults);
+          return;
+        }
 
-    const onSearchReady = (text) => {
-      if (!text.length) {
+        const resultsFragment = document.createDocumentFragment();
+
+        const filesListElement = dom.querySelector('config > files-list[id="' + this.#currentlyTabId + '"]');
+        if (!filesListElement) {
+          throw new Error("Can't handle files-list element");
+        }
+
+        let hasResults = false;
+
+        for(const file in this.#indexes) {
+          if (!file.startsWith(filesListElement.getAttribute('basepath'))) {
+            continue;
+          }
+
+          const fileDataKeys = this.#indexes[file];
+
+          const foundInName = file.toLowerCase().indexOf(text.toLowerCase()) != -1;
+          const foundInKeys = fileDataKeys.toLowerCase().indexOf(text.toLowerCase()) != -1;
+          
+          if (foundInName || foundInKeys) {
+            hasResults = true;
+
+            const fileDataTitle = document.createElement('div');
+            fileDataTitle.classList.add('file-data-title');
+            fileDataTitle.textContent = this.#parseCategoryName(file.replaceAll('/', ' > '));
+            const fileData = document.createElement('div');
+            fileData.classList.add('file-data');
+            fileData.addEventListener('click', () => {
+              this.#loadContent(file);
+            });
+            fileData.appendChild(fileDataTitle);
+
+            if (!foundInName) {
+              const splitting = fileDataKeys.toLowerCase().split(text.toLowerCase());
+              const beforeSplitting = this.#splitSearchResult(splitting[0], true);
+              const afterSplitting = this.#splitSearchResult(splitting[1], false);
+
+              const highlightedWord = document.createElement('span');
+              highlightedWord.classList.add('highlighted');
+              highlightedWord.textContent = text;
+              const fileDataDescription = document.createElement('div');
+              fileDataDescription.classList.add('file-data-description');
+              fileDataDescription.appendChild(document.createTextNode(beforeSplitting));
+              fileDataDescription.appendChild(highlightedWord);
+              fileDataDescription.appendChild(document.createTextNode(afterSplitting));
+              fileData.appendChild(fileDataDescription);
+            }
+            
+            resultsFragment.appendChild(fileData);
+          }
+        }
+
+        if (!hasResults) {
+          const errorImage = document.createElement('img');
+          errorImage.classList.add('image');
+          errorImage.src = '/src/icons/heartCrack.svg';
+          const errorText = document.createElement('div');
+          errorText.textContent = 'No results found.';
+          const error = document.createElement('div');
+          error.classList.add('error');
+          error.appendChild(errorImage);
+          error.appendChild(errorText);
+          resultsFragment.append(error);
+        }
+
         results.textContent = '';
         results.classList.toggle('is-loading', !hasResults);
+        results.appendChild(resultsFragment);
+      };
+
+      if (this.#isCurrentlyIndexing) {
         return;
-      }
-
-      const resultsFragment = document.createDocumentFragment();
-
-      const filesListElement = dom.querySelector('config > files-list[id="' + this.#currentlyTabId + '"]');
-      if (!filesListElement) {
-        throw new Error("Can't handle files-list element");
-      }
-
-      let hasResults = false;
-
-      for(const file in this.#indexes) {
-        if (!file.startsWith(filesListElement.getAttribute('basepath'))) {
-          continue;
-        }
-
-        const fileDataKeys = this.#indexes[file];
-
-        const foundInName = file.toLowerCase().indexOf(text.toLowerCase()) != -1;
-        const foundInKeys = fileDataKeys.toLowerCase().indexOf(text.toLowerCase()) != -1;
-        
-        if (foundInName || foundInKeys) {
-          hasResults = true;
-
-          const fileDataTitle = document.createElement('div');
-          fileDataTitle.classList.add('file-data-title');
-          fileDataTitle.textContent = this.#parseCategoryName(file.replaceAll('/', ' > '));
-          const fileData = document.createElement('div');
-          fileData.classList.add('file-data');
-          fileData.addEventListener('click', () => {
-            this.#loadContent(file);
-          });
-          fileData.appendChild(fileDataTitle);
-
-          if (!foundInName) {
-            const splitting = fileDataKeys.toLowerCase().split(text.toLowerCase());
-            const beforeSplitting = this.#splitSearchResult(splitting[0], true);
-            const afterSplitting = this.#splitSearchResult(splitting[1], false);
-
-            const highlightedWord = document.createElement('span');
-            highlightedWord.classList.add('highlighted');
-            highlightedWord.textContent = text;
-            const fileDataDescription = document.createElement('div');
-            fileDataDescription.classList.add('file-data-description');
-            fileDataDescription.appendChild(document.createTextNode(beforeSplitting));
-            fileDataDescription.appendChild(highlightedWord);
-            fileDataDescription.appendChild(document.createTextNode(afterSplitting));
-            fileData.appendChild(fileDataDescription);
-          }
-          
-          resultsFragment.appendChild(fileData);
-        }
-      }
-
-      if (!hasResults) {
-        const errorImage = document.createElement('img');
-        errorImage.classList.add('image');
-        errorImage.src = './src/icons/heartCrack.svg';
-        const errorText = document.createElement('div');
-        errorText.textContent = 'No results found.';
-        const error = document.createElement('div');
-        error.classList.add('error');
-        error.appendChild(errorImage);
-        error.appendChild(errorText);
-        resultsFragment.append(error);
-      }
-
-      results.textContent = '';
-      results.classList.toggle('is-loading', !hasResults);
-      results.appendChild(resultsFragment);
-    };
-
-    if (this.#isCurrentlyIndexing) {
-      return;
-    } else if (!this.#hasIndexed) {
-      if (typeof this.#precachedResponse != 'undefined') {
+      } else if (!this.#hasIndexed) {
         this.#isCurrentlyIndexing = true;
 
         const indexingText = document.createElement('span');
@@ -467,10 +477,10 @@ class HomePage {
             });
           }
         }
+      } else {
+        onSearchReady(input.value.trim());
       }
-    } else {
-      onSearchReady(input.value.trim());
-    }
+    });
   }
 
   #splitSearchResult(text, isZeroSplit = false) {
@@ -491,7 +501,7 @@ class HomePage {
     }
   }
 
-  #handleResponseWithContent(response, content, id) {
+  #handleResponseWithContent(response, content, id, pathName) {
     const domHelper = new DOMParser();
     const dom = domHelper.parseFromString(response, 'application/xml');
 
@@ -517,11 +527,24 @@ class HomePage {
         switch (file.tagName.toUpperCase()) {
           case 'FILE':
             if (file.textContent != '.xml' && file.textContent.endsWith('.xml')) {
-              listFragment.append(this.#createSidebarFileElement(
+              const fullPath = basePathForMainFiles ? (basePathForMainFiles + file.textContent) : undefined;
+
+              const element = this.#createSidebarFileElement(
                 i.toString(),
                 this.#parseCategoryName(file.textContent).replace(basePathForMainFiles ?? '', ''),
-                basePathForMainFiles ? (basePathForMainFiles + file.textContent) : undefined
-              ));
+                fullPath
+              );
+
+              listFragment.append(element);
+
+              if (encodeURI(this.#parseCategoryUrl(fullPath)) == pathName) {
+                element.classList.add('active');
+                this.#selectedElement = element;
+
+                requestAnimationFrame(() => {
+                  this.#loadContent(fullPath);
+                });
+              }
             }
           break;
           case 'MICROTAG':
@@ -545,7 +568,7 @@ class HomePage {
                 elementText.classList.add('text');
                 elementText.textContent = this.#parseCategoryName(basePathForGroupFiles).replace(basePathForMainFiles ?? '', '');
                 const elementIcon = document.createElement('img');
-                elementIcon.src = 'src/icons/chevrondown.svg';
+                elementIcon.src = '/src/icons/chevrondown.svg';
                 const element = document.createElement('div');
                 element.classList.add('element');
                 element.appendChild(elementText);
@@ -557,11 +580,23 @@ class HomePage {
                 elementsGroup.appendChild(element);
 
                 for(const file of groupFilesList) {
-                  elementsGroup.append(this.#createSidebarFileElement(
+                  let fullPath = basePathForGroupFiles + file.textContent;
+
+                  const element = this.#createSidebarFileElement(
                     i.toString(), 
                     this.#parseCategoryName(file.textContent).replace(basePathForGroupFiles ?? '', ''),
-                    basePathForGroupFiles + file.textContent
-                  ));
+                    fullPath,
+                  );
+                  elementsGroup.append(element);
+
+                  if (encodeURI(this.#parseCategoryUrl(fullPath)) == pathName) {
+                    element.classList.add('active');
+                    this.#selectedElement = element;
+
+                    requestAnimationFrame(() => {
+                      this.#loadContent(fullPath);
+                    });
+                  }
                 }
 
                 elementsGroup.style.setProperty('--items', elementsGroup.childNodes.length.toString());
@@ -658,7 +693,9 @@ class HomePage {
     this.#leftContainer.classList.remove('show');
     this.#headerMenu.classList.remove('show');
 
+    const pathFileName = this.#parseCategoryUrl(fileName);
     if (this.#indexes_caching[fileName]) {
+      window.history.pushState('', '', pathFileName);
       this.#handleResponse(content, pageSections, this.#indexes_caching[fileName]);
     } else {
       const XML = new XMLHttpRequest();
@@ -667,6 +704,7 @@ class HomePage {
       XML.addEventListener('readystatechange', (e) => {
         if (e.target.readyState == 4 && e.target.status == 200) {
           this.#indexes_caching[fileName] = e.target.response;
+          window.history.pushState('', '', pathFileName);
           this.#handleResponse(content, pageSections, e.target.response);
         }
       });
@@ -735,6 +773,22 @@ class HomePage {
   #parseCategoryName(fileName) {
     if (fileName.endsWith('.xml')) {
       fileName = fileName.slice(0, -4);
+    }
+
+    if (fileName.endsWith('/')) {
+      fileName = fileName.slice(0, -1);
+    }
+
+    return fileName;
+  }
+
+  #parseCategoryUrl(fileName) {
+    if (fileName.endsWith('.xml')) {
+      fileName = fileName.slice(0, -4);
+    }
+
+    if (!fileName.startsWith('/')) {
+      fileName = '/' + fileName;
     }
 
     if (fileName.endsWith('/')) {
