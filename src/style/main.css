@@ -57,6 +57,10 @@ body .page-container {
   display: flex;
   align-items: center;
   justify-content: center;
+  max-width: 100vw;
+  height: calc(100 * var(--vh) - 61px);
+  overflow: hidden;
+  position: relative;
 }
 
 ::-webkit-scrollbar {
