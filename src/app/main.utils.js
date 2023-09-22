@@ -3,7 +3,7 @@ class Utils {
     const circleItem = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     circleItem.setAttributeNS(null, 'cx', '50%');
     circleItem.setAttributeNS(null, 'cy', '50%');
-    circleItem.setAttributeNS(null, 'r', 20);
+    circleItem.setAttributeNS(null, 'r', '20');
     circleItem.setAttributeNS(null, 'fill', 'none');
     const loaderSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     loaderSvg.setAttributeNS(null, 'width', String(size));
