@@ -34,7 +34,7 @@ class HomePage {
     headerMenu.appendChild(document.createElement('div'));
     this.#headerMenu = headerMenu;
     const headerIcon = document.createElement('img');
-    headerIcon.src = 'src/assets/splash/telegram-logo.svg';
+    headerIcon.src = '/src/assets/splash/telegram-logo.svg';
     const headerTitle = document.createElement('div');
     headerTitle.classList.add('title');
     headerTitle.textContent = 'NTgCalls';
