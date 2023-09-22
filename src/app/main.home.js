@@ -809,4 +809,4 @@ class HomePage {
   }
 }
 
-var homePage = new HomePage();
+const homePage = new HomePage();
