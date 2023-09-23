@@ -179,6 +179,13 @@ body .page-container .content:not(.is-loading) .syntax-highlight {
   overflow-x: auto;
   overflow-y: hidden;
   position: relative;
+  white-space: nowrap;
+}
+
+@supports (overflow-x: overlay) {
+  body .page-container .content:not(.is-loading) .syntax-highlight {
+    overflow-x: overlay;
+  }
 }
 
 body.disable-blur .page-container .content:not(.is-loading) .syntax-highlight {
