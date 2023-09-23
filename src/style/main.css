@@ -17,6 +17,7 @@ body {
   -ms-user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body .shadow-element {
