@@ -5,12 +5,11 @@ body .splash {
   position: relative;
   height: 100%;
   overflow: hidden;
-  animation: 0.2s hideSplash 1.2s forwards;
+  animation: 0.2s hideSplash 1.4s forwards;
 }
 
 @keyframes hideSplash {
   to {
-    transform: scale(1.1);
     opacity: 0;
   }
 }
@@ -25,7 +24,7 @@ body .splash .animated-icon {
   top: 50%;
   left: 50%;
   transform: translateX(-50%) translateY(-50%) translateX(var(--pos-x)) translateY(var(--pos-y));
-  animation: 0.5s appearAnimatedIcon, 0.6s moveToCenter 0.5s forwards cubic-bezier(1, -0.02, 0, 1.02);
+  animation: 0.5s appearAnimatedIcon, 0.6s moveToCenter 0.3s forwards cubic-bezier(1, -0.02, 0, 1.02);
 }
 
 @media screen and (max-width: 650px) {
@@ -54,33 +53,224 @@ body .splash .animated-icon img {
   width: 50px;
 }
 
-body .splash .text {
-  color: #FFFFFF;
-  font-size: 63px;
-  opacity: 0.3;
-  transform: scale(0.8);
-  animation: 0.3s appearText 0.7s forwards;
+body .splash .audio-shader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-@keyframes appearText {
+body .splash .audio-shader .microphone {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  top: calc(50% - 50px);
+  left: calc(50% - 50px);
+  opacity: 0;
+  animation: 0.4s appearImage 0.2s forwards, 0.4s moveMicrophone 0.7s forwards;
+}
+
+@keyframes moveMicrophone {
+  to {
+    left: calc(50% - 50px - 200px);
+  }
+}
+
+body .splash .audio-shader .microphone img {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  top: calc(50% - 50px);
+  left: calc(50% - 50px);
+}
+
+body .splash .audio-shader .microphone img.mainicon {
+  animation: 0.4s rotateImage 0.7s forwards;
+}
+
+@keyframes rotateImage {
+  to {
+    transform: rotate(-90deg);
+    opacity: 0;
+  }
+}
+
+body .splash .audio-shader .microphone img.secondary {
+  opacity: 0;
+  animation: 0.4s rotateImageSecondary 0.7s forwards;
+}
+
+@keyframes rotateImageSecondary {
+  from {
+    transform: rotate(-90deg);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+body .splash .audio-shader .shader {
+  height: 140px;
+  width: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-radius: 50%;
+  opacity: 0;
+  animation: 0.4s appearShader 0.2s forwards;
+}
+
+body .splash .audio-shader .shader:first-child {
+  margin-right: 50px;
+  animation: 0.4s appearShader 0.2s forwards, 0.4s moveToCenterShaderFirst 0.7s forwards;
+}
+
+body .splash .audio-shader .shader:nth-child(2) {
+  animation: 0.4s appearShader 0.2s forwards, 0.4s disappearShader 0.7s forwards;
+}
+
+body .splash .audio-shader .shader:nth-child(3) {
+  margin-left: 50px;
+  animation: 0.4s appearShader 0.2s forwards, 0.4s moveToCenterShaderLatest 0.7s forwards;
+}
+
+@keyframes moveToCenterShaderFirst {
+  to {
+    margin-right: calc(-60px - 50px);
+    opacity: 0;
+  }
+}
+
+@keyframes disappearShader {
+  to {
+    border-radius: 10%;
+    opacity: 0;
+  }
+}
+
+@keyframes moveToCenterShaderLatest {
+  to {
+    margin-left: calc(-60px - 50px);
+    opacity: 0;
+  }
+}
+
+@keyframes appearShader {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+body .splash .audio-shader .shader[data-id="video"] {
+  background: #a44711;
+}
+
+body .splash .audio-shader .shader[data-id="microphone"] {
+  background: linear-gradient(
+    #d06723, #22c5ed
+  );
+}
+
+body .splash .audio-shader .shader[data-id="quit"] {
+  background: #883e41;
+}
+
+body .splash .audio-shader .shader[data-id="quit"] img {
+  transform: rotate(137deg);
+}
+
+body .splash .audio-shader .shader:not([data-id="microphone"]) {
+  height: 60px;
+  width: 60px;
+}
+
+body .splash .audio-shader .shader img {
+  width: 22px;
+  height: 22px;
+  filter: invert(1);
+  opacity: 0;
+  animation: 0.4s appearImage 0.2s forwards;
+}
+
+@keyframes appearImage {
+  from {
+    opacity: 0;
+  }
   to {
     opacity: 1;
-    transform: scale(1);
   }
 }
 
-body .splash .text img {
-  width: 42px;
-  height: 42px;
+body .splash .audio-shader .shader .description {
+  position: absolute;
+  bottom: -30px;
+  color: white;
+  opacity: 0;
+  animation: 0.4s appearDescription 0.2s forwards;
 }
 
-@media screen and (max-width: 650px) {
-  body .splash .text  {
-    font-size: 38px;
+@keyframes appearDescription {
+  from {
+    transform: translateY(-40px);
+    opacity: 0;
   }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
 
-  body .splash .text img {
-    width: 25px;
-    height: 25px;
+body .splash .audio-shader .waves {
+  width: 0;
+  height: 6px;
+  background: #ffffff40;
+  border-radius: 10px;
+  display: flex;
+  align-items: flex-end;
+  animation: 0.4s updateWaves 0.7s forwards;
+}
+
+@keyframes updateWaves {
+  from {
+    width: 0;
+    transform: none;
+  }
+  to {
+    width: 300px;
+    transform: translateY(20px);
+  }
+}
+
+body .splash .audio-shader .waves .wave {
+  display: inline-block;
+  width: 3px;
+  height: 0;
+  background: white;
+  margin-right: 3px;
+  opacity: 0;
+  animation: 0.4s updateWaveState 0.7s forwards, 0.4s updateWaveHeight calc(0.9s + 0.01s * var(--i)) forwards;
+}
+
+@keyframes updateWaveState {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes updateWaveHeight {
+  from {
+    height: 0;
+  }
+  to {
+    height: calc(var(--value) * 0.5px);
   }
 }
