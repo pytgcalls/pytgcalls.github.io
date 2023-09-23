@@ -5,7 +5,7 @@ window.addEventListener('load', () => {
     
     promisesList.push(new Promise((resolve) => {
       splashScreen.addEventListener('animationend', (e) => {
-        if (e.target == splashScreen) {
+        if (e.target === splashScreen) {
           resolve();
         }
       });

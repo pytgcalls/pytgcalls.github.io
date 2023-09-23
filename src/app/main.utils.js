@@ -35,7 +35,7 @@ class Utils {
   }
 
   loadConfig() {
-    if (typeof this.#precachedConfig != 'undefined') {
+    if (typeof this.#precachedConfig !== 'undefined') {
       return Promise.resolve(this.#precachedConfig);
     } else {
       return new Promise((resolve) => {
@@ -43,7 +43,7 @@ class Utils {
         XML.open('GET', 'https://raw.githubusercontent.com/pytgcalls/docsdata/master/config.xml?cache='+String(Math.random()), true);
         XML.send();
         XML.addEventListener('readystatechange', (e) => {
-          if (e.target.readyState == 4 && e.target.status == 200) {
+          if (e.target.readyState === 4 && e.target.status === 200) {
             this.#precachedConfig = e.target.response;
             resolve(this.#precachedConfig);
           }
