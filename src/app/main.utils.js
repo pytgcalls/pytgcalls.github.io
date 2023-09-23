@@ -5,7 +5,7 @@ class Utils {
     const circleItem = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     circleItem.setAttributeNS(null, 'cx', '50%');
     circleItem.setAttributeNS(null, 'cy', '50%');
-    circleItem.setAttributeNS(null, 'r', 20);
+    circleItem.setAttributeNS(null, 'r', '20');
     circleItem.setAttributeNS(null, 'fill', 'none');
     const loaderSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     loaderSvg.setAttributeNS(null, 'width', String(size));
@@ -35,7 +35,7 @@ class Utils {
   }
 
   loadConfig() {
-    if (typeof this.#precachedConfig != 'undefined') {
+    if (typeof this.#precachedConfig !== 'undefined') {
       return Promise.resolve(this.#precachedConfig);
     } else {
       return new Promise((resolve) => {
@@ -43,7 +43,7 @@ class Utils {
         XML.open('GET', 'https://raw.githubusercontent.com/pytgcalls/docsdata/master/config.xml?cache='+String(Math.random()), true);
         XML.send();
         XML.addEventListener('readystatechange', (e) => {
-          if (e.target.readyState == 4 && e.target.status == 200) {
+          if (e.target.readyState === 4 && e.target.status === 200) {
             this.#precachedConfig = e.target.response;
             resolve(this.#precachedConfig);
           }
