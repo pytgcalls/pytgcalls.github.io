@@ -4,11 +4,15 @@
 @import url("sections.css");
 @import url("splash.css");
 
+html {
+  height: 100%;
+}
+
 body {
   background: #050505;
   font-family: 'Poppins', sans-serif;
   overflow: hidden;
-  height: calc(100 * var(--vh));
+  height: 100%;
   width: 100%;
   box-sizing: border-box;
   margin: 0;
@@ -58,10 +62,10 @@ body .page-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  max-width: 100vw;
-  height: calc(100 * var(--vh) - 61px);
+  width: 100%;
+  height: calc(100% - 61px);
   overflow: hidden;
-  position: relative;
+  position: absolute;
 }
 
 ::-webkit-scrollbar {

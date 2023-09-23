@@ -5,7 +5,7 @@ window.addEventListener('load', () => {
     
     promisesList.push(new Promise((resolve) => {
       splashScreen.addEventListener('animationend', (e) => {
-        if (e.target == splashScreen) {
+        if (e.target === splashScreen) {
           resolve();
         }
       });
@@ -18,11 +18,4 @@ window.addEventListener('load', () => {
       homePage.init(window.location.pathname);
     });
   }
-
-  const updateVh = () => {
-    document.body.style.setProperty('--vh', (window.innerHeight * 0.01)+'px');
-  };
-
-  updateVh();
-  window.addEventListener('resize', updateVh);
 });
