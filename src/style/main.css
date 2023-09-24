@@ -66,6 +66,13 @@ body .page-container {
   height: calc(100% - 61px);
   overflow: hidden;
   position: absolute;
+  animation: 0.4s appearPageContainer;
+}
+
+@keyframes appearPageContainer {
+  from {
+    opacity: 0;
+  }
 }
 
 ::-webkit-scrollbar {
