@@ -109,7 +109,7 @@ class HomePage {
     if (typeof pathName === 'string') {
       this.#chooseRightTab(pathName);
     } else {
-      this.#loadSidebar('NTgCalls', pathName);
+      this.#loadSidebar('NTgCalls');
     }
   }
 
@@ -123,7 +123,7 @@ class HomePage {
       for(const element of filesListElements) {
         if (decodeURI(pathName).startsWith(this.#parseCategoryUrl(element.getAttribute('basepath')))) {
           found = true;
-          this.#loadSidebar(element.getAttribute('id'), pathName);
+          this.#loadSidebar(element.getAttribute('id'), pathName, window.location.hash);
         }
       }
 
@@ -268,7 +268,7 @@ class HomePage {
     }, { once: true });
   }
 
-  #loadSidebar(id, pathName = false) {
+  #loadSidebar(id, pathName, hash) {
     const content = this.#leftSidebar;
 
     content.classList.add('is-loading');
@@ -281,7 +281,7 @@ class HomePage {
         this.#createPageTabs({ onChange: false });
       }
       
-      this.#handleResponseWithContent(config, content, id, pathName);
+      this.#handleResponseWithContent(config, content, id, pathName, hash);
     });
   }
 
@@ -501,7 +501,7 @@ class HomePage {
     }
   }
 
-  #handleResponseWithContent(response, content, id, pathName) {
+  #handleResponseWithContent(response, content, id, pathName, hash) {
     const domHelper = new DOMParser();
     const dom = domHelper.parseFromString(response, 'application/xml');
 
@@ -542,7 +542,7 @@ class HomePage {
                 this.#selectedElement = element;
 
                 requestAnimationFrame(() => {
-                  this.#loadContent(fullPath);
+                  this.#loadContent(fullPath, hash);
                 });
               }
             }
@@ -594,7 +594,7 @@ class HomePage {
                     this.#selectedElement = element;
 
                     requestAnimationFrame(() => {
-                      this.#loadContent(fullPath);
+                      this.#loadContent(fullPath, hash);
                     });
                   }
                 }
@@ -686,7 +686,7 @@ class HomePage {
     return pageSections;
   }
 
-  #loadContent(fileName) {
+  #loadContent(fileName, hash) {
     const content = this.#createCustomContent();
     const pageSections = this.#createCustomPageSections();
 
@@ -696,7 +696,7 @@ class HomePage {
     const pathFileName = this.#parseCategoryUrl(fileName);
     if (this.#indexes_caching[fileName]) {
       window.history.pushState('', '', pathFileName);
-      this.#handleResponse(content, pageSections, this.#indexes_caching[fileName]);
+      this.#handleResponse(content, pageSections, this.#indexes_caching[fileName], hash);
     } else {
       const XML = new XMLHttpRequest();
       XML.open('GET', 'https://raw.githubusercontent.com/pytgcalls/docsdata/master/' + fileName, true);
@@ -705,13 +705,13 @@ class HomePage {
         if (e.target.readyState === 4 && e.target.status === 200) {
           this.#indexes_caching[fileName] = e.target.response;
           window.history.pushState('', '', pathFileName);
-          this.#handleResponse(content, pageSections, e.target.response);
+          this.#handleResponse(content, pageSections, e.target.response, hash);
         }
       });
     }
   }
 
-  #handleResponse(content, pageSections, response) {
+  #handleResponse(content, pageSections, response, hash) {
     try {
       const data = sourceParser.getContentByData(response);
       content.classList.remove('is-loading');
@@ -724,6 +724,10 @@ class HomePage {
       pageSections.textContent = '';
       pageSections.appendChild(sectionsFragment);
       this.#headerCompass.classList.add('visible');
+
+      try {
+        this.#handleHash(data, hash);
+      } catch(e) {}
     } catch(e) {
       this.#headerCompass.classList.remove('visible');
       content.classList.add('is-loading');
@@ -732,6 +736,22 @@ class HomePage {
       pageSections.textContent = '';
 
       throw e;
+    }
+  }
+
+  #handleHash(data, hash) {
+    if (typeof hash != 'undefined' && hash.length) {
+      if (hash.startsWith('#')) {
+        hash = hash.slice(1);
+      }
+      
+      const selectedChild = data.querySelectorAll('.h1, .h2, .h3');
+      for(const child of selectedChild) {
+        if (utils.generateSectionRefByTextContent(child.textContent) == hash) {
+          child.scrollIntoView();
+          break;
+        }
+      }
     }
   }
 

@@ -208,6 +208,16 @@ class SourceParser {
   #handlePostQueryElement(element, newElement) {
     if (element.tagName.toUpperCase() === 'CATEGORY-TITLE') {
       newElement.innerHTML = this.#handleTabsWithSpacer(newElement.innerHTML);
+    } else if (['H1', 'H2', 'H3'].includes(element.tagName.toUpperCase())) {
+      const hashtagRef = document.createElement('div');
+      hashtagRef.classList.add('hashtag-ref');
+      hashtagRef.addEventListener('click', () => {
+        const ref = utils.generateSectionRefByTextContent(newElement.textContent);
+        window.history.pushState('', '', '#' + ref);
+        newElement.scrollIntoView();
+      });
+      hashtagRef.textContent = '#';
+      newElement.appendChild(hashtagRef);
     } else if (element.tagName.toUpperCase() === 'ALERT') {
       const elementHeaderImage = document.createElement('img');
       const elementHeaderText = document.createElement('div');

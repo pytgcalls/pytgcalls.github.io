@@ -51,6 +51,28 @@ class Utils {
       });
     }
   }
+
+  generateSectionRefByTextContent(textContent) {
+    const alpha = Array.from(Array(26)).map((_, i) => i + 65);
+    const alphabet = alpha.map((x) => String.fromCharCode(x));
+
+    const chars = ['-', '+'];
+
+    let reformedText = '';
+    for(const char of textContent) {
+      if (alphabet.includes(char.toUpperCase()) || chars.includes(reformedText)) {
+        reformedText += char;
+      } else if (char == ' ') {
+        reformedText += '=';
+      }
+    }
+
+    if (reformedText.length) {
+      return reformedText.replaceAll(' ', '-');
+    } else {
+      throw Error('section has wrong title');
+    }
+  }
 }
 
 const utils = new Utils();

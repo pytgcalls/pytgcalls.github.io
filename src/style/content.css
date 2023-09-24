@@ -118,6 +118,7 @@ body .page-container .content:not(.is-loading) .h1 {
   font-size: 40px;
   margin-top: 10px;
   font-weight: 700;
+  position: relative;
 }
 
 body .page-container .content:not(.is-loading) .h2 {
@@ -125,12 +126,40 @@ body .page-container .content:not(.is-loading) .h2 {
   margin-top: 10px;
   margin-top: 36px;
   font-weight: 600;
+  position: relative;
 }
 
 body .page-container .content:not(.is-loading) .h3 {
   font-size: 25px;
   margin-top: 10px;
   font-weight: 600;
+  position: relative;
+}
+
+body .page-container .content:not(.is-loading) .h1 .hashtag-ref,
+body .page-container .content:not(.is-loading) .h2 .hashtag-ref,
+body .page-container .content:not(.is-loading) .h3 .hashtag-ref {
+  position: absolute;
+  top: 50%;
+  right: 0px;
+  transform: translateY(-50%) scale(0.7);
+  opacity: 0;
+  cursor: pointer;
+  transition: 0.4s transform, 0.4s opacity;
+}
+
+body .page-container .content:not(.is-loading) .h1:hover .hashtag-ref,
+body .page-container .content:not(.is-loading) .h2:hover .hashtag-ref,
+body .page-container .content:not(.is-loading) .h3:hover .hashtag-ref {
+  transform: translateY(-50%) scale(1);
+  opacity: 0.7;
+}
+
+body .page-container .content:not(.is-loading) .h1:hover .hashtag-ref:active,
+body .page-container .content:not(.is-loading) .h2:hover .hashtag-ref:active,
+body .page-container .content:not(.is-loading) .h3:hover .hashtag-ref:active {
+  transform: translateY(-50%) scale(0.8);
+  opacity: 1;
 }
 
 body .page-container .content:not(.is-loading) .text,
