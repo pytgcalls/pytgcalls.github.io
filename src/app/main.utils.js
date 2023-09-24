@@ -60,7 +60,7 @@ class Utils {
 
     let reformedText = '';
     for(const char of textContent) {
-      if (alphabet.includes(char.toUpperCase()) || chars.includes(reformedText)) {
+      if (alphabet.includes(char.toUpperCase()) || chars.includes(char)) {
         reformedText += char;
       } else if (char == ' ') {
         reformedText += '=';
