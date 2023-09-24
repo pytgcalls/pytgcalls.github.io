@@ -215,9 +215,7 @@ class SourceParser {
   }
 
   #handlePostQueryElement(element, newElement) {
-    if (element.tagName.toUpperCase() === 'CATEGORY-TITLE') {
-      newElement.innerHTML = this.#handleTabsWithSpacer(newElement.innerHTML);
-    } else if (['H1', 'H2', 'H3'].includes(element.tagName.toUpperCase())) {
+    if (['H1', 'H2', 'H3'].includes(element.tagName.toUpperCase())) {
       const hashtagRef = document.createElement('div');
       hashtagRef.classList.add('hashtag-ref');
       hashtagRef.addEventListener('click', () => {
