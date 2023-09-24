@@ -592,7 +592,7 @@ class HomePage {
 
               listFragment.append(element);
 
-              if (encodeURI(this.#parseCategoryUrl(fullPath)) === pathName) {
+              if (this.#parseCategoryUrl(fullPath) === decodeURI(pathName)) {
                 element.classList.add('active');
                 this.#selectedElement = element;
 
@@ -644,7 +644,7 @@ class HomePage {
                   );
                   elementsGroup.append(element);
 
-                  if (encodeURI(this.#parseCategoryUrl(fullPath)) === pathName) {
+                  if (this.#parseCategoryUrl(fullPath) === decodeURI(pathName)) {
                     element.classList.add('active');
                     this.#selectedElement = element;
 
