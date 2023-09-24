@@ -195,6 +195,8 @@ body .page-container .content:not(.is-loading) .sb {
 
 body .page-container .content:not(.is-loading) .docs-ref {
   display: inline-block;
+  color: #007fff;
+  cursor: pointer;
 }
 
 body .page-container .content:not(.is-loading) ul.with-numbers {

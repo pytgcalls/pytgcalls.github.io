@@ -160,6 +160,15 @@ class SourceParser {
       } else {
         newElement = document.createElement('td');
       }
+    } else if (element.tagName.toUpperCase() === 'DOCS-REF') {
+      newElement.classList.add('docs-ref');
+      newElement.addEventListener('click', () => {
+        if (element.hasAttribute('link')) {
+          homePage.handleAsRedirect(element.getAttribute('link'));
+        } else {
+          throw new Error('invalid link for docs-ref');
+        }
+      });
     } else if(element.tagName.toUpperCase() === 'GITHUB-REF') {
       newElement = document.createElement('a');
       newElement.classList.add('github-ref');

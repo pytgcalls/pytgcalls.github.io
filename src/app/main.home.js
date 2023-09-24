@@ -8,7 +8,6 @@ class HomePage {
   #headerCompass;
   #headerDescription;
   #headerMenu;
-  #precachedResponse;
   #selectedElement;
   #searchBar;
   #currentlyTabId;
@@ -107,13 +106,24 @@ class HomePage {
     }
 
     if (typeof pathName === 'string') {
-      this.#chooseRightTab(pathName);
+      this.#chooseRightTab(pathName, window.location.hash);
     } else {
       this.#loadSidebar('NTgCalls');
     }
   }
 
-  #chooseRightTab(pathName) {
+  handleAsRedirect(pathName) {
+    if (typeof pathName === 'string') {
+      let hash;
+      if (pathName.indexOf('#') != -1) {
+        hash = '#' + pathName.split('#')[1];
+        pathName = pathName.split('#')[0];
+      }
+      this.#chooseRightTab(pathName, hash);
+    }
+  }
+
+  #chooseRightTab(pathName, hash) {
     utils.loadConfig().then((config) => {
       const domHelper = new DOMParser();
       const dom = domHelper.parseFromString(config, 'application/xml');
@@ -123,7 +133,14 @@ class HomePage {
       for(const element of filesListElements) {
         if (decodeURI(pathName).startsWith(this.#parseCategoryUrl(element.getAttribute('basepath')))) {
           found = true;
-          this.#loadSidebar(element.getAttribute('id'), pathName, window.location.hash);
+          
+          if (typeof this.#currentlyTabId == 'undefined') {
+            this.#loadSidebar(element.getAttribute('id'), pathName, hash);
+          } else {
+            this.#switchSidebarWithAnimation(element.getAttribute('id'), pathName, hash);
+          }
+
+          break;
         }
       }
 
@@ -253,7 +270,7 @@ class HomePage {
     });
   }
 
-  #switchSidebarWithAnimation(id) {
+  #switchSidebarWithAnimation(...args) {
     const content = this.#createCustomContent();
     content.textContent = '';
     
@@ -264,7 +281,7 @@ class HomePage {
     this.#leftSidebar.classList.add('disappear');
     this.#leftSidebar.lastChild.addEventListener('animationend', () => {
       this.#leftSidebar.classList.remove('disappear');
-      this.#loadSidebar(id);
+      this.#loadSidebar(...args);
     }, { once: true });
   }
 
