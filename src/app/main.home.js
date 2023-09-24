@@ -541,8 +541,10 @@ class HomePage {
       let newText = text.split("").reverse().join("");
 
       if (newText.length > 30) {
-        newText = '...' + newText.slice(0, 30).split("").reverse().join("");
+        newText = '...' + newText.slice(0, 30);
       }
+
+      newText = newText.split("").reverse().join("");
 
       return newText;
     } else {
