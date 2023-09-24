@@ -440,7 +440,7 @@ body .page-container .content:not(.is-loading) .github-ref:not(.is-loading)::bef
 
 body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info {
   z-index: 1;
-  width: 440px;
+  width: min(45%, 440px);
 }
 
 body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info .repo-title {
