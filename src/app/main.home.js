@@ -134,6 +134,8 @@ class HomePage {
   }
 
   #updateProjectName(projectName) {
+    document.title = projectName + ' Documentation';
+
     if (!this.#headerProjectName.hasChildNodes()) {
       this.#headerProjectName.textContent = projectName;
 
