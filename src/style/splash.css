@@ -92,11 +92,9 @@ body .splash .audio-shader .shader:nth-child(3) {
 }
 
 @keyframes disappearShader {
-  from {
-    clip-path: circle(100%);
-  }
   to {
-    clip-path: circle(0%);
+    transform: scale(0.4);
+    opacity: 0;
   }
 }
 
