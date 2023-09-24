@@ -15,9 +15,8 @@ body .splash {
 }
 
 body .splash .animated-icon {
-  height: 50px;
-  width: 50px;
-  padding: 10px;
+  height: 60px;
+  width: 60px;
   background: rgba(255, 255, 255, 0.03);
   border-radius: 10px;
   position: absolute;
@@ -49,8 +48,8 @@ body .splash .animated-icon {
 }
 
 body .splash .animated-icon img {
-  height: 50px;
-  width: 50px;
+  height: 60px;
+  width: 60px;
 }
 
 body .splash .audio-shader {
