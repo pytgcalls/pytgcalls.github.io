@@ -136,6 +136,7 @@ body .splash .audio-shader .shader[data-id="microphone"] {
   background: linear-gradient(45deg,
     #377df6, #469df7
   );
+  box-shadow: 0 0 100px rgba(55, 125, 246, 0.6);
 }
 
 body .splash .audio-shader .shader[data-id="microphone"] img {
