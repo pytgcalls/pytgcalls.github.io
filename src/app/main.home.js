@@ -743,9 +743,7 @@ class HomePage {
       this.#headerCompass.classList.add('visible');
 
       try {
-        requestAnimationFrame(() => {
-          this.#handleHash(data, hash);
-        });
+        this.#handleHash(data, hash);
       } catch(e) {}
     } catch(e) {
       this.#headerCompass.classList.remove('visible');
@@ -882,6 +880,10 @@ class HomePage {
 
           if (!hasRefElement) {
             cloned.innerHTML = element.textContent;
+
+            if (element.textContent.endsWith('#') && element.lastChild instanceof Element && element.lastChild.classList.contains('hashtag-ref')) {
+              cloned.innerHTML = element.textContent.slice(0, -1);
+            }
           }
 
           currentDom.append(cloned);
