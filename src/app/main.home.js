@@ -695,7 +695,7 @@ class HomePage {
 
     const pathFileName = this.#parseCategoryUrl(fileName);
     if (this.#indexes_caching[fileName]) {
-      window.history.pushState('', '', pathFileName);
+      window.history.pushState('', '', pathFileName + (hash ?? ''));
       this.#handleResponse(content, pageSections, this.#indexes_caching[fileName], hash);
     } else {
       const XML = new XMLHttpRequest();
@@ -704,7 +704,7 @@ class HomePage {
       XML.addEventListener('readystatechange', (e) => {
         if (e.target.readyState === 4 && e.target.status === 200) {
           this.#indexes_caching[fileName] = e.target.response;
-          window.history.pushState('', '', pathFileName);
+          window.history.pushState('', '', pathFileName + (hash ?? ''));
           this.#handleResponse(content, pageSections, e.target.response, hash);
         }
       });
