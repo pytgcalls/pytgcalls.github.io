@@ -60,8 +60,8 @@ body .splash .audio-shader {
 }
 
 body .splash .audio-shader .shader {
-  height: 140px;
-  width: 140px;
+  height: 130px;
+  width: 130px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -116,27 +116,40 @@ body .splash .audio-shader .shader:nth-child(3) {
   }
 }
 
+@keyframes clickCall {
+  0% {
+    transform: scale(1.0);
+  }
+  50% {
+    transform: scale(0.8);
+  }
+  100% {
+    transform: scale(1.0);
+  }
+}
+
 body .splash .audio-shader .shader[data-id="video"] {
-  background: #154262;
+  background: #0f2d5a;
 }
 
 body .splash .audio-shader .shader[data-id="microphone"] {
-  background: linear-gradient(
-    #0a97f0, #15c8fa
+  background: linear-gradient(45deg,
+    #377df6, #469df7
   );
 }
 
 body .splash .audio-shader .shader[data-id="microphone"] img {
-  height: 100px;
-  width: 100px;
+  height: 115px;
+  width: 115px;
+  animation: 0.35s clickCall 0.65s forwards;
 }
 
 body .splash .audio-shader .shader[data-id="quit"] {
-  background: #883e41;
+  background: #451611;
 }
 
 body .splash .audio-shader .shader[data-id="quit"] img {
-  transform: rotate(137deg);
+  filter: invert(1);
 }
 
 body .splash .audio-shader .shader:not([data-id="microphone"]) {
@@ -145,9 +158,8 @@ body .splash .audio-shader .shader:not([data-id="microphone"]) {
 }
 
 body .splash .audio-shader .shader:not([data-id="microphone"]) img {
-  width: 22px;
-  height: 22px;
-  filter: invert(1);
+  width: 34px;
+  height: 34px;
   opacity: 0;
   animation: 0.4s appearImage 0.6s forwards;
 }
