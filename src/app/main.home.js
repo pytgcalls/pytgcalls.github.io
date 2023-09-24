@@ -726,7 +726,9 @@ class HomePage {
       this.#headerCompass.classList.add('visible');
 
       try {
-        this.#handleHash(data, hash);
+        requestAnimationFrame(() => {
+          this.#handleHash(data, hash);
+        });
       } catch(e) {}
     } catch(e) {
       this.#headerCompass.classList.remove('visible');
