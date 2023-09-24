@@ -146,7 +146,7 @@ body .splash .audio-shader .shader:not([data-id="microphone"]) {
   width: 60px;
 }
 
-body .splash .audio-shader .shader img {
+body .splash .audio-shader .shader:not([data-id="microphone"]) img {
   width: 22px;
   height: 22px;
   filter: invert(1);

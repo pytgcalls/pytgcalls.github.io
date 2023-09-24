@@ -8,6 +8,8 @@ class HomePage {
   #headerCompass;
   #headerDescription;
   #headerMenu;
+  #headerProjectName;
+  #headerFakeProjectName;
   #selectedElement;
   #searchBar;
   #currentlyTabId;
@@ -34,10 +36,16 @@ class HomePage {
     this.#headerMenu = headerMenu;
     const headerIcon = document.createElement('img');
     headerIcon.src = '/src/assets/splash/telegram-logo.svg';
+    const headerProjectName = document.createElement('div');
+    headerProjectName.classList.add('project-name');
+    this.#headerProjectName = headerProjectName;
     const headerTitle = document.createElement('div');
     headerTitle.classList.add('title');
-    headerTitle.textContent = 'NTgCalls';
+    headerTitle.appendChild(headerProjectName);
     headerTitle.appendChild(headerIcon);
+    const fakeHeaderTitle = document.createElement('div');
+    fakeHeaderTitle.classList.add('fake-title');
+    this.#headerFakeProjectName = fakeHeaderTitle;
     const headerCompass = document.createElement('img');
     headerCompass.classList.add('header-compass');
     headerCompass.addEventListener('click', () => {
@@ -55,6 +63,7 @@ class HomePage {
     });
     header.appendChild(headerMenu);
     header.appendChild(headerTitle);
+    header.appendChild(fakeHeaderTitle);
     header.appendChild(headerCompass);
     header.appendChild(headerDescription);
 
@@ -108,6 +117,7 @@ class HomePage {
     if (typeof pathName === 'string') {
       this.#chooseRightTab(pathName, window.location.hash);
     } else {
+      this.#updateProjectName('NTgCalls');
       this.#loadSidebar('NTgCalls');
     }
   }
@@ -123,6 +133,26 @@ class HomePage {
     }
   }
 
+  #updateProjectName(projectName) {
+    if (!this.#headerProjectName.hasChildNodes()) {
+      this.#headerProjectName.textContent = projectName;
+
+      const rect = this.#headerProjectName.getBoundingClientRect();
+      this.#headerProjectName.style.setProperty('--width', rect.width.toString() + 'px');
+    } else {
+      this.#headerFakeProjectName.textContent = projectName;
+      const rect = this.#headerFakeProjectName.getBoundingClientRect();
+      this.#headerProjectName.style.setProperty('--width', rect.width.toString() + 'px');
+
+      this.#headerProjectName.classList.add('updating');
+      this.#headerProjectName.addEventListener('transitionend', () => {
+        this.#headerProjectName.classList.remove('updating');
+        this.#headerProjectName.textContent = projectName;
+
+      }, { once: true });
+    }
+  }
+
   #chooseRightTab(pathName, hash) {
     utils.loadConfig().then((config) => {
       const domHelper = new DOMParser();
@@ -133,6 +163,8 @@ class HomePage {
       for(const element of filesListElements) {
         if (decodeURI(pathName).startsWith(this.#parseCategoryUrl(element.getAttribute('basepath')))) {
           found = true;
+
+          this.#updateProjectName(element.getAttribute('id'));
           
           if (typeof this.#currentlyTabId == 'undefined') {
             this.#loadSidebar(element.getAttribute('id'), pathName, hash);
@@ -147,6 +179,7 @@ class HomePage {
       if (!found) {
         window.history.pushState('', '', '/');
         this.#loadSidebar('NTgCalls');
+        this.#updateProjectName('NTgCalls');
       }
     });
   }
@@ -241,6 +274,7 @@ class HomePage {
             }
 
             this.#switchSidebarWithAnimation(file.getAttribute('id'));
+            this.#updateProjectName(file.getAttribute('id'));
             selectedTabElement = tab;
             tabsContainer.style.setProperty('--id', id.toString());
             tab.classList.add('active');

@@ -106,6 +106,25 @@ body .header .title {
   }
 }
 
+body .header .title .project-name {
+  width: var(--width);
+  transition: 0.4s width, 0.4s opacity, 0.4s transform;
+}
+
+body .header .title .project-name.updating {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+body .header .fake-title {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 24px;
+  opacity: 0;
+  pointer-events: none;
+}
+
 body .tooltip .tooltip-text .tabs,
 body .header .description .tabs {
   display: grid;
