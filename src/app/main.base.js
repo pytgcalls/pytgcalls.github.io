@@ -11,7 +11,7 @@ window.addEventListener('load', () => {
       });
     }));
 
-    promisesList.push(utils.loadConfig());
+    promisesList.push(config.loadConfig());
 
     Promise.all(promisesList).then(() => {
       splashScreen.remove();
