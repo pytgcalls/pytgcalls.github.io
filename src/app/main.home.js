@@ -3,7 +3,7 @@ class HomePage {
   #sidebarInstance;
   #contentInstance;
 
-  init() {
+  init(pathName) {
     this.#headerInstance = new Header();
     this.#sidebarInstance = new Sidebar();
     this.#contentInstance = new Content();
@@ -19,8 +19,12 @@ class HomePage {
     document.body.appendChild(pageContainer);
 
     requestAnimationFrame(() => {
-      this.#headerInstance.updateActiveTab('NTgCalls');
-      this.#sidebarInstance.loadSidebar('NTgCalls');
+      if (typeof pathName === 'string') {
+        this.#chooseRightTab(pathName, window.location.hash);
+      } else {
+        this.#headerInstance.updateActiveTab('NTgCalls');
+        this.#sidebarInstance.loadSidebar('NTgCalls');
+      }  
     });
 
     this.#headerInstance.addOnActiveTabUpdate((id) => {
@@ -38,7 +42,6 @@ class HomePage {
     });
 
     this.#headerInstance.addOnCompassUpdateListener(() => {
-      console.log('arg');
       const state = this.#contentInstance.updateMobileSectionsVisibilityState();
       this.#headerInstance.updateCompassExpandedState(state);
       this.#sidebarInstance.updateMobileVisibilityState(false);
@@ -57,6 +60,53 @@ class HomePage {
       this.#headerInstance.updateCompassExpandedState(false);
       this.#contentInstance.updateMobileSectionsVisibilityState(false);
     });
+  }
+
+  handleAsRedirect(pathName) {
+    if (typeof pathName === 'string') {
+      let hash;
+      if (pathName.indexOf('#') != -1) {
+        hash = '#' + pathName.split('#')[1];
+        pathName = pathName.split('#')[0];
+      }
+      this.#chooseRightTab(pathName, hash);
+    }
+  }
+  
+  #chooseRightTab(pathName, hash) {
+    config.getAvailableCategories().then((ids) => {
+      let found = false;
+      
+      for(const id of ids) {
+        if (decodeURI(pathName).startsWith(utils.parseCategoryUrl(id))) {
+          found = true;
+
+          this.#headerInstance.updateActiveTab(id);
+          this.#sidebarInstance.loadSidebar(id);
+
+          this.#tryToIndexFilePathFromId(id, pathName, hash);
+          //this.#contentInstance.loadFile(pathname);
+        }
+      }
+      
+      if (!found) {
+        window.history.pushState('', '', '/');
+        this.#headerInstance.updateActiveTab('NTgCalls');
+        this.#sidebarInstance.loadSidebar('NTgCalls');
+      }
+    });
+  }
+
+  #tryToIndexFilePathFromId(id, pathName, hash) {
+    config.getAllFilesListFilesById(id).then((files) => {
+      for(const file of files) {
+        if (utils.parseCategoryUrl(file) === decodeURI(pathName)) {
+          this.#sidebarInstance.updateActiveFile(file);
+          this.#contentInstance.loadFile(file);
+          break;
+        }
+      }
+    })
   }
 }
 

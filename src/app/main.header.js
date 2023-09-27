@@ -148,6 +148,10 @@ class Header {
 
   #appendTitleUpdateOnActiveTabUpdate() {
     this.#onChangeListeners.push((id) => {
+      if (this.#headerProjectName.textContent === id) {
+        return;
+      }
+      
       document.title = id + ' Documentation';
 
       if (!this.#headerProjectName.hasChildNodes()) {
