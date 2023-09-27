@@ -1,6 +1,4 @@
 class SourceParser {
-  #OPTIONS = {};
-  #COMPLEX_OPTIONS = [];
   #AVAILABLE_ELEMENTS = [
     'H1', 'H2', 'H3', 'SEPARATOR',
     'TEXT', 'BOLD', 'B', 'SB', 'CODE', 'A', 'BR',
@@ -25,21 +23,6 @@ class SourceParser {
     }
 
     return currentElement;
-  }
-
-  saveAsConfigFromDom(dom) {
-    const options = dom.querySelectorAll('config > option');
-    this.#OPTIONS = {};
-    for(const option of options) {
-      if (option.hasAttribute('id')) {
-        if (option.childElementCount || !(option.firstChild instanceof Text)) {
-          this.#COMPLEX_OPTIONS.push(option.getAttribute('id'));
-          this.#OPTIONS[option.getAttribute('id')] = option;
-        } else {
-          this.#OPTIONS[option.getAttribute('id')] = option.textContent;
-        }
-      }
-    }
   }
 
   #handleRecursive(currentDom, elementDom) {
@@ -191,10 +174,12 @@ class SourceParser {
   #tryToReduceTags(element) {
     const handleItem = (child) => {
       if (!(child instanceof Text) && child.tagName.toUpperCase() === 'CONFIG') {
-        const currentOptionData = this.#OPTIONS[child.getAttribute('id')];
+        const currentOptionData = config.getOptionValueByIdSync(child.getAttribute('id'));
 
         if (currentOptionData) {
-          if (this.#COMPLEX_OPTIONS.includes(child.getAttribute('id'))) {
+          const isComplex = config.isComplexOptionValueByIdSync(child.getAttribute('id'));
+
+          if (isComplex) {
             const fragment = document.createDocumentFragment();
             fragment.append(...currentOptionData.cloneNode(true).childNodes);
             child.replaceWith(fragment);

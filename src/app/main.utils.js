@@ -1,6 +1,4 @@
 class Utils {
-  #precachedConfig;
-
   createLoadingItem(size = 100) {
     const circleItem = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     circleItem.setAttributeNS(null, 'cx', '50%');
@@ -34,24 +32,6 @@ class Utils {
     return finalString;
   }
 
-  loadConfig() {
-    if (typeof this.#precachedConfig !== 'undefined') {
-      return Promise.resolve(this.#precachedConfig);
-    } else {
-      return new Promise((resolve) => {
-        const XML = new XMLHttpRequest();
-        XML.open('GET', 'https://raw.githubusercontent.com/pytgcalls/docsdata/master/config.xml?cache='+String(Math.random()), true);
-        XML.send();
-        XML.addEventListener('readystatechange', (e) => {
-          if (e.target.readyState === 4 && e.target.status === 200) {
-            this.#precachedConfig = e.target.response;
-            resolve(this.#precachedConfig);
-          }
-        });
-      });
-    }
-  }
-
   generateSectionRefByTextContent(textContent) {
     const alpha = Array.from(Array(26)).map((_, i) => i + 65);
     const alphabet = alpha.map((x) => String.fromCharCode(x));
@@ -71,6 +51,54 @@ class Utils {
       return reformedText.replaceAll(' ', '-');
     } else {
       throw Error('section has wrong title');
+    }
+  }
+
+  parseCategoryName(fileName) {
+    if (fileName.endsWith('.xml')) {
+      fileName = fileName.slice(0, -4);
+    }
+
+    if (fileName.endsWith('/')) {
+      fileName = fileName.slice(0, -1);
+    }
+
+    return fileName;
+  }
+
+  parseCategoryUrl(fileName) {
+    if (fileName.endsWith('.xml')) {
+      fileName = fileName.slice(0, -4);
+    }
+
+    if (!fileName.startsWith('/')) {
+      fileName = '/' + fileName;
+    }
+
+    if (fileName.endsWith('/')) {
+      fileName = fileName.slice(0, -1);
+    }
+
+    return fileName;
+  }
+
+  splitSearchResult(text, isZeroSplit = false) {
+    if (isZeroSplit) {
+      let newText = text.split("").reverse().join("");
+
+      if (newText.length > 30) {
+        newText = '...' + newText.slice(0, 30);
+      }
+
+      newText = newText.split("").reverse().join("");
+
+      return newText;
+    } else {
+      if (text.length > 30) {
+        text = text.slice(0, 30) + '...';
+      }
+
+      return text;
     }
   }
 }
