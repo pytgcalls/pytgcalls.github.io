@@ -32,7 +32,7 @@ class Content {
     XML.addEventListener('readystatechange', (e) => {
       if (e.target.readyState === 4 && e.target.status === 200) {
         window.history.pushState('', '', pathFileName + (hash ?? ''));
-        this.#handleResponse(content, pageSections, e.target.response);
+        this.#handleResponse(content, pageSections, e.target.response, hash);
       }
     });
   }
@@ -56,7 +56,7 @@ class Content {
     return { content, pageSections };
   }
 
-  #handleResponse(content, pageSections, response) {
+  #handleResponse(content, pageSections, response, hash) {
     try {
       const data = sourceParser.getContentByData(response);
       content.classList.remove('is-loading');
@@ -69,17 +69,32 @@ class Content {
       pageSections.textContent = '';
       pageSections.appendChild(sectionsFragment);
 
-      //try {
-      //  this.#handleHash(data, hash);
-      //} catch(e) {}
+      try {
+        this.#handleHash(data, hash);
+      } catch(e) {}
     } catch(e) {
-      //this.#headerCompass.classList.remove('visible');
       content.classList.add('is-loading');
       content.textContent = 'Rendering failed';
       pageSections.classList.add('is-loading');
       pageSections.textContent = '';
 
       throw e;
+    }
+  }
+
+  #handleHash(data, hash) {
+    if (typeof hash != 'undefined' && hash.length) {
+      if (hash.startsWith('#')) {
+        hash = hash.slice(1);
+      }
+      
+      const selectedChild = data.querySelectorAll('.h1, .h2, .h3');
+      for(const child of selectedChild) {
+        if (utils.generateSectionRefByTextContent(child.textContent) == hash) {
+          child.scrollIntoView();
+          break;
+        }
+      }
     }
   }
 
@@ -146,7 +161,7 @@ class Content {
       }
     }
   }
-  
+
   updateMobileSectionsVisibilityState(forcedState) {
     return this.#currentSectionsElement.classList.toggle('show', forcedState);
   }

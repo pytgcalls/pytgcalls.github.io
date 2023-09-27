@@ -76,7 +76,7 @@ class HomePage {
   #chooseRightTab(pathName, hash) {
     config.getAvailableCategories().then((ids) => {
       let found = false;
-      
+
       for(const id of ids) {
         if (decodeURI(pathName).startsWith(utils.parseCategoryUrl(id))) {
           found = true;
@@ -85,7 +85,6 @@ class HomePage {
           this.#sidebarInstance.loadSidebar(id);
 
           this.#tryToIndexFilePathFromId(id, pathName, hash);
-          //this.#contentInstance.loadFile(pathname);
         }
       }
       
@@ -102,7 +101,7 @@ class HomePage {
       for(const file of files) {
         if (utils.parseCategoryUrl(file) === decodeURI(pathName)) {
           this.#sidebarInstance.updateActiveFile(file);
-          this.#contentInstance.loadFile(file);
+          this.#contentInstance.loadFile(file, hash);
           break;
         }
       }
