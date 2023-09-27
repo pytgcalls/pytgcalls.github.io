@@ -80,6 +80,7 @@ body .header .header-compass {
 body .header .header-compass:not(.visible) {
   transform: scale(0.8);
   opacity: 0;
+  pointer-events: none;
 }
 
 body .header .header-compass.show {
