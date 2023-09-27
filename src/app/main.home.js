@@ -38,6 +38,7 @@ class HomePage {
     });
 
     this.#headerInstance.addOnCompassUpdateListener(() => {
+      console.log('arg');
       const state = this.#contentInstance.updateMobileSectionsVisibilityState();
       this.#headerInstance.updateCompassExpandedState(state);
       this.#sidebarInstance.updateMobileVisibilityState(false);
@@ -50,6 +51,11 @@ class HomePage {
       this.#headerInstance.updateCompassExpandedState(false);
       this.#sidebarInstance.updateMobileVisibilityState(false);
       this.#contentInstance.loadFile(file);
+    });
+
+    this.#contentInstance.addOnSelectedSectionListener(() => {
+      this.#headerInstance.updateCompassExpandedState(false);
+      this.#contentInstance.updateMobileSectionsVisibilityState(false);
     });
   }
 }
