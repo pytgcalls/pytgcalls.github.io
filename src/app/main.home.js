@@ -1,4 +1,6 @@
 class HomePage {
+  #COLORS = ['red', 'green', 'blue', 'yellow'];
+  
   #headerInstance;
   #sidebarInstance;
   #contentInstance;
@@ -17,6 +19,20 @@ class HomePage {
     
     document.body.appendChild(this.#headerInstance.getElement());
     document.body.appendChild(pageContainer);
+
+    for(let i = 0; i < 4; i++) {
+      if (this.#COLORS[i]) {
+        const randomX = Math.floor(Math.random() * 100);
+        const randomY = Math.floor(Math.random() * 100);
+
+        const shadowElement = document.createElement('div');
+        shadowElement.classList.add('shadow-element');
+        shadowElement.style.setProperty('--x', randomX.toString() + '%');
+        shadowElement.style.setProperty('--y', randomY.toString() + '%');
+        shadowElement.style.setProperty('--color', this.#COLORS[i]);
+        document.body.appendChild(shadowElement);
+      }
+    }
 
     requestAnimationFrame(() => {
       if (typeof pathName === 'string') {
