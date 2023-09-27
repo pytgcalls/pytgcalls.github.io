@@ -1,4 +1,6 @@
 class Content {
+  #onSelectedSectionListeners = [];
+
   #currentContentElement;
   #currentSectionsElement;
 
@@ -100,11 +102,7 @@ class Content {
             cloned.classList.add('pg-title');
           }
 
-          cloned.addEventListener('click', () => {
-            element.scrollIntoView({ behavior: 'smooth' });
-            //this.#pageSections.classList.remove('show');
-            //this.#headerCompass.classList.remove('show');
-          });
+          cloned.addEventListener('click', () => this.updateActiveSection(element));
 
           let hasRefElement = false;
           for(const child of element.childNodes) {
@@ -148,8 +146,23 @@ class Content {
       }
     }
   }
-
+  
   updateMobileSectionsVisibilityState(forcedState) {
     return this.#currentSectionsElement.classList.toggle('show', forcedState);
+  }
+
+  updateActiveSection(section) {
+    section.scrollIntoView();
+    for(const listener of this.#onSelectedSectionListeners) {
+      try {
+        listener();
+      } catch(e) {}
+    }
+  }
+
+  addOnSelectedSectionListener(callback) {
+    if (typeof callback === 'function') {
+      this.#onSelectedSectionListeners.push(callback);
+    }
   }
 }
