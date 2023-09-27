@@ -25,6 +25,13 @@ class Sidebar {
 
     return leftContainer;
   }
+
+  updateMobileVisibilityState(forcedState) {
+    const state = this.#leftContainer.classList.toggle('show', forcedState);
+    this.#leftSidebar.classList.add('expanded');
+    this.#searchBar.classList.remove('expanded');
+    return state;
+  }
   
   #createSearchBar() {
     const searchIcon = document.createElement('img');

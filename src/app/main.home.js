@@ -25,10 +25,30 @@ class HomePage {
 
     this.#headerInstance.addOnActiveTabUpdate((id) => {
       this.#sidebarInstance.loadSidebar(id);
+      this.#headerInstance.updateCompassVisibilityState(false);
+      this.#headerInstance.updateCompassExpandedState(false);
       this.#contentInstance.clearBoard();
     });
 
+    this.#headerInstance.addOnSidebarUpdateListener(() => {
+      const state = this.#sidebarInstance.updateMobileVisibilityState();
+      this.#headerInstance.updateSidebarMobileVisibilityState(state);
+      this.#headerInstance.updateCompassExpandedState(false);
+      this.#contentInstance.updateMobileSectionsVisibilityState(false);
+    });
+
+    this.#headerInstance.addOnCompassUpdateListener(() => {
+      const state = this.#contentInstance.updateMobileSectionsVisibilityState();
+      this.#headerInstance.updateCompassExpandedState(state);
+      this.#sidebarInstance.updateMobileVisibilityState(false);
+      this.#headerInstance.updateSidebarMobileVisibilityState(false);
+    });
+
     this.#sidebarInstance.addOnSelectedFileUpdate((file) => {
+      this.#headerInstance.updateSidebarMobileVisibilityState(false);
+      this.#headerInstance.updateCompassVisibilityState(true);
+      this.#headerInstance.updateCompassExpandedState(false);
+      this.#sidebarInstance.updateMobileVisibilityState(false);
       this.#contentInstance.loadFile(file);
     });
   }

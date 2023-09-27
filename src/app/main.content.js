@@ -148,4 +148,8 @@ class Content {
       }
     }
   }
+
+  updateMobileSectionsVisibilityState(forcedState) {
+    return this.#currentSectionsElement.classList.toggle('show', forcedState);
+  }
 }
