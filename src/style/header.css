@@ -136,7 +136,6 @@ body .header .description .tabs {
   position: relative;
 }
 
-body .tooltip .tooltip-text .tabs::before,
 body .header .description .tabs::before {
   content: "";
   position: absolute;
@@ -189,4 +188,16 @@ body .header .description .tabs .tab:hover {
 body .tooltip .tooltip-text .tabs .tab:active,
 body .header .description .tabs .tab:active {
   transform: scale(0.9);
+}
+
+body .tooltip .tooltip-text .tabs {
+  background: #000000;
+  gap: 8px;
+}
+
+body .tooltip .tooltip-text .tabs .tab {
+  background: #0e0e0e;
+  border-radius: 16px;
+  padding-inline: 25px;
+  padding-block: 6px;
 }
