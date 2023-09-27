@@ -1,6 +1,10 @@
 class Header {
   #onChangeListeners = [];
+  #onSidebarUpdateListener = [];
+  #onCompassUpdateListener = [];
 
+  #headerMenu;
+  #headerCompass;
   #headerDescription;
   #headerProjectName;
   #fakeHeaderTitle;
@@ -9,14 +13,16 @@ class Header {
     const headerMenu = document.createElement('div');
     headerMenu.classList.add('menu');
     headerMenu.addEventListener('click', () => {
-      /*const state = leftContainer.classList.toggle('show');
-      headerMenu.classList.toggle('show', state);
-      this.#pageSections.classList.remove('show');
-      headerCompass.classList.remove('show');*/
+      for(const listener of this.#onSidebarUpdateListener) {
+        try {
+          listener();
+        } catch(e) {}
+      }
     });
     headerMenu.appendChild(document.createElement('div'));
     headerMenu.appendChild(document.createElement('div'));
     headerMenu.appendChild(document.createElement('div'));
+    this.#headerMenu = headerMenu;
 
     const headerIcon = document.createElement('img');
     headerIcon.src = '/src/assets/splash/telegram-logo.svg';
@@ -35,10 +41,14 @@ class Header {
     const headerCompass = document.createElement('img');
     headerCompass.classList.add('header-compass');
     headerCompass.addEventListener('click', () => {
-      //const state = this.#pageSections.classList.toggle('show');
-      //headerCompass.classList.toggle('show', state);
+      for(const listener of this.#onCompassUpdateListener) {
+        try {
+          listener();
+        } catch(e) {}
+      }
     });
     headerCompass.src = '/src/icons/compass.svg';
+    this.#headerCompass = headerCompass;
 
     const headerDescription = document.createElement('div');
     headerDescription.classList.add('description');
@@ -109,6 +119,30 @@ class Header {
   addOnActiveTabUpdate(callback) {
     if (typeof callback === 'function') {
       this.#onChangeListeners.push(callback);
+    }
+  }
+
+  updateSidebarMobileVisibilityState(state) {
+    this.#headerMenu.classList.toggle('show', state);
+  }
+
+  addOnSidebarUpdateListener(callback) {
+    if (typeof callback === 'function') {
+      this.#onSidebarUpdateListener.push(callback);
+    }
+  }
+
+  updateCompassVisibilityState(state) {
+    this.#headerCompass.classList.toggle('visible', state);
+  }
+
+  updateCompassExpandedState(state) {
+    this.#headerCompass.classList.toggle('show', state);
+  }
+
+  addOnCompassUpdateListener(callback) {
+    if (typeof callback === 'function') {
+      this.#onCompassUpdateListener.push(callback);
     }
   }
 
