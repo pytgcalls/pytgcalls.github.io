@@ -64,6 +64,28 @@ class Config {
     });
   }
 
+  getAllFilesListFilesById(id) {
+    return new Promise((resolve) => {
+      this.loadConfig().then((config) => {
+        const domHelper = new DOMParser();
+        const dom = domHelper.parseFromString(config, 'application/xml');
+        const filesListElements = dom.querySelectorAll('config > files-list[id="' + id + '"] file');
+
+        let finalList = [];
+        for(const element of filesListElements) {
+          let finalText = '';
+          if (element.parentNode.hasAttribute('basepath')) {
+            finalText = element.parentNode.getAttribute('basepath');
+          }
+          finalText += element.textContent;
+          finalList.push(finalText);
+        }
+    
+        resolve(finalList);
+      });
+    });
+  }
+
   getFilesListInstanceById(id) {
     return new Promise((resolve) => {
       this.loadConfig().then((config) => {

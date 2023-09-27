@@ -11,6 +11,7 @@ class Sidebar {
   #hasLoaded = false;
   #isCurrentlyIndexing = false;
   #indexes = {};
+  #currentLoadedSidebarId;
 
   getElement() {
     const searchBar = this.#createSearchBar();
@@ -208,11 +209,17 @@ class Sidebar {
   }
 
   loadSidebar(id) {
+    if (this.#currentLoadedSidebarId === id) {
+      return;
+    }
+
     this.#getPromiseBeforeLoadSidebar().then(() => {
       this.#hasLoaded = true;
 
       const content = this.#leftSidebar;
       content.textContent = '';
+
+      this.#currentLoadedSidebarId = id;
   
       config.getFilesListInstanceById(id).then((child) => {
         const fragment = document.createDocumentFragment();
