@@ -97,6 +97,7 @@ class Header {
     const tab = document.createElement('div');
     tab.classList.add('tab');
     tab.addEventListener('click', () => {
+      window.history.pushState('', '', '/' + id);
       this.updateActiveTab(id);
     });
     tab.textContent = id;
@@ -151,7 +152,7 @@ class Header {
       if (this.#headerProjectName.textContent === id) {
         return;
       }
-      
+
       document.title = id + ' Documentation';
 
       if (!this.#headerProjectName.hasChildNodes()) {
