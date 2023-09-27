@@ -68,32 +68,42 @@ class Header {
     this.#createTabsByConfig();
     this.#appendTitleUpdateOnActiveTabUpdate();
 
+    setTimeout(() => {
+      this.#initTooltip(headerTitle);
+    }, 150);
+
     return header;
   }
 
   #createTabsByConfig() {
-    config.loadConfig().then(() => {
-      config.getAvailableCategories().then((ids) => {
-        const tabsContainer = document.createElement('div');
-        tabsContainer.classList.add('tabs');
+    config.getAvailableCategories().then((ids) => {
+      const tabsContainer = this.#generateTabsContainer(ids);
 
-        for(const id of ids) {
-          tabsContainer.appendChild(this.#createSingleTab(id));
-        }
-
-        this.#onChangeListeners.push((id) => {
-          if (ids.indexOf(id) != -1) {
-            tabsContainer.style.setProperty('--id', ids.indexOf(id).toString());
-          }
-        });
-
-        this.#headerDescription.textContent = '';
-        this.#headerDescription.appendChild(tabsContainer);
-      });
+      this.#headerDescription.textContent = '';
+      this.#headerDescription.appendChild(tabsContainer);
     });
   }
 
-  #createSingleTab(id) {
+  #generateTabsContainer(ids, ignoreOnChange = false) {
+    const tabsContainer = document.createElement('div');
+    tabsContainer.classList.add('tabs');
+
+    for(const id of ids) {
+      tabsContainer.appendChild(this.#createSingleTab(id, ignoreOnChange));
+    }
+
+    if (!ignoreOnChange) {
+      this.#onChangeListeners.push((id) => {
+        if (ids.indexOf(id) != -1) {
+          tabsContainer.style.setProperty('--id', ids.indexOf(id).toString());
+        }
+      });
+    }
+
+    return tabsContainer;
+  }
+
+  #createSingleTab(id, ignoreOnChange) {
     const tab = document.createElement('div');
     tab.classList.add('tab');
     tab.addEventListener('click', () => {
@@ -102,9 +112,11 @@ class Header {
     });
     tab.textContent = id;
 
-    this.#onChangeListeners.push((activeId) => {
-      tab.classList.toggle('active', activeId == id);
-    });
+    if (!ignoreOnChange) {
+      this.#onChangeListeners.push((activeId) => {
+        tab.classList.toggle('active', activeId == id);
+      });
+    }
 
     return tab;
   }
@@ -173,53 +185,15 @@ class Header {
       }
     });
   }
-}
 
-/*
   #initTooltip(element) {
     if (window.innerWidth < 1330) {
       const elementRect = element.getBoundingClientRect();
 
-      const createTooltip = (element, hasTabs = false) => {
-        const tooltipTriangle = document.createElement('div');
-        tooltipTriangle.classList.add('triangle');
-        const tooltipText = document.createElement('div');
-        tooltipText.classList.add('tooltip-text');
-        tooltipText.appendChild(element);
-        const tooltip = document.createElement('div');
-        tooltip.classList.add('tooltip');
-        tooltip.classList.toggle('has-tabs', hasTabs);
-        tooltip.style.setProperty('--center-x', elementRect.left + 'px');
-        tooltip.style.setProperty('--center-y', elementRect.top + 'px');
-        tooltip.appendChild(tooltipTriangle);
-        tooltip.appendChild(tooltipText);
-  
-        document.body.appendChild(tooltip);
-
-        const width = tooltip.getBoundingClientRect();
-        tooltip.style.setProperty('--center-x', (elementRect.left + elementRect.width / 2 - width.width / 2) + 'px');
-        tooltip.classList.add('visible');
-  
-        const handler = () => {
-          tooltip.classList.add('remove');
-          tooltip.addEventListener('animationend', () => {
-            tooltip.remove();
-          }, { once: true });
-  
-          window.removeEventListener('resize', handler);
-          document.body.removeEventListener('click', handler);
-        };
-  
-        window.addEventListener('resize', handler);
-        document.body.addEventListener('click', handler);
-
-        return handler;
-      };
-
       let handler;
       if (localStorage.getItem('showSuggestions') !== 'true') {
         localStorage.setItem('showSuggestions', 'true');
-        handler = createTooltip(document.createTextNode('Click here to select the documentation of your favorite library'));
+        handler = this.#createTooltip(elementRect, document.createTextNode('Click here to select the documentation of your favorite library'));
         setTimeout(() => {
           handler();
         }, 5000);
@@ -230,13 +204,53 @@ class Header {
       element.addEventListener('click', (e) => {
         e.stopPropagation();
         currentHandler && currentHandler();
-        currentHandler = createTooltip(this.#createPageTabs({
-          onChange: () => {
-            this.#leftContainer.classList.add('show');
-            this.#headerMenu.classList.add('show');
-          },
-          isSecondaryInstance: true
-        }), true);
+
+        config.getAvailableCategories().then((ids) => {
+          const elementRect = element.getBoundingClientRect();
+          const tabsContainer = this.#generateTabsContainer(ids, true);
+
+          currentHandler = this.#createTooltip(elementRect, tabsContainer, true);
+        });
       });
     }
-  }*/
+  }
+
+  #createTooltip(elementRect, element, hasTabs = false) {
+    const tooltipTriangle = document.createElement('div');
+    tooltipTriangle.classList.add('triangle');
+    const tooltipText = document.createElement('div');
+    tooltipText.classList.add('tooltip-text');
+    tooltipText.appendChild(element);
+    const tooltip = document.createElement('div');
+    tooltip.classList.add('tooltip');
+    tooltip.classList.toggle('has-tabs', hasTabs);
+    tooltip.style.setProperty('--center-x', elementRect.left + 'px');
+    tooltip.style.setProperty('--center-y', elementRect.top + 'px');
+    tooltip.appendChild(tooltipTriangle);
+    tooltip.appendChild(tooltipText);
+
+    document.body.appendChild(tooltip);
+
+    const width = tooltip.getBoundingClientRect();
+    tooltip.style.setProperty('--center-x', (elementRect.left + elementRect.width / 2 - width.width / 2) + 'px');
+    tooltip.classList.add('visible');
+
+    const handler = () => {
+      tooltip.classList.add('remove');
+      tooltip.addEventListener('animationend', () => {
+        tooltip.remove();
+      }, { once: true });
+
+      window.removeEventListener('resize', handler);
+      document.body.removeEventListener('click', handler);
+    };
+
+    window.addEventListener('resize', handler);
+    document.body.addEventListener('click', handler);
+
+    return handler;
+  }
+}
+
+/*
+  */
