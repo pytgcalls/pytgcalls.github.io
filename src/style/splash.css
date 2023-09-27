@@ -85,7 +85,7 @@ body .splash .audio-shader .shader:nth-child(3) {
 
 @keyframes moveToCenterShaderFirst {
   to {
-    margin-right: calc(-60px - 50px);
+    margin-right: -91px;
     opacity: 0;
   }
 }
@@ -99,7 +99,7 @@ body .splash .audio-shader .shader:nth-child(3) {
 
 @keyframes moveToCenterShaderLatest {
   to {
-    margin-left: calc(-60px - 50px);
+    margin-left: -99px;
     opacity: 0;
   }
 }
