@@ -52,8 +52,8 @@ class Config {
         let finalList = [];
         for(const element of filesListElements) {
           let finalText = '';
-          if (element.parentNode.hasAttribute('basepath')) {
-            finalText = element.parentNode.getAttribute('basepath');
+          if (element.parentElement.hasAttribute('basepath')) {
+            finalText = element.parentElement.getAttribute('basepath');
           }
           finalText += element.textContent;
           finalList.push(finalText);
@@ -69,13 +69,13 @@ class Config {
       this.loadConfig().then((config) => {
         const domHelper = new DOMParser();
         const dom = domHelper.parseFromString(config, 'application/xml');
-        const filesListElements = dom.querySelectorAll(`config > files-list[id="' + id + '"] file`);
+        const filesListElements = dom.querySelectorAll(`config > files-list[id="` + id + `"] file`);
 
         let finalList = [];
         for(const element of filesListElements) {
           let finalText = '';
-          if (element.parentNode.hasAttribute('basepath')) {
-            finalText = element.parentNode.getAttribute('basepath');
+          if (element.parentElement.hasAttribute('basepath')) {
+            finalText = element.parentElement.getAttribute('basepath');
           }
           finalText += element.textContent;
           finalList.push(finalText);
@@ -102,9 +102,7 @@ class Config {
     if (this.isConfigReady()) {
       const domHelper = new DOMParser();
       const dom = domHelper.parseFromString(this.#precachedConfig, 'application/xml');
-      const optionElement = dom.querySelector('config > option[id="' + id + '"]');
-
-      return optionElement;
+      return dom.querySelector('config > option[id="' + id + '"]');
     }
 
     return null;

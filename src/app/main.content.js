@@ -96,7 +96,7 @@ class Content {
       
       const selectedChild = data.querySelectorAll('.h1, .h2, .h3');
       for(const child of selectedChild) {
-        if (utils.generateSectionRefByTextContent(child.textContent) == hash) {
+        if (utils.generateSectionRefByTextContent(child.textContent) === hash) {
           child.scrollIntoView();
           break;
         }
