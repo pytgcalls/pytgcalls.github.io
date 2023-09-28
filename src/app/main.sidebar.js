@@ -120,25 +120,24 @@ class Sidebar {
         });
       };
 
-      if (indexesManager.isCurrentlyIndexing()) {
-        return;
-      } else if (!indexesManager.hasIndexed()) {
+      if (!indexesManager.isCurrentlyIndexing()) {
+        if (!indexesManager.hasIndexed()) {
+          const indexingText = document.createElement('span');
+          indexingText.textContent = 'Indexing... (0/0)';
 
-        const indexingText = document.createElement('span');
-        indexingText.textContent = 'Indexing... (0/0)';
-  
-        this.#searchResults.classList.add('is-loading');
-        this.#searchResults.textContent = '';
-        this.#searchResults.appendChild(utils.createLoadingItem(50));
-        this.#searchResults.appendChild(indexingText);
+          this.#searchResults.classList.add('is-loading');
+          this.#searchResults.textContent = '';
+          this.#searchResults.appendChild(utils.createLoadingItem(50));
+          this.#searchResults.appendChild(indexingText);
 
-        indexesManager.initFull((i, length) => {
-          indexingText.textContent = 'Indexing... (' + i + '/' + length + ')';
-        }).then(() => {
+          indexesManager.initFull((i, length) => {
+            indexingText.textContent = 'Indexing... (' + i + '/' + length + ')';
+          }).then(() => {
+            onSearchReady(input.value.trim());
+          });
+        } else {
           onSearchReady(input.value.trim());
-        });
-      } else {
-        onSearchReady(input.value.trim());
+        }
       }
     });
   }

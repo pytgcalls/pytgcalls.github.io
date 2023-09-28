@@ -102,9 +102,7 @@ class Config {
     if (this.isConfigReady()) {
       const domHelper = new DOMParser();
       const dom = domHelper.parseFromString(this.#precachedConfig, 'application/xml');
-      const optionElement = dom.querySelector('config > option[id="' + id + '"]');
-
-      return optionElement;
+      return dom.querySelector('config > option[id="' + id + '"]');
     }
 
     return null;
