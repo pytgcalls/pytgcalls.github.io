@@ -52,8 +52,8 @@ class Config {
         let finalList = [];
         for(const element of filesListElements) {
           let finalText = '';
-          if (element.parentNode.hasAttribute('basepath')) {
-            finalText = element.parentNode.getAttribute('basepath');
+          if (element.parentElement.hasAttribute('basepath')) {
+            finalText = element.parentElement.getAttribute('basepath');
           }
           finalText += element.textContent;
           finalList.push(finalText);
@@ -74,8 +74,8 @@ class Config {
         let finalList = [];
         for(const element of filesListElements) {
           let finalText = '';
-          if (element.parentNode.hasAttribute('basepath')) {
-            finalText = element.parentNode.getAttribute('basepath');
+          if (element.parentElement.hasAttribute('basepath')) {
+            finalText = element.parentElement.getAttribute('basepath');
           }
           finalText += element.textContent;
           finalList.push(finalText);
