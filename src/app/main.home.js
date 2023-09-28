@@ -45,6 +45,7 @@ class HomePage {
 
     this.#headerInstance.addOnActiveTabUpdate((id) => {
       this.#sidebarInstance.loadSidebar(id);
+      this.#sidebarInstance.focusOnSidebar();
       this.#headerInstance.updateCompassVisibilityState(false);
       this.#headerInstance.updateCompassExpandedState(false);
       this.#contentInstance.clearBoard();
