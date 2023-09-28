@@ -33,8 +33,7 @@ class Utils {
   }
 
   generateSectionRefByTextContent(textContent) {
-    const alpha = Array.from(Array(26)).map((_, i) => i + 65);
-    const alphabet = alpha.map((x) => String.fromCharCode(x));
+    const alphabet = Array.from(Array(26), (_, i) => String.fromCharCode(i + 65));
 
     const chars = ['-', '+'];
 
