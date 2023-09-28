@@ -73,8 +73,15 @@ class Sidebar {
           return;
         }
 
+        let promise;
+        if (typeof this.#currentLoadedSidebarId == 'undefined') {
+          promise = config.getAllFilesListFiles();
+        } else {
+          promise = config.getAllFilesListFilesById(this.#currentLoadedSidebarId);
+        }
+
         const resultsFragment = document.createDocumentFragment();
-        config.getAllFilesListFiles().then((files) => {
+        promise.then((files) => {
           let hasResults = false;
 
           for(const file of files) {
