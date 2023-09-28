@@ -99,9 +99,9 @@ class HomePage {
           found = true;
 
           this.#headerInstance.updateActiveTab(id);
-          this.#sidebarInstance.loadSidebar(id);
+          const promise = this.#sidebarInstance.loadSidebar(id);
 
-          this.#tryToIndexFilePathFromId(id, pathName, hash);
+          this.#tryToIndexFilePathFromId(id, pathName, hash, promise);
         }
       }
       
@@ -113,11 +113,16 @@ class HomePage {
     });
   }
 
-  #tryToIndexFilePathFromId(id, pathName, hash) {
+  #tryToIndexFilePathFromId(id, pathName, hash, updateActiveFilePromise) {
     config.getAllFilesListFilesById(id).then((files) => {
       for(const file of files) {
         if (utils.parseCategoryUrl(file) === decodeURI(pathName)) {
-          this.#sidebarInstance.updateActiveFile(file);
+          updateActiveFilePromise.then(() => {
+            requestAnimationFrame(() => {
+              this.#sidebarInstance.updateActiveFile(file);
+            });
+          });
+
           this.#contentInstance.loadFile(file, hash);
           break;
         }
