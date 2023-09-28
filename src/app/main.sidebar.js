@@ -24,11 +24,14 @@ class Sidebar {
     return leftContainer;
   }
 
-  updateMobileVisibilityState(forcedState) {
-    const state = this.#leftContainer.classList.toggle('show', forcedState);
+  focusOnSidebar() {
     this.#leftSidebar.classList.add('expanded');
     this.#searchBar.classList.remove('expanded');
-    return state;
+  }
+
+  updateMobileVisibilityState(forcedState) {
+    this.focusOnSidebar();
+    return this.#leftContainer.classList.toggle('show', forcedState);
   }
   
   #createSearchBar() {
@@ -189,10 +192,7 @@ class Sidebar {
 
         const collapsedDomain = document.createElement('div');
         collapsedDomain.classList.add('collapsed');
-        collapsedDomain.addEventListener('click', () => {
-          this.#leftSidebar.classList.add('expanded');
-          this.#searchBar.classList.remove('expanded');
-        });
+        collapsedDomain.addEventListener('click', () => this.focusOnSidebar());
         collapsedDomain.textContent = 'Press here to expand';
         fragment.append(collapsedDomain);
   
