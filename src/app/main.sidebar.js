@@ -7,11 +7,8 @@ class Sidebar {
   #searchBar;
   #searchResults;
 
-  #hasIndexed = false;
-  #hasLoaded = false;
-  #isCurrentlyIndexing = false;
-  #indexes = {};
   #currentLoadedSidebarId;
+  #hasLoaded = false;
 
   getElement() {
     const searchBar = this.#createSearchBar();
@@ -81,14 +78,16 @@ class Sidebar {
           let hasResults = false;
 
           for(const file of files) {
-            const fileDataKeys = this.#indexes[file];
-
-            const foundInName = file.toLowerCase().indexOf(text.toLowerCase()) !== -1;
-            const foundInKeys = fileDataKeys.toLowerCase().indexOf(text.toLowerCase()) !== -1;
+            const fileDataKeys = indexesManager.getIndexedValue(file);
             
-            if (foundInName || foundInKeys) {
-              hasResults = true;
-              resultsFragment.append(this.#createSingleSearchResult(file, fileDataKeys, foundInName, text));
+            if (typeof fileDataKeys != 'undefined') {
+              const foundInName = file.toLowerCase().indexOf(text.toLowerCase()) !== -1;
+              const foundInKeys = fileDataKeys.toLowerCase().indexOf(text.toLowerCase()) !== -1;
+              
+              if (foundInName || foundInKeys) {
+                hasResults = true;
+                resultsFragment.append(this.#createSingleSearchResult(file, fileDataKeys, foundInName, text));
+              }
             }
           }
 
@@ -111,10 +110,21 @@ class Sidebar {
         });
       };
 
-      if (this.#isCurrentlyIndexing) {
+      if (indexesManager.isCurrentlyIndexing()) {
         return;
-      } else if (!this.#hasIndexed) {
-        this.#handleSearchIndexing().then(() => {
+      } else if (!indexesManager.hasIndexed()) {
+
+        const indexingText = document.createElement('span');
+        indexingText.textContent = 'Indexing... (0/0)';
+  
+        this.#searchResults.classList.add('is-loading');
+        this.#searchResults.textContent = '';
+        this.#searchResults.appendChild(utils.createLoadingItem(50));
+        this.#searchResults.appendChild(indexingText);
+
+        indexesManager.initFull((i, length) => {
+          indexingText.textContent = 'Indexing... (' + i + '/' + length + ')';
+        }).then(() => {
           onSearchReady(input.value.trim());
         });
       } else {
@@ -152,61 +162,6 @@ class Sidebar {
     
     return fileData;
   };
-
-  #handleSearchIndexing() {
-    if (this.#hasIndexed) {
-      return Promise.resolve();
-    } else if (this.#isCurrentlyIndexing) {
-      return Promise.reject();
-    }
-
-    return new Promise((resolve) => {
-      this.#isCurrentlyIndexing = true;
-
-      const indexingText = document.createElement('span');
-      indexingText.textContent = 'Indexing... (0/0)';
-
-      this.#searchResults.classList.add('is-loading');
-      this.#searchResults.textContent = '';
-      this.#searchResults.appendChild(utils.createLoadingItem(50));
-      this.#searchResults.appendChild(indexingText);
-      
-      let i = 0;
-
-      config.getAllFilesListFiles().then((files) => {
-        const handleIndexingWithResponse = (i, file, response, status) => {
-          indexingText.textContent = 'Indexing... (' + i + '/' + files.length + ')';
-    
-          if (status === 200) {
-            this.#indexes[file] = sourceParser.handleSearchIndexByText(response);
-          }
-    
-          if (i === files.length) {
-            this.#isCurrentlyIndexing = false;
-            this.#hasIndexed = true;
-            resolve();
-          }
-        };
-
-        for(const file of files) {
-          //if (this.#indexes_caching[file]) {
-          //  i++;
-          //  handleIndexingWithResponse(i, file, this.#indexes_caching[file], 200);
-          //} else {
-            const XML = new XMLHttpRequest();
-            XML.open('GET', 'https://raw.githubusercontent.com/pytgcalls/docsdata/master/' + file, true);
-            setTimeout(() => XML.send(), i * 150);
-            XML.addEventListener('readystatechange', (e) => {
-              if (e.target.readyState === 4) {
-                i++;
-                handleIndexingWithResponse(i, file, e.target.response, e.target.status);
-              }
-            });
-          //}
-        }
-      });
-    });
-  }
 
   loadSidebar(id) {
     if (this.#currentLoadedSidebarId === id) {

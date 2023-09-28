@@ -24,17 +24,23 @@ class Content {
     const { content, pageSections} = this.#replaceWithValidElements();
 
     const pathFileName = utils.parseCategoryUrl(fileName);
-    // TODO:handle indexes caching
+    const indexedCache = indexesManager.getFullIndexedValue(fileName);
 
-    const XML = new XMLHttpRequest();
-    XML.open('GET', 'https://raw.githubusercontent.com/pytgcalls/docsdata/master/' + fileName, true);
-    XML.send();
-    XML.addEventListener('readystatechange', (e) => {
-      if (e.target.readyState === 4 && e.target.status === 200) {
-        window.history.pushState('', '', pathFileName + (hash ?? ''));
-        this.#handleResponse(content, pageSections, e.target.response, hash);
-      }
-    });
+    if (typeof indexedCache != 'undefined') {
+      window.history.pushState('', '', pathFileName + (hash ?? ''));
+      this.#handleResponse(content, pageSections, indexedCache, hash);
+    } else {
+      const XML = new XMLHttpRequest();
+      XML.open('GET', 'https://raw.githubusercontent.com/pytgcalls/docsdata/master/' + fileName, true);
+      XML.send();
+      XML.addEventListener('readystatechange', (e) => {
+        if (e.target.readyState === 4 && e.target.status === 200) {
+          window.history.pushState('', '', pathFileName + (hash ?? ''));
+          indexesManager.saveAsFullIndexedValue(fileName, e.target.response);
+          this.#handleResponse(content, pageSections, e.target.response, hash);
+        }
+      });
+    }
   }
 
   clearBoard() {
