@@ -94,7 +94,7 @@ class Header {
 
     if (!ignoreOnChange) {
       this.#onChangeListeners.push((id) => {
-        if (ids.indexOf(id) != -1) {
+        if (ids.indexOf(id) !== -1) {
           tabsContainer.style.setProperty('--id', ids.indexOf(id).toString());
         }
       });
@@ -114,7 +114,7 @@ class Header {
 
     if (!ignoreOnChange) {
       this.#onChangeListeners.push((activeId) => {
-        tab.classList.toggle('active', activeId == id);
+        tab.classList.toggle('active', activeId === id);
       });
     }
 

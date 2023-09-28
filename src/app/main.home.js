@@ -82,7 +82,7 @@ class HomePage {
   handleAsRedirect(pathName) {
     if (typeof pathName === 'string') {
       let hash;
-      if (pathName.indexOf('#') != -1) {
+      if (pathName.indexOf('#') !== -1) {
         hash = '#' + pathName.split('#')[1];
         pathName = pathName.split('#')[0];
       }

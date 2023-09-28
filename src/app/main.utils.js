@@ -33,8 +33,7 @@ class Utils {
   }
 
   generateSectionRefByTextContent(textContent) {
-    const alpha = Array.from(Array(26)).map((_, i) => i + 65);
-    const alphabet = alpha.map((x) => String.fromCharCode(x));
+    const alphabet = Array.from(Array(26), (_, i) => String.fromCharCode(i + 65));
 
     const chars = ['-', '+'];
 
@@ -42,7 +41,7 @@ class Utils {
     for(const char of textContent) {
       if (alphabet.includes(char.toUpperCase()) || chars.includes(char)) {
         reformedText += char;
-      } else if (char == ' ') {
+      } else if (char === ' ') {
         reformedText += '=';
       }
     }
