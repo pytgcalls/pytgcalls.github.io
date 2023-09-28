@@ -42,7 +42,7 @@ class Utils {
     for(const char of textContent) {
       if (alphabet.includes(char.toUpperCase()) || chars.includes(char)) {
         reformedText += char;
-      } else if (char == ' ') {
+      } else if (char === ' ') {
         reformedText += '=';
       }
     }

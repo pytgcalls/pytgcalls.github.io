@@ -310,7 +310,7 @@ class Sidebar {
     element.textContent = textContent;
 
     this.#onChangeListeners.push((activePath) => {
-      element.classList.toggle('active', contentUri == activePath);
+      element.classList.toggle('active', contentUri === activePath);
     });
 
     return element;
