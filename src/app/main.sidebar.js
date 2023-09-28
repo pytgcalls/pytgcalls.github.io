@@ -177,7 +177,9 @@ class Sidebar {
       return;
     }
 
-    this.#getPromiseBeforeLoadSidebar().then(() => {
+    const promise = this.#getPromiseBeforeLoadSidebar();
+
+    promise.then(() => {
       this.#hasLoaded = true;
 
       const content = this.#leftSidebar;
@@ -230,6 +232,8 @@ class Sidebar {
         content.appendChild(fragment);
       });
     });
+
+    return promise;
   }
 
   #getPromiseBeforeLoadSidebar() {
