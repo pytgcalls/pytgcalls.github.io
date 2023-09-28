@@ -69,7 +69,7 @@ class Config {
       this.loadConfig().then((config) => {
         const domHelper = new DOMParser();
         const dom = domHelper.parseFromString(config, 'application/xml');
-        const filesListElements = dom.querySelectorAll(`config > files-list[id="` + id + `"] file`);
+        const filesListElements = dom.querySelectorAll('config > files-list[id="' + id + '"] file');
 
         let finalList = [];
         for(const element of filesListElements) {
