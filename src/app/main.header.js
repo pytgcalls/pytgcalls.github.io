@@ -1,7 +1,7 @@
 class Header {
-  #onChangeListeners = [];
-  #onSidebarUpdateListener = [];
-  #onCompassUpdateListener = [];
+  onChangeListenerInstance;
+  onSidebarUpdateListenerInstance;
+  onCompassUpdateListenerInstance;
 
   #headerMenu;
   #headerCompass;
@@ -9,15 +9,17 @@ class Header {
   #headerProjectName;
   #fakeHeaderTitle;
 
+  constructor() {
+    this.onChangeListenerInstance = new ListenerManagerInstance();
+    this.onSidebarUpdateListenerInstance = new ListenerManagerInstance();
+    this.onCompassUpdateListenerInstance = new ListenerManagerInstance();
+  }
+
   getElement() {
     const headerMenu = document.createElement('div');
     headerMenu.classList.add('menu');
     headerMenu.addEventListener('click', () => {
-      for(const listener of this.#onSidebarUpdateListener) {
-        try {
-          listener();
-        } catch(e) {}
-      }
+      this.onSidebarUpdateListenerInstance.callAllListeners();
     });
     headerMenu.appendChild(document.createElement('div'));
     headerMenu.appendChild(document.createElement('div'));
@@ -41,11 +43,7 @@ class Header {
     const headerCompass = document.createElement('img');
     headerCompass.classList.add('header-compass');
     headerCompass.addEventListener('click', () => {
-      for(const listener of this.#onCompassUpdateListener) {
-        try {
-          listener();
-        } catch(e) {}
-      }
+      this.onCompassUpdateListenerInstance.callAllListeners();
     });
     headerCompass.src = '/src/icons/compass.svg';
     this.#headerCompass = headerCompass;
@@ -93,10 +91,14 @@ class Header {
     }
 
     if (!ignoreOnChange) {
-      this.#onChangeListeners.push((id) => {
-        if (ids.indexOf(id) !== -1) {
-          tabsContainer.style.setProperty('--id', ids.indexOf(id).toString());
-        }
+      this.onChangeListenerInstance.addListener({
+        callback: (id) => {
+          if (ids.indexOf(id) !== -1) {
+            tabsContainer.style.setProperty('--id', ids.indexOf(id).toString());
+          }
+        },
+        isInternal: true,
+        ref: tabsContainer
       });
     }
 
@@ -108,13 +110,17 @@ class Header {
     tab.classList.add('tab');
     tab.addEventListener('click', () => {
       window.history.pushState('', '', '/' + id);
-      this.updateActiveTab(id);
+      this.#globalUpdateActiveTab(id);
     });
     tab.textContent = id;
 
     if (!ignoreOnChange) {
-      this.#onChangeListeners.push((activeId) => {
-        tab.classList.toggle('active', activeId === id);
+      this.onChangeListenerInstance.addListener({
+        callback: (activeId) => {
+          tab.classList.toggle('active', activeId === id);
+        },
+        isInternal: true,
+        ref: tab
       });
     }
 
@@ -122,27 +128,15 @@ class Header {
   }
 
   updateActiveTab(id) {
-    for(const listener of this.#onChangeListeners) {
-      try {
-        listener(id);
-      } catch(e) {}
-    }
+    this.onChangeListenerInstance.callInternalListeners(id);
   }
 
-  addOnActiveTabUpdate(callback) {
-    if (typeof callback === 'function') {
-      this.#onChangeListeners.push(callback);
-    }
+  #globalUpdateActiveTab(id) {
+    this.onChangeListenerInstance.callAllListeners(id);
   }
 
   updateSidebarMobileVisibilityState(state) {
     this.#headerMenu.classList.toggle('show', state);
-  }
-
-  addOnSidebarUpdateListener(callback) {
-    if (typeof callback === 'function') {
-      this.#onSidebarUpdateListener.push(callback);
-    }
   }
 
   updateCompassVisibilityState(state) {
@@ -153,36 +147,33 @@ class Header {
     this.#headerCompass.classList.toggle('show', state);
   }
 
-  addOnCompassUpdateListener(callback) {
-    if (typeof callback === 'function') {
-      this.#onCompassUpdateListener.push(callback);
-    }
-  }
-
   #appendTitleUpdateOnActiveTabUpdate() {
-    this.#onChangeListeners.push((id) => {
-      if (this.#headerProjectName.textContent === id) {
-        return;
-      }
-
-      document.title = id + ' Documentation';
-
-      if (!this.#headerProjectName.hasChildNodes()) {
-        this.#headerProjectName.textContent = id;
-
-        const rect = this.#headerProjectName.getBoundingClientRect();
-        this.#headerProjectName.style.setProperty('--width', rect.width.toString() + 'px');
-      } else {
-        this.#fakeHeaderTitle.textContent = id;
-        const rect = this.#fakeHeaderTitle.getBoundingClientRect();
-        this.#headerProjectName.style.setProperty('--width', rect.width.toString() + 'px');
-
-        this.#headerProjectName.classList.add('updating');
-        this.#headerProjectName.addEventListener('transitionend', () => {
-          this.#headerProjectName.classList.remove('updating');
+    this.onChangeListenerInstance.addListener({
+      callback: (id) => {
+        if (this.#headerProjectName.textContent === id) {
+          return;
+        }
+  
+        document.title = id + ' Documentation';
+  
+        if (!this.#headerProjectName.hasChildNodes()) {
           this.#headerProjectName.textContent = id;
-        }, { once: true });
-      }
+  
+          const rect = this.#headerProjectName.getBoundingClientRect();
+          this.#headerProjectName.style.setProperty('--width', rect.width.toString() + 'px');
+        } else {
+          this.#fakeHeaderTitle.textContent = id;
+          const rect = this.#fakeHeaderTitle.getBoundingClientRect();
+          this.#headerProjectName.style.setProperty('--width', rect.width.toString() + 'px');
+  
+          this.#headerProjectName.classList.add('updating');
+          this.#headerProjectName.addEventListener('transitionend', () => {
+            this.#headerProjectName.classList.remove('updating');
+            this.#headerProjectName.textContent = id;
+          }, { once: true });
+        }
+      },
+      isInternal: true
     });
   }
 

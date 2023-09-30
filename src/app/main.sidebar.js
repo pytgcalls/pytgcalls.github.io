@@ -1,5 +1,5 @@
 class Sidebar {
-  #onChangeListeners = [];
+  onChangeListenerInstance;
 
   #leftContainer;
   #leftSidebar;
@@ -9,6 +9,10 @@ class Sidebar {
 
   #currentLoadedSidebarId;
   #hasLoaded = false;
+
+  constructor() {
+    this.onChangeListenerInstance = new ListenerManagerInstance();
+  }
 
   getElement() {
     const searchBar = this.#createSearchBar();
@@ -149,7 +153,7 @@ class Sidebar {
     const fileData = document.createElement('div');
     fileData.classList.add('file-data');
     fileData.addEventListener('click', () => {
-      this.updateActiveFile(file);
+      this.#globalUpdateActiveFile(file);
     });
     fileData.appendChild(fileDataTitle);
 
@@ -308,29 +312,27 @@ class Sidebar {
     const element = document.createElement('div');
     element.classList.add('element');
     element.addEventListener('click', () => {
-      this.updateActiveFile(contentUri);
+      this.#globalUpdateActiveFile(contentUri);
     });
     element.style.setProperty('--id', id);
     element.textContent = textContent;
 
-    this.#onChangeListeners.push((activePath) => {
-      element.classList.toggle('active', contentUri === activePath);
+    this.onChangeListenerInstance.addListener({
+      callback: (activePath) => {
+        element.classList.toggle('active', contentUri === activePath);
+      },
+      isInternal: true,
+      ref: element
     });
 
     return element;
   }
 
   updateActiveFile(file) {
-    for(const listener of this.#onChangeListeners) {
-      try {
-        listener(file);
-      } catch(e) {}
-    }
+    this.onChangeListenerInstance.callInternalListeners(file);
   }
 
-  addOnSelectedFileUpdate(callback) {
-    if (typeof callback === 'function') {
-      this.#onChangeListeners.push(callback);
-    }
+  #globalUpdateActiveFile(file) {
+    this.onChangeListenerInstance.callAllListeners(file);
   }
 }

@@ -43,39 +43,55 @@ class HomePage {
       }  
     });
 
-    this.#headerInstance.addOnActiveTabUpdate((id) => {
-      this.#sidebarInstance.loadSidebar(id);
-      this.#sidebarInstance.focusOnSidebar();
-      this.#headerInstance.updateCompassVisibilityState(false);
-      this.#headerInstance.updateCompassExpandedState(false);
-      this.#contentInstance.clearBoard();
+    this.#headerInstance.onChangeListenerInstance.addListener({
+      callback: (id) => {
+        const promise = this.#sidebarInstance.loadSidebar(id);
+        this.#sidebarInstance.focusOnSidebar();
+        this.#headerInstance.updateCompassVisibilityState(false);
+        this.#headerInstance.updateCompassExpandedState(false);
+        this.#contentInstance.clearBoard();
+  
+        config.getFilesListDefaultFileById(id).then((file) => {
+          if (typeof file == 'string') {
+            this.#updateLoadedFile(file, null, promise);
+          }
+        });
+      }
     });
 
-    this.#headerInstance.addOnSidebarUpdateListener(() => {
-      const state = this.#sidebarInstance.updateMobileVisibilityState();
-      this.#headerInstance.updateSidebarMobileVisibilityState(state);
-      this.#headerInstance.updateCompassExpandedState(false);
-      this.#contentInstance.updateMobileSectionsVisibilityState(false);
+    this.#headerInstance.onSidebarUpdateListenerInstance.addListener({
+      callback: () => {
+        const state = this.#sidebarInstance.updateMobileVisibilityState();
+        this.#headerInstance.updateSidebarMobileVisibilityState(state);
+        this.#headerInstance.updateCompassExpandedState(false);
+        this.#contentInstance.updateMobileSectionsVisibilityState(false);
+      }
     });
 
-    this.#headerInstance.addOnCompassUpdateListener(() => {
-      const state = this.#contentInstance.updateMobileSectionsVisibilityState();
-      this.#headerInstance.updateCompassExpandedState(state);
-      this.#sidebarInstance.updateMobileVisibilityState(false);
-      this.#headerInstance.updateSidebarMobileVisibilityState(false);
+    this.#headerInstance.onCompassUpdateListenerInstance.addListener({
+      callback: () => {
+        const state = this.#contentInstance.updateMobileSectionsVisibilityState();
+        this.#headerInstance.updateCompassExpandedState(state);
+        this.#sidebarInstance.updateMobileVisibilityState(false);
+        this.#headerInstance.updateSidebarMobileVisibilityState(false);
+      }
     });
 
-    this.#sidebarInstance.addOnSelectedFileUpdate((file) => {
-      this.#headerInstance.updateSidebarMobileVisibilityState(false);
-      this.#headerInstance.updateCompassVisibilityState(true);
-      this.#headerInstance.updateCompassExpandedState(false);
-      this.#sidebarInstance.updateMobileVisibilityState(false);
-      this.#contentInstance.loadFile(file);
+    this.#sidebarInstance.onChangeListenerInstance.addListener({
+      callback: (file) => {
+        this.#headerInstance.updateSidebarMobileVisibilityState(false);
+        this.#headerInstance.updateCompassVisibilityState(true);
+        this.#headerInstance.updateCompassExpandedState(false);
+        this.#sidebarInstance.updateMobileVisibilityState(false);
+        this.#contentInstance.loadFile(file);
+      }
     });
 
-    this.#contentInstance.addOnSelectedSectionListener(() => {
-      this.#headerInstance.updateCompassExpandedState(false);
-      this.#contentInstance.updateMobileSectionsVisibilityState(false);
+    this.#contentInstance.onSelectedSectionListenerInstance.addListener({
+      callback: () => {
+        this.#headerInstance.updateCompassExpandedState(false);
+        this.#contentInstance.updateMobileSectionsVisibilityState(false);
+      }
     });
   }
 
@@ -115,19 +131,33 @@ class HomePage {
 
   #tryToIndexFilePathFromId(id, pathName, hash, updateActiveFilePromise) {
     config.getAllFilesListFilesById(id).then((files) => {
+      let found = false;
+
       for(const file of files) {
         if (utils.parseCategoryUrl(file) === decodeURI(pathName)) {
-          updateActiveFilePromise.then(() => {
-            requestAnimationFrame(() => {
-              this.#sidebarInstance.updateActiveFile(file);
-            });
-          });
-
-          this.#contentInstance.loadFile(file, hash);
+          this.#updateLoadedFile(file, hash, updateActiveFilePromise);
           break;
         }
       }
+      
+      if (!found) {
+        config.getFilesListDefaultFileById(id).then((file) => {
+          if (typeof file == 'string') {
+            this.#updateLoadedFile(file, null, updateActiveFilePromise);
+          }
+        });
+      }
     });
+  }
+
+  #updateLoadedFile(file, hash, updateActiveFilePromise) {
+    updateActiveFilePromise.then(() => {
+      requestAnimationFrame(() => {
+        this.#sidebarInstance.updateActiveFile(file);
+      });
+    });
+
+    this.#contentInstance.loadFile(file, hash);
   }
 }
 
