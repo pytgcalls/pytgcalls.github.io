@@ -1,8 +1,12 @@
 class Content {
-  #onSelectedSectionListeners = [];
+  onSelectedSectionListenerInstance;
 
   #currentContentElement;
   #currentSectionsElement;
+
+  constructor() {
+    this.onSelectedSectionListenerInstance = new ListenerManagerInstance();
+  }
 
   getElement() {
     const content = document.createElement('div');
@@ -174,16 +178,6 @@ class Content {
 
   updateActiveSection(section) {
     section.scrollIntoView();
-    for(const listener of this.#onSelectedSectionListeners) {
-      try {
-        listener();
-      } catch(e) {}
-    }
-  }
-
-  addOnSelectedSectionListener(callback) {
-    if (typeof callback === 'function') {
-      this.#onSelectedSectionListeners.push(callback);
-    }
+    this.onSelectedSectionListenerInstance.callAllListeners();
   }
 }
