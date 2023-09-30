@@ -5,6 +5,10 @@ body .page-container .content {
   height: 100%;
 }
 
+body .page-container.as-home .content {
+  display: none;
+}
+
 @media screen and (max-width: 1330px) {
   body .page-container .content {
     width: 100%;

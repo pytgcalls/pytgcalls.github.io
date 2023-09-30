@@ -4,11 +4,13 @@ class HomePage {
   #headerInstance;
   #sidebarInstance;
   #contentInstance;
+  #introductionInstance;
 
   init(pathName) {
     this.#headerInstance = new Header();
     this.#sidebarInstance = new Sidebar();
     this.#contentInstance = new Content();
+    this.#introductionInstance = new Introduction();
 
     document.body.innerHTML = '';
 
@@ -16,6 +18,7 @@ class HomePage {
     pageContainer.classList.add('page-container');
     pageContainer.appendChild(this.#sidebarInstance.getElement());
     pageContainer.appendChild(this.#contentInstance.getElement());
+    pageContainer.appendChild(this.#introductionInstance.getElement());
     
     document.body.appendChild(this.#headerInstance.getElement());
     document.body.appendChild(pageContainer);
@@ -35,16 +38,25 @@ class HomePage {
     }
 
     requestAnimationFrame(() => {
-      if (typeof pathName === 'string') {
+      if (typeof pathName === 'string' && pathName.length) {
         this.#chooseRightTab(pathName, window.location.hash);
       } else {
-        this.#headerInstance.updateActiveTab('NTgCalls');
-        this.#sidebarInstance.loadSidebar('NTgCalls');
+        this.#introductionInstance.show();
+        //this.#headerInstance.updateActiveTab('NTgCalls');
+        //this.#sidebarInstance.loadSidebar('NTgCalls');
       }  
+    });
+
+    this.#introductionInstance.onVisibilityUpdateListenerInstance.addListener({
+      callback: (state) => {
+        pageContainer.classList.toggle('as-home', state);
+      }
     });
 
     this.#headerInstance.onChangeListenerInstance.addListener({
       callback: (id) => {
+        this.#introductionInstance.hide();
+
         const promise = this.#sidebarInstance.loadSidebar(id);
         this.#sidebarInstance.focusOnSidebar();
         this.#headerInstance.updateCompassVisibilityState(false);
@@ -123,8 +135,7 @@ class HomePage {
       
       if (!found) {
         window.history.pushState('', '', '/');
-        this.#headerInstance.updateActiveTab('NTgCalls');
-        this.#sidebarInstance.loadSidebar('NTgCalls');
+        this.#introductionInstance.show();
       }
     });
   }

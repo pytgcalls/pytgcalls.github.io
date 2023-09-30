@@ -141,7 +141,7 @@ body .header .description .tabs::before {
   content: "";
   position: absolute;
   top: 0px;
-  left: calc(50% * var(--id));
+  left: calc(50% * var(--id, -1));
   width: 50%;
   height: 100%;
   background: #2d2d2d;
