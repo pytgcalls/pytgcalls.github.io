@@ -423,9 +423,11 @@ body .page-container .home-container .team-card .team-grid .member {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  gap: 15px;
   border-radius: 20px;
   overflow: hidden;
   white-space: nowrap;
+  position: relative;
 }
 
 body .page-container .home-container .team-card .team-grid .member > img {
@@ -436,7 +438,7 @@ body .page-container .home-container .team-card .team-grid .member > img {
 
 body .page-container .home-container .team-card .team-grid .member .member-name {
   color: white;
-  font-size: 30px;
+  font-size: 24px;
   width: 85%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -446,6 +448,14 @@ body .page-container .home-container .team-card .team-grid .member .member-name 
 body .page-container .home-container .team-card .team-grid .member .icons {
   display: flex;
   gap: 15px;
+  display: flex;
+  gap: 15px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #090909;
+  padding: 7px;
+  border-bottom-left-radius: 10px;
 }
 
 body .page-container .home-container .team-card .team-grid .member .icons:hover a:not(:hover) {
