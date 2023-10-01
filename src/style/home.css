@@ -10,6 +10,11 @@ body .page-container .home-container {
   overflow-y: auto;
 }
 
+body .page-container:not(.as-home) .home-container {
+  background: transparent;
+  pointer-events: none;
+}
+
 @supports (overflow-y: overlay) {
   body .page-container .home-container {
     overflow-y: overlay;
