@@ -7,6 +7,13 @@ body .page-container .home-container {
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   background: #020202;
+  overflow-y: auto;
+}
+
+@supports (overflow-y: overlay) {
+  body .page-container .home-container {
+    overflow-y: overlay;
+  }
 }
 
 body .page-container .home-container .introduction {
@@ -157,4 +164,302 @@ body .page-container .home-container .introduction .animation .bigtitle-descript
   to {
     opacity: 0.5;
   }
+}
+
+body .page-container .home-container .row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 30px;
+  margin-inline: 30px;
+}
+
+body .page-container .home-container .squad-form {
+  margin-top: 40px;
+  overflow: hidden;
+  position: relative;
+  background: #090909;
+  border-radius: 30px;
+  border: 1px solid rgb(255, 255, 255, 0.06);
+  height: 434px;
+}
+
+body .page-container .home-container .squad-form .squad-title {
+  font-size: 42px;
+  text-align: center;
+  color: white;
+  position: absolute;
+  top: 19px;
+  width: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+body .page-container .home-container .squad-form .grid {
+  height: 585px;
+  transform: perspective(132px) rotateX(11deg) scale(1.5);
+  transition: 0.4s transform cubic-bezier(1, 0.05, 0, 1);
+}
+
+body .page-container .home-container .squad-form .grid:hover {
+  transform: scale(1.1);
+}
+
+body .page-container .home-container .squad-form .grid::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(0deg, transparent 31px, #333 32px),linear-gradient(90deg,  transparent 31px, #333 32px);
+  background-color: #090909;
+  background-size: 32px 32px;
+  opacity: 0.3;
+}
+
+body .page-container .home-container .squad-form .grid::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(#090909 18%, transparent 41%);
+}
+
+body .page-container .home-container .squad-form .grid .elements {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+body .page-container .home-container .squad-form .grid .elements .initial {
+  color: white;
+  text-align: center;
+  background: #2d3141;
+  width: fit-content;
+  margin-inline: auto;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  box-shadow: 0px 3px 0px 0px #677091;
+}
+
+body .page-container .home-container .squad-form .grid .elements .initial:before {
+  content: "";
+  position: absolute;
+  top: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 0;
+  width: 10px;
+  background: #2d3141;
+  animation: 0.4s appearBefore forwards 0.3s;
+}
+
+@keyframes appearBefore {
+  to {
+    height: 34px;
+  }
+}
+
+body .page-container .home-container .squad-form .grid .elements .initial:after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 7px;
+  border-radius: 10px;
+  background: #2d3141;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 77px;
+  animation: 0.4s appearAfter forwards 0.7s;
+}
+
+@keyframes appearAfter {
+  to {
+    width: calc(52px * 4 + 20px * 4 - 2px);
+  }
+}
+
+body .page-container .home-container .squad-form .grid .elements .def-elements {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 52px;
+}
+
+body .page-container .home-container .squad-form .grid .elements .def-elements .grid-container {
+  position: relative;
+  margin-top: 40px;
+}
+
+body .page-container .home-container .squad-form .grid .elements .def-elements .grid-container::before {
+  position: absolute;
+  top: -35px;
+  left: 50%;
+  width: 10px;
+  height: 0;
+  background: linear-gradient(345deg, var(--color), #2c2f3f);
+  content: "";
+  transform: translateX(-50%);
+  animation: 0.4s updateGridBf forwards 1s;
+}
+
+@keyframes updateGridBf {
+  to {
+    height: 35px;
+  }
+}
+
+body .page-container .home-container .squad-form .grid .elements .def-elements .grid-container img {
+  width: 40px;
+  height: 40px;
+  clip-path: circle(0%);
+  animation: 0.4s updateGridSz forwards 1.5s;
+}
+
+@keyframes updateGridSz {
+  to {
+    clip-path: circle(100%);
+  }
+}
+
+body .page-container .home-container .projects-card {
+  margin-top: 40px;
+  overflow: hidden;
+  position: relative;
+  background: #090909;
+  border-radius: 30px;
+  border: 1px solid rgb(255, 255, 255, 0.06);
+  height: 434px;
+}
+
+body .page-container .home-container .projects-card .projects-title {
+  font-size: 38px;
+  margin-top: 25px;
+  text-align: center;
+  color: white;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+body .page-container .home-container .projects-card .project {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  margin-inline: 30px;
+  text-decoration: none;
+  background: #020202;
+  padding: 10px;
+  padding-inline: 20px;
+  transition: 0.4s padding-inline;
+}
+
+@media screen and (min-width: 1301px) {
+  body .page-container .home-container .projects-card .project:hover {
+    padding-inline: 25px;
+  }
+  
+  body .page-container .home-container .projects-card .project:active {
+    padding-inline: 40px;
+  }
+}
+
+body .page-container .home-container .projects-card .project img {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
+
+body .page-container .home-container .projects-card .project .project-name {
+  flex: 1;
+  color: white;
+  font-weight: 600;
+}
+
+body .page-container .home-container .projects-card .project .project-language {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+body .page-container .home-container .team-card {
+  margin-block: 40px;
+  margin-inline: 30px;
+  overflow: hidden;
+  position: relative;
+  background: #090909;
+  border-radius: 30px;
+  border: 1px solid rgb(255, 255, 255, 0.06);
+  padding-bottom: 25px;
+}
+
+body .page-container .home-container .team-card .projects-title {
+  font-size: 38px;
+  margin-top: 25px;
+  text-align: center;
+  color: white;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+body .page-container .home-container .team-card .team-grid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+body .page-container .home-container .team-card .team-grid .member {
+  height: 250px;
+  background: #020202;
+  width: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border-radius: 20px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+body .page-container .home-container .team-card .team-grid .member > img {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+}
+
+body .page-container .home-container .team-card .team-grid .member .member-name {
+  color: white;
+  font-size: 30px;
+  width: 85%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+body .page-container .home-container .team-card .team-grid .member .icons {
+  display: flex;
+  gap: 15px;
+}
+
+body .page-container .home-container .team-card .team-grid .member .icons:hover a:not(:hover) {
+  opacity: 0.4;
+}
+
+body .page-container .home-container .team-card .team-grid .member .icons a {
+  transition: 0.4s transform, 0.4s opacity;
+}
+
+body .page-container .home-container .team-card .team-grid .member .icons a:hover {
+  transform: scale(0.95);
+}
+
+body .page-container .home-container .team-card .team-grid .member .icons a:active {
+  transform: scale(0.9);
 }
