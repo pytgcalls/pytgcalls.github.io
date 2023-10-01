@@ -23,6 +23,18 @@ class Config {
     return typeof this.#precachedConfig != 'undefined';
   }
 
+  getTeamMembers() {
+    return new Promise((resolve) => {
+      this.loadConfig().then((config) => {
+        const domHelper = new DOMParser();
+        const dom = domHelper.parseFromString(config, 'application/xml');
+        const teamMembers = dom.querySelectorAll('team > member');
+    
+        resolve(teamMembers);
+      });
+    });
+  }
+
   getAvailableCategories() {
     return new Promise((resolve) => {
       this.loadConfig().then((config) => {
