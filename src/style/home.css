@@ -198,6 +198,7 @@ body .page-container .home-container .squad-form::after {
   width: 1px;
   box-shadow: 0px 0px 350px 270px rgb(64, 71, 168, 0.18);
   z-index: 0;
+  pointer-events: none;
 }
 
 body .page-container .home-container .squad-form .squad-title {
@@ -364,6 +365,7 @@ body .page-container .home-container .projects-card::before {
   width: 1px;
   box-shadow: 0px 0px 350px 270px rgb(0, 106, 255, 0.12);
   z-index: 0;
+  pointer-events: none;
 }
 
 body .page-container .home-container .projects-card .projects-title {
@@ -434,11 +436,13 @@ body .page-container .home-container .team-card::after {
   height: 1px;
   width: 1px;
   z-index: 0;
+  pointer-events: none;
 }
 
 body .page-container .home-container .team-card::before {
   left: 0;
   box-shadow: 0px 0px 350px 270px rgb(77 182 254 / 18%);
+  z-index: 1;
 }
 
 body .page-container .home-container .team-card::after {
