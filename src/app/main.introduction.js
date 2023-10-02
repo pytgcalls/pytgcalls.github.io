@@ -193,7 +193,7 @@ class Introduction {
 
         if (name && role && github && telegram && github.textContent.trim() && telegram.textContent.trim()) {
           const memberImage = document.createElement('img');
-          memberImage.src = 'https://github.com/' + github.textContent + '.png?size=40';
+          memberImage.src = 'https://github.com/' + github.textContent + '.png?size=90';
           const memberName = document.createElement('div');
           memberName.classList.add('member-name');
           memberName.textContent = name.textContent.trim();
