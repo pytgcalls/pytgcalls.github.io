@@ -22,7 +22,7 @@ body .page-container:not(.as-home) .home-container {
 }
 
 body .page-container .home-container .introduction {
-  height: 410px;
+  height: 500px;
   width: 100%;
   position: relative;
   padding-bottom: 50px;
@@ -177,6 +177,17 @@ body .page-container .home-container .row {
   grid-template-rows: 1fr;
   gap: 30px;
   margin-inline: 30px;
+  margin-top: -75px;
+}
+
+@media (max-width: 800px) {
+  body .page-container .home-container .row {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    margin-inline: 0px;
+    gap: 0;
+  }
 }
 
 body .page-container .home-container .squad-form {
@@ -188,6 +199,16 @@ body .page-container .home-container .squad-form {
   border: 1px solid rgb(255, 255, 255, 0.06);
   height: 434px;
 }
+
+@media (max-width: 800px) {
+  body .page-container .home-container .row .squad-form {
+    height: 350px;
+    width: 100%;
+    border-radius: 0px;
+    border: none;
+  }
+}
+
 
 body .page-container .home-container .squad-form::after {
   content: "";
@@ -202,7 +223,7 @@ body .page-container .home-container .squad-form::after {
 }
 
 body .page-container .home-container .squad-form .squad-title {
-  font-size: 42px;
+  font-size: 22px;
   text-align: center;
   color: white;
   position: absolute;
@@ -211,6 +232,7 @@ body .page-container .home-container .squad-form .squad-title {
   left: 50%;
   transform: translateX(-50%);
   z-index: 1;
+  text-transform: uppercase;
 }
 
 body .page-container .home-container .squad-form .grid {
@@ -356,6 +378,14 @@ body .page-container .home-container .projects-card {
   height: 434px;
 }
 
+@media (max-width: 800px) {
+  body .page-container .home-container .row .projects-card {
+    margin-top: 0;
+    border-radius: 0px;
+    border: none;
+  }
+}
+
 body .page-container .home-container .projects-card::before {
   content: "";
   position: absolute;
@@ -369,12 +399,13 @@ body .page-container .home-container .projects-card::before {
 }
 
 body .page-container .home-container .projects-card .projects-title {
-  font-size: 38px;
+  font-size: 22px;
   margin-top: 25px;
   text-align: center;
   color: white;
   width: 100%;
   margin-bottom: 20px;
+  text-transform: uppercase;
 }
 
 body .page-container .home-container .projects-card .project {
@@ -451,30 +482,32 @@ body .page-container .home-container .team-card::after {
 }
 
 body .page-container .home-container .team-card .projects-title {
-  font-size: 38px;
+  font-size: 22px;
   margin-top: 25px;
   text-align: center;
   color: white;
   width: 100%;
   margin-bottom: 20px;
+  text-transform: uppercase;
 }
 
 body .page-container .home-container .team-card .team-grid {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 16px;
+  overflow-x: scroll;
+  padding-inline: 40px;
 }
 
 body .page-container .home-container .team-card .team-grid .member {
   height: 250px;
+  width: calc(100vw / var(--items) - 16px);
   background: #020202;
-  width: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: 15px;
+  padding-top: 20px;
   border-radius: 20px;
   overflow: hidden;
   white-space: nowrap;
@@ -523,4 +556,11 @@ body .page-container .home-container .team-card .team-grid .member .icons a:hove
 
 body .page-container .home-container .team-card .team-grid .member .icons a:active {
   transform: scale(0.9);
+}
+
+body .page-container .home-container .team-card .team-grid .member .member-role {
+  color: rgba(255, 255, 255, 0.6);
+  white-space: break-spaces;
+  text-align: center;
+  max-width: 87%;
 }
