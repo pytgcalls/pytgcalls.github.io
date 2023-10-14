@@ -55,18 +55,18 @@ class HomePage {
 
     this.#headerInstance.onChangeListenerInstance.addListener({
       callback: (id) => {
-        this.#introductionInstance.hide();
-
-        const promise = this.#sidebarInstance.loadSidebar(id);
-        this.#sidebarInstance.focusOnSidebar();
-        this.#headerInstance.updateCompassVisibilityState(false);
-        this.#headerInstance.updateCompassExpandedState(false);
-        this.#contentInstance.clearBoard();
-  
-        config.getFilesListDefaultFileById(id).then((file) => {
-          if (typeof file == 'string') {
-            this.#updateLoadedFile(file, null, promise);
-          }
+        this.#introductionInstance.hide().then(() => {
+          const promise = this.#sidebarInstance.loadSidebar(id);
+          this.#sidebarInstance.focusOnSidebar();
+          this.#headerInstance.updateCompassVisibilityState(false);
+          this.#headerInstance.updateCompassExpandedState(false);
+          this.#contentInstance.clearBoard();
+    
+          config.getFilesListDefaultFileById(id).then((file) => {
+            if (typeof file == 'string') {
+              this.#updateLoadedFile(file, null, promise);
+            }
+          });
         });
       }
     });
