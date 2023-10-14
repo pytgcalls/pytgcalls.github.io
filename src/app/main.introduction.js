@@ -3,6 +3,7 @@ class Introduction {
 
   #container;
   #isCurrentlyEnabled = false;
+  #isCurrentlyDisappearing = false;
 
   constructor() {
     this.onVisibilityUpdateListenerInstance = new ListenerManagerInstance();
@@ -17,14 +18,24 @@ class Introduction {
   }
 
   show() {
-    this.#isCurrentlyEnabled = true;
-    this.onVisibilityUpdateListenerInstance.callAllListeners(true);
-    this.#composeContainer();
+    const executeUiUpdate = () => {
+      this.#isCurrentlyEnabled = true;
+      this.onVisibilityUpdateListenerInstance.callAllListeners(true);
+      this.#composeContainer();
+    };
+
+    if (this.#isCurrentlyDisappearing instanceof Promise) {
+      this.#isCurrentlyDisappearing.then(executeUiUpdate);
+    } else {
+      executeUiUpdate();
+    }
   }
 
   hide() {
-    if (this.#isCurrentlyEnabled) {
-      return new Promise((resolve) => {
+    if (this.#isCurrentlyDisappearing instanceof Promise) {
+      return this.#isCurrentlyDisappearing;
+    } else if (this.#isCurrentlyEnabled) {
+      this.#isCurrentlyDisappearing = new Promise((resolve) => {
         this.#isCurrentlyEnabled = false;
 
         this.#container.classList.add('disappear');
@@ -33,9 +44,12 @@ class Introduction {
           this.#container.textContent = '';
           this.onVisibilityUpdateListenerInstance.callAllListeners(false);
 
+          this.#isCurrentlyDisappearing = false;
+
           resolve();
         }, { once: true });
       });
+      return this.#isCurrentlyDisappearing;
     } else {
       return Promise.resolve();
     }
