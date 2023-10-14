@@ -2,6 +2,7 @@ class Introduction {
   onVisibilityUpdateListenerInstance;
 
   #container;
+  #isCurrentlyEnabled = false;
 
   constructor() {
     this.onVisibilityUpdateListenerInstance = new ListenerManagerInstance();
@@ -16,17 +17,31 @@ class Introduction {
   }
 
   show() {
+    this.#isCurrentlyEnabled = true;
     this.onVisibilityUpdateListenerInstance.callAllListeners(true);
     this.#composeContainer();
   }
 
   hide() {
-    this.onVisibilityUpdateListenerInstance.callAllListeners(false);
-    this.#container.textContent = '';
+    if (this.#isCurrentlyEnabled) {
+      return new Promise((resolve) => {
+        this.#isCurrentlyEnabled = false;
+
+        this.#container.classList.add('disappear');
+        this.#container.addEventListener('animationend', () => {
+          this.#container.classList.remove('disappear');
+          this.#container.textContent = '';
+          this.onVisibilityUpdateListenerInstance.callAllListeners(false);
+
+          resolve();
+        }, { once: true });
+      });
+    } else {
+      return Promise.resolve();
+    }
   }
 
   #composeContainer() {
-    console.log('ARRIVED AS COMPOS');
     this.#container.textContent = '';
 
     const title = document.createElement('div');

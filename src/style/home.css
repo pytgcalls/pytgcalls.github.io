@@ -32,6 +32,17 @@ body .page-container .home-container .introduction {
   overflow: hidden;
 }
 
+body .page-container .home-container.disappear .introduction {
+  animation: 0.4s disappearIntroduction forwards cubic-bezier(1, 0.05, 0, 1);
+}
+
+@keyframes disappearIntroduction {
+  to {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+}
+
 body .page-container .home-container .introduction::after {
   content: "";
   position: absolute;
@@ -178,6 +189,17 @@ body .page-container .home-container .row {
   gap: 30px;
   margin-inline: 30px;
   margin-top: -75px;
+}
+
+body .page-container .home-container.disappear .row {
+  animation: 0.4s disappearIntroductionRow forwards cubic-bezier(1, 0.05, 0, 1);
+}
+
+@keyframes disappearIntroductionRow {
+  to {
+    transform: translateY(50px);
+    opacity: 0;
+  }
 }
 
 @media (max-width: 800px) {
