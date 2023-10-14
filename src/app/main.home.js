@@ -146,6 +146,7 @@ class HomePage {
 
       for(const file of files) {
         if (utils.parseCategoryUrl(file) === decodeURI(pathName)) {
+          found = true;
           this.#updateLoadedFile(file, hash, updateActiveFilePromise);
           break;
         }
