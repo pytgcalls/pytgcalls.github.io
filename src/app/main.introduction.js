@@ -184,6 +184,7 @@ class Introduction {
 
     config.getTeamMembers().then((members) => {
       const fragment = document.createDocumentFragment();
+      let validMembersCount = 0;
       
       for(const member of members) {
         const name = member.querySelector('name');
@@ -192,11 +193,16 @@ class Introduction {
         const telegram = member.querySelector('telegram-username');
 
         if (name && role && github && telegram && github.textContent.trim() && telegram.textContent.trim()) {
+          validMembersCount++;
+
           const memberImage = document.createElement('img');
           memberImage.src = 'https://github.com/' + github.textContent + '.png?size=90';
           const memberName = document.createElement('div');
           memberName.classList.add('member-name');
           memberName.textContent = name.textContent.trim();
+          const memberRole = document.createElement('div');
+          memberRole.classList.add('member-role');
+          memberRole.textContent = role.textContent.trim();
 
           const githubLogoIcon = document.createElement('img');
           githubLogoIcon.src = '/src/icons/github.svg';
@@ -220,14 +226,16 @@ class Introduction {
           memberContainer.classList.add('member');
           memberContainer.appendChild(memberImage);
           memberContainer.appendChild(memberName);
+          memberContainer.appendChild(memberRole);
           memberContainer.appendChild(memberIcons);
           fragment.append(memberContainer);
         }
       }
 
+      teamGrid.style.setProperty('--items', validMembersCount.toString());
       teamGrid.appendChild(fragment);
     });
 
     return teamGrid;
   }
-}
+} 
