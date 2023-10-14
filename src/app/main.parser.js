@@ -184,7 +184,7 @@ class SourceParser {
             fragment.append(...currentOptionData.cloneNode(true).childNodes);
             child.replaceWith(fragment);
           } else {
-            child.replaceWith(document.createTextNode(currentOptionData));
+            child.replaceWith(document.createTextNode(currentOptionData.textContent));
           }
         } else {
           throw new Error("A config key that doesn't exist has been requested "+child.getAttribute('id'));
