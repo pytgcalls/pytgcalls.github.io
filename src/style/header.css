@@ -158,7 +158,6 @@ body .header .fake-title {
   pointer-events: none;
 }
 
-body .tooltip .tooltip-text .tabs,
 body .header .description .tabs {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -180,23 +179,21 @@ body .header .description .tabs::before {
   transition: 0.4s left;
 }
 
-body .tooltip .tooltip-text .tabs .tab,
 body .header .description .tabs .tab {
   position: relative;
   padding: 10px;
   padding-inline: 18px;
   cursor: pointer;
+  text-align: center;
   color: rgba(255, 255, 255, 0.5);
   transition: 0.4s transform, 0.4s color;
 }
 
-body .tooltip .tooltip-text .tabs .tab.active,
 body .header .description .tabs .tab.active {
   color: #FFFFFF;
   pointer-events: none;
 }
 
-body .tooltip .tooltip-text .tabs .tab:after,
 body .header .description .tabs .tab:after {
   position: absolute;
   bottom: -10px;
@@ -207,30 +204,14 @@ body .header .description .tabs .tab:after {
   transition: 0.4s bottom;
 }
 
-body .tooltip .tooltip-text .tabs .tab.active:after,
 body .header .description .tabs .tab.active:after {
   bottom: 0;
 }
 
-
-body .tooltip .tooltip-text .tabs .tab:hover,
 body .header .description .tabs .tab:hover {
   transform: scale(0.95);
 }
 
-body .tooltip .tooltip-text .tabs .tab:active,
 body .header .description .tabs .tab:active {
   transform: scale(0.9);
-}
-
-body .tooltip .tooltip-text .tabs {
-  background: #000000;
-  gap: 8px;
-}
-
-body .tooltip .tooltip-text .tabs .tab {
-  background: #0e0e0e;
-  border-radius: 16px;
-  padding-inline: 25px;
-  padding-block: 6px;
 }
