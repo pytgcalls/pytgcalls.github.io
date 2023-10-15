@@ -2,15 +2,12 @@ body .header {
   height: 60px;
   background: rgb(45, 45, 45, 0.3);
   border-bottom: 1px solid rgb(255, 255, 255, 0.1);
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-around;
-  transition: 0.4s padding-bottom cubic-bezier(0.42, 0, 0, 0.97);
+  overflow: hidden;
   animation: 0.4s appearHeader;
-}
-
-body .header.tabs-expanded {
-  padding-bottom: 50px;
 }
 
 @keyframes appearHeader {
@@ -61,15 +58,18 @@ body .header .menu div:nth-child(3) {
   top: calc(100% - 5px);
 }
 
-body .header .menu.show div:first-child {
+body .header .menu.show div:first-child,
+body .header.tabs-expanded .menu div:first-child {
   transform: rotate(45deg) translateX(4px) translateY(7px);
 }
 
-body .header .menu.show div:nth-child(2) {
+body .header .menu.show div:nth-child(2),
+body .header.tabs-expanded .menu div:nth-child(2) {
   transform: rotate(-45deg) translateX(-1px) translateY(-2px);
 }
 
-body .header .menu.show div:nth-child(3) {
+body .header .menu.show div:nth-child(3),
+body .header.header.tabs-expanded .menu div:nth-child(3) {
   transform: scale(0);
 }
 
@@ -80,6 +80,11 @@ body .header .header-compass {
   cursor: pointer;
   position: relative;
   transition: 0.4s filter, 0.4s transform, 0.4s opacity;
+}
+
+body .header.tabs-expanded .header-compass {
+  transform: translateY(50px);
+  opacity: 0;
 }
 
 body .header .header-compass:not(.visible) {
@@ -100,11 +105,12 @@ body .header .title {
   color: #FFFFFF;
   font-size: 24px;
   gap: 11px;
-  transition: 0.4s gap;
+  transition: 0.4s transform, 0.4s opacity;
 }
 
-body .header .title:has(.project-name.updating) {
-  gap: 0;
+body .header.tabs-expanded .title {
+  transform: translateY(50px);
+  opacity: 0;
 }
 
 @media screen and (max-width: 1330px) {
@@ -114,10 +120,11 @@ body .header .title:has(.project-name.updating) {
 
   body .header .description {
     position: absolute;
-    top: 0;
+    top: 50%;
+    transform: translateY(-100%);
+    width: 71vw;
+    right: 45px;
     opacity: 0;
-    width: 84vw;
-    transform: scale(0.7);
     transition: 0.4s transform, 0.4s opacity;
     transition-timing-function: cubic-bezier(0.42, 0, 0, 0.97);
   }
@@ -127,8 +134,8 @@ body .header .title:has(.project-name.updating) {
   }
 
   body .header.tabs-expanded .description {
-    transform: translateY(58px);
     opacity: 1;
+    transform: translateY(-50%);
   }
 }
 
