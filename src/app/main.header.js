@@ -22,7 +22,12 @@ class Header {
     const headerMenu = document.createElement('div');
     headerMenu.classList.add('menu');
     headerMenu.addEventListener('click', () => {
-      this.onSidebarUpdateListenerInstance.callAllListeners();
+      if (header.classList.contains('tabs-expanded')) {
+        header.classList.remove('tabs-expanded');
+        this.onTabsVisibilityUpdateListenerInstance.callAllListeners(false);
+      } else {
+        this.onSidebarUpdateListenerInstance.callAllListeners();
+      }
     });
     headerMenu.appendChild(document.createElement('div'));
     headerMenu.appendChild(document.createElement('div'));
