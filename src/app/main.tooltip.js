@@ -14,15 +14,12 @@ class Tooltip {
 
     const tooltipTriangle = document.createElement('div');
     tooltipTriangle.classList.add('triangle');
-    const tooltipText = document.createElement('div');
-    tooltipText.classList.add('tooltip-text');
     const tooltip = document.createElement('div');
     tooltip.classList.add('tooltip');
     tooltip.classList.toggle('has-tabs', hasTabs);
     tooltip.style.setProperty('--center-x', '0px');
     tooltip.style.setProperty('--center-y', elementRect.top + 'px');
     tooltip.appendChild(tooltipTriangle);
-    tooltip.appendChild(tooltipText);
 
     if (childElement instanceof Element) {
       tooltipText.appendChild(childElement);

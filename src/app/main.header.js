@@ -164,22 +164,15 @@ class Header {
   
         document.title = id + ' Documentation';
   
-        if (!this.#headerProjectName.hasChildNodes()) {
+        this.#fakeHeaderTitle.textContent = id;
+        const rect = this.#fakeHeaderTitle.getBoundingClientRect();
+        this.#headerProjectName.style.setProperty('--width', rect.width.toString() + 'px');
+
+        this.#headerProjectName.classList.add('updating');
+        this.#headerProjectName.addEventListener('transitionend', () => {
+          this.#headerProjectName.classList.remove('updating');
           this.#headerProjectName.textContent = id;
-  
-          const rect = this.#headerProjectName.getBoundingClientRect();
-          this.#headerProjectName.style.setProperty('--width', rect.width.toString() + 'px');
-        } else {
-          this.#fakeHeaderTitle.textContent = id;
-          const rect = this.#fakeHeaderTitle.getBoundingClientRect();
-          this.#headerProjectName.style.setProperty('--width', rect.width.toString() + 'px');
-  
-          this.#headerProjectName.classList.add('updating');
-          this.#headerProjectName.addEventListener('transitionend', () => {
-            this.#headerProjectName.classList.remove('updating');
-            this.#headerProjectName.textContent = id;
-          }, { once: true });
-        }
+        }, { once: true });
       },
       isInternal: true
     });
