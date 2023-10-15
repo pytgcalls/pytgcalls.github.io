@@ -195,6 +195,7 @@ class HomePage {
 
     this.#headerInstance.updateCompassVisibilityState(true);
     this.#headerInstance.updateCompassExpandedState(false);
+    this.#headerInstance.updateTabsMobileVisibility(false);
     this.#sidebarInstance.updateMobileVisibilityState(false);
     this.#contentInstance.loadFile(file, hash);
   }
