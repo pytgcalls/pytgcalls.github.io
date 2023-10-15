@@ -178,7 +178,7 @@ class Sidebar {
 
   loadSidebar(id) {
     if (this.#currentLoadedSidebarId === id) {
-      return;
+      return Promise.resolve();
     }
 
     const promise = this.#getPromiseBeforeLoadSidebar();
