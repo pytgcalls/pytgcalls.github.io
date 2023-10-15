@@ -9,6 +9,7 @@ class Header {
   #headerCompass;
   #headerDescription;
   #headerProjectName;
+  #headerTitle;
   #fakeHeaderTitle;
 
   #hasSelectedTab = false;
@@ -53,6 +54,7 @@ class Header {
     });
     headerTitle.appendChild(headerProjectName);
     headerTitle.appendChild(headerIcon);
+    this.#headerTitle = headerTitle;
     const fakeHeaderTitle = document.createElement('div');
     fakeHeaderTitle.classList.add('fake-title');
     this.#fakeHeaderTitle = fakeHeaderTitle;
@@ -196,7 +198,7 @@ class Header {
       tooltip.init({
         title: 'Select your language',
         text: 'You can choose the programming language by pressing here.',
-        container: this.#headerProjectName
+        container: this.#detectContainerForTooltips()
       });
     }, 800);
   }
@@ -206,8 +208,15 @@ class Header {
       tooltip.init({
         title: 'Select your library',
         text: 'When you are ready, you can go to the library documentation of your favorite language by selecting it above.',
-        container: this.#headerDescription
+        container: this.#detectContainerForTooltips()
       });
     }, 800);
+  }
+
+  #detectContainerForTooltips() {
+    return (
+      window.matchMedia('screen and (max-width: 1330px)').matches
+      ? this.#headerTitle : this.#headerDescription
+    );
   }
 }

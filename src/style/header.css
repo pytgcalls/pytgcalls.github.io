@@ -6,10 +6,16 @@ body .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-inline: 30px;
+  padding-inline: calc(calc(100vw - 1100px) / 2);
   box-sizing: border-box;
   overflow: hidden;
   animation: 0.4s appearHeader;
+}
+
+@media screen and (max-width: 1100px) {
+  body .header {
+    padding-inline: 30px;
+  }
 }
 
 @keyframes appearHeader {
@@ -102,7 +108,11 @@ body .header .title {
   color: #FFFFFF;
   font-size: 24px;
   gap: 11px;
-  transition: 0.4s transform, 0.4s opacity;
+  transition: 0.4s transform, 0.4s opacity, 0.4s gap;
+}
+
+body .header .title:has(.project-name:empty) {
+  gap: 0px;
 }
 
 @media screen and (max-width: 1330px) {
