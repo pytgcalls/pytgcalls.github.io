@@ -10,6 +10,16 @@ body .page-container .home-container {
   overflow-y: auto;
 }
 
+body .page-container.as-home .home-container.disappear {
+  animation: 0.4s disappearBg forwards;
+}
+
+@keyframes disappearBg {
+  to {
+    background: transparent;
+  }
+}
+
 body .page-container:not(.as-home) .home-container {
   background: transparent;
   pointer-events: none;

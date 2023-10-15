@@ -5,7 +5,12 @@ body .header {
   display: flex;
   align-items: center;
   justify-content: space-around;
+  transition: 0.4s padding-bottom;
   animation: 0.4s appearHeader;
+}
+
+body .header.tabs-expanded {
+  padding-bottom: 50px;
 }
 
 @keyframes appearHeader {
@@ -103,7 +108,23 @@ body .header .title {
   }
 
   body .header .description {
-    display: none;
+    position: absolute;
+    top: 0;
+    opacity: 0;
+    width: 84vw;
+    transition: 0.4s transform, 0.2s opacity;
+    transition-timing-function: cubic-bezier(0.42, 0, 0, 0.97);
+  }
+
+  body .header:not(.tabs-expanded) .description {
+    pointer-events: none;
+  }
+
+  body .header.tabs-expanded .description {
+    transform: translateY(58px);
+    opacity: 1;
+    transition: 0.4s transform, 0.2s opacity 0.1s;
+    transition-timing-function: cubic-bezier(0.42, 0, 0, 0.97);
   }
 }
 
@@ -112,9 +133,14 @@ body .header .title .project-name {
   transition: 0.4s width, 0.4s opacity, 0.4s transform;
 }
 
-body .header .title .project-name.updating {
+body .header .title .project-name.updating,
+body .header.tabs-expanded .title .project-name {
   opacity: 0;
   transform: scale(0.9);
+}
+
+body .header.tabs-expanded .title .project-name {
+  width: 0px !important;
 }
 
 body .header .fake-title {

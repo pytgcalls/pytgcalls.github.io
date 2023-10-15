@@ -2,7 +2,9 @@ class Header {
   onChangeListenerInstance;
   onSidebarUpdateListenerInstance;
   onCompassUpdateListenerInstance;
+  onTabsVisibilityUpdateListenerInstance;
 
+  #header;
   #headerMenu;
   #headerCompass;
   #headerDescription;
@@ -13,6 +15,7 @@ class Header {
     this.onChangeListenerInstance = new ListenerManagerInstance();
     this.onSidebarUpdateListenerInstance = new ListenerManagerInstance();
     this.onCompassUpdateListenerInstance = new ListenerManagerInstance();
+    this.onTabsVisibilityUpdateListenerInstance = new ListenerManagerInstance();
   }
 
   getElement() {
@@ -34,6 +37,10 @@ class Header {
     this.#headerProjectName = headerProjectName;
     const headerTitle = document.createElement('div');
     headerTitle.classList.add('title');
+    headerTitle.addEventListener('click', () => {
+      const state = header.classList.toggle('tabs-expanded');
+      this.onTabsVisibilityUpdateListenerInstance.callAllListeners(state);
+    });
     headerTitle.appendChild(headerProjectName);
     headerTitle.appendChild(headerIcon);
     const fakeHeaderTitle = document.createElement('div');
@@ -62,13 +69,10 @@ class Header {
     header.appendChild(fakeHeaderTitle);
     header.appendChild(headerCompass);
     header.appendChild(headerDescription);
+    this.#header = header;
 
     this.#createTabsByConfig();
     this.#appendTitleUpdateOnActiveTabUpdate();
-
-    setTimeout(() => {
-      this.#initTooltip(headerTitle);
-    }, 150);
 
     return header;
   }
@@ -147,6 +151,10 @@ class Header {
     this.#headerCompass.classList.toggle('show', state);
   }
 
+  updateTabsMobileVisibility(state) {
+    this.#header.classList.toggle('tabs-expanded', state);
+  }
+
   #appendTitleUpdateOnActiveTabUpdate() {
     this.onChangeListenerInstance.addListener({
       callback: (id) => {
@@ -178,70 +186,25 @@ class Header {
   }
 
   #initTooltip(element) {
-    if (window.innerWidth < 1330) {
-      const elementRect = element.getBoundingClientRect();
-
-      let handler;
-      if (localStorage.getItem('showSuggestions') !== 'true') {
-        localStorage.setItem('showSuggestions', 'true');
-        handler = this.#createTooltip(elementRect, document.createTextNode('Click here to select the documentation of your favorite library'));
-        setTimeout(() => {
-          handler();
-        }, 5000);
-      }
-
-      let currentHandler = handler;
-      
-      element.addEventListener('click', (e) => {
-        e.stopPropagation();
-        currentHandler && currentHandler();
-
-        config.getAvailableCategories().then((ids) => {
-          const elementRect = element.getBoundingClientRect();
-          const tabsContainer = this.#generateTabsContainer(ids, true);
-
-          currentHandler = this.#createTooltip(elementRect, tabsContainer, true);
-        });
-      });
-    }
   }
 
-  #createTooltip(elementRect, element, hasTabs = false) {
-    const tooltipTriangle = document.createElement('div');
-    tooltipTriangle.classList.add('triangle');
-    const tooltipText = document.createElement('div');
-    tooltipText.classList.add('tooltip-text');
-    tooltipText.appendChild(element);
-    const tooltip = document.createElement('div');
-    tooltip.classList.add('tooltip');
-    tooltip.classList.toggle('has-tabs', hasTabs);
-    tooltip.style.setProperty('--center-x', elementRect.left + 'px');
-    tooltip.style.setProperty('--center-y', elementRect.top + 'px');
-    tooltip.appendChild(tooltipTriangle);
-    tooltip.appendChild(tooltipText);
+  highlightTabsForSelection() {
+    setTimeout(() => {
+      tooltip.init({
+        title: 'Select your language',
+        text: 'You can choose the programming language by pressing here.',
+        container: this.#headerProjectName
+      });
+    }, 800);
+  }
 
-    document.body.appendChild(tooltip);
-
-    const width = tooltip.getBoundingClientRect();
-    tooltip.style.setProperty('--center-x', (elementRect.left + elementRect.width / 2 - width.width / 2) + 'px');
-    tooltip.classList.add('visible');
-
-    const handler = () => {
-      tooltip.classList.add('remove');
-      tooltip.addEventListener('animationend', () => {
-        tooltip.remove();
-      }, { once: true });
-
-      window.removeEventListener('resize', handler);
-      document.body.removeEventListener('click', handler);
-    };
-
-    window.addEventListener('resize', handler);
-    document.body.addEventListener('click', handler);
-
-    return handler;
+  highlightTabsForIntroduction() {
+    setTimeout(() => {
+      tooltip.init({
+        title: 'Select your library',
+        text: 'When you are ready, you can go to the library documentation of your favorite language by selecting it above.',
+        container: this.#headerDescription
+      });
+    }, 800);
   }
 }
-
-/*
-  */

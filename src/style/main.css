@@ -103,12 +103,13 @@ body .tooltip {
   position: fixed;
   top: calc(var(--center-y) + 49px);
   left: var(--center-x);
-  width: min(100%, 80vw);
   color: black;
-  background: white;
-  padding: 10px;
+  background: linear-gradient(45deg, #685eab, #3d49d3);
+  padding: 15px;
+  max-width: min(360px, 80vw);
+  box-sizing: border-box;
   border-radius: 10px;
-  border: 1px solid #ffffff45;
+  border: 1px solid #000000;
   box-shadow: 0px 0px 17px 5px black;
   opacity: 0;
   z-index: 4;
@@ -117,6 +118,28 @@ body .tooltip {
 body .tooltip.visible {
   opacity: 1;
   animation: 0.8s appearTooltip cubic-bezier(0.42, 0, 0, 0.98);
+}
+
+body .tooltip .title-element {
+  font-size: 24px;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin-bottom: 7px;
+}
+
+body .tooltip .text-element {
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+}
+
+@media screen and (max-width: 500px) {
+  body .tooltip .title-element {
+    font-size: 20px;
+  }
+
+  body .tooltip .text-element {
+    font-size: 14px;
+  }
 }
 
 body .tooltip.has-tabs {
@@ -148,11 +171,10 @@ body .tooltip .triangle {
   left: 50%;
   width: 10px;
   height: 10px;
-  background: white;
-  top: -7px;
+  background: #4c50c5;
+  top: -5px;
+  border-top-left-radius: 3px;
   transform: translateX(-50%) rotate(45deg);
-  border-top: 1px solid #ffffff45;
-  border-left: 1px solid #ffffff45;
 }
 
 body .tooltip.has-tabs .triangle {

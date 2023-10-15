@@ -39,17 +39,34 @@ class HomePage {
 
     requestAnimationFrame(() => {
       if (typeof pathName === 'string' && pathName.length) {
-        this.#chooseRightTab(pathName, window.location.hash);
+        this.#chooseRightTab(pathName, window.location.hash).then((found) => {
+          if (found) {
+            this.#headerInstance.highlightTabsForSelection();
+          }
+        });
       } else {
         this.#introductionInstance.show();
-        //this.#headerInstance.updateActiveTab('NTgCalls');
-        //this.#sidebarInstance.loadSidebar('NTgCalls');
       }  
     });
 
     this.#introductionInstance.onVisibilityUpdateListenerInstance.addListener({
       callback: (state) => {
         pageContainer.classList.toggle('as-home', state);
+
+        if (state) {
+          this.#headerInstance.highlightTabsForIntroduction();
+        }
+      }
+    });
+
+    this.#headerInstance.onTabsVisibilityUpdateListenerInstance.addListener({
+      callback: (state) => {
+        if (state) {
+          this.#headerInstance.updateSidebarMobileVisibilityState(false);
+          this.#headerInstance.updateCompassExpandedState(false);
+          this.#sidebarInstance.updateMobileVisibilityState(false);
+          this.#contentInstance.updateMobileSectionsVisibilityState(false);
+        }
       }
     });
 
@@ -60,6 +77,7 @@ class HomePage {
           this.#sidebarInstance.focusOnSidebar();
           this.#headerInstance.updateCompassVisibilityState(false);
           this.#headerInstance.updateCompassExpandedState(false);
+          this.#headerInstance.updateTabsMobileVisibility(false);
           this.#contentInstance.clearBoard();
     
           config.getFilesListDefaultFileById(id).then((file) => {
@@ -76,6 +94,7 @@ class HomePage {
         const state = this.#sidebarInstance.updateMobileVisibilityState();
         this.#headerInstance.updateSidebarMobileVisibilityState(state);
         this.#headerInstance.updateCompassExpandedState(false);
+        this.#headerInstance.updateTabsMobileVisibility(false);
         this.#contentInstance.updateMobileSectionsVisibilityState(false);
       }
     });
@@ -86,6 +105,7 @@ class HomePage {
         this.#headerInstance.updateCompassExpandedState(state);
         this.#sidebarInstance.updateMobileVisibilityState(false);
         this.#headerInstance.updateSidebarMobileVisibilityState(false);
+        this.#headerInstance.updateTabsMobileVisibility(false);
       }
     });
 
@@ -119,24 +139,28 @@ class HomePage {
   }
   
   #chooseRightTab(pathName, hash) {
-    config.getAvailableCategories().then((ids) => {
-      let found = false;
+    return new Promise((resolve) => {
+      config.getAvailableCategories().then((ids) => {
+        let found = false;
 
-      for(const id of ids) {
-        if (decodeURI(pathName).startsWith(utils.parseCategoryUrl(id))) {
-          found = true;
+        for(const id of ids) {
+          if (decodeURI(pathName).startsWith(utils.parseCategoryUrl(id))) {
+            found = true;
 
-          this.#headerInstance.updateActiveTab(id);
-          const promise = this.#sidebarInstance.loadSidebar(id);
+            this.#headerInstance.updateActiveTab(id);
+            const promise = this.#sidebarInstance.loadSidebar(id);
 
-          this.#tryToIndexFilePathFromId(id, pathName, hash, promise);
+            this.#tryToIndexFilePathFromId(id, pathName, hash, promise);
+          }
         }
-      }
-      
-      if (!found) {
-        window.history.pushState('', '', '/');
-        this.#introductionInstance.show();
-      }
+        
+        if (!found) {
+          window.history.pushState('', '', '/');
+          this.#introductionInstance.show();
+        }
+
+        resolve(found);
+      });
     });
   }
 
@@ -169,6 +193,9 @@ class HomePage {
       });
     });
 
+    this.#headerInstance.updateCompassVisibilityState(true);
+    this.#headerInstance.updateCompassExpandedState(false);
+    this.#sidebarInstance.updateMobileVisibilityState(false);
     this.#contentInstance.loadFile(file, hash);
   }
 }
