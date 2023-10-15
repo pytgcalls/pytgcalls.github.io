@@ -16,7 +16,9 @@ body .page-container.as-home .left-container {
     width: 100%;
     padding-inline: 20px;
     pointer-events: none;
-    background: black;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
     z-index: 4;
     transition: 0.4s transform cubic-bezier(0.97,-0.02, 0, 0.98);
   }

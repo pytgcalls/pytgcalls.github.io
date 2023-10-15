@@ -177,7 +177,9 @@ class Content {
   }
 
   updateActiveSection(section) {
-    section.scrollIntoView();
+    section.scrollIntoView({
+      behavior: 'smooth'
+    });
     this.onSelectedSectionListenerInstance.callAllListeners();
   }
 }
