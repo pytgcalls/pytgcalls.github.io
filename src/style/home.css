@@ -6,6 +6,7 @@ body .page-container .home-container {
   height: 100%;
   background: #020202;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 body .page-container.as-home .home-container.disappear {

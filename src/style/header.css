@@ -5,7 +5,9 @@ body .header {
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
+  padding-inline: 30px;
+  box-sizing: border-box;
   overflow: hidden;
   animation: 0.4s appearHeader;
 }

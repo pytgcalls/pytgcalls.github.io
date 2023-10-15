@@ -11,6 +11,8 @@ class Header {
   #headerProjectName;
   #fakeHeaderTitle;
 
+  #hasSelectedTab = false;
+
   constructor() {
     this.onChangeListenerInstance = new ListenerManagerInstance();
     this.onSidebarUpdateListenerInstance = new ListenerManagerInstance();
@@ -25,6 +27,9 @@ class Header {
       if (header.classList.contains('tabs-expanded')) {
         header.classList.remove('tabs-expanded');
         this.onTabsVisibilityUpdateListenerInstance.callAllListeners(false);
+      } else if (!this.#hasSelectedTab) {
+        header.classList.add('tabs-expanded');
+        this.onTabsVisibilityUpdateListenerInstance.callAllListeners(true);
       } else {
         this.onSidebarUpdateListenerInstance.callAllListeners();
       }
@@ -106,6 +111,7 @@ class Header {
         callback: (id) => {
           if (ids.indexOf(id) !== -1) {
             tabsContainer.style.setProperty('--id', ids.indexOf(id).toString());
+            this.#hasSelectedTab = true;
           }
         },
         isInternal: true,
@@ -183,9 +189,6 @@ class Header {
       },
       isInternal: true
     });
-  }
-
-  #initTooltip(element) {
   }
 
   highlightTabsForSelection() {
