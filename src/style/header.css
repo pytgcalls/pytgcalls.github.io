@@ -132,7 +132,7 @@ body .header .title {
     transform: translateY(50px);
     opacity: 0;
   }
-  
+
   body .header.tabs-expanded .header-compass {
     transform: translateY(50px);
     opacity: 0;
@@ -160,7 +160,7 @@ body .header .fake-title {
 
 body .header .description .tabs {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(var(--length), 1fr);
   justify-content: center;
   background: #050505;
   border-radius: 10px;

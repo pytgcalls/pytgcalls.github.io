@@ -99,6 +99,8 @@ class Header {
       tabsContainer.appendChild(this.#createSingleTab(id, ignoreOnChange));
     }
 
+    tabsContainer.style.setProperty('--length', ids.length.toString());
+
     if (!ignoreOnChange) {
       this.onChangeListenerInstance.addListener({
         callback: (id) => {
