@@ -173,7 +173,7 @@ class Introduction {
   #composeProjectsGrid() {
     const fragment = document.createDocumentFragment();
     fragment.append(this.#composeSquareProjectsGrid(
-      'pytgcalls', 'ntgcalls', 'C'
+      'pytgcalls', 'ntgcalls', 'C++'
     ));
     fragment.append(this.#composeSquareProjectsGrid(
       'pytgcalls', 'pytgcalls', 'Python'
