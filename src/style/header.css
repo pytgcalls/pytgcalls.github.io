@@ -82,11 +82,6 @@ body .header .header-compass {
   transition: 0.4s filter, 0.4s transform, 0.4s opacity;
 }
 
-body .header.tabs-expanded .header-compass {
-  transform: translateY(50px);
-  opacity: 0;
-}
-
 body .header .header-compass:not(.visible) {
   transform: scale(0.8);
   opacity: 0;
@@ -106,11 +101,6 @@ body .header .title {
   font-size: 24px;
   gap: 11px;
   transition: 0.4s transform, 0.4s opacity;
-}
-
-body .header.tabs-expanded .title {
-  transform: translateY(50px);
-  opacity: 0;
 }
 
 @media screen and (max-width: 1330px) {
@@ -136,6 +126,16 @@ body .header.tabs-expanded .title {
   body .header.tabs-expanded .description {
     opacity: 1;
     transform: translateY(-50%);
+  }
+
+  body .header.tabs-expanded .title {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  
+  body .header.tabs-expanded .header-compass {
+    transform: translateY(50px);
+    opacity: 0;
   }
 }
 
