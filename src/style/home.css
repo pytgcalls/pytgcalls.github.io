@@ -4,8 +4,6 @@ body .page-container .home-container {
   left: 0;
   width: 100%;
   height: 100%;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
   background: #020202;
   overflow-y: auto;
 }
@@ -40,6 +38,12 @@ body .page-container .home-container .introduction {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+}
+
+@media screen and (max-width: 800px) {
+  body .page-container .home-container .introduction {
+    height: 300px;
+  }
 }
 
 body .page-container .home-container.disappear .introduction {
@@ -86,6 +90,13 @@ body .page-container .home-container .introduction .animated-gif {
   animation: 0.4s appearTelegramAnimation forwards 3.4s, 0.4s disappearAnimation forwards 6s;
 }
 
+@media screen and (max-width: 800px) {
+  body .page-container .home-container .introduction .animated-gif {
+    width: 240px;
+    height: 240px;
+  }
+}
+
 @keyframes appearTelegramAnimation {
   from {
     transform: translateX(-100%) translateY(36%);
@@ -109,6 +120,12 @@ body .page-container .home-container .introduction .animation {
   z-index: 2;
   color: white;
   font-weight: 600;
+}
+
+@media screen and (max-width: 800px) {
+  body .page-container .home-container .introduction .animation {
+    font-size: 20px;
+  }
 }
 
 body .page-container .home-container .introduction .animation .title1 {
@@ -138,6 +155,14 @@ body .page-container .home-container .introduction .animation .bigtitle {
   animation: 0.4s updateBigTitle forwards 2.7s, 0.4s updateTopPosition forwards 3.2s;
 }
 
+@media screen and (max-width: 800px) {
+  body .page-container .home-container .introduction .animation .bigtitle {
+    font-size: 40px;
+    width: 100%;
+    text-align: center;
+  }
+}
+
 body .page-container .home-container .introduction .animation .bigtitle-description {
   position: absolute;
   top: 50%;
@@ -146,6 +171,14 @@ body .page-container .home-container .introduction .animation .bigtitle-descript
   transform: translateX(-50%) translateY(38%) translateY(-40px);
   opacity: 0;
   animation: 0.4s updateBigTitleDescription forwards 3.2s;
+}
+
+@media screen and (max-width: 800px) {
+  body .page-container .home-container .introduction .animation .bigtitle-description {
+    font-size: 27px;
+    width: 100%;
+    text-align: center;
+  }
 }
 
 @keyframes fullHide {
@@ -215,10 +248,10 @@ body .page-container .home-container.disappear .row {
 @media (max-width: 800px) {
   body .page-container .home-container .row {
     display: flex;
-    width: 100%;
+    width: calc(100vw - 20px);
     flex-direction: column;
-    margin-inline: 0px;
-    gap: 0;
+    margin-inline: 10px;
+    gap: 20px;
   }
 }
 
@@ -234,13 +267,11 @@ body .page-container .home-container .squad-form {
 
 @media (max-width: 800px) {
   body .page-container .home-container .row .squad-form {
-    height: 350px;
+    height: 296px;
     width: 100%;
-    border-radius: 0px;
     border: none;
   }
 }
-
 
 body .page-container .home-container .squad-form::after {
   content: "";
@@ -269,8 +300,15 @@ body .page-container .home-container .squad-form .squad-title {
 
 body .page-container .home-container .squad-form .grid {
   height: 585px;
-  transform: perspective(132px) rotateX(11deg) scale(1.5);
+  transform: perspective(132px) rotateX(11deg) scale(var(--scl, 1.5));
   transition: 0.4s transform cubic-bezier(1, 0.05, 0, 1);
+}
+
+@media (max-width: 800px) {
+  body .page-container .home-container .squad-form .grid {
+    --scl: 0.8;
+    height: 400px;
+  }
 }
 
 body .page-container .home-container .squad-form .grid:hover {
@@ -413,7 +451,6 @@ body .page-container .home-container .projects-card {
 @media (max-width: 800px) {
   body .page-container .home-container .row .projects-card {
     margin-top: 0;
-    border-radius: 0px;
     border: none;
   }
 }
@@ -448,9 +485,10 @@ body .page-container .home-container .projects-card .project {
   border-radius: 10px;
   margin-inline: 30px;
   text-decoration: none;
-  background: #020202;
+  background: rgba(2, 2, 2, 0.6);
   padding: 10px;
   padding-inline: 20px;
+  position: relative;
   transition: 0.4s padding-inline;
 }
 
@@ -478,6 +516,20 @@ body .page-container .home-container .projects-card .project .project-name {
 
 body .page-container .home-container .projects-card .project .project-language {
   color: rgba(255, 255, 255, 0.5);
+}
+
+@media screen and (max-width: 800px) {
+  body .page-container .home-container .projects-card .project .project-name {
+    position: absolute;
+    left: calc(20px + 15px + 40px);
+    top: calc(50% - 22px);
+  }
+
+  body .page-container .home-container .projects-card .project .project-language {
+    position: absolute;
+    left: calc(20px + 15px + 40px);
+    top: calc(50% - 3px);
+  }
 }
 
 body .page-container .home-container .team-card {
