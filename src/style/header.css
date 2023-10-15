@@ -68,7 +68,7 @@ body .header .menu div:nth-child(3) {
 
 body .header .menu.show div:first-child,
 body .header.tabs-expanded .menu div:first-child {
-  transform: rotate(45deg) translateX(4px) translateY(7px);
+  transform: rotate(45deg) translateX(3px) translateY(7px);
 }
 
 body .header .menu.show div:nth-child(2),
