@@ -586,7 +586,7 @@ body .page-container .home-container .team-card .projects-title {
 
 body .page-container .home-container .team-card .team-grid {
   gap: 16px;
-  overflow-x: scroll;
+  overflow: hidden;
   padding-inline: 40px;
   display: grid;
   grid-template-columns: repeat(var(--div), 1fr);
@@ -659,8 +659,8 @@ body .page-container .home-container .team-card .team-grid .member > img {
 
 @media screen and (max-width: 600px) {
   body .page-container .home-container .team-card .team-grid .member > img {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
   }
 }
 
@@ -725,7 +725,7 @@ body .page-container .home-container .team-card .team-grid .member .member-role 
     position: absolute;
     top: 53%;
     font-size: 15px;
-    left: calc(20px + 50px + 16px);
+    left: calc(20px + 40px + 16px);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
