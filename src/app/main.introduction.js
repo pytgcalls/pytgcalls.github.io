@@ -35,6 +35,8 @@ class Introduction {
     if (this.#isCurrentlyDisappearing instanceof Promise) {
       return this.#isCurrentlyDisappearing;
     } else if (this.#isCurrentlyEnabled) {
+      this.#container.scrollTo(0, 0);
+
       this.#isCurrentlyDisappearing = new Promise((resolve) => {
         this.#isCurrentlyEnabled = false;
 
