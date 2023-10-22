@@ -3,7 +3,6 @@ class Content {
 
   #currentContentElement;
   #currentSectionsElement;
-  #doesLoadViaUserContentWork = true;
 
   constructor() {
     this.onSelectedSectionListenerInstance = new ListenerManagerInstance();
