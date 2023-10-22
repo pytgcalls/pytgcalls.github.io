@@ -3,14 +3,9 @@ class RequestsManager {
 
   initRequest(fileName) {
     return new Promise((resolve, reject) => {
-      const userContentPromise = this.#tryToLoadWithUserContent(fileName);
-      userContentPromise.then(resolve);
-      userContentPromise.catch(() => {
+      this.#tryToLoadWithUserContent(fileName).then(resolve).catch(() => {
         this.#doesLoadViaUserContentWork = false;
-
-        const apiPromise = this.#tryToLoadWithApi(fileName);
-        apiPromise.then(resolve);
-        apiPromise.catch(reject);
+        this.#tryToLoadWithApi(fileName).then(resolve).catch(reject);
       });
     });
   }
