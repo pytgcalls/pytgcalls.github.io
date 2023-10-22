@@ -6,7 +6,7 @@ class SourceParser {
     'CATEGORY', 'CATEGORY-TITLE', 'REF', 'SUBTEXT',
     'LIST', 'ITEM',
     'TABLE', 'DEFINITIONS', 'COLUMN', 'ITEM',
-    'DOCS-REF', 'GITHUB-REF',
+    'DOCS-REF', 'GITHUB-REF', 'REF-SHI',
     'CONFIG'
   ];
 
@@ -157,12 +157,18 @@ class SourceParser {
       newElement.classList.add('github-ref');
       newElement.setAttribute('target', '_blank');
 
-      if (element.hasAttribute('reponame')) {
-        newElement.setAttribute('reponame', element.getAttribute('reponame'));
+      if (!element.hasAttribute('reponame') || !element.hasAttribute('user')) {
+        throw new Error('invalid reponame/user for github-ref');
       }
 
-      if (element.hasAttribute('user')) {
-        newElement.setAttribute('user', element.getAttribute('user'));
+      newElement.setAttribute('reponame', element.getAttribute('reponame'));
+      newElement.setAttribute('user', element.getAttribute('user'));
+    } else if(element.tagName.toUpperCase() === 'REF-SHI') {
+      newElement = document.createElement('a');
+      newElement.classList.add('ref-shi');
+
+      if (!element.hasAttribute('url') || !element.hasAttribute('language')) {
+        throw new Error('invalid data for ref-shi');
       }
     } else {
       newElement.classList.toggle(element.tagName.toLowerCase());
@@ -210,6 +216,44 @@ class SourceParser {
       });
       hashtagRef.textContent = '#';
       newElement.appendChild(hashtagRef);
+    } else if (element.tagName.toUpperCase() == 'REF-SHI') {
+      newElement.addEventListener('click', () => {
+        const closeButton = document.createElement('div');
+        closeButton.classList.add('close-button');
+        closeButton.addEventListener('click', () => {
+          fullscreenCodePreview.classList.add('disappear');
+          fullscreenCodePreview.addEventListener('animationend', () => {
+            fullscreenCodePreview.remove();
+          }, { once: true });
+        });
+        closeButton.appendChild(document.createElement('div'));
+        closeButton.appendChild(document.createElement('div'));
+
+        const codePreview = document.createElement('div');
+        codePreview.classList.add('code-preview', 'is-loading');
+        codePreview.appendChild(utils.createLoadingItem());
+
+        const fullscreenCodePreview = document.createElement('div');
+        fullscreenCodePreview.classList.add('fs-code-preview');
+        fullscreenCodePreview.appendChild(closeButton);
+        fullscreenCodePreview.appendChild(codePreview);
+        document.body.appendChild(fullscreenCodePreview);
+
+        fullscreenCodePreview.addEventListener('animationend', () => {
+          requestsManager.initRequest(element.getAttribute('url'), 'pytgcalls/pytgcalls').then((response) => {
+            codePreview.textContent = '';
+            codePreview.classList.remove('is-loading');
+  
+            const fakeChild = document.createElement('div');
+            if (element.hasAttribute('language')) {
+              fakeChild.setAttribute('language', element.getAttribute('language'));
+            }
+            fakeChild.textContent = response;
+  
+            this.#handleSyntaxHighlight(fakeChild, codePreview);
+          });
+        }, { once: true });
+      });
     } else if (element.tagName.toUpperCase() === 'ALERT') {
       const elementHeaderImage = document.createElement('img');
       const elementHeaderText = document.createElement('div');

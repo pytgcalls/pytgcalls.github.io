@@ -49,6 +49,13 @@ class Content {
     }
   }
 
+  handleCustomCodeInsert() {
+    const data = prompt('Insert here your script');
+
+    const { content, pageSections } = this.#replaceWithValidElements();
+    this.#handleResponse(content, pageSections, data, '');
+  }
+
   clearBoard() {
     this.#replaceWithValidElements(true);
   }

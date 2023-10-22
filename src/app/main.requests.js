@@ -1,14 +1,14 @@
 class RequestsManager {
   #doesLoadViaUserContentWork = true;
 
-  initRequest(fileName) {
+  initRequest(fileName, repoName = 'pytgcalls/docsdata') {
     return new Promise((resolve, reject) => {
-      const userContentPromise = this.#tryToLoadWithUserContent(fileName);
+      const userContentPromise = this.#tryToLoadWithUserContent(repoName, fileName);
       userContentPromise.then(resolve);
       userContentPromise.catch(() => {
         this.#doesLoadViaUserContentWork = false;
 
-        const apiPromise = this.#tryToLoadWithApi(fileName);
+        const apiPromise = this.#tryToLoadWithApi(repoName, fileName);
         apiPromise.then(resolve);
         apiPromise.catch(reject);
       });
@@ -16,14 +16,14 @@ class RequestsManager {
   }
 
   
-  #tryToLoadWithUserContent(fileName) {
+  #tryToLoadWithUserContent(repoName, fileName) {
     if (!this.#doesLoadViaUserContentWork) {
       return Promise.reject('Ignoring githubusercontent as it isnt available');
     } else {
       return new Promise((resolve, reject) => {
         const XML = new XMLHttpRequest();
         XML.timeout = 3500;
-        XML.open('GET', 'https://raw.githubusercontent.com/pytgcalls/docsdata/master/' + fileName, true);
+        XML.open('GET', 'https://raw.githubusercontent.com/' + repoName + '/master/' + fileName, true);
         XML.send();
         XML.addEventListener('readystatechange', (e) => {
           if (e.target.readyState === 4) {
@@ -38,10 +38,10 @@ class RequestsManager {
     }
   }
 
-  #tryToLoadWithApi(fileName) {
+  #tryToLoadWithApi(repoName, fileName) {
     return new Promise((resolve, reject) => {
       const XML = new XMLHttpRequest();
-      XML.open('GET', 'https://api.github.com/repos/pytgcalls/docsdata/contents/' + fileName, true);
+      XML.open('GET', 'https://api.github.com/repos/' + repoName + '/contents/' + fileName, true);
       XML.send();
       XML.addEventListener('readystatechange', (e) => {
         if (e.target.readyState === 4) {
