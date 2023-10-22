@@ -3,9 +3,9 @@ class RequestsManager {
 
   initRequest(fileName, repoName = 'pytgcalls/docsdata') {
     return new Promise((resolve, reject) => {
-      this.#tryToLoadWithUserContent(fileName, repoName).then(resolve).catch(() => {
+      this.#tryToLoadWithUserContent(repoName, fileName).then(resolve).catch(() => {
         this.#doesLoadViaUserContentWork = false;
-        this.#tryToLoadWithApi(fileName, repoName).then(resolve).catch(reject);
+        this.#tryToLoadWithApi(repoName, fileName).then(resolve).catch(reject);
       });
     });
   }
