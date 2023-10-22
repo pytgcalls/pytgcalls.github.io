@@ -105,6 +105,10 @@ body .page-container .content:not(.is-loading) a {
   color: #007fff;
 }
 
+body .page-container .content:not(.is-loading) a.ref-shi {
+  cursor: pointer;
+}
+
 body .page-container .content:not(.is-loading) .ref {
   display: inline-block;
   color: #f08d49;

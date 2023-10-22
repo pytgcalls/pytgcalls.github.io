@@ -199,6 +199,10 @@ class HomePage {
     this.#sidebarInstance.updateMobileVisibilityState(false);
     this.#contentInstance.loadFile(file, hash);
   }
+
+  handleCustomCodeInsert() {
+    this.#contentInstance.handleCustomCodeInsert();
+  }
 }
 
 const homePage = new HomePage();
