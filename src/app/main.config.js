@@ -6,14 +6,15 @@ class Config {
       return Promise.resolve(this.#precachedConfig);
     } else {
       return new Promise((resolve) => {
-        const XML = new XMLHttpRequest();
-        XML.open('GET', 'https://raw.githubusercontent.com/pytgcalls/docsdata/master/config.xml?cache='+String(Math.random()), true);
-        XML.send();
-        XML.addEventListener('readystatechange', (e) => {
-          if (e.target.readyState === 4 && e.target.status === 200) {
-            this.#precachedConfig = e.target.response;
-            resolve(this.#precachedConfig);
-          }
+        const configPromise = requestsManager.initRequest('config.xml');
+        
+        configPromise.then((response) => {
+          this.#precachedConfig = response;
+          resolve(response);
+        });
+        
+        configPromise.catch(() => {
+          alert("This documentation isn't available in your country");
         });
       });
     }
