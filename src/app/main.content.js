@@ -64,6 +64,7 @@ class Content {
     } else {
       return new Promise((resolve, reject) => {
         const XML = new XMLHttpRequest();
+        XML.timeout = 3500;
         XML.open('GET', 'https://raw.githubusercontent.com/pytgcalls/docsdata/master/' + fileName, true);
         XML.send();
         XML.addEventListener('readystatechange', (e) => {
