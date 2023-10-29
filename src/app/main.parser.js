@@ -220,14 +220,16 @@ class SourceParser {
       newElement.addEventListener('click', () => {
         const src = 'https://github.com/pytgcalls/pytgcalls/tree/master/' + element.getAttribute('url');
 
-        const closeButton = document.createElement('div');
-        closeButton.classList.add('close-button');
-        closeButton.addEventListener('click', () => {
+        const closePopup = () => {
           fullscreenCodePreview.classList.add('disappear');
           fullscreenCodePreview.addEventListener('animationend', () => {
             fullscreenCodePreview.remove();
           }, { once: true });
-        });
+        };
+
+        const closeButton = document.createElement('div');
+        closeButton.classList.add('close-button');
+        closeButton.addEventListener('click', closePopup);
         closeButton.appendChild(document.createElement('div'));
         closeButton.appendChild(document.createElement('div'));
 
@@ -242,6 +244,7 @@ class SourceParser {
         urlBarOpenImage.src = '/src/assets/uprightfromsquare.svg';
         const urlBarOpen = document.createElement('a');
         urlBarOpen.classList.add('link');
+        urlBarOpen.addEventListener('click', closePopup);
         urlBarOpen.target = '_blank';
         urlBarOpen.href = src;
         urlBarOpen.appendChild(urlBarOpenImage);
