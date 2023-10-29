@@ -218,6 +218,8 @@ class SourceParser {
       newElement.appendChild(hashtagRef);
     } else if (element.tagName.toUpperCase() == 'REF-SHI') {
       newElement.addEventListener('click', () => {
+        const src = 'https://github.com/pytgcalls/pytgcalls/tree/master/' + element.getAttribute('url');
+
         const closeButton = document.createElement('div');
         closeButton.classList.add('close-button');
         closeButton.addEventListener('click', () => {
@@ -229,13 +231,38 @@ class SourceParser {
         closeButton.appendChild(document.createElement('div'));
         closeButton.appendChild(document.createElement('div'));
 
+        const urlBarGithub = document.createElement('img');
+        urlBarGithub.classList.add('icon');
+        urlBarGithub.src = '/src/assets/github.svg';
+        const urlBarText = document.createElement('div');
+        urlBarText.classList.add('url');
+        urlBarText.textContent = src;
+        const urlBarOpenImage = document.createElement('img');
+        urlBarOpenImage.classList.add('icon', 'open');
+        urlBarOpenImage.src = '/src/assets/uprightfromsquare.svg';
+        const urlBarOpen = document.createElement('a');
+        urlBarOpen.classList.add('link');
+        urlBarOpen.target = '_blank';
+        urlBarOpen.href = src;
+        urlBarOpen.appendChild(urlBarOpenImage);
+        const urlBar = document.createElement('div');
+        urlBar.classList.add('url-bar');
+        urlBar.appendChild(urlBarGithub);
+        urlBar.appendChild(urlBarText);
+        urlBar.appendChild(urlBarOpen);
+
+        const topBar = document.createElement('div');
+        topBar.classList.add('top-bar');
+        topBar.appendChild(closeButton);
+        topBar.appendChild(urlBar);
+
         const codePreview = document.createElement('div');
         codePreview.classList.add('code-preview', 'is-loading');
         codePreview.appendChild(utils.createLoadingItem());
 
         const fullscreenCodePreview = document.createElement('div');
         fullscreenCodePreview.classList.add('fs-code-preview');
-        fullscreenCodePreview.appendChild(closeButton);
+        fullscreenCodePreview.appendChild(topBar);
         fullscreenCodePreview.appendChild(codePreview);
         document.body.appendChild(fullscreenCodePreview);
 
