@@ -83,6 +83,12 @@ class Config {
         for(const file of filesListElementsGlobal) {
           if (this.#getFullPathByFileElement(file) == fileName) {
             detectedId = file.parentElement;
+
+            if (detectedId.tagName.toUpperCase() === 'GROUP') {
+              detectedId = detectedId.parentElement;
+            }
+
+            break;
           }
         }
 
