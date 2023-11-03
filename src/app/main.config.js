@@ -64,15 +64,65 @@ class Config {
 
         let finalList = [];
         for(const element of filesListElements) {
-          let finalText = '';
-          if (element.parentElement.hasAttribute('basepath')) {
-            finalText = element.parentElement.getAttribute('basepath');
-          }
-          finalText += element.textContent;
-          finalList.push(finalText);
+          finalList.push(this.#getFullPathByFileElement(element));
         }
     
         resolve(finalList);
+      });
+    });
+  }
+
+  getTheNextFileAfter(fileName) {
+    return new Promise((resolve, reject) => {
+      this.loadConfig().then((config) => {
+        const domHelper = new DOMParser();
+        const dom = domHelper.parseFromString(config, 'application/xml');
+        const filesListElementsGlobal = dom.querySelectorAll('config > files-list file');
+
+        let detectedId;
+        for(const file of filesListElementsGlobal) {
+          if (this.#getFullPathByFileElement(file) == fileName) {
+            detectedId = file.parentElement;
+          }
+        }
+
+        if (typeof detectedId == 'undefined') {
+          reject('dcid not found');
+        } else {
+          const filesListElements = detectedId.querySelectorAll('file');
+          
+          let nextFile, previousFile, previousStateFile;
+          let found = false;
+          for(const file of filesListElements) {
+            const finalText = this.#getFullPathByFileElement(file);
+
+            if (typeof nextFile == 'undefined') {
+              if (found) {
+                nextFile = finalText;
+              } else if (finalText == fileName) {
+                found = true;
+              }
+            }
+
+            if (typeof previousFile == 'undefined') {
+              if (finalText == fileName && typeof previousStateFile != 'undefined') {
+                previousFile = previousStateFile;
+              } else {
+                previousStateFile = finalText;
+              }
+            }
+          }
+
+          if (typeof nextFile == 'undefined' && typeof previousFile == 'undefined') {
+            reject('path not found');
+          } else {
+            resolve({
+              previousFile,
+              nextFile,
+              basePath: detectedId.hasAttribute('basepath') ? detectedId.getAttribute('basepath') : ''
+            });
+          }
+        }
       });
     });
   }
@@ -151,6 +201,15 @@ class Config {
     }
     
     return false;
+  }
+
+  #getFullPathByFileElement(file) {
+    let finalText = '';
+    if (file.parentElement.hasAttribute('basepath')) {
+      finalText = file.parentElement.getAttribute('basepath');
+    }
+    finalText += file.textContent;
+    return finalText;
   }
 }
 

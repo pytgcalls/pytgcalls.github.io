@@ -83,7 +83,7 @@ body .page-container .content.is-loading .try-container .button {
   border-radius: 10px;
 }
 
-body .page-container .content .page {
+body .page-container .content:not(.disappear) .page {
   animation: 0.4s appearPage cubic-bezier(0.42, 0, 0, 0.97);
 }
 
@@ -94,11 +94,95 @@ body .page-container .content .page {
   }
 }
 
+body .page-container .content.disappear {
+  animation: 0.4s disappearPage cubic-bezier(0.42, 0, 0, 0.97);
+}
+
+@keyframes disappearPage {
+  to {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+}
+
 body .page-container .content:not(.is-loading) {
   box-sizing: border-box;
   padding-inline: 20px;
   padding-bottom: 20px;
   color: #FFFFFF;
+}
+
+body .page-container .content:not(.is-loading) .go-to-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 50px;
+}
+
+body .page-container .content:not(.is-loading) .go-to-container .go-to {
+  display: flex;
+  align-items: center;
+  background: #111111;
+  padding: 17px;
+  gap: 11px;
+  position: relative;
+  min-width: 153px;
+  border: 1px solid rgb(255, 255, 255, 0.1);
+  border-radius: 10px;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+@media screen and (max-width: 800px) {
+  body .page-container .content:not(.is-loading) .go-to-container .go-to {
+    padding: 10px;
+  }
+}
+
+body .page-container .content:not(.is-loading) .go-to-container .go-to img {
+  filter: invert(1);
+  transition: 0.4s margin-right, 0.4s opacity;
+}
+
+body .page-container .content:not(.is-loading) .go-to-container .go-to:hover img {
+  margin-right: -25px;
+  opacity: 0;
+}
+
+body .page-container .content:not(.is-loading) .go-to-container .go-to .big-title {
+  transform: translateY(-7px);
+  transition: 0.4s transform;
+}
+
+@media screen and (max-width: 800px) {
+  body .page-container .content:not(.is-loading) .go-to-container .go-to .big-title {
+    transform: none;
+  }
+}
+
+body .page-container .content:not(.is-loading) .go-to-container .go-to:hover .big-title {
+  transform: none;
+}
+
+body .page-container .content:not(.is-loading) .go-to-container .go-to .mini-title {
+  position: absolute;
+  bottom: 8px;
+  font-size: 14px;
+  left: 42px;
+  opacity: 0.7;
+  white-space: nowrap;
+  transition: 0.4s bottom, 0.4s opacity;
+}
+
+body .page-container .content:not(.is-loading) .go-to-container .go-to:hover .mini-title {
+  bottom: 0px;
+  opacity: 0;
+}
+
+@media screen and (max-width: 800px) {
+  body .page-container .content:not(.is-loading) .go-to-container .go-to .mini-title {
+    display: none;
+  }
 }
 
 body .page-container .content:not(.is-loading) a {

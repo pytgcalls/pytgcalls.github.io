@@ -32,12 +32,16 @@ class Content {
 
     if (typeof indexedCache != 'undefined') {
       window.history.pushState('', '', pathFileName + (hash ?? ''));
-      this.#handleResponse(content, pageSections, indexedCache, hash);
+      this.#handleResponse(content, pageSections, indexedCache, hash).then(() => {
+        this.#handlePathPNManager(content, fileName);
+      });
     } else {
       const handleData = (response) => {
         window.history.pushState('', '', pathFileName + (hash ?? ''));
         indexesManager.saveAsFullIndexedValue(fileName, response);
-        this.#handleResponse(content, pageSections, response, hash);
+        this.#handleResponse(content, pageSections, response, hash).then(() => {
+          this.#handlePathPNManager(content, fileName);
+        });
       };
 
       requestsManager.initRequest(fileName).then(handleData).catch(() => {
@@ -76,7 +80,7 @@ class Content {
   }
 
   #handleResponse(content, pageSections, response, hash) {
-    try {
+    return new Promise((resolve) => {
       const data = sourceParser.getContentByData(response);
       content.classList.remove('is-loading');
       content.textContent = '';
@@ -91,14 +95,70 @@ class Content {
       try {
         this.#handleHash(data, hash);
       } catch(e) {}
-    } catch(e) {
-      content.classList.add('is-loading');
-      content.textContent = 'Rendering failed';
-      pageSections.classList.add('is-loading');
-      pageSections.textContent = '';
 
-      throw e;
-    }
+      resolve();
+    });
+  }
+
+  #handlePathPNManager(content, fileName) {
+    console.log('HANDLING ', fileName);
+    config.getTheNextFileAfter(fileName).then(({ previousFile, nextFile, basePath }) => {
+      console.log(previousFile, nextFile);
+
+      const goToPreviousIcon = document.createElement('img');
+      goToPreviousIcon.src = '/src/assets/arrowleft.svg';
+      const goToPreviousBigTitle = document.createElement('div');
+      goToPreviousBigTitle.classList.add('big-title');
+      goToPreviousBigTitle.textContent = 'Previous';
+      const goToPreviousMiniTitle = document.createElement('div');
+      goToPreviousMiniTitle.classList.add('mini-title');
+      const goToPreviousContainer = document.createElement('div');
+      goToPreviousContainer.classList.add('go-to');
+      goToPreviousContainer.appendChild(goToPreviousIcon);
+      goToPreviousContainer.appendChild(goToPreviousBigTitle);
+      goToPreviousContainer.appendChild(goToPreviousMiniTitle);
+
+      const goToNextIcon = document.createElement('img');
+      goToNextIcon.src = '/src/assets/arrowright.svg';
+      const goToNextBigTitle = document.createElement('div');
+      goToNextBigTitle.classList.add('big-title');
+      goToNextBigTitle.textContent = 'Next';
+      const goToNextMiniTitle = document.createElement('div');
+      goToNextMiniTitle.classList.add('mini-title');
+      const goToNextContainer = document.createElement('div');
+      goToNextContainer.classList.add('go-to');
+      goToNextContainer.appendChild(goToNextIcon);
+      goToNextContainer.appendChild(goToNextBigTitle);
+      goToNextContainer.appendChild(goToNextMiniTitle);
+
+      const goToContainer = document.createElement('div');
+      goToContainer.classList.add('go-to-container');
+
+      if (typeof previousFile != 'undefined') {
+        goToPreviousMiniTitle.textContent = utils.getCategoryFileName(previousFile.replace(basePath, ''));
+        goToPreviousContainer.addEventListener('click', () => {
+          this.#handleRedirectWithAnimation(content, previousFile);
+        });
+        goToContainer.appendChild(goToPreviousContainer);
+      }
+
+      if (typeof nextFile != 'undefined') {
+        goToNextMiniTitle.textContent = utils.getCategoryFileName(nextFile.replace(basePath, ''));
+        goToNextContainer.addEventListener('click', () => {
+          this.#handleRedirectWithAnimation(content, nextFile);
+        });
+        goToContainer.appendChild(goToNextContainer);
+      }
+
+      content.appendChild(goToContainer);
+    });
+  }
+
+  #handleRedirectWithAnimation(content, url) {
+    content.classList.add('disappear');
+    content.addEventListener('animationend', () => {
+      homePage.handleAsRedirect(utils.parseCategoryUrl(url));
+    }, { once: true });
   }
 
   #handleHash(data, hash) {
