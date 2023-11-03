@@ -119,6 +119,10 @@ body .page-container .content:not(.is-loading) .go-to-container {
   margin-top: 50px;
 }
 
+body .page-container .content:not(.is-loading) .go-to-container.has-only-next {
+  justify-content: flex-end;
+}
+
 body .page-container .content:not(.is-loading) .go-to-container .go-to {
   display: flex;
   align-items: center;

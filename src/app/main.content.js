@@ -133,6 +133,7 @@ class Content {
 
       const goToContainer = document.createElement('div');
       goToContainer.classList.add('go-to-container');
+      goToContainer.classList.toggle('has-only-next', !previousFile && !!nextFile);
 
       if (typeof previousFile != 'undefined') {
         goToPreviousMiniTitle.textContent = utils.getCategoryFileName(previousFile.replace(basePath, ''));
