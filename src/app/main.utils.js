@@ -65,6 +65,10 @@ class Utils {
     return fileName;
   }
 
+  getCategoryFileName(fileName) {
+    return this.parseCategoryName(fileName).split('/').reverse()[0];
+  }
+
   parseCategoryUrl(fileName) {
     if (fileName.endsWith('.xml')) {
       fileName = fileName.slice(0, -4);
