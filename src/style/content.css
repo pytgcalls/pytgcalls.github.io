@@ -140,6 +140,8 @@ body .page-container .content:not(.is-loading) .go-to-container .go-to {
 @media screen and (max-width: 800px) {
   body .page-container .content:not(.is-loading) .go-to-container .go-to {
     padding: 10px;
+    min-width: 38vw;
+    max-width: 38vw;
   }
 }
 
