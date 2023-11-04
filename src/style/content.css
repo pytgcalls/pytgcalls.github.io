@@ -324,6 +324,26 @@ body .page-container .content:not(.is-loading) .syntax-highlight {
   }
 }
 
+body .page-container .content:not(.is-loading) .syntax-highlight.has-mark::before,
+body .page-container .content:not(.is-loading) .syntax-highlight.has-mark::after {
+  content: "";
+  position: absolute;
+  left: -10px;
+  width: calc(100% + 10px);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+body .page-container .content:not(.is-loading) .syntax-highlight.has-mark::before {
+  top: 0px;
+  height: calc(10px + 25px * var(--start-mark) - 25px);
+}
+
+body .page-container .content:not(.is-loading) .syntax-highlight.has-mark::after {
+  --top: calc(10px + 25px * calc(var(--start-mark) + var(--offset-mark)));
+  top: var(--top);
+  height: calc(var(--length) * 25px - var(--top) + 20px);
+}
+
 body.disable-blur .page-container .content:not(.is-loading) .syntax-highlight {
   border: none;
 }
