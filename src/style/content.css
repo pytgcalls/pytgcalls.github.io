@@ -331,6 +331,7 @@ body .page-container .content:not(.is-loading) .syntax-highlight.has-mark::after
   left: -10px;
   width: calc(100% + 10px);
   background: rgba(0, 0, 0, 0.4);
+  transition: 0.4s transform;
 }
 
 body .page-container .content:not(.is-loading) .syntax-highlight.has-mark::before {
@@ -342,6 +343,14 @@ body .page-container .content:not(.is-loading) .syntax-highlight.has-mark::after
   --top: calc(10px + 25px * calc(var(--start-mark) + var(--offset-mark)));
   top: var(--top);
   height: calc(var(--length) * 25px - var(--top) + 20px);
+}
+
+body .page-container .content:not(.is-loading) .syntax-highlight.has-mark:hover::before {
+  transform: translateY(-100%);
+}
+
+body .page-container .content:not(.is-loading) .syntax-highlight.has-mark:hover::after {
+  transform: translateY(100%);
 }
 
 body.disable-blur .page-container .content:not(.is-loading) .syntax-highlight {
