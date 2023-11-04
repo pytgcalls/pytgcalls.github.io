@@ -343,7 +343,7 @@ class SourceParser {
     code = this.#handleTabsWithSpacer(code);
     newElement.innerHTML = code;
 
-    /*if (element.hasAttribute('mark')) {
+    if (element.hasAttribute('mark')) {
       const markData = element.getAttribute('mark');
       const startAt = parseInt(markData.split('-')[0]);
       const endAt = parseInt(markData.split('-')[1]);
@@ -354,8 +354,7 @@ class SourceParser {
         newElement.style.setProperty('--length', code.split('<br/>').length - 1);
         newElement.classList.add('has-mark');
       }
-    }*/
-    //TODO: MARK ON SYNTAX HIGHLIGHT
+    }
   }
 
   #handleTabsWithSpacer(code) {
