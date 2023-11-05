@@ -343,16 +343,28 @@ class SourceParser {
     code = this.#handleTabsWithSpacer(code);
     newElement.innerHTML = code;
 
+    const updateMark = (startAt, endAt) => {
+      newElement.style.setProperty('--start-mark', startAt);
+      newElement.style.setProperty('--offset-mark', endAt - startAt);
+      newElement.style.setProperty('--length', code.split('<br/>').length - 1);
+      newElement.classList.add('has-mark');
+    };
+
     if (element.hasAttribute('mark')) {
       const markData = element.getAttribute('mark');
-      const startAt = parseInt(markData.split('-')[0]);
-      const endAt = parseInt(markData.split('-')[1]);
+      if (markData.indexOf('-') == -1) {
+        const startAt = parseInt(markData);
 
-      if (!isNaN(startAt) && !isNaN(endAt)) {
-        newElement.style.setProperty('--start-mark', startAt);
-        newElement.style.setProperty('--offset-mark', endAt - startAt);
-        newElement.style.setProperty('--length', code.split('<br/>').length - 1);
-        newElement.classList.add('has-mark');
+        if (!isNaN(startAt)) {
+          updateMark(startAt, startAt);
+        }
+      } else {
+        const startAt = parseInt(markData.split('-')[0]);
+        const endAt = parseInt(markData.split('-')[1]);
+
+        if (!isNaN(startAt) && !isNaN(endAt)) {
+          updateMark(Math.min(startAt, endAt), Math.max(startAt, endAt));
+        }
       }
     }
   }
