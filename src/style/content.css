@@ -319,13 +319,64 @@ body .page-container .content:not(.is-loading) .syntax-highlight {
   white-space: nowrap;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax > .syntax-highlight {
+body .page-container .content:not(.is-loading) .multisyntax > .sy-container > .syntax-highlight {
   background: none;
   border: none;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax > .syntax-highlight:not(.active) {
+body .page-container .content:not(.is-loading) .multisyntax > .sy-container.preparing-animation {
+  height: var(--height);
+  overflow: hidden;
+}
+
+body .page-container .content:not(.is-loading) .multisyntax > .sy-container:not(.preparing-animation):not(.animating) > .syntax-highlight:not(.active) {
   display: none;
+}
+
+body .page-container .content:not(.is-loading) .multisyntax > .sy-container.preparing-animation > .syntax-highlight:not(.active) {
+  visibility: hidden;
+}
+
+body .page-container .content:not(.is-loading) .multisyntax > .sy-container.animating {
+  overflow: hidden;
+  animation: 0.4s updateHeight forwards;
+}
+
+@keyframes updateHeight {
+  from {
+    height: var(--height);
+  }
+  to {
+    height: var(--to-height);
+  }
+}
+
+body .page-container .content:not(.is-loading) .multisyntax > .sy-container.animating .syntax-highlight.disappearing,
+body .page-container .content:not(.is-loading) .multisyntax > .sy-container.animating .syntax-highlight.appearing {
+  position: absolute;
+  top: 50px;
+}
+
+body .page-container .content:not(.is-loading) .multisyntax > .sy-container.animating .syntax-highlight.disappearing {
+  animation: 0.4s disappearSy forwards cubic-bezier(1,-0.02, 0, 0.97);
+}
+
+@keyframes disappearSy {
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+body .page-container .content:not(.is-loading) .multisyntax > .sy-container.animating .syntax-highlight.appearing {
+  animation: 0.4s appearSy forwards cubic-bezier(1,-0.02, 0, 0.97);
+}
+
+@keyframes appearSy {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
 }
 
 @supports (overflow-x: overlay) {
