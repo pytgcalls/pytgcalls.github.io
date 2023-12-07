@@ -4,7 +4,7 @@ class SourceParser {
     'TEXT', 'BOLD', 'B', 'SB', 'CODE', 'A', 'BR',
     'SYNTAX-HIGHLIGHT', 'SHI', 'ALERT', 'PG-TITLE',
     'CATEGORY', 'CATEGORY-TITLE', 'REF', 'SUBTEXT',
-    'LIST', 'ITEM',
+    'LIST', 'ITEM', 'MULTISYNTAX',
     'TABLE', 'DEFINITIONS', 'COLUMN', 'ITEM',
     'DOCS-REF', 'GITHUB-REF', 'REF-SHI',
     'CONFIG'
@@ -63,6 +63,9 @@ class SourceParser {
           elementDom.appendChild(newElement);
         } else if (element.tagName.toUpperCase() === 'GITHUB-REF') {
           this.#handleGithubRef(newElement);
+          elementDom.appendChild(newElement);
+        } else if (element.tagName.toUpperCase() === 'MULTISYNTAX') {
+          this.#handleMultiSyntax(element, newElement);
           elementDom.appendChild(newElement);
         } else {
           if (containsCustomTags) {
@@ -389,6 +392,88 @@ class SourceParser {
     }
     
     return code;
+  }
+
+  #handleMultiSyntax(element, newElement) {
+    if (!element.querySelector('tabs > tab')) {
+      throw new Error('multisyntax must contains tabs');
+    }
+
+    if (!element.querySelector('syntax-highlight')) {
+      throw new Error('multisyntax must contains syntax highlight elements');
+    }
+
+    newElement.classList.add('multisyntax');
+
+    const tabsContainer = document.createElement('div');
+    tabsContainer.classList.add('tabs');
+    tabsContainer.style.setProperty('--i', element.querySelectorAll('tabs > tab').length);
+    newElement.appendChild(tabsContainer);
+    
+    for (const [id, tab] of Object.entries(element.querySelectorAll('tabs > tab'))) {
+      if (!tab.textContent || !tab.getAttribute('id')) {
+        throw new Error('tab has invalid data for multisyntax');
+      }
+
+      const tabElement = document.createElement('div');
+      tabElement.classList.add('tab');
+      tabElement.addEventListener('click', () => {
+        homePage.onChangeFavoriteSyntaxTab.callAllListeners(tab.getAttribute('id'));
+      });
+      tabElement.textContent = tab.textContent;
+      tabsContainer.appendChild(tabElement);
+
+      homePage.onChangeFavoriteSyntaxTab.addListener({
+        callback: (data) => {
+          tabElement.classList.toggle('active', tab.getAttribute('id') == data);
+          if (tab.getAttribute('id') == data) {
+            tabsContainer.style.setProperty('--eid', parseInt(id));
+            localStorage.setItem('currentTabData', tab.getAttribute('id'));
+          }
+        },
+        ref: tabElement,
+        recallWithCurrentData: true,
+        onUnknownRecall: () => {
+          tabElement.classList.toggle('active', !parseInt(id));
+          if (!parseInt(id)) {
+            tabsContainer.style.setProperty('--eid', 0);
+          }
+        }
+      });
+    }
+
+    for (const [id, syntax] of Object.entries(element.querySelectorAll('syntax-highlight'))) {
+      let syntaxElement = document.createElement('div');
+      
+      this.#tryToReduceTags(syntax);
+      syntaxElement = this.#checkAndManageElement(syntax, syntaxElement, document.createElement('div'));
+
+      let containsCustomTags = false;
+      for(const data of syntax.querySelectorAll('*')) {
+        if (!(data instanceof Text)) {
+          containsCustomTags = true;
+          break;
+        }
+      }
+      
+      if (containsCustomTags) {
+        throw new Error("Syntax highlight can't contain other tags");
+      }
+
+      this.#handleSyntaxHighlight(syntax, syntaxElement);
+      newElement.appendChild(syntaxElement);
+
+      homePage.onChangeFavoriteSyntaxTab.addListener({
+        callback: (data) => {
+          syntaxElement.classList.toggle('active', syntax.getAttribute('id') == data);
+        },
+        ref: syntaxElement,
+        recallWithCurrentData: true,
+        onUnknownRecall: () => {
+          syntaxElement.classList.toggle('active', !parseInt(id));
+        }
+      });
+    }
   }
 
   #handleGithubRef(element) {

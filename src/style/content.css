@@ -305,6 +305,7 @@ body .page-container .content:not(.is-loading) ul li:has(.syntax-highlight) {
   margin-block: 10px;
 }
 
+body .page-container .content:not(.is-loading) .multisyntax,
 body .page-container .content:not(.is-loading) .syntax-highlight {
   padding: 10px;
   background: rgb(45, 45, 45, 0.3);
@@ -316,6 +317,15 @@ body .page-container .content:not(.is-loading) .syntax-highlight {
   overflow-y: hidden;
   position: relative;
   white-space: nowrap;
+}
+
+body .page-container .content:not(.is-loading) .multisyntax > .syntax-highlight {
+  background: none;
+  border: none;
+}
+
+body .page-container .content:not(.is-loading) .multisyntax > .syntax-highlight:not(.active) {
+  display: none;
 }
 
 @supports (overflow-x: overlay) {
@@ -351,6 +361,41 @@ body .page-container .content:not(.is-loading) .syntax-highlight.has-mark:hover:
 
 body .page-container .content:not(.is-loading) .syntax-highlight.has-mark:hover::after {
   transform: translateY(100%);
+}
+
+body .page-container .content:not(.is-loading) .multisyntax {
+  padding: 0;
+}
+
+body .page-container .content:not(.is-loading) .multisyntax .tabs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid rgb(255, 255, 255, 0.1);
+  position: relative;
+}
+
+body .page-container .content:not(.is-loading) .multisyntax .tabs::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: calc(calc(100% * var(--eid)) / var(--i));
+  width: calc(100% / var(--i));
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  transition: 0.2s left;
+}
+
+body .page-container .content:not(.is-loading) .multisyntax .tabs > .tab {
+  width: calc(100% / var(--i));
+  text-align: center;
+  padding-block: 12px;
+  transition: 0.2s color;
+}
+
+body .page-container .content:not(.is-loading) .multisyntax .tabs > .tab:not(.active) {
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 body.disable-blur .page-container .content:not(.is-loading) .syntax-highlight {

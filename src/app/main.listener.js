@@ -1,19 +1,40 @@
 class ListenerManagerInstance {
+  ultimateDataCall;
+  ultimateDataCallInternal;
+
   #callbacks = [];
 
-  addListener({ callback, isInternal = false, ref = undefined }) {
+  addListener({ callback, isInternal = false, ref = undefined, recallWithCurrentData = false, onUnknownRecall }) {
     this.#callbacks.push({
       callback,
       isInternal,
       ref
     });
+
+    if (recallWithCurrentData) {
+      if (isInternal) {
+        if (typeof this.ultimateDataCallInternal != 'undefined') {
+          callback(this.ultimateDataCallInternal);
+        } else {
+          onUnknownRecall && onUnknownRecall();
+        }
+      } else if(!isInternal) {
+        if (typeof this.ultimateDataCall != 'undefined') {
+          callback(this.ultimateDataCall);
+        } else {
+          onUnknownRecall && onUnknownRecall();
+        }
+      }
+    }
   }
 
   callAllListeners(data) {
+    this.ultimateDataCall = data;
     return this.#executeListenerCall(data);
   }
 
   callInternalListeners(data) {
+    this.ultimateDataCallInternal = data;
     return this.#executeListenerCall(data, true);
   }
 
