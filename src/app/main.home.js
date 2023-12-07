@@ -1,4 +1,6 @@
 class HomePage {
+  onChangeFavoriteSyntaxTab;
+
   #COLORS = ['red', 'green', 'blue', 'yellow'];
   
   #headerInstance;
@@ -7,6 +9,13 @@ class HomePage {
   #introductionInstance;
 
   init(pathName) {
+    this.onChangeFavoriteSyntaxTab = new ListenerManagerInstance();
+
+    const syntaxTabData = localStorage.getItem('currentTabData');
+    if (syntaxTabData != null) {
+      this.onChangeFavoriteSyntaxTab.callAllListeners(syntaxTabData);
+    }
+
     this.#headerInstance = new Header();
     this.#sidebarInstance = new Sidebar();
     this.#contentInstance = new Content();
