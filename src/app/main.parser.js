@@ -442,6 +442,10 @@ class SourceParser {
       });
     }
 
+    const syntaxHighlightContainer = document.createElement('div');
+    syntaxHighlightContainer.classList.add('sy-container');
+    newElement.appendChild(syntaxHighlightContainer);
+
     for (const [id, syntax] of Object.entries(element.querySelectorAll('syntax-highlight'))) {
       let syntaxElement = document.createElement('div');
       
@@ -461,11 +465,39 @@ class SourceParser {
       }
 
       this.#handleSyntaxHighlight(syntax, syntaxElement);
-      newElement.appendChild(syntaxElement);
+      syntaxHighlightContainer.appendChild(syntaxElement);
 
       homePage.onChangeFavoriteSyntaxTab.addListener({
         callback: (data) => {
-          syntaxElement.classList.toggle('active', syntax.getAttribute('id') == data);
+          const activeItem = syntaxHighlightContainer.querySelector('.active');
+          if (activeItem) {
+            if (activeItem != syntaxElement && syntax.getAttribute('id') == data) {
+              const activeItemRect = activeItem.getBoundingClientRect();
+              syntaxHighlightContainer.style.setProperty('--height', activeItemRect.height+'px');
+              syntaxHighlightContainer.classList.add('preparing-animation');
+              
+              const currentItemRect = syntaxElement.getBoundingClientRect();
+              syntaxHighlightContainer.style.setProperty('--to-height', (currentItemRect.height + 10)+'px');
+              activeItem.classList.add('disappearing');
+              syntaxHighlightContainer.classList.add('animating');
+              syntaxHighlightContainer.classList.remove('preparing-animation');
+              syntaxElement.classList.add('appearing');
+
+              Promise.all([
+                new Promise((resolve) => syntaxHighlightContainer.addEventListener('animationend', resolve, { once: true })),
+                new Promise((resolve) => activeItem.addEventListener('animationend', resolve, { once: true })),
+                new Promise((resolve) => syntaxElement.addEventListener('animationend', resolve, { once: true }))
+              ]).then(() => {
+                syntaxElement.classList.remove('appearing');
+                syntaxElement.classList.add('active');
+                activeItem.classList.remove('disappearing');
+                activeItem.classList.remove('active');
+                syntaxHighlightContainer.classList.remove('animating');
+              });
+            }
+          } else {
+            syntaxElement.classList.toggle('active', syntax.getAttribute('id') == data);
+          }
         },
         ref: syntaxElement,
         recallWithCurrentData: true,
