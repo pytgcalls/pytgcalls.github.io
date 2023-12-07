@@ -365,6 +365,7 @@ body .page-container .content:not(.is-loading) .syntax-highlight.has-mark:hover:
 
 body .page-container .content:not(.is-loading) .multisyntax {
   padding: 0;
+  user-select: none;
 }
 
 body .page-container .content:not(.is-loading) .multisyntax .tabs {
