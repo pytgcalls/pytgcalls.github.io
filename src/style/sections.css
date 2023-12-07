@@ -56,6 +56,9 @@ body .page-container .sections:not(.is-loading) {
   padding-left: 18px;
   padding-top: 15px;
   box-sizing: border-box;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
 }
 
 body .page-container .sections:not(.is-loading) * {
@@ -65,11 +68,16 @@ body .page-container .sections:not(.is-loading) * {
   transition: 0.4s color;
 }
 
-body .page-container .sections:not(.is-loading) *:hover {
+body .page-container .sections:not(.is-loading) .sections-recap {
+  flex: 1;
+  width: 100%;
+}
+
+body .page-container .sections:not(.is-loading) .sections-recap *:hover {
   color: #FFFFFF;
 }
 
-body .page-container .sections:not(.is-loading):has(*:hover) *:not(:hover) {
+body .page-container .sections:not(.is-loading) .sections-recap:has(*:hover) *:not(:hover) {
   color: rgba(255, 255, 255, 0.4);
 }
 

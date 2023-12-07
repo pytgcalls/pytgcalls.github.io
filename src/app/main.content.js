@@ -32,14 +32,14 @@ class Content {
 
     if (typeof indexedCache != 'undefined') {
       window.history.pushState('', '', pathFileName + (hash ?? ''));
-      this.#handleResponse(content, pageSections, indexedCache, hash).then(() => {
+      this.#handleResponse(fileName, content, pageSections, indexedCache, hash).then(() => {
         this.#handlePathPNManager(content, fileName);
       });
     } else {
       const handleData = (response) => {
         window.history.pushState('', '', pathFileName + (hash ?? ''));
         indexesManager.saveAsFullIndexedValue(fileName, response);
-        this.#handleResponse(content, pageSections, response, hash).then(() => {
+        this.#handleResponse(fileName, content, pageSections, response, hash).then(() => {
           this.#handlePathPNManager(content, fileName);
         });
       };
@@ -57,7 +57,7 @@ class Content {
     const data = prompt('Insert here your script');
 
     const { content, pageSections } = this.#replaceWithValidElements();
-    this.#handleResponse(content, pageSections, data, '');
+    this.#handleResponse("", content, pageSections, data, '');
   }
 
   clearBoard() {
@@ -79,18 +79,32 @@ class Content {
     return { content, pageSections };
   }
 
-  #handleResponse(content, pageSections, response, hash) {
+  #handleResponse(fileName, content, pageSections, response, hash) {
     return new Promise((resolve) => {
       const data = sourceParser.getContentByData(response);
       content.classList.remove('is-loading');
       content.textContent = '';
       content.appendChild(data);
 
-      const sectionsFragment = document.createDocumentFragment();
-      this.#iterPageSectionsData(data, sectionsFragment);
+      const sectionsContainer = document.createElement('div');
+      sectionsContainer.classList.add('sections-recap');
+      this.#iterPageSectionsData(data, sectionsContainer);
+
       pageSections.classList.remove('is-loading');
       pageSections.textContent = '';
-      pageSections.appendChild(sectionsFragment);
+      pageSections.appendChild(sectionsContainer);
+
+      if (fileName != "") {
+        const contributeToEdit = document.createElement('a');
+        contributeToEdit.classList.add('h2');
+        contributeToEdit.href = 'https://github.com/pytgcalls/docsdata/edit/master/' + fileName;
+        contributeToEdit.target = '_blank';
+        contributeToEdit.textContent = 'Contribute to this page';
+        const contributionsContainer = document.createElement('div');
+        contributionsContainer.classList.add('contributions');
+        contributionsContainer.appendChild(contributeToEdit);
+        pageSections.appendChild(contributionsContainer);
+      }
 
       try {
         this.#handleHash(data, hash);
@@ -101,10 +115,7 @@ class Content {
   }
 
   #handlePathPNManager(content, fileName) {
-    console.log('HANDLING ', fileName);
     config.getTheNextFileAfter(fileName).then(({ previousFile, nextFile, basePath }) => {
-      console.log(previousFile, nextFile);
-
       const goToPreviousIcon = document.createElement('img');
       goToPreviousIcon.src = '/src/assets/arrowleft.svg';
       const goToPreviousBigTitle = document.createElement('div');
