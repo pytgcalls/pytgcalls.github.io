@@ -379,6 +379,10 @@ body .page-container .content:not(.is-loading) .multisyntax > .sy-container.anim
   }
 }
 
+body .page-container .content:not(.is-loading) .multisyntax > .sy-container.animating .hidden {
+  visibility: hidden;
+}
+
 @supports (overflow-x: overlay) {
   body .page-container .content:not(.is-loading) .syntax-highlight {
     overflow-x: overlay;

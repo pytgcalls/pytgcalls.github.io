@@ -475,6 +475,14 @@ class SourceParser {
           if (activeItem) {
             if (activeItem != syntaxElement && syntax.getAttribute('id') == data) {
               homePage.onChangeFavoriteSyntaxTabAnimationState.callAllListeners(true);
+              
+              let updatedChildren = [];
+              for(const syntax of syntaxHighlightContainer.childNodes) {
+                if (syntax != syntaxElement && syntax != activeItem) {
+                  updatedChildren.push(syntax);
+                  syntax.classList.add('hidden');
+                }
+              }
 
               const activeItemRect = activeItem.getBoundingClientRect();
               syntaxHighlightContainer.style.setProperty('--height', activeItemRect.height+'px');
@@ -498,6 +506,10 @@ class SourceParser {
                 activeItem.classList.remove('active');
                 syntaxHighlightContainer.classList.remove('animating');
                 homePage.onChangeFavoriteSyntaxTabAnimationState.callAllListeners(false);
+
+                for(const child of updatedChildren) {
+                  child.classList.remove('hidden');
+                }
               });
             }
           } else {
