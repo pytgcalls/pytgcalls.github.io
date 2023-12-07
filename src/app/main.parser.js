@@ -155,7 +155,7 @@ class SourceParser {
     } else if(element.tagName.toUpperCase() === 'GITHUB-REF') {
       newElement = document.createElement('a');
       newElement.classList.add('github-ref');
-      newElement.setAttribute('target', '_blank');
+      newElement.target = '_blank';
 
       if (!element.hasAttribute('reponame') || !element.hasAttribute('user')) {
         throw new Error('invalid reponame/user for github-ref');
