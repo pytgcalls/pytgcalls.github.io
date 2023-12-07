@@ -418,7 +418,9 @@ class SourceParser {
       const tabElement = document.createElement('div');
       tabElement.classList.add('tab');
       tabElement.addEventListener('click', () => {
-        homePage.onChangeFavoriteSyntaxTab.callAllListeners(tab.getAttribute('id'));
+        if (!homePage.onChangeFavoriteSyntaxTabAnimationState.ultimateDataCall) {
+          homePage.onChangeFavoriteSyntaxTab.callAllListeners(tab.getAttribute('id'));
+        }
       });
       tabElement.textContent = tab.textContent;
       tabsContainer.appendChild(tabElement);
@@ -472,6 +474,8 @@ class SourceParser {
           const activeItem = syntaxHighlightContainer.querySelector('.active');
           if (activeItem) {
             if (activeItem != syntaxElement && syntax.getAttribute('id') == data) {
+              homePage.onChangeFavoriteSyntaxTabAnimationState.callAllListeners(true);
+
               const activeItemRect = activeItem.getBoundingClientRect();
               syntaxHighlightContainer.style.setProperty('--height', activeItemRect.height+'px');
               syntaxHighlightContainer.classList.add('preparing-animation');
@@ -482,7 +486,7 @@ class SourceParser {
               syntaxHighlightContainer.classList.add('animating');
               syntaxHighlightContainer.classList.remove('preparing-animation');
               syntaxElement.classList.add('appearing');
-
+              
               Promise.all([
                 new Promise((resolve) => syntaxHighlightContainer.addEventListener('animationend', resolve, { once: true })),
                 new Promise((resolve) => activeItem.addEventListener('animationend', resolve, { once: true })),
@@ -493,6 +497,7 @@ class SourceParser {
                 activeItem.classList.remove('disappearing');
                 activeItem.classList.remove('active');
                 syntaxHighlightContainer.classList.remove('animating');
+                homePage.onChangeFavoriteSyntaxTabAnimationState.callAllListeners(false);
               });
             }
           } else {
