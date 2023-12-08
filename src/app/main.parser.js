@@ -495,13 +495,16 @@ class SourceParser {
               if (activeItem != syntaxElement && syntax.getAttribute('id') == currentData) {
                 homePage.onChangeFavoriteSyntaxTabAnimationState.callAllListeners(true);
                 
+                const childNodes = [...syntaxHighlightContainer.childNodes];
                 let updatedChildren = [];
-                for(const syntax of syntaxHighlightContainer.childNodes) {
+                for(const syntax of childNodes) {
                   if (syntax != syntaxElement && syntax != activeItem) {
                     updatedChildren.push(syntax);
                     syntax.classList.add('hidden');
                   }
                 }
+
+                const asBack = childNodes.indexOf(activeItem) > childNodes.indexOf(syntaxElement);
 
                 const activeItemRect = activeItem.getBoundingClientRect();
                 syntaxHighlightContainer.style.setProperty('--height', (activeItemRect.height + 10)+'px');
@@ -511,6 +514,7 @@ class SourceParser {
                 syntaxHighlightContainer.style.setProperty('--to-height', (currentItemRect.height + 10)+'px');
                 activeItem.classList.add('disappearing');
                 syntaxHighlightContainer.classList.add('animating');
+                syntaxHighlightContainer.classList.toggle('animating-asback', asBack);
                 syntaxHighlightContainer.classList.remove('preparing-animation');
                 syntaxElement.classList.add('appearing');
                 
@@ -524,6 +528,7 @@ class SourceParser {
                   activeItem.classList.remove('disappearing');
                   activeItem.classList.remove('active');
                   syntaxHighlightContainer.classList.remove('animating');
+                  syntaxHighlightContainer.classList.remove('animating-asback');
                   homePage.onChangeFavoriteSyntaxTabAnimationState.callAllListeners(false);
 
                   for(const child of updatedChildren) {
