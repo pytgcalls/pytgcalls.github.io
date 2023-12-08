@@ -13,11 +13,15 @@ class HomePage {
     this.onChangeFavoriteSyntaxTab = new ListenerManagerInstance();
     this.onChangeFavoriteSyntaxTabAnimationState = new ListenerManagerInstance();
 
-    const syntaxTabData = localStorage.getItem('currentTabData');
+    const syntaxTabData = localStorage.getItem('currentTabDataIndexes');
+    let baseParsedSyntaxTab = {};
     if (syntaxTabData != null) {
-      this.onChangeFavoriteSyntaxTab.callAllListeners(syntaxTabData);
+      try {
+        baseParsedSyntaxTab = JSON.parse(syntaxTabData);
+      } catch(_) {}
     }
 
+    this.onChangeFavoriteSyntaxTab.callAllListeners(baseParsedSyntaxTab);
     this.onChangeFavoriteSyntaxTabAnimationState.callAllListeners(false);
 
     this.#headerInstance = new Header();
