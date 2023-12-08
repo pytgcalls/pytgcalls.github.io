@@ -395,6 +395,10 @@ class SourceParser {
   }
 
   #handleMultiSyntax(element, newElement) {
+    if (!element.getAttribute('id')) {
+      throw new Error('multisyntax must have id tag');
+    }
+
     if (!element.querySelector('tabs > tab')) {
       throw new Error('multisyntax must contains tabs');
     }
@@ -410,16 +414,22 @@ class SourceParser {
     tabsContainer.style.setProperty('--i', element.querySelectorAll('tabs > tab').length);
     newElement.appendChild(tabsContainer);
     
+    let tabIds = [];
     for (const [id, tab] of Object.entries(element.querySelectorAll('tabs > tab'))) {
       if (!tab.textContent || !tab.getAttribute('id')) {
         throw new Error('tab has invalid data for multisyntax');
       }
+      
+      tabIds.push(tab.getAttribute('id'));
 
       const tabElement = document.createElement('div');
       tabElement.classList.add('tab');
       tabElement.addEventListener('click', () => {
         if (!homePage.onChangeFavoriteSyntaxTabAnimationState.ultimateDataCall) {
-          homePage.onChangeFavoriteSyntaxTab.callAllListeners(tab.getAttribute('id'));
+          let currentState = homePage.onChangeFavoriteSyntaxTab.ultimateDataCall;
+          currentState[element.getAttribute('id')] = tab.getAttribute('id');
+          homePage.onChangeFavoriteSyntaxTab.callAllListeners(currentState);
+          localStorage.setItem('currentTabDataIndexes', JSON.stringify(currentState));
         }
       });
       tabElement.textContent = tab.textContent;
@@ -427,20 +437,19 @@ class SourceParser {
 
       homePage.onChangeFavoriteSyntaxTab.addListener({
         callback: (data) => {
-          tabElement.classList.toggle('active', tab.getAttribute('id') == data);
-          if (tab.getAttribute('id') == data) {
-            tabsContainer.style.setProperty('--eid', parseInt(id));
-            localStorage.setItem('currentTabData', tab.getAttribute('id'));
+          const currentData = data[element.getAttribute('id')];
+          if (currentData && tabIds.includes(currentData)) {
+            tabElement.classList.toggle('active', tab.getAttribute('id') == currentData);
+            if (tab.getAttribute('id') == currentData) {
+              tabsContainer.style.setProperty('--eid', parseInt(id));
+            }
+          } else if(!currentData && !parseInt(id)) {
+            tabElement.classList.add('active');
+            tabsContainer.style.setProperty('--eid', 0);
           }
         },
         ref: tabElement,
         recallWithCurrentData: true,
-        onUnknownRecall: () => {
-          tabElement.classList.toggle('active', !parseInt(id));
-          if (!parseInt(id)) {
-            tabsContainer.style.setProperty('--eid', 0);
-          }
-        }
       });
     }
 
@@ -448,7 +457,15 @@ class SourceParser {
     syntaxHighlightContainer.classList.add('sy-container');
     newElement.appendChild(syntaxHighlightContainer);
 
+    let syntaxIds = [];
+
     for (const [id, syntax] of Object.entries(element.querySelectorAll('syntax-highlight'))) {
+      if (!syntax.getAttribute('id')) {
+        throw new Error('syntax has invalid data for multisyntax');
+      }
+
+      syntaxIds.push(syntax.getAttribute('id'));
+      
       let syntaxElement = document.createElement('div');
       
       this.#tryToReduceTags(syntax);
@@ -471,56 +488,58 @@ class SourceParser {
 
       homePage.onChangeFavoriteSyntaxTab.addListener({
         callback: (data) => {
-          const activeItem = syntaxHighlightContainer.querySelector('.active');
-          if (activeItem) {
-            if (activeItem != syntaxElement && syntax.getAttribute('id') == data) {
-              homePage.onChangeFavoriteSyntaxTabAnimationState.callAllListeners(true);
-              
-              let updatedChildren = [];
-              for(const syntax of syntaxHighlightContainer.childNodes) {
-                if (syntax != syntaxElement && syntax != activeItem) {
-                  updatedChildren.push(syntax);
-                  syntax.classList.add('hidden');
+          const currentData = data[element.getAttribute('id')];
+          if (currentData && syntaxIds.includes(currentData)) {
+            const activeItem = syntaxHighlightContainer.querySelector('.active');
+            if (activeItem) {
+              if (activeItem != syntaxElement && syntax.getAttribute('id') == currentData) {
+                homePage.onChangeFavoriteSyntaxTabAnimationState.callAllListeners(true);
+                
+                let updatedChildren = [];
+                for(const syntax of syntaxHighlightContainer.childNodes) {
+                  if (syntax != syntaxElement && syntax != activeItem) {
+                    updatedChildren.push(syntax);
+                    syntax.classList.add('hidden');
+                  }
                 }
+
+                const activeItemRect = activeItem.getBoundingClientRect();
+                syntaxHighlightContainer.style.setProperty('--height', (activeItemRect.height + 10)+'px');
+                syntaxHighlightContainer.classList.add('preparing-animation');
+                
+                const currentItemRect = syntaxElement.getBoundingClientRect();
+                syntaxHighlightContainer.style.setProperty('--to-height', (currentItemRect.height + 10)+'px');
+                activeItem.classList.add('disappearing');
+                syntaxHighlightContainer.classList.add('animating');
+                syntaxHighlightContainer.classList.remove('preparing-animation');
+                syntaxElement.classList.add('appearing');
+                
+                Promise.all([
+                  new Promise((resolve) => syntaxHighlightContainer.addEventListener('animationend', resolve, { once: true })),
+                  new Promise((resolve) => activeItem.addEventListener('animationend', resolve, { once: true })),
+                  new Promise((resolve) => syntaxElement.addEventListener('animationend', resolve, { once: true }))
+                ]).then(() => {
+                  syntaxElement.classList.remove('appearing');
+                  syntaxElement.classList.add('active');
+                  activeItem.classList.remove('disappearing');
+                  activeItem.classList.remove('active');
+                  syntaxHighlightContainer.classList.remove('animating');
+                  homePage.onChangeFavoriteSyntaxTabAnimationState.callAllListeners(false);
+
+                  for(const child of updatedChildren) {
+                    child.classList.remove('hidden');
+                  }
+                });
               }
-
-              const activeItemRect = activeItem.getBoundingClientRect();
-              syntaxHighlightContainer.style.setProperty('--height', (activeItemRect.height + 10)+'px');
-              syntaxHighlightContainer.classList.add('preparing-animation');
-              
-              const currentItemRect = syntaxElement.getBoundingClientRect();
-              syntaxHighlightContainer.style.setProperty('--to-height', (currentItemRect.height + 10)+'px');
-              activeItem.classList.add('disappearing');
-              syntaxHighlightContainer.classList.add('animating');
-              syntaxHighlightContainer.classList.remove('preparing-animation');
-              syntaxElement.classList.add('appearing');
-              
-              Promise.all([
-                new Promise((resolve) => syntaxHighlightContainer.addEventListener('animationend', resolve, { once: true })),
-                new Promise((resolve) => activeItem.addEventListener('animationend', resolve, { once: true })),
-                new Promise((resolve) => syntaxElement.addEventListener('animationend', resolve, { once: true }))
-              ]).then(() => {
-                syntaxElement.classList.remove('appearing');
-                syntaxElement.classList.add('active');
-                activeItem.classList.remove('disappearing');
-                activeItem.classList.remove('active');
-                syntaxHighlightContainer.classList.remove('animating');
-                homePage.onChangeFavoriteSyntaxTabAnimationState.callAllListeners(false);
-
-                for(const child of updatedChildren) {
-                  child.classList.remove('hidden');
-                }
-              });
+            } else {
+              syntaxElement.classList.toggle('active', syntax.getAttribute('id') == currentData);
             }
           } else {
-            syntaxElement.classList.toggle('active', syntax.getAttribute('id') == data);
+            syntaxElement.classList.toggle('active', !parseInt(id));
           }
         },
         ref: syntaxElement,
         recallWithCurrentData: true,
-        onUnknownRecall: () => {
-          syntaxElement.classList.toggle('active', !parseInt(id));
-        }
       });
     }
   }
