@@ -485,7 +485,7 @@ class SourceParser {
               }
 
               const activeItemRect = activeItem.getBoundingClientRect();
-              syntaxHighlightContainer.style.setProperty('--height', activeItemRect.height+'px');
+              syntaxHighlightContainer.style.setProperty('--height', (activeItemRect.height + 10)+'px');
               syntaxHighlightContainer.classList.add('preparing-animation');
               
               const currentItemRect = syntaxElement.getBoundingClientRect();
