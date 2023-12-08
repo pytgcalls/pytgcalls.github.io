@@ -319,6 +319,10 @@ body .page-container .content:not(.is-loading) .syntax-highlight {
   white-space: nowrap;
 }
 
+body .page-container .content:not(.is-loading) .multisyntax > .sy-container {
+  position: relative;
+}
+
 body .page-container .content:not(.is-loading) .multisyntax > .sy-container > .syntax-highlight {
   background: none;
   border: none;
@@ -354,7 +358,7 @@ body .page-container .content:not(.is-loading) .multisyntax > .sy-container.anim
 body .page-container .content:not(.is-loading) .multisyntax > .sy-container.animating .syntax-highlight.disappearing,
 body .page-container .content:not(.is-loading) .multisyntax > .sy-container.animating .syntax-highlight.appearing {
   position: absolute;
-  top: 50px;
+  top: 0;
 }
 
 body .page-container .content:not(.is-loading) .multisyntax > .sy-container.animating .syntax-highlight.disappearing {
