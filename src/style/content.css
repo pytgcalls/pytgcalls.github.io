@@ -260,6 +260,13 @@ body .page-container .content:not(.is-loading) .h3:hover .hashtag-ref:active {
   opacity: 1;
 }
 
+body .page-container .content:not(.is-loading) .h4 {
+  font-size: 18px;
+  margin-top: 5px;
+  font-weight: 600;
+  position: relative;
+}
+
 body .page-container .content:not(.is-loading) .text,
 body .page-container .content:not(.is-loading) .pg-title {
   color: rgba(255, 255, 255, 0.8);
