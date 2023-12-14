@@ -1,6 +1,6 @@
 class SourceParser {
   #AVAILABLE_ELEMENTS = [
-    'H1', 'H2', 'H3', 'SEPARATOR',
+    'H1', 'H2', 'H3', 'H4', 'SEPARATOR',
     'TEXT', 'BOLD', 'B', 'SB', 'CODE', 'A', 'BR',
     'SYNTAX-HIGHLIGHT', 'SHI', 'ALERT', 'PG-TITLE',
     'CATEGORY', 'CATEGORY-TITLE', 'REF', 'SUBTEXT',
