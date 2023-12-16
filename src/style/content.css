@@ -810,3 +810,108 @@ body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .ill
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+body .page-container .content:not(.is-loading) .banner {
+  aspect-ratio: calc(var(--imagewidth) / calc(var(--imageheight) + 329));
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+body .page-container .content:not(.is-loading) .banner::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 325px;
+  background: linear-gradient(0deg, var(--mainbg) 59%, transparent);
+}
+
+body .page-container .content:not(.is-loading) .banner .main-image {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  z-index: -1;
+  border: 4px solid var(--mainbg);
+  border-radius: 16px;
+  box-sizing: border-box;
+}
+
+body .page-container .content:not(.is-loading) .banner .bottom-container {
+  z-index: 0;
+  padding: 23px;
+  padding-bottom: 3px;
+}
+
+body .page-container .content:not(.is-loading) .banner .bottom-container .mini-title {
+  font-size: 24px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  transform: translateY(10px);
+}
+
+body .page-container .content:not(.is-loading) .banner .bottom-container .big-title {
+  font-size: 34px;
+  font-weight: 600;
+}
+
+body .page-container .content:not(.is-loading) .banner .bottom-container .description {
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 300;
+}
+
+body .page-container .content:not(.is-loading) .banner .lib-presentation {
+  background: rgba(0, 0, 0, 0.5);
+  transform: translateX(-20px);
+  width: calc(100% + 40px);
+  border-bottom-left-radius: 17px;
+  border-bottom-right-radius: 17px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  box-sizing: border-box;
+  padding-inline: 20px;
+  padding-block: 13px;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body .page-container .content:not(.is-loading) .banner .lib-presentation .icon {
+  height: 47px;
+  width: 47px;
+  background: #4a5472;
+  border-radius: 25%;
+  margin-right: 15px;
+}
+
+body .page-container .content:not(.is-loading) .banner .lib-presentation .lib-details {
+  flex: 1;
+}
+
+body .page-container .content:not(.is-loading) .banner .lib-presentation .lib-details .pres-title {
+  font-size: 19px;
+  font-weight: 500;
+}
+
+body .page-container .content:not(.is-loading) .banner .lib-presentation .lib-details .pres-description {
+  margin-top: -6px;
+  font-weight: 100;
+}
+
+body .page-container .content:not(.is-loading) .banner .lib-presentation .update {
+  text-decoration: none;
+  color: white;
+  background: rgba(255, 255, 255, 0.2);
+  padding-inline: 16px;
+  padding-block: 8px;
+  border-radius: 20px;
+  font-weight: 500;
+}
