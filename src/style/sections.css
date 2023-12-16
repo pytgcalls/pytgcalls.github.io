@@ -71,6 +71,13 @@ body .page-container .sections:not(.is-loading) * {
 body .page-container .sections:not(.is-loading) .sections-recap {
   flex: 1;
   width: 100%;
+  overflow-y: auto;
+}
+
+@supports (overflow-y: overlay) {
+  body .page-container .sections:not(.is-loading) .sections-recap {
+    overflow-y: overlay;
+  }
 }
 
 body .page-container .sections:not(.is-loading) .sections-recap *:hover {
