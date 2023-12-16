@@ -812,73 +812,86 @@ body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .ill
 }
 
 body .page-container .content:not(.is-loading) .banner {
-  aspect-ratio: calc(var(--imagewidth) / calc(var(--imageheight) + 329));
   width: 100%;
   border-radius: 20px;
   overflow: hidden;
+  background: var(--mainbg);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  position: relative;
+}
+
+body .page-container .content:not(.is-loading) .banner .banner-container {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  position: relative;
 }
 
-body .page-container .content:not(.is-loading) .banner::before {
+body .page-container .content:not(.is-loading) .banner .banner-container::before {
   content: "";
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
+  z-index: 1;
   height: 325px;
-  background: linear-gradient(0deg, var(--mainbg) 59%, transparent);
+  background: linear-gradient(0deg, var(--mainbg) 10%, transparent);
 }
 
-body .page-container .content:not(.is-loading) .banner .main-image {
+body .page-container .content:not(.is-loading) .banner .banner-container .main-image { 
   width: 100%;
-  position: absolute;
-  top: 0;
-  z-index: -1;
   border: 4px solid var(--mainbg);
-  border-radius: 16px;
+  border-radius: 18px;
   box-sizing: border-box;
 }
 
-body .page-container .content:not(.is-loading) .banner .bottom-container {
-  z-index: 0;
-  padding: 23px;
-  padding-bottom: 3px;
+body .page-container .content:not(.is-loading) .banner .banner-container .bottom-container {
+  z-index: 2;
+  padding: 0 20px;
+  position: absolute;
 }
 
-body .page-container .content:not(.is-loading) .banner .bottom-container .mini-title {
-  font-size: 24px;
+body .page-container .content:not(.is-loading) .banner .banner-container .bottom-container .mini-title {
+  font-size: 17px;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.6);
-  transform: translateY(10px);
+  color: rgba(255, 255, 255, 0.4);
+  transform: translateY(5px);
 }
 
-body .page-container .content:not(.is-loading) .banner .bottom-container .big-title {
-  font-size: 34px;
+body .page-container .content:not(.is-loading) .banner .banner-container .bottom-container .big-title {
+  font-size: 35px;
+  line-height: 45px;
   font-weight: 600;
 }
 
-body .page-container .content:not(.is-loading) .banner .bottom-container .description {
-  font-size: 20px;
-  color: rgba(255, 255, 255, 0.6);
+body .page-container .content:not(.is-loading) .banner .description {
+  font-size: 17px;
   font-weight: 300;
+  color: rgba(255, 255, 255, 0.4);
+  padding: 0 20px;
 }
 
 body .page-container .content:not(.is-loading) .banner .lib-presentation {
   background: rgba(0, 0, 0, 0.5);
-  transform: translateX(-20px);
-  width: calc(100% + 40px);
-  border-bottom-left-radius: 17px;
-  border-bottom-right-radius: 17px;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+  width: calc(100% - 8px);
+  margin: 4px;
+  border-radius: 16px;
   box-sizing: border-box;
   padding-inline: 20px;
   padding-block: 13px;
-  margin-top: 20px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+@media screen and (max-width: 800px) {
+  body .page-container .content:not(.is-loading) .banner .lib-presentation {
+    flex-direction: column;
+    align-items: unset;
+  }
+}
+
+body .page-container .content:not(.is-loading) .banner .lib-presentation .presentation-data {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -900,16 +913,28 @@ body .page-container .content:not(.is-loading) .banner .lib-presentation .lib-de
 }
 
 body .page-container .content:not(.is-loading) .banner .lib-presentation .lib-details .pres-description {
-  margin-top: -6px;
+  line-height: 18px;
   font-weight: 100;
+  opacity: 0.4;
 }
 
 body .page-container .content:not(.is-loading) .banner .lib-presentation .update {
   text-decoration: none;
   color: white;
-  background: rgba(255, 255, 255, 0.2);
+  display: block;
+  background: rgba(255, 255, 255, 0.12);
   padding-inline: 16px;
   padding-block: 8px;
   border-radius: 20px;
   font-weight: 500;
+  box-sizing: border-box;
+  text-align: center;
+  margin-left: auto;
+}
+
+@media screen and (max-width: 800px) {
+  body .page-container .content:not(.is-loading) .banner .lib-presentation .update {
+    margin-top: 20px;
+    margin-left: 0;
+  }
 }

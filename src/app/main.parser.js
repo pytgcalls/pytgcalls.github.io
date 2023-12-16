@@ -134,29 +134,38 @@ class SourceParser {
       );
 
       if (isValidQuery) {
-        newElement.style.setProperty('--imagewidth', element.getAttribute('imagewidth'));
-        newElement.style.setProperty('--imageheight', element.getAttribute('imageheight'));
         newElement.style.setProperty('--mainbg', element.getAttribute('mainbg'));
+
+        const bannerContainer = document.createElement('div');
+        bannerContainer.classList.add('banner-container');
+        newElement.appendChild(bannerContainer);
 
         const mainImage = document.createElement('img');
         mainImage.classList.add('main-image');
         mainImage.src = element.getAttribute('imageurl');
-        newElement.appendChild(mainImage);
+        bannerContainer.appendChild(mainImage);
+
+        const bottomContainer = document.createElement('div');
+        bottomContainer.classList.add('bottom-container');
+        bannerContainer.appendChild(bottomContainer);
 
         const miniTitleContainer = document.createElement('div');
         miniTitleContainer.classList.add('mini-title');
         miniTitleContainer.textContent = element.getAttribute('minititle');
+        bottomContainer.appendChild(miniTitleContainer);
+
         const bigTitleContainer = document.createElement('div');
         bigTitleContainer.classList.add('big-title');
         bigTitleContainer.textContent = element.getAttribute('bigtitle');
+        bottomContainer.appendChild(bigTitleContainer);
+
         const descriptionContainer = document.createElement('div');
         descriptionContainer.classList.add('description');
         descriptionContainer.textContent = element.getAttribute('description');
-        const updateRecapState = document.createElement('div');
-        updateRecapState.classList.add('update-recap');
-        updateRecapState.appendChild(miniTitleContainer);
-        updateRecapState.appendChild(bigTitleContainer);
-        updateRecapState.appendChild(descriptionContainer);
+        newElement.appendChild(descriptionContainer);
+
+        const presContainer = document.createElement('div');
+        presContainer.classList.add('presentation-data');
 
         const presentationTitle = document.createElement('div');
         presentationTitle.classList.add('pres-title');
@@ -172,22 +181,21 @@ class SourceParser {
         const leftIcon = document.createElement('img');
         leftIcon.classList.add('icon');
         leftIcon.src = '/src/assets/pytgcalls.svg';
+
         const updateButton = document.createElement('a');
         updateButton.classList.add('update');
-        updateButton.href = 'https://pypi.org/project/pytgcalls/' + element.getAttribute('version');
+        updateButton.href = 'https://pypi.org/project/py-tgcalls/' + element.getAttribute('version');
         updateButton.target = '_blank';
         updateButton.textContent = 'Update';
+
+        presContainer.appendChild(leftIcon);
+        presContainer.appendChild(presentation);
+
         const libPresentationRow = document.createElement('div');
         libPresentationRow.classList.add('lib-presentation');
-        libPresentationRow.appendChild(leftIcon);
-        libPresentationRow.appendChild(presentation);
+        libPresentationRow.appendChild(presContainer);
         libPresentationRow.appendChild(updateButton);
-        
-        const bottomContainer = document.createElement('div');
-        bottomContainer.classList.add('bottom-container');
-        bottomContainer.appendChild(updateRecapState);
-        bottomContainer.appendChild(libPresentationRow);
-        newElement.appendChild(bottomContainer);
+        newElement.appendChild(libPresentationRow);
       } else {
         throw new Error("invalid banner data");
       }
