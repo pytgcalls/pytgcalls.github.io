@@ -842,7 +842,6 @@ body .page-container .content:not(.is-loading) .banner .banner-container .main-i
   border: 4px solid var(--mainbg);
   border-radius: 18px;
   box-sizing: border-box;
-  margin-bottom: -100px;
 }
 
 body .page-container .content:not(.is-loading) .banner .banner-container .bottom-container {
