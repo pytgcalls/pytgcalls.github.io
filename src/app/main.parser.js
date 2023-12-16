@@ -124,8 +124,6 @@ class SourceParser {
 
       const isValidQuery = (
         element.getAttribute('imageurl')
-        && element.hasAttribute('imageheight') && !isNaN(parseInt(element.getAttribute('imageheight')))
-        && element.hasAttribute('imagewidth') && !isNaN(parseInt(element.getAttribute('imagewidth')))
         && element.getAttribute('minititle')
         && element.getAttribute('bigtitle')
         && element.getAttribute('description')
@@ -134,8 +132,6 @@ class SourceParser {
       );
 
       if (isValidQuery) {
-        newElement.style.setProperty('--imagewidth', element.getAttribute('imagewidth'));
-        newElement.style.setProperty('--imageheight', element.getAttribute('imageheight'));
         newElement.style.setProperty('--mainbg', element.getAttribute('mainbg'));
 
         const mainImage = document.createElement('img');
