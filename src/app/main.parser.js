@@ -7,7 +7,7 @@ class SourceParser {
     'LIST', 'ITEM', 'MULTISYNTAX',
     'TABLE', 'DEFINITIONS', 'COLUMN', 'ITEM',
     'DOCS-REF', 'GITHUB-REF', 'REF-SHI',
-    'CONFIG'
+    'CONFIG', 'BANNER'
   ];
 
   getContentByData(text) {
@@ -67,6 +67,12 @@ class SourceParser {
         } else if (element.tagName.toUpperCase() === 'MULTISYNTAX') {
           this.#handleMultiSyntax(element, newElement);
           elementDom.appendChild(newElement);
+        } else if (element.tagName.toUpperCase() === 'BANNER') {
+          if (containsCustomTags) {
+            throw new Error("Banner can't contain other tags");
+          }
+
+          elementDom.appendChild(newElement);
         } else {
           if (containsCustomTags) {
             this.#handleRecursive(element, newElement);
@@ -112,6 +118,77 @@ class SourceParser {
         newElement.target = '_blank';
       } else {
         throw new Error("UnsupportedLink");
+      }
+    } else if (element.tagName.toUpperCase() === 'BANNER') {
+      newElement.classList.add('banner');
+
+      const isValidQuery = (
+        element.getAttribute('imageurl')
+        && element.hasAttribute('imageheight') && !isNaN(parseInt(element.getAttribute('imageheight')))
+        && element.hasAttribute('imagewidth') && !isNaN(parseInt(element.getAttribute('imagewidth')))
+        && element.getAttribute('minititle')
+        && element.getAttribute('bigtitle')
+        && element.getAttribute('description')
+        && element.getAttribute('version')
+        && element.hasAttribute('mainbg') && element.getAttribute('mainbg').startsWith('#')
+      );
+
+      if (isValidQuery) {
+        newElement.style.setProperty('--imagewidth', element.getAttribute('imagewidth'));
+        newElement.style.setProperty('--imageheight', element.getAttribute('imageheight'));
+        newElement.style.setProperty('--mainbg', element.getAttribute('mainbg'));
+
+        const mainImage = document.createElement('img');
+        mainImage.classList.add('main-image');
+        mainImage.src = element.getAttribute('imageurl');
+        newElement.appendChild(mainImage);
+
+        const miniTitleContainer = document.createElement('div');
+        miniTitleContainer.classList.add('mini-title');
+        miniTitleContainer.textContent = element.getAttribute('minititle');
+        const bigTitleContainer = document.createElement('div');
+        bigTitleContainer.classList.add('big-title');
+        bigTitleContainer.textContent = element.getAttribute('bigtitle');
+        const descriptionContainer = document.createElement('div');
+        descriptionContainer.classList.add('description');
+        descriptionContainer.textContent = element.getAttribute('description');
+        const updateRecapState = document.createElement('div');
+        updateRecapState.classList.add('update-recap');
+        updateRecapState.appendChild(miniTitleContainer);
+        updateRecapState.appendChild(bigTitleContainer);
+        updateRecapState.appendChild(descriptionContainer);
+
+        const presentationTitle = document.createElement('div');
+        presentationTitle.classList.add('pres-title');
+        presentationTitle.textContent = 'PyTgCalls';
+        const presentationDescription = document.createElement('div');
+        presentationDescription.classList.add('pres-description');
+        presentationDescription.textContent = 'Async client API for the Telegram group calls';
+        const presentation = document.createElement('div');
+        presentation.classList.add('lib-details');
+        presentation.appendChild(presentationTitle);
+        presentation.appendChild(presentationDescription);
+
+        const leftIcon = document.createElement('div');
+        leftIcon.classList.add('icon');
+        const updateButton = document.createElement('a');
+        updateButton.classList.add('update');
+        updateButton.href = 'https://pypi.org/project/pytgcalls/' + element.getAttribute('version');
+        updateButton.target = '_blank';
+        updateButton.textContent = 'Update';
+        const libPresentationRow = document.createElement('div');
+        libPresentationRow.classList.add('lib-presentation');
+        libPresentationRow.appendChild(leftIcon);
+        libPresentationRow.appendChild(presentation);
+        libPresentationRow.appendChild(updateButton);
+        
+        const bottomContainer = document.createElement('div');
+        bottomContainer.classList.add('bottom-container');
+        bottomContainer.appendChild(updateRecapState);
+        bottomContainer.appendChild(libPresentationRow);
+        newElement.appendChild(bottomContainer);
+      } else {
+        throw new Error("invalid banner data");
       }
     } else if (element.tagName.toUpperCase() === 'LIST') {
       newElement = document.createElement('ul');
