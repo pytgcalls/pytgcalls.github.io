@@ -887,8 +887,6 @@ body .page-container .content:not(.is-loading) .banner .lib-presentation {
 body .page-container .content:not(.is-loading) .banner .lib-presentation .icon {
   height: 47px;
   width: 47px;
-  background: #4a5472;
-  border-radius: 25%;
   margin-right: 15px;
 }
 

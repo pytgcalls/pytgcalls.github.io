@@ -169,8 +169,9 @@ class SourceParser {
         presentation.appendChild(presentationTitle);
         presentation.appendChild(presentationDescription);
 
-        const leftIcon = document.createElement('div');
+        const leftIcon = document.createElement('img');
         leftIcon.classList.add('icon');
+        leftIcon.src = '/src/assets/pytgcalls.svg';
         const updateButton = document.createElement('a');
         updateButton.classList.add('update');
         updateButton.href = 'https://pypi.org/project/pytgcalls/' + element.getAttribute('version');
