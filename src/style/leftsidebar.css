@@ -43,6 +43,21 @@ body .page-container.as-home .left-container {
   }
 }
 
+@media screen and (min-width: 1330px) {
+  body .page-container .left-container {
+    width: calc(23vw + 10px);
+    transition: 0.4s width, 0.4s opacity 0.3s;
+    transition-timing-function: cubic-bezier(1, 0.01, 0, 0.98);
+  }
+
+  body .page-container .left-container.collapsed {
+    opacity: 0;
+    width: 0px;
+    transition: 0.4s width 0.3s, 0.4s opacity;
+    transition-timing-function: cubic-bezier(1, 0.01, 0, 0.98);
+  }
+}
+
 body .page-container .left-container .search-bar {
   margin-top: 10px;
   width: 23vw;
