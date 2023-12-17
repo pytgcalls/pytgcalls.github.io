@@ -217,6 +217,18 @@ class Config {
     finalText += file.textContent;
     return finalText;
   }
+
+  getRedirectDataForPath(path) {
+    return new Promise((resolve) => {
+      this.loadConfig().then((config) => {
+        const domHelper = new DOMParser();
+        const dom = domHelper.parseFromString(config, 'application/xml');
+        const redirectTo = dom.querySelector('config > redirects > redirect[path="' + path.toLowerCase() + '"]');
+    
+        resolve(redirectTo && redirectTo.textContent);
+      });
+    });
+  }
 }
 
 const config = new Config();
