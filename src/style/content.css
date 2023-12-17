@@ -845,6 +845,26 @@ body .page-container .content:not(.is-loading) .banner .banner-container .main-i
   box-sizing: border-box;
 }
 
+body .page-container .content:not(.is-loading) .banner .banner-container .main-image:not(.loaded) { 
+  opacity: 0;
+}
+
+body .page-container .content:not(.is-loading) .banner .banner-container svg {
+  position: absolute;
+  top: calc(50% - 50px);
+  left: calc(50% - 50px);
+  animation: 0.9s rotateSvg linear infinite;
+}
+
+body .page-container .content:not(.is-loading) .banner .banner-container svg circle {
+  fill: none;
+  stroke: #FFFFFF;
+  stroke-width: 4px;
+  stroke-linecap: round;
+  stroke-dasharray: 10, 10;
+  animation: 1.5s animateStroke linear infinite;
+}
+
 body .page-container .content:not(.is-loading) .banner .banner-container .bottom-container {
   z-index: 2;
   padding-inline: 20px;

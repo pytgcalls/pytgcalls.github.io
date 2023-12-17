@@ -153,11 +153,19 @@ class SourceParser {
         bottomContainer.appendChild(miniTitleContainer);
         bottomContainer.appendChild(bigTitleContainer);
 
+        const imageLoaderItem = utils.createLoadingItem();
+
         const bannerContainer = document.createElement('div');
         bannerContainer.classList.add('banner-container');
         bannerContainer.appendChild(mainImage);
+        bannerContainer.appendChild(imageLoaderItem);
         bannerContainer.appendChild(bottomContainer);
         newElement.appendChild(bannerContainer);
+        
+        mainImage.addEventListener('load', () => {
+          imageLoaderItem.remove();
+          mainImage.classList.add('loaded');
+        }, { once: true });
 
         const descriptionContainer = document.createElement('div');
         descriptionContainer.classList.add('description');
