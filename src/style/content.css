@@ -840,6 +840,7 @@ body .page-container .content:not(.is-loading) .banner .banner-container::before
 body .page-container .content:not(.is-loading) .banner .banner-container .main-image { 
   width: 100%;
   border: 4px solid var(--mainbg);
+  aspect-ratio: var(--width) / var(--height);
   border-radius: 18px;
   box-sizing: border-box;
 }
@@ -866,6 +867,7 @@ body .page-container .content:not(.is-loading) .banner .banner-container .bottom
 body .page-container .content:not(.is-loading) .banner .description {
   font-size: 17px;
   font-weight: 300;
+  padding-inline: 20px;
   color: rgba(255, 255, 255, 0.4);
 }
 
