@@ -124,6 +124,8 @@ class SourceParser {
 
       const isValidQuery = (
         element.getAttribute('imageurl')
+        && element.hasAttribute('imageheight') && !isNaN(parseInt(element.getAttribute('imageheight')))
+        && element.hasAttribute('imagewidth') && !isNaN(parseInt(element.getAttribute('imagewidth')))
         && element.getAttribute('minititle')
         && element.getAttribute('bigtitle')
         && element.getAttribute('description')
@@ -136,6 +138,8 @@ class SourceParser {
 
         const mainImage = document.createElement('img');
         mainImage.classList.add('main-image');
+        mainImage.style.setProperty('--width', element.getAttribute('imagewidth'));
+        mainImage.style.setProperty('--height', element.getAttribute('imageheight'));
         mainImage.src = element.getAttribute('imageurl');
 
         const miniTitleContainer = document.createElement('div');
@@ -144,21 +148,21 @@ class SourceParser {
         const bigTitleContainer = document.createElement('div');
         bigTitleContainer.classList.add('big-title');
         bigTitleContainer.textContent = element.getAttribute('bigtitle');
-        const descriptionContainer = document.createElement('div');
-        descriptionContainer.classList.add('description');
-        descriptionContainer.textContent = element.getAttribute('description');
-        newElement.appendChild(descriptionContainer);
         const bottomContainer = document.createElement('div');
         bottomContainer.classList.add('bottom-container');
         bottomContainer.appendChild(miniTitleContainer);
         bottomContainer.appendChild(bigTitleContainer);
-        bottomContainer.appendChild(descriptionContainer);
 
         const bannerContainer = document.createElement('div');
         bannerContainer.classList.add('banner-container');
         bannerContainer.appendChild(mainImage);
         bannerContainer.appendChild(bottomContainer);
         newElement.appendChild(bannerContainer);
+
+        const descriptionContainer = document.createElement('div');
+        descriptionContainer.classList.add('description');
+        descriptionContainer.textContent = element.getAttribute('description');
+        newElement.appendChild(descriptionContainer);
 
         const presentationTitle = document.createElement('div');
         presentationTitle.classList.add('pres-title');
