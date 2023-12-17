@@ -951,6 +951,7 @@ body .page-container .content:not(.is-loading) .banner .lib-presentation .update
   box-sizing: border-box;
   text-align: center;
   margin-left: auto;
+  transition: 0.4s transform, 0.4s background;
 }
 
 @media screen and (max-width: 800px) {
@@ -958,4 +959,12 @@ body .page-container .content:not(.is-loading) .banner .lib-presentation .update
     margin-top: 20px;
     margin-left: 0;
   }
+}
+
+body .page-container .content:not(.is-loading) .banner .lib-presentation .update:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+body .page-container .content:not(.is-loading) .banner .lib-presentation .update:active {
+  transform: scale(0.95);
 }
