@@ -15,7 +15,13 @@ window.addEventListener('load', () => {
 
     Promise.all(promisesList).then(() => {
       splashScreen.remove();
-      homePage.init(window.location.pathname);
+      config.getRedirectDataForPath(window.location.pathname).then((data) => {
+        if (data && (data.startsWith('https://') || data.startsWith('http://'))) {
+          window.location.href = data;
+        } else {
+          homePage.init(data || window.location.pathname);
+        }
+      });
     });
   }
 });
