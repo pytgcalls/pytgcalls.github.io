@@ -237,7 +237,7 @@ class Content {
           }
 
           currentDom.append(cloned);
-        } else if(element.classList.length && ['CATEGORY', 'SUBTEXT'].includes(element.classList[0].toUpperCase())) {
+        } else if(element.classList.contains('category') || element.classList.contains('subtext')) {
           const cloned = element.cloneNode(false);
           currentDom.append(cloned);
           this.#iterPageSectionsData(element, cloned);
@@ -248,6 +248,15 @@ class Content {
           this.#iterPageSectionsData(element, clonedTable);
         } else if (element.tagName.toUpperCase() === 'TR') {
           this.#iterPageSectionsData(element, currentDom, 1);
+        } else if (element.classList.contains('banner')) {
+          const bigTitle = element.querySelector('.banner-container > .bottom-container > .big-title');
+          if (bigTitle && bigTitle.textContent != '') {  
+            const clonedBannerState = document.createElement('h2');
+            clonedBannerState.classList.add('subtext');
+            clonedBannerState.addEventListener('click', () => this.updateActiveSection(element));
+            clonedBannerState.textContent = bigTitle.textContent;
+            currentDom.append(clonedBannerState);
+          }
         }
       }
     }
