@@ -137,7 +137,6 @@ class SourceParser {
         const mainImage = document.createElement('img');
         mainImage.classList.add('main-image');
         mainImage.src = element.getAttribute('imageurl');
-        newElement.appendChild(mainImage);
 
         const miniTitleContainer = document.createElement('div');
         miniTitleContainer.classList.add('mini-title');
@@ -148,11 +147,18 @@ class SourceParser {
         const descriptionContainer = document.createElement('div');
         descriptionContainer.classList.add('description');
         descriptionContainer.textContent = element.getAttribute('description');
-        const updateRecapState = document.createElement('div');
-        updateRecapState.classList.add('update-recap');
-        updateRecapState.appendChild(miniTitleContainer);
-        updateRecapState.appendChild(bigTitleContainer);
-        updateRecapState.appendChild(descriptionContainer);
+        newElement.appendChild(descriptionContainer);
+        const bottomContainer = document.createElement('div');
+        bottomContainer.classList.add('bottom-container');
+        bottomContainer.appendChild(miniTitleContainer);
+        bottomContainer.appendChild(bigTitleContainer);
+        bottomContainer.appendChild(descriptionContainer);
+
+        const bannerContainer = document.createElement('div');
+        bannerContainer.classList.add('banner-container');
+        bannerContainer.appendChild(mainImage);
+        bannerContainer.appendChild(bottomContainer);
+        newElement.appendChild(bannerContainer);
 
         const presentationTitle = document.createElement('div');
         presentationTitle.classList.add('pres-title');
@@ -168,22 +174,23 @@ class SourceParser {
         const leftIcon = document.createElement('img');
         leftIcon.classList.add('icon');
         leftIcon.src = '/src/assets/pytgcalls.svg';
+
+        const presContainer = document.createElement('div');
+        presContainer.classList.add('presentation-data');
+        presContainer.appendChild(leftIcon);
+        presContainer.appendChild(presentation);
+
         const updateButton = document.createElement('a');
         updateButton.classList.add('update');
-        updateButton.href = 'https://pypi.org/project/pytgcalls/' + element.getAttribute('version');
+        updateButton.href = 'https://pypi.org/project/py-tgcalls/' + element.getAttribute('version');
         updateButton.target = '_blank';
         updateButton.textContent = 'Update';
+
         const libPresentationRow = document.createElement('div');
         libPresentationRow.classList.add('lib-presentation');
-        libPresentationRow.appendChild(leftIcon);
-        libPresentationRow.appendChild(presentation);
+        libPresentationRow.appendChild(presContainer);
         libPresentationRow.appendChild(updateButton);
-        
-        const bottomContainer = document.createElement('div');
-        bottomContainer.classList.add('bottom-container');
-        bottomContainer.appendChild(updateRecapState);
-        bottomContainer.appendChild(libPresentationRow);
-        newElement.appendChild(bottomContainer);
+        newElement.appendChild(libPresentationRow);
       } else {
         throw new Error("invalid banner data");
       }
