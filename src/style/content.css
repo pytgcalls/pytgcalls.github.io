@@ -846,7 +846,7 @@ body .page-container .content:not(.is-loading) .banner .banner-container .main-i
 
 body .page-container .content:not(.is-loading) .banner .banner-container .bottom-container {
   z-index: 2;
-  padding: 0 20px;
+  padding-inline: 20px;
   position: absolute;
 }
 
@@ -867,7 +867,6 @@ body .page-container .content:not(.is-loading) .banner .description {
   font-size: 17px;
   font-weight: 300;
   color: rgba(255, 255, 255, 0.4);
-  padding: 0 20px;
 }
 
 body .page-container .content:not(.is-loading) .banner .lib-presentation {

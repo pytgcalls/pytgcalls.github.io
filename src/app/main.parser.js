@@ -134,36 +134,31 @@ class SourceParser {
       if (isValidQuery) {
         newElement.style.setProperty('--mainbg', element.getAttribute('mainbg'));
 
-        const bannerContainer = document.createElement('div');
-        bannerContainer.classList.add('banner-container');
-        newElement.appendChild(bannerContainer);
-
         const mainImage = document.createElement('img');
         mainImage.classList.add('main-image');
         mainImage.src = element.getAttribute('imageurl');
-        bannerContainer.appendChild(mainImage);
-
-        const bottomContainer = document.createElement('div');
-        bottomContainer.classList.add('bottom-container');
-        bannerContainer.appendChild(bottomContainer);
 
         const miniTitleContainer = document.createElement('div');
         miniTitleContainer.classList.add('mini-title');
         miniTitleContainer.textContent = element.getAttribute('minititle');
-        bottomContainer.appendChild(miniTitleContainer);
-
         const bigTitleContainer = document.createElement('div');
         bigTitleContainer.classList.add('big-title');
         bigTitleContainer.textContent = element.getAttribute('bigtitle');
-        bottomContainer.appendChild(bigTitleContainer);
-
         const descriptionContainer = document.createElement('div');
         descriptionContainer.classList.add('description');
         descriptionContainer.textContent = element.getAttribute('description');
         newElement.appendChild(descriptionContainer);
+        const bottomContainer = document.createElement('div');
+        bottomContainer.classList.add('bottom-container');
+        bottomContainer.appendChild(miniTitleContainer);
+        bottomContainer.appendChild(bigTitleContainer);
+        bottomContainer.appendChild(descriptionContainer);
 
-        const presContainer = document.createElement('div');
-        presContainer.classList.add('presentation-data');
+        const bannerContainer = document.createElement('div');
+        bannerContainer.classList.add('banner-container');
+        bannerContainer.appendChild(mainImage);
+        bannerContainer.appendChild(bottomContainer);
+        newElement.appendChild(bannerContainer);
 
         const presentationTitle = document.createElement('div');
         presentationTitle.classList.add('pres-title');
@@ -180,14 +175,16 @@ class SourceParser {
         leftIcon.classList.add('icon');
         leftIcon.src = '/src/assets/pytgcalls.svg';
 
+        const presContainer = document.createElement('div');
+        presContainer.classList.add('presentation-data');
+        presContainer.appendChild(leftIcon);
+        presContainer.appendChild(presentation);
+
         const updateButton = document.createElement('a');
         updateButton.classList.add('update');
         updateButton.href = 'https://pypi.org/project/py-tgcalls/' + element.getAttribute('version');
         updateButton.target = '_blank';
         updateButton.textContent = 'Update';
-
-        presContainer.appendChild(leftIcon);
-        presContainer.appendChild(presentation);
 
         const libPresentationRow = document.createElement('div');
         libPresentationRow.classList.add('lib-presentation');
