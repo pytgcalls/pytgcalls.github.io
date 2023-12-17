@@ -251,8 +251,8 @@ class Content {
         } else if (element.classList.contains('banner')) {
           const bigTitle = element.querySelector('.banner-container > .bottom-container > .big-title');
           if (bigTitle && bigTitle.textContent != '') {  
-            const clonedBannerState = document.createElement('h2');
-            clonedBannerState.classList.add('subtext');
+            const clonedBannerState = document.createElement('div');
+            clonedBannerState.classList.add('h2');
             clonedBannerState.addEventListener('click', () => this.updateActiveSection(element));
             clonedBannerState.textContent = bigTitle.textContent;
             currentDom.append(clonedBannerState);
