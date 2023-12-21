@@ -36,21 +36,40 @@ body .page-container.as-home .left-container {
 
 @media screen and (min-width: 1330px) {
   body .page-container .left-container {
+    --timing: cubic-bezier(1, 0.01, 0, 0.98);
     background: #050505;
     border-right: 1px solid rgb(255, 255, 255, 0.1);
     width: calc(23vw + 10px);
-    transition: 0.4s width cubic-bezier(1, 0.01, 0, 0.98), 0.4s clip-path 0.3s cubic-bezier(1, 0.01, 0, 0.98);
+    transition: 0.4s width var(--timing), 0.4s opacity var(--timing), 0.4s border-right;
   }
 
   body .page-container .left-container.collapsed {
     width: 0px;
-    transition: 0.4s width 0.3s cubic-bezier(1, 0.01, 0, 0.98), 0.4s clip-path cubic-bezier(1, 0.01, 0, 0.98);
+    border-right: 1px solid transparent;
+    opacity: 0;
+    transition: 0.4s width var(--timing), 0.4s opacity var(--timing) 0.4s, 0.4s border-right;
   }
 
   body .page-container .left-container.collapsed .left-sidebar,
   body .page-container .left-container.collapsed .search-bar {
     opacity: 0;
   }
+}
+
+body .page-container .left-container .expandable {
+  margin-top: 10px;
+  margin-left: 15px;
+  cursor: pointer;
+  transition: 0.4s transform;
+}
+
+body .page-container .left-container .expandable img {
+  width: 31px;
+  transition: 0.4s transform;
+}
+
+body .page-container .left-container .expandable:active img {
+  transform: scale(0.95);
 }
 
 body .page-container .left-container .explore {

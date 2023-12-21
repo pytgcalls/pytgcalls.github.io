@@ -1,5 +1,6 @@
 class Sidebar {
   onChangeListenerInstance;
+  onCollapsedListenerInstance;
 
   #leftContainer;
   #leftSidebar;
@@ -13,6 +14,7 @@ class Sidebar {
 
   constructor() {
     this.onChangeListenerInstance = new ListenerManagerInstance();
+    this.onCollapsedListenerInstance = new ListenerManagerInstance();
   }
 
   getElement() {
@@ -21,12 +23,24 @@ class Sidebar {
     leftSidebar.classList.add('left-sidebar', 'expanded');
     this.#leftSidebar = leftSidebar;
 
+    const expandableIcon = document.createElement('img');
+    expandableIcon.src = '/src/icons/tablecolumns.svg';
+    const expandableButton = document.createElement('div');
+    expandableButton.classList.add('expandable');
+    expandableButton.addEventListener('click', () => {
+      this.#leftContainer.classList.add('collapsed');
+      this.onCollapsedListenerInstance.callAllListeners(true);
+      this.killSearch();
+    });
+    expandableButton.appendChild(expandableIcon);
+
     const exploreTitle = document.createElement('div');
     exploreTitle.classList.add('explore');
     exploreTitle.textContent = 'Explore';
 
     const leftContainer = document.createElement('div');
     leftContainer.classList.add('left-container');
+    leftContainer.appendChild(expandableButton);
     leftContainer.appendChild(exploreTitle);
     leftContainer.appendChild(searchBar);
     leftContainer.appendChild(leftSidebar);
@@ -38,6 +52,11 @@ class Sidebar {
   focusOnSidebar() {
     this.#leftContainer.classList.remove('collapsed');
     this.#leftSidebar.classList.add('expanded');
+    this.onCollapsedListenerInstance.callAllListeners(false);
+    this.killSearch();
+  }
+
+  killSearch() {
     this.#searchBar.classList.remove('expanded');
     this.#searchResults.textContent = '';
     this.#searchInputText.value = '';
@@ -46,6 +65,10 @@ class Sidebar {
   updateMobileVisibilityState(forcedState) {
     this.focusOnSidebar();
     return this.#leftContainer.classList.toggle('show', forcedState);
+  }
+
+  updateDesktopCollapsedState(isCollapsed) {
+    return this.#leftContainer.classList.toggle('collapsed', isCollapsed);
   }
   
   #createSearchBar() {
