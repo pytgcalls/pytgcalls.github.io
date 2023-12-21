@@ -21,7 +21,7 @@ body .page-container.as-home .sections {
   }
   
   body:not(.disable-blur) .page-container .sections {
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.9);
     backdrop-filter: blur(30px);
     -webkit-backdrop-filter: blur(30px);
   }

@@ -19,8 +19,14 @@ class Sidebar {
     const leftSidebar = document.createElement('div');
     leftSidebar.classList.add('left-sidebar', 'expanded');
     this.#leftSidebar = leftSidebar;
+
+    const exploreTitle = document.createElement('div');
+    exploreTitle.classList.add('explore');
+    exploreTitle.textContent = 'Explore';
+
     const leftContainer = document.createElement('div');
     leftContainer.classList.add('left-container');
+    leftContainer.appendChild(exploreTitle);
     leftContainer.appendChild(searchBar);
     leftContainer.appendChild(leftSidebar);
     this.#leftContainer = leftContainer;
@@ -29,6 +35,7 @@ class Sidebar {
   }
 
   focusOnSidebar() {
+    this.#leftContainer.classList.remove('collapsed');
     this.#leftSidebar.classList.add('expanded');
     this.#searchBar.classList.remove('expanded');
   }
@@ -42,7 +49,7 @@ class Sidebar {
     const searchIcon = document.createElement('img');
     searchIcon.src = '/src/icons/magnifyingGlass.svg';
     const searchText = document.createElement('input');
-    searchText.placeholder = 'Search docs';
+    searchText.placeholder = 'Search...';
     const searchInput = document.createElement('div');
     searchInput.classList.add('search-input');
     searchInput.appendChild(searchIcon);
@@ -194,12 +201,6 @@ class Sidebar {
       config.getFilesListInstanceById(id).then((child) => {
         const fragment = document.createDocumentFragment();
         const basePathForMainFiles = child.getAttribute('basepath');
-
-        const collapsedDomain = document.createElement('div');
-        collapsedDomain.classList.add('collapsed');
-        collapsedDomain.addEventListener('click', () => this.focusOnSidebar());
-        collapsedDomain.textContent = 'Press here to expand';
-        fragment.append(collapsedDomain);
   
         let i = 0;
         for(const file of child.childNodes) {
