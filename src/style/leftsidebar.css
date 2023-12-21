@@ -90,6 +90,7 @@ body .page-container .left-container .search-bar .search-input {
   background: #191919;
   border-radius: 10px;
   min-height: 35px;
+  max-height: 35px;
   overflow: hidden;
 }
 
@@ -138,6 +139,28 @@ body .page-container .left-container .search-bar .results.is-loading {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+}
+
+body .page-container .left-container .search-bar .results.is-loading .loading {
+  height: 7px;
+  width: 96px;
+  background: rgb(45, 45, 45, 0.3);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+body .page-container .left-container .search-bar .results.is-loading .loading::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: var(--percent, 0%);
+  background: #e88947;
+  border-radius: 10px;
 }
 
 body .page-container .left-container .search-bar .results.is-loading .error {

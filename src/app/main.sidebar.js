@@ -143,15 +143,21 @@ class Sidebar {
       if (!indexesManager.isCurrentlyIndexing()) {
         if (!indexesManager.hasIndexed()) {
           const indexingText = document.createElement('span');
-          indexingText.textContent = 'Indexing... (0/0)';
+          indexingText.textContent = 'Indexing dataset...';
+
+          const loadingContainer = document.createElement('div');
+          loadingContainer.classList.add('loading');
+          loadingContainer.style.setProperty('--percent', '0%');
 
           this.#searchResults.classList.add('is-loading');
           this.#searchResults.textContent = '';
-          this.#searchResults.appendChild(utils.createLoadingItem(50));
           this.#searchResults.appendChild(indexingText);
+          this.#searchResults.appendChild(loadingContainer);
 
           indexesManager.initFull((i, length) => {
-            indexingText.textContent = 'Indexing... (' + i + '/' + length + ')';
+            const percent = (i / length) * 100;
+            console.log(percent);
+            loadingContainer.style.setProperty('--percent', percent + '%');
           }).then(() => {
             onSearchReady(input.value.trim());
           });

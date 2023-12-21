@@ -61,11 +61,11 @@ body .page-container .sections:not(.is-loading) {
   flex-direction: column;
 }
 
-body .page-container .sections:not(.is-loading) * {
+body .page-container .sections:not(.is-loading) *:not(.sections-recap) {
   cursor: pointer;
   color: rgba(255, 255, 255, 0.7);
   margin-bottom: 4px;
-  transition: 0.4s color;
+  transition: 0.2s color;
 }
 
 body .page-container .sections:not(.is-loading) .sections-recap {
