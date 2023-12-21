@@ -6,6 +6,7 @@ class Sidebar {
 
   #searchBar;
   #searchResults;
+  #searchInputText;
 
   #currentLoadedSidebarId;
   #hasLoaded = false;
@@ -38,6 +39,8 @@ class Sidebar {
     this.#leftContainer.classList.remove('collapsed');
     this.#leftSidebar.classList.add('expanded');
     this.#searchBar.classList.remove('expanded');
+    this.#searchResults.textContent = '';
+    this.#searchInputText.value = '';
   }
 
   updateMobileVisibilityState(forcedState) {
@@ -50,10 +53,15 @@ class Sidebar {
     searchIcon.src = '/src/icons/magnifyingGlass.svg';
     const searchText = document.createElement('input');
     searchText.placeholder = 'Search...';
+    this.#searchInputText = searchText;
+    const searchCancelIcon = document.createElement('img');
+    searchCancelIcon.classList.add('cancel');
+    searchCancelIcon.src = '/src/icons/circlexmark.svg';
     const searchInput = document.createElement('div');
     searchInput.classList.add('search-input');
     searchInput.appendChild(searchIcon);
     searchInput.appendChild(searchText);
+    searchInput.appendChild(searchCancelIcon);
 
     const searchResults = document.createElement('div');
     searchResults.classList.add('results');
@@ -65,12 +73,13 @@ class Sidebar {
     searchBar.appendChild(searchResults);
     this.#searchBar = searchBar;
 
+    searchCancelIcon.addEventListener('click', () => this.focusOnSidebar());
+
     searchInput.addEventListener('input', () => {
       const expandSearchBar = !!searchText.value.trim().length;
 
       searchBar.classList.toggle('expanded', expandSearchBar);
       this.#leftSidebar.classList.toggle('expanded', !expandSearchBar);
-      expandSearchBar && this.#leftSidebar.scrollTo(0, 0);
 
       this.#handleSearchValue(searchText, searchResults);
     });

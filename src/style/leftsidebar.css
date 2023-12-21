@@ -79,7 +79,7 @@ body.disable-blur .page-container .left-container .search-bar {
 }
 
 body .page-container .left-container .search-bar.expanded {
-  height: calc(100% - 56px);
+  height: 100%;
 }
 
 body .page-container .left-container .search-bar .search-input {
@@ -89,12 +89,23 @@ body .page-container .left-container .search-bar .search-input {
   width: calc(100% - 13px * 2);
   background: #191919;
   border-radius: 10px;
-  height: 35px;
+  min-height: 35px;
+  overflow: hidden;
 }
 
 body .page-container .left-container .search-bar .search-input img {
   filter: invert(0.6);
   padding-inline: 17px;
+}
+
+body .page-container .left-container .search-bar .search-input img.cancel {
+  cursor: pointer;
+  transition: 0.4s transform, 0.4s opacity;
+}
+
+body .page-container .left-container .search-bar:not(.expanded) .search-input img.cancel {
+  transform: translateX(100%);
+  opacity: 0;
 }
 
 body .page-container .left-container .search-bar .search-input input {
@@ -110,6 +121,11 @@ body .page-container .left-container .search-bar .results {
   box-sizing: border-box;
   flex: 1;
   overflow-y: auto;
+  transition: 0.4s margin-top;
+}
+
+body .page-container .left-container .search-bar.expanded .results {
+  margin-top: 15px;
 }
 
 @supports (overflow-y: overlay) {
@@ -193,7 +209,7 @@ body .page-container .left-container .left-sidebar {
   border-radius: 10px;
   width: 100%;
   position: relative;
-  transition: 0.4s height, 0.4s opacity cubic-bezier(1, 0.01, 0, 0.98);
+  transition: 0.4s height, 0.4s opacity cubic-bezier(1, 0.01, 0, 0.98), 0.4s padding, 0.4s margin;
   animation: 0.4s appearLeftSidebar linear;
 }
 
@@ -203,6 +219,8 @@ body.disable-blur .page-container .left-container .left-sidebar {
 
 body .page-container .left-container .left-sidebar:not(.expanded) {
   height: 0px !important;
+  margin-top: 0px !important;
+  padding-block: 0px !important;
   overflow: hidden !important;
 }
 
