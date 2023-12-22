@@ -4,8 +4,8 @@ class Sidebar {
 
   #leftContainer;
   #leftSidebar;
+  #sidebarSticky;
 
-  #searchBar;
   #searchResults;
   #searchInputText;
 
@@ -18,7 +18,7 @@ class Sidebar {
   }
 
   getElement() {
-    const searchBar = this.#createSearchBar();
+    const { searchInput, searchResults } = this.#createSearchBar();
     const leftSidebar = document.createElement('div');
     leftSidebar.classList.add('left-sidebar', 'expanded');
     this.#leftSidebar = leftSidebar;
@@ -38,11 +38,21 @@ class Sidebar {
     exploreTitle.classList.add('explore');
     exploreTitle.textContent = 'Explore';
 
+    const sidebarSticky = document.createElement('div');
+    sidebarSticky.classList.add('sidebar-sticky');
+    sidebarSticky.appendChild(expandableButton);
+    sidebarSticky.appendChild(exploreTitle);
+    sidebarSticky.appendChild(searchInput);
+    this.#sidebarSticky = sidebarSticky;
+
+    leftSidebar.addEventListener('scroll', () => {
+      sidebarSticky.classList.toggle('use-mini-title', searchResults.classList.contains('expanded') || leftSidebar.scrollTop > 0);
+    });
+
     const leftContainer = document.createElement('div');
     leftContainer.classList.add('left-container');
-    leftContainer.appendChild(expandableButton);
-    leftContainer.appendChild(exploreTitle);
-    leftContainer.appendChild(searchBar);
+    leftContainer.appendChild(sidebarSticky);
+    leftContainer.appendChild(searchResults);
     leftContainer.appendChild(leftSidebar);
     this.#leftContainer = leftContainer;
 
@@ -56,10 +66,12 @@ class Sidebar {
   }
 
   killSearch() {
-    this.#searchBar.classList.remove('expanded');
+    this.#searchResults.classList.remove('expanded');
     this.#leftSidebar.classList.add('expanded');
     this.#searchResults.textContent = '';
     this.#searchInputText.value = '';
+    this.#searchInputText.classList.add('is-empty');
+    this.#sidebarSticky.classList.toggle('use-mini-title', this.#leftSidebar.scrollTop > 0);
   }
 
   updateMobileVisibilityState(forcedState) {
@@ -75,6 +87,7 @@ class Sidebar {
     const searchIcon = document.createElement('img');
     searchIcon.src = '/src/icons/magnifyingGlass.svg';
     const searchText = document.createElement('input');
+    searchText.classList.add('is-empty');
     searchText.placeholder = 'Search...';
     this.#searchInputText = searchText;
     const searchCancelIcon = document.createElement('img');
@@ -87,27 +100,36 @@ class Sidebar {
     searchInput.appendChild(searchCancelIcon);
 
     const searchResults = document.createElement('div');
-    searchResults.classList.add('results');
+    searchResults.classList.add('search-results');
     this.#searchResults = searchResults;
 
-    const searchBar = document.createElement('div');
-    searchBar.classList.add('search-bar');
-    searchBar.appendChild(searchInput);
-    searchBar.appendChild(searchResults);
-    this.#searchBar = searchBar;
+    searchCancelIcon.addEventListener('click', () => this.killSearch());
 
-    searchCancelIcon.addEventListener('click', () => this.focusOnSidebar());
-
+    let wasExpanded = false;
     searchInput.addEventListener('input', () => {
       const expandSearchBar = !!searchText.value.trim().length;
 
-      searchBar.classList.toggle('expanded', expandSearchBar);
+      searchText.classList.toggle('is-empty', !expandSearchBar);
+      searchResults.classList.toggle('expanded', expandSearchBar);
+      this.#sidebarSticky.classList.toggle('use-mini-title', expandSearchBar);
       this.#leftSidebar.classList.toggle('expanded', !expandSearchBar);
 
+      if (expandSearchBar && !wasExpanded) {
+        searchResults.scrollTo(0, 0);
+      }
+
+      if (!expandSearchBar) {
+        this.#sidebarSticky.classList.toggle('use-mini-title', this.#leftSidebar.scrollTop > 0);
+      }
+
+      wasExpanded = expandSearchBar;
       this.#handleSearchValue(searchText, searchResults);
     });
 
-    return searchBar;
+    return {
+      searchInput,
+      searchResults
+    };
   }
   
   #handleSearchValue(input, results) {
@@ -165,23 +187,11 @@ class Sidebar {
 
       if (!indexesManager.isCurrentlyIndexing()) {
         if (!indexesManager.hasIndexed()) {
-          const indexingText = document.createElement('span');
-          indexingText.textContent = 'Indexing dataset...';
-
-          const loadingContainer = document.createElement('div');
-          loadingContainer.classList.add('loading');
-          loadingContainer.style.setProperty('--percent', '0%');
-
           this.#searchResults.classList.add('is-loading');
           this.#searchResults.textContent = '';
-          this.#searchResults.appendChild(indexingText);
-          this.#searchResults.appendChild(loadingContainer);
+          this.#searchResults.appendChild(utils.createLoadingItem(50));
 
-          indexesManager.initFull((i, length) => {
-            const percent = (i / length) * 100;
-            console.log(percent);
-            loadingContainer.style.setProperty('--percent', percent + '%');
-          }).then(() => {
+          indexesManager.initFull(() => {}).then(() => {
             onSearchReady(input.value.trim());
           });
         } else {
@@ -264,7 +274,7 @@ class Sidebar {
                   if (!basePathForGroupFiles) {
                     throw new Error("group elements require a basepath");
                   } else {
-                    this.#handleSidebarGroup(fragment, file, i, basePathForMainFiles, basePathForGroupFiles, groupFilesList);
+                    this.#handleSidebarGroup(fragment, i, basePathForMainFiles, basePathForGroupFiles, groupFilesList);
                   }
                 }
               break;
@@ -314,7 +324,7 @@ class Sidebar {
     sidebar.append(element);
   }
 
-  #handleSidebarGroup(sidebar, file, i, basePathForMainFiles, basePathForGroupFiles, groupFilesList) {
+  #handleSidebarGroup(sidebar, i, basePathForMainFiles, basePathForGroupFiles, groupFilesList) {
     const elementText = document.createElement('div');
     elementText.classList.add('text');
     elementText.textContent = utils.parseCategoryName(basePathForGroupFiles).replace(basePathForMainFiles ?? '', '');

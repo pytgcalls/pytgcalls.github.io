@@ -13,14 +13,14 @@ body .header {
   animation: 0.4s appearHeader;
 }
 
-@media screen and (max-width: 1100px) {
+@media screen and (max-width: 1330px) {
   body .header {
     padding-inline: 30px;
   }
 
   body .header:has(.menu.show),
   body .header:has(.header-compass.visible.show) {
-    background: rgb(0, 0, 0, 0.8);
+    background: #050505;
     border-bottom: 1px solid transparent;
   }
 }
