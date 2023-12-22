@@ -67,6 +67,8 @@ body .page-container {
   height: calc(100% - 61px);
   overflow: hidden;
   position: absolute;
+  padding-left: 0;
+  transition: 0.4s width cubic-bezier(0.42, 0, 0, 0.97), 0.4s padding-left cubic-bezier(0.42, 0, 0, 0.97);
   animation: 0.4s appearPageContainer;
 }
 
@@ -289,6 +291,7 @@ body .fs-code-preview .top-bar .url-bar {
 body:not(.disable-blur) .fs-code-preview .top-bar .url-bar {
   background: rgba(30, 30, 30, 0.22);
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 body .fs-code-preview .top-bar .url-bar .icon {
@@ -325,6 +328,7 @@ body .fs-code-preview .code-preview {
 body:not(.disable-blur) .fs-code-preview .code-preview {
   background: rgba(30, 30, 30, 0.22);
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 @supports (overflow-y: overlay) {

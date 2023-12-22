@@ -107,12 +107,17 @@ class HomePage {
     });
 
     this.#headerInstance.onSidebarUpdateListenerInstance.addListener({
-      callback: () => {
-        const state = this.#sidebarInstance.updateMobileVisibilityState();
-        this.#headerInstance.updateSidebarMobileVisibilityState(state);
-        this.#headerInstance.updateCompassExpandedState(false);
-        this.#headerInstance.updateTabsMobileVisibility(false);
-        this.#contentInstance.updateMobileSectionsVisibilityState(false);
+      callback: (isMobile) => {
+        if (isMobile) {
+          const state = this.#sidebarInstance.updateMobileVisibilityState();
+          this.#headerInstance.updateSidebarMobileVisibilityState(state);
+          this.#headerInstance.updateCompassExpandedState(false);
+          this.#headerInstance.updateTabsMobileVisibility(false);
+          this.#contentInstance.updateMobileSectionsVisibilityState(false);
+        } else {
+          this.#sidebarInstance.updateDesktopCollapsedState(false);
+          this.#headerInstance.updateSidebarDesktopExpandedState(false);
+        }
       }
     });
 
@@ -123,6 +128,12 @@ class HomePage {
         this.#sidebarInstance.updateMobileVisibilityState(false);
         this.#headerInstance.updateSidebarMobileVisibilityState(false);
         this.#headerInstance.updateTabsMobileVisibility(false);
+      }
+    });
+
+    this.#sidebarInstance.onCollapsedListenerInstance.addListener({
+      callback: (isCollapsed) => {
+        this.#headerInstance.updateSidebarDesktopExpandedState(isCollapsed);
       }
     });
 
