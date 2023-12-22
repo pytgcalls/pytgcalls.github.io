@@ -6,6 +6,7 @@ class Header {
 
   #header;
   #headerMenu;
+  #headerExpanded;
   #headerCompass;
   #headerDescription;
   #headerProjectName;
@@ -32,13 +33,21 @@ class Header {
         header.classList.add('tabs-expanded');
         this.onTabsVisibilityUpdateListenerInstance.callAllListeners(true);
       } else {
-        this.onSidebarUpdateListenerInstance.callAllListeners();
+        this.onSidebarUpdateListenerInstance.callAllListeners(true);
       }
     });
     headerMenu.appendChild(document.createElement('div'));
     headerMenu.appendChild(document.createElement('div'));
     headerMenu.appendChild(document.createElement('div'));
     this.#headerMenu = headerMenu;
+
+    const headerExpandSidebar = document.createElement('img');
+    headerExpandSidebar.classList.add('expand-sidebar');
+    headerExpandSidebar.addEventListener('click', () => {
+      this.onSidebarUpdateListenerInstance.callAllListeners(false);
+    });
+    headerExpandSidebar.src = '/src/icons/tablecolumns.svg';
+    this.#headerExpanded = headerExpandSidebar;
 
     const headerIcon = document.createElement('img');
     headerIcon.src = '/src/assets/splash/telegram-logo.svg';
@@ -76,6 +85,7 @@ class Header {
     header.addEventListener('dblclick', () => {
       document.body.classList.toggle('disable-blur');
     });
+    header.appendChild(headerExpandSidebar);
     header.appendChild(headerMenu);
     header.appendChild(headerTitle);
     header.appendChild(fakeHeaderTitle);
@@ -156,6 +166,10 @@ class Header {
 
   updateSidebarMobileVisibilityState(state) {
     this.#headerMenu.classList.toggle('show', state);
+  }
+
+  updateSidebarDesktopExpandedState(state) {
+    this.#headerExpanded.classList.toggle('show', state);
   }
 
   updateCompassVisibilityState(state) {

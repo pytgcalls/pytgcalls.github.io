@@ -46,7 +46,7 @@ class IndexesManager {
             XML.open('GET', 'https://raw.githubusercontent.com/pytgcalls/docsdata/master/' + file, true);
             setTimeout(() => {
               XML.send();
-            }, i * 5);
+            }, i * 60);
             XML.addEventListener('readystatechange', (e) => {
               if (e.target.readyState === 4) {
                 i++;
