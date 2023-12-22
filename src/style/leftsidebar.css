@@ -73,6 +73,12 @@ body .page-container .left-container .expandable:active img {
   transform: scale(0.95);
 }
 
+@media screen and (max-width: 1330px) {
+  body .page-container .left-container .expandable {
+    display: none;
+  }
+}
+
 body .page-container .left-container .explore {
   font-size: 30px;
   font-weight: 600;
