@@ -27,6 +27,7 @@ body .page-container.as-home .left-container {
     backdrop-filter: blur(30px);
     -webkit-backdrop-filter: blur(30px);
   }
+  
 
   body .page-container .left-container.show {
     pointer-events: all;
@@ -40,19 +41,19 @@ body .page-container.as-home .left-container {
     background: #050505;
     border-right: 1px solid rgb(255, 255, 255, 0.1);
     width: calc(23vw + 10px);
-    transition: 0.4s width var(--timing), 0.4s opacity var(--timing), 0.4s border-right;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    transition: 0.4s transform cubic-bezier(0.42, 0, 0, 0.97);
+  }
+
+  body .page-container:not(:has(.left-container.collapsed)) {
+    width: calc(100% - 23vw - 10px);
+    padding-left: calc(23vw + 10px);
   }
 
   body .page-container .left-container.collapsed {
-    width: 0px;
-    border-right: 1px solid transparent;
-    opacity: 0;
-    transition: 0.4s width var(--timing), 0.4s opacity var(--timing) 0.4s, 0.4s border-right;
-  }
-
-  body .page-container .left-container.collapsed .left-sidebar,
-  body .page-container .left-container.collapsed .search-bar {
-    opacity: 0;
+    transform: translateX(-100%);
   }
 }
 

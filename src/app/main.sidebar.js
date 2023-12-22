@@ -51,13 +51,13 @@ class Sidebar {
 
   focusOnSidebar() {
     this.#leftContainer.classList.remove('collapsed');
-    this.#leftSidebar.classList.add('expanded');
     this.onCollapsedListenerInstance.callAllListeners(false);
     this.killSearch();
   }
 
   killSearch() {
     this.#searchBar.classList.remove('expanded');
+    this.#leftSidebar.classList.add('expanded');
     this.#searchResults.textContent = '';
     this.#searchInputText.value = '';
   }
