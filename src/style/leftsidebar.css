@@ -117,9 +117,9 @@ body .page-container .left-container .sidebar-sticky .explore {
 body .page-container .left-container .sidebar-sticky.use-mini-title .explore {
   top: 5px;
   left: 50%;
-  transform: translateX(-50%) scale(0.8);
+  transform: translateX(-50%) scale(0.6);
   margin-left: 0;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 body .page-container .left-container .sidebar-sticky .search-input {
@@ -146,11 +146,14 @@ body .page-container .left-container .sidebar-sticky .search-input {
 
 body .page-container .left-container .sidebar-sticky .search-input img {
   filter: invert(0.6);
-  padding-inline: 17px;
+  padding-left: 12px;
+  padding-right: 8px;
 }
 
 body .page-container .left-container .sidebar-sticky .search-input img.cancel {
   cursor: pointer;
+  padding-left: 8px;
+  padding-right: 12px;
   transition: 0.4s transform, 0.4s opacity;
 }
 
@@ -166,6 +169,7 @@ body .page-container .left-container .sidebar-sticky .search-input input {
   color: #FFFFFF;
   background: transparent;
   border: none;
+  width: inherit;
 }
 
 body .page-container .left-container .search-results {
@@ -285,7 +289,6 @@ body .page-container .left-container .search-results:not(.is-loading) .file-data
 
 body .page-container .left-container .left-sidebar {
   flex: 1;
-  margin-top: 15px;
   border-radius: 10px;
   width: 100%;
   position: relative;
