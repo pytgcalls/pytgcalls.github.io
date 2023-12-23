@@ -200,3 +200,17 @@ body .splash .audio-shader .shader .description {
     opacity: 1;
   }
 }
+
+
+body .splash.faster > svg {
+  animation: 0.9s rotateSvg linear infinite;
+}
+
+body .splash.faster > svg circle {
+  fill: none;
+  stroke: #FFFFFF;
+  stroke-width: 4px;
+  stroke-linecap: round;
+  stroke-dasharray: 10, 10;
+  animation: 1.5s animateStroke linear infinite;
+}
