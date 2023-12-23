@@ -100,7 +100,6 @@ body .page-container .left-container .sidebar-sticky .explore {
   font-size: 30px;
   font-weight: 600;
   margin-left: 16px;
-  position: relative;
   color: #FFFFFF;
   position: absolute;
   top: 47px;
@@ -110,7 +109,7 @@ body .page-container .left-container .sidebar-sticky .explore {
 
 @media screen and (max-width: 1330px) {
   body .page-container .left-container .sidebar-sticky .explore {
-    top: 0px;
+    top: 0;
   }
 }
 
@@ -170,6 +169,7 @@ body .page-container .left-container .sidebar-sticky .search-input input {
   background: transparent;
   border: none;
   width: inherit;
+  font-family: 'Poppins', sans-serif;
 }
 
 body .page-container .left-container .search-results {
@@ -177,8 +177,7 @@ body .page-container .left-container .search-results {
   flex: 1;
   overflow-y: auto;
   margin-top: 15px;
-  padding: 7px;
-  padding-top: 105px;
+  padding: 105px 7px 7px;
 }
 
 body .page-container .left-container .search-results::-webkit-scrollbar {
@@ -292,8 +291,7 @@ body .page-container .left-container .left-sidebar {
   border-radius: 10px;
   width: 100%;
   position: relative;
-  padding: 15px;
-  padding-top: 144px;
+  padding: 144px 15px 15px;
   overflow-y: scroll;
   overflow-x: hidden;
   box-sizing: border-box;
@@ -373,8 +371,7 @@ body .page-container .left-container .left-sidebar .elements .element:not(:first
 
 body .page-container .left-container .left-sidebar .element {
   color: #FFFFFF;
-  padding: 6px;
-  padding-left: 15px;
+  padding: 6px 6px 6px 15px;
   border-radius: 10px;
   cursor: pointer;
   transition: 0.4s background, 0.4s transform;

@@ -76,10 +76,8 @@ body .page-container .home-container .introduction::before {
   width: 100%;
   height: 100%;
   opacity: 0.05;
-  background: url("/src/assets/banner.jpg");
   background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
+  background: url("/src/assets/banner.jpg") no-repeat center;
 }
 
 body .page-container .home-container .introduction .animated-gif {
@@ -281,7 +279,7 @@ body .page-container .home-container .squad-form::after {
   left: 0;
   height: 1px;
   width: 1px;
-  box-shadow: 0px 0px 350px 270px rgb(64, 71, 168, 0.18);
+  box-shadow: 0 0 350px 270px rgb(64, 71, 168, 0.18);
   z-index: 0;
   pointer-events: none;
 }
@@ -356,7 +354,7 @@ body .page-container .home-container .squad-form .grid .elements .initial {
   padding: 10px;
   border-radius: 10px;
   margin-bottom: 30px;
-  box-shadow: 0px 3px 0px 0px #677091;
+  box-shadow: 0 3px 0 0 #677091;
 }
 
 body .page-container .home-container .squad-form .grid .elements .initial:before {
@@ -463,7 +461,7 @@ body .page-container .home-container .projects-card::before {
   right: 0;
   height: 1px;
   width: 1px;
-  box-shadow: 0px 0px 350px 270px rgb(0, 106, 255, 0.12);
+  box-shadow: 0 0 350px 270px rgb(0, 106, 255, 0.12);
   z-index: 0;
   pointer-events: none;
 }
@@ -565,13 +563,13 @@ body .page-container .home-container .team-card::after {
 
 body .page-container .home-container .team-card::before {
   left: 0;
-  box-shadow: 0px 0px 350px 270px rgb(77 182 254 / 18%);
+  box-shadow: 0 0 350px 270px rgb(77 182 254 / 18%);
   z-index: 1;
 }
 
 body .page-container .home-container .team-card::after {
   right: 0;
-  box-shadow: 0px 0px 350px 270px rgb(97 67 62 / 18%);
+  box-shadow: 0 0 350px 270px rgb(97 67 62 / 18%);
 }
 
 body .page-container .home-container .team-card .projects-title {
@@ -682,8 +680,6 @@ body .page-container .home-container .team-card .team-grid .member .member-name 
 }
 
 body .page-container .home-container .team-card .team-grid .member .icons {
-  display: flex;
-  gap: 15px;
   display: flex;
   gap: 15px;
   position: absolute;
