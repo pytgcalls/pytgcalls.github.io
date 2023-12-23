@@ -843,10 +843,11 @@ body .page-container .content:not(.is-loading) .banner .banner-container .main-i
   aspect-ratio: var(--width) / var(--height);
   border-radius: 18px;
   box-sizing: border-box;
+  transition: 0.4s opacity;
 }
 
 body .page-container .content:not(.is-loading) .banner .banner-container .main-image:not(.loaded) { 
-  opacity: 0;
+  opacity: 0.2;
 }
 
 body .page-container .content:not(.is-loading) .banner .banner-container svg {
