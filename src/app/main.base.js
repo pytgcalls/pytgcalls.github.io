@@ -4,11 +4,15 @@ window.addEventListener('load', () => {
     let promisesList = [];
     
     promisesList.push(new Promise((resolve) => {
-      splashScreen.addEventListener('animationend', (e) => {
-        if (e.target === splashScreen) {
-          resolve();
-        }
-      });
+      if (splashScreen.classList.contains('faster')) {
+        resolve();
+      } else {
+        splashScreen.addEventListener('animationend', (e) => {
+          if (e.target === splashScreen) {
+            resolve();
+          }
+        });
+      }
     }));
 
     promisesList.push(config.loadConfig());
