@@ -227,6 +227,11 @@ class Sidebar {
       fileDataDescription.appendChild(document.createTextNode(afterSplitting));
       fileData.appendChild(fileDataDescription);
     }
+
+    const elementIcon = document.createElement('img');
+    elementIcon.src = '/src/icons/chevrondown.svg';
+    elementIcon.classList.add('right-icon');
+    fileData.appendChild(elementIcon);
     
     return fileData;
   };

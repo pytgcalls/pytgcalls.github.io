@@ -100,7 +100,6 @@ body .page-container .left-container .sidebar-sticky .explore {
   font-size: 30px;
   font-weight: 600;
   margin-left: 16px;
-  position: relative;
   color: #FFFFFF;
   position: absolute;
   top: 47px;
@@ -110,7 +109,7 @@ body .page-container .left-container .sidebar-sticky .explore {
 
 @media screen and (max-width: 1330px) {
   body .page-container .left-container .sidebar-sticky .explore {
-    top: 0px;
+    top: 0;
   }
 }
 
@@ -145,7 +144,7 @@ body .page-container .left-container .sidebar-sticky .search-input {
 }
 
 body .page-container .left-container .sidebar-sticky .search-input img {
-  filter: invert(0.6);
+  filter: invert(0.4);
   padding-left: 12px;
   padding-right: 8px;
 }
@@ -164,12 +163,17 @@ body .page-container .left-container .sidebar-sticky .search-input input.is-empt
 
 body .page-container .left-container .sidebar-sticky .search-input input {
   flex: 1;
-  font-size: 18px;
+  font-size: 17px;
   height: 35px;
   color: #FFFFFF;
   background: transparent;
   border: none;
   width: inherit;
+  font-family: 'Poppins', sans-serif;
+}
+
+body .page-container .left-container .sidebar-sticky .search-input input::placeholder {
+  font-family: 'Poppins', sans-serif;
 }
 
 body .page-container .left-container .search-results {
@@ -177,8 +181,7 @@ body .page-container .left-container .search-results {
   flex: 1;
   overflow-y: auto;
   margin-top: 15px;
-  padding: 7px;
-  padding-top: 105px;
+  padding: 105px 7px 7px;
 }
 
 body .page-container .left-container .search-results::-webkit-scrollbar {
@@ -206,6 +209,7 @@ body .page-container .left-container .search-results.is-loading {
 body .page-container .left-container .search-results.is-loading .error {
   text-align: center;
   color: #FFFFFF;
+  opacity: 0.3;
 }
 
 body .page-container .left-container .search-results.is-loading .error .image {
@@ -263,6 +267,7 @@ body .page-container .left-container .search-results:not(.is-loading) .file-data
   cursor: pointer;
   border-radius: 10px;
   transition: 0.4s background, 0.4s transform;
+  position: relative;
 }
 
 body .page-container .left-container .search-results:not(.is-loading) .file-data:hover {
@@ -277,14 +282,28 @@ body .page-container .left-container .search-results:not(.is-loading) .file-data
 
 body .page-container .left-container .search-results:not(.is-loading) .file-data-title {
   font-weight: 600;
+  margin-right: 40px;
 }
 
 body .page-container .left-container .search-results:not(.is-loading) .file-data-description {
-  opacity: 0.8;
+  color: rgba(255,255,255,0.5);
+  margin-right: 40px;
 }
 
 body .page-container .left-container .search-results:not(.is-loading) .file-data-description .highlighted {
-  background: #007fff;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+body .page-container .left-container .search-results:not(.is-loading) .right-icon {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  margin-right: 19px;
+  margin-top: auto;
+  margin-bottom: auto;
+  transform: rotate(-90deg);
 }
 
 body .page-container .left-container .left-sidebar {
@@ -292,8 +311,7 @@ body .page-container .left-container .left-sidebar {
   border-radius: 10px;
   width: 100%;
   position: relative;
-  padding: 15px;
-  padding-top: 144px;
+  padding: 144px 15px 15px;
   overflow-y: scroll;
   overflow-x: hidden;
   box-sizing: border-box;
@@ -373,8 +391,7 @@ body .page-container .left-container .left-sidebar .elements .element:not(:first
 
 body .page-container .left-container .left-sidebar .element {
   color: #FFFFFF;
-  padding: 6px;
-  padding-left: 15px;
+  padding: 6px 6px 6px 15px;
   border-radius: 10px;
   cursor: pointer;
   transition: 0.4s background, 0.4s transform;

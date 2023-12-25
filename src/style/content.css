@@ -67,7 +67,7 @@ body .page-container .content.is-loading .try-container textarea {
   background: transparent;
   border: 1px solid rgb(255, 255, 255, 0.1);
   color: #FFFFFF;
-  font-family: 'Poppins';
+  font-family: 'Poppins', sans-serif;
   font-size: 12px;
   padding: 10px;
 }
@@ -181,7 +181,7 @@ body .page-container .content:not(.is-loading) .go-to-container .go-to .mini-tit
 }
 
 body .page-container .content:not(.is-loading) .go-to-container .go-to:hover .mini-title {
-  bottom: 0px;
+  bottom: 0;
   opacity: 0;
 }
 
@@ -221,7 +221,6 @@ body .page-container .content:not(.is-loading) .h1 {
 
 body .page-container .content:not(.is-loading) .h2 {
   font-size: 30px;
-  margin-top: 10px;
   margin-top: 36px;
   font-weight: 600;
   position: relative;
@@ -239,7 +238,7 @@ body .page-container .content:not(.is-loading) .h2 .hashtag-ref,
 body .page-container .content:not(.is-loading) .h3 .hashtag-ref {
   position: absolute;
   top: 50%;
-  right: 0px;
+  right: 0;
   transform: translateY(-50%) scale(0.7);
   opacity: 0;
   cursor: pointer;
@@ -433,7 +432,7 @@ body .page-container .content:not(.is-loading) .syntax-highlight.has-mark::after
 }
 
 body .page-container .content:not(.is-loading) .syntax-highlight.has-mark::before {
-  top: 0px;
+  top: 0;
   height: calc(10px + 25px * var(--start-mark) - 25px);
 }
 
@@ -527,7 +526,7 @@ body .page-container .content:not(.is-loading) .subtext + .category-title {
 }
 
 body .page-container .content:not(.is-loading) table {
-  border-spacing: 0px;
+  border-spacing: 0;
   background: rgb(45, 45, 45, 0.3);
   border: 1px solid rgb(255, 255, 255, 0.1);
   padding: 7px;
@@ -783,7 +782,7 @@ body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .ill
   }
 
   body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .illustration .container {
-    min-width: 0px;
+    min-width: 0;
   }
 }
 
@@ -895,12 +894,11 @@ body .page-container .content:not(.is-loading) .banner .description {
 body .page-container .content:not(.is-loading) .banner .lib-presentation {
   background: rgba(0, 0, 0, 0.5);
   width: calc(100% - 8px);
-  margin: 4px;
   border-radius: 16px;
   box-sizing: border-box;
   padding-inline: 20px;
   padding-block: 13px;
-  margin-top: 10px;
+  margin: 10px 4px 4px;
   display: flex;
   flex-direction: row;
   align-items: center;
