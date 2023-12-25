@@ -119,7 +119,7 @@ body .header .title {
 }
 
 body .header .title:has(.project-name:empty) {
-  gap: 0px;
+  gap: 0;
 }
 
 @media screen and (max-width: 1330px) {
@@ -194,7 +194,7 @@ body .header .description .tabs {
 body .header .description .tabs::before {
   content: "";
   position: absolute;
-  top: 0px;
+  top: 0;
   left: calc(50% * var(--id, -1));
   width: 50%;
   height: 100%;

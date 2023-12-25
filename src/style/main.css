@@ -26,9 +26,9 @@ body {
 }
 
 body .shadow-element {
-  height: 0px;
-  width: 0px;
-  box-shadow: 0px 0px 400px 60px var(--color);
+  height: 0;
+  width: 0;
+  box-shadow: 0 0 400px 60px var(--color);
   position: fixed;
   top: var(--x);
   left: var(--y);
@@ -55,7 +55,7 @@ body.disable-blur .shadow-element {
 
 @media screen and (max-width: 1330px) {
   body .shadow-element {
-    box-shadow: 0px 0px 400px 50px var(--color);
+    box-shadow: 0 0 400px 50px var(--color);
   }
 }
 
@@ -112,7 +112,7 @@ body .tooltip {
   box-sizing: border-box;
   border-radius: 10px;
   border: 1px solid #000000;
-  box-shadow: 0px 0px 17px 5px black;
+  box-shadow: 0 0 17px 5px black;
   opacity: 0;
   z-index: 4;
 }
