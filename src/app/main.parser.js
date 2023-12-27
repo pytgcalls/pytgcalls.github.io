@@ -38,7 +38,7 @@ class SourceParser {
 
         let containsCustomTags = false;
         for(const data of element.querySelectorAll('*')) {
-          if (!(data instanceof Text)) {
+          if (!(data instanceof Text) && data.tagName.toUpperCase() != 'BR') {
             containsCustomTags = true;
             break;
           }
@@ -566,7 +566,7 @@ class SourceParser {
 
       let containsCustomTags = false;
       for(const data of syntax.querySelectorAll('*')) {
-        if (!(data instanceof Text)) {
+        if (!(data instanceof Text) && data.tagName.toUpperCase() != 'BR') {
           containsCustomTags = true;
           break;
         }
