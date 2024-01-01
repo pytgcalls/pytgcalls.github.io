@@ -174,10 +174,10 @@ class SourceParser {
 
         const presentationTitle = document.createElement('div');
         presentationTitle.classList.add('pres-title');
-        presentationTitle.textContent = 'PyTgCalls';
+        presentationTitle.textContent = element.getAttribute('presentationtitle') || 'PyTgCalls';
         const presentationDescription = document.createElement('div');
         presentationDescription.classList.add('pres-description');
-        presentationDescription.textContent = 'Async client API for the Telegram group calls';
+        presentationDescription.textContent = element.getAttribute('presentationdescription') || 'Async client API for the Telegram group calls';
         const presentation = document.createElement('div');
         presentation.classList.add('lib-details');
         presentation.appendChild(presentationTitle);
@@ -185,7 +185,7 @@ class SourceParser {
 
         const leftIcon = document.createElement('img');
         leftIcon.classList.add('icon');
-        leftIcon.src = '/src/assets/pytgcalls.svg';
+        leftIcon.src = element.getAttribute('presentationimage') || '/src/assets/pytgcalls.svg';
 
         const presContainer = document.createElement('div');
         presContainer.classList.add('presentation-data');
