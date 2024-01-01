@@ -194,9 +194,14 @@ class SourceParser {
 
         const updateButton = document.createElement('a');
         updateButton.classList.add('update');
-        updateButton.href = 'https://pypi.org/project/py-tgcalls/' + element.getAttribute('version');
         updateButton.target = '_blank';
-        updateButton.textContent = 'Update';
+        updateButton.textContent = element.getAttribute('presentationbuttontitle') || 'Update';
+
+        if (element.hasAttribute('presentationbuttonurl') && element.getAttribute('presentationbuttonurl').startsWith('https://')) {
+          updateButton.href = element.getAttribute('presentationbuttonurl');
+        } else {
+          updateButton.href = 'https://pypi.org/project/py-tgcalls/' + element.getAttribute('version');
+        }
 
         const libPresentationRow = document.createElement('div');
         libPresentationRow.classList.add('lib-presentation');
