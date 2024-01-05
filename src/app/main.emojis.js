@@ -7,10 +7,6 @@ class EmojisParser {
 			this.#ignoreOtherRequestsOp = devicesManager.isAnAppleDevice();
 		}
 
-		if (this.#ignoreOtherRequestsOp) {
-			return textElement;
-		}
-
 		let content;
 		let defTextElement = textElement;
 		if (typeof textElement == 'string') {
@@ -21,6 +17,11 @@ class EmojisParser {
 		} else {
 			return textElement;
 		}
+
+		if (this.#ignoreOtherRequestsOp) {
+			return defTextElement;
+		}
+
 
 		const allMatch = [...content.matchAll(this.#regex)];
 		for (const match of allMatch) {
