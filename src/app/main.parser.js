@@ -26,7 +26,7 @@ class SourceParser {
   }
 
   #handleRecursive(currentDom, elementDom) {
-    for(const element of currentDom.childNodes) {
+    for (const element of currentDom.childNodes) {
       if (element instanceof Text) {
         elementDom.appendChild(document.createTextNode(element.textContent));
       } else if (!this.#AVAILABLE_ELEMENTS.includes(element.tagName.toUpperCase())) {
@@ -37,7 +37,7 @@ class SourceParser {
         newElement = this.#checkAndManageElement(element, newElement, elementDom);
 
         let containsCustomTags = false;
-        for(const data of element.querySelectorAll('*')) {
+        for (const data of element.querySelectorAll('*')) {
           if (!(data instanceof Text) && data.tagName.toUpperCase() != 'BR') {
             containsCustomTags = true;
             break;
@@ -169,7 +169,7 @@ class SourceParser {
 
         const descriptionContainer = document.createElement('div');
         descriptionContainer.classList.add('description');
-        descriptionContainer.textContent = element.getAttribute('description');
+        descriptionContainer.appendChild(emojisParser.parse(element.getAttribute('description')));
         newElement.appendChild(descriptionContainer);
 
         const presentationTitle = document.createElement('div');
@@ -301,7 +301,7 @@ class SourceParser {
 
     handleItem(element);
 
-    for(const child of element.childNodes) {
+    for (const child of element.childNodes) {
       handleItem(child); 
     }
   }
@@ -473,7 +473,7 @@ class SourceParser {
   #handleTabsWithSpacer(code) {
     let firstRowSpacesCount = 0;
     const firstRow = code.split('<br/>')[0];
-    for(let char of firstRow) {
+    for (let char of firstRow) {
       if (char === ' ') {
         firstRowSpacesCount++;
       } else {
@@ -483,7 +483,7 @@ class SourceParser {
 
     let baseString = ' '.repeat(firstRowSpacesCount);
 
-    for(let i = 20; i > 1; i--) {
+    for (let i = 20; i > 1; i--) {
       const newSpacer = baseString + (' '.repeat(i));
       const replacer = '<div class="spacer" style="--id: '+i+'">&nbsp;</div>';
       code = code.replaceAll(newSpacer, replacer);
@@ -570,7 +570,7 @@ class SourceParser {
       syntaxElement = this.#checkAndManageElement(syntax, syntaxElement, document.createElement('div'));
 
       let containsCustomTags = false;
-      for(const data of syntax.querySelectorAll('*')) {
+      for (const data of syntax.querySelectorAll('*')) {
         if (!(data instanceof Text) && data.tagName.toUpperCase() != 'BR') {
           containsCustomTags = true;
           break;
@@ -595,7 +595,7 @@ class SourceParser {
                 
                 const childNodes = [...syntaxHighlightContainer.childNodes];
                 let updatedChildren = [];
-                for(const syntax of childNodes) {
+                for (const syntax of childNodes) {
                   if (syntax != syntaxElement && syntax != activeItem) {
                     updatedChildren.push(syntax);
                     syntax.classList.add('hidden');
@@ -629,7 +629,7 @@ class SourceParser {
                   syntaxHighlightContainer.classList.remove('animating-asback');
                   homePage.onChangeFavoriteSyntaxTabAnimationState.callAllListeners(false);
 
-                  for(const child of updatedChildren) {
+                  for (const child of updatedChildren) {
                     child.classList.remove('hidden');
                   }
                 });
@@ -751,7 +751,7 @@ class SourceParser {
 
     let finalText = '';
 
-    for(const child of childs) {
+    for (const child of childs) {
       this.#tryToReduceTags(child);
       finalText += ' ' + child.textContent;
     }

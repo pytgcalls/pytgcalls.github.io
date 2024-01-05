@@ -68,7 +68,7 @@ class Tooltip {
   }
 
   closeTooltips() {
-    for(const callback of this.#closeCallbacksList) {
+    for (const callback of this.#closeCallbacksList) {
       try {
         callback();
       } catch(e) {}

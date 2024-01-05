@@ -18,7 +18,7 @@ class ListenerManagerInstance {
         } else {
           onUnknownRecall && onUnknownRecall();
         }
-      } else if(!isInternal) {
+      } else if (!isInternal) {
         if (typeof this.ultimateDataCall != 'undefined') {
           callback(this.ultimateDataCall);
         } else {
@@ -41,7 +41,7 @@ class ListenerManagerInstance {
   #executeListenerCall(data, onlyInternal = false) {
     let reparsedCallbacks = [];
 
-    for(const callback of this.#callbacks) {
+    for (const callback of this.#callbacks) {
       if (callback.ref instanceof Element && !document.body.contains(callback.ref)) {
         continue;
       }
