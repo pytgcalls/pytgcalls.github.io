@@ -18,6 +18,10 @@ window.addEventListener('load', () => {
     promisesList.push(config.loadConfig());
 
     Promise.all(promisesList).then(() => {
+      if (devicesManager.isAndroid()) {
+        document.body.classList.add('disable-blur');
+      }
+
       splashScreen.remove();
       config.getRedirectDataForPath(window.location.pathname).then((data) => {
         if (data && (data.startsWith('https://') || data.startsWith('http://'))) {
