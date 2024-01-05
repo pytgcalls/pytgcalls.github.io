@@ -1,3 +1,6 @@
 [submodule "emoji-data/img-apple-60"]
 	path = emoji-data/img-apple-60
 	url = https://github.com/iamcal/emoji-data
+[submodule "emoji-data"]
+	path = emoji-data
+	url = https://github.com/iamcal/emoji-data
