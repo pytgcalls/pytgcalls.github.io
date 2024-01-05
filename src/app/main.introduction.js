@@ -217,7 +217,7 @@ class Introduction {
       const fragment = document.createDocumentFragment();
       let validMembersCount = 0;
       
-      for(const member of members) {
+      for (const member of members) {
         const name = member.querySelector('name');
         const role = member.querySelector('role');
         const github = member.querySelector('github-username');

@@ -40,7 +40,7 @@ class HomePage {
     document.body.appendChild(this.#headerInstance.getElement());
     document.body.appendChild(pageContainer);
 
-    for(let i = 0; i < 4; i++) {
+    for (let i = 0; i < 4; i++) {
       if (this.#COLORS[i]) {
         const randomX = Math.floor(Math.random() * 100);
         const randomY = Math.floor(Math.random() * 100);
@@ -171,7 +171,7 @@ class HomePage {
       config.getAvailableCategories().then((ids) => {
         let found = false;
 
-        for(const id of ids) {
+        for (const id of ids) {
           if (decodeURI(pathName).startsWith(utils.parseCategoryUrl(id))) {
             found = true;
 
@@ -196,7 +196,7 @@ class HomePage {
     config.getAllFilesListFilesById(id).then((files) => {
       let found = false;
 
-      for(const file of files) {
+      for (const file of files) {
         if (utils.parseCategoryUrl(file) === decodeURI(pathName)) {
           found = true;
           this.#updateLoadedFile(file, hash, updateActiveFilePromise);

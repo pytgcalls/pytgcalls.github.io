@@ -38,7 +38,7 @@ class Utils {
     const chars = ['-', '+'];
 
     let reformedText = '';
-    for(const char of textContent) {
+    for (const char of textContent) {
       if (alphabet.includes(char.toUpperCase()) || chars.includes(char)) {
         reformedText += char;
       } else if (char === ' ') {
@@ -104,6 +104,12 @@ class Utils {
       return text;
     }
   }
+  
+	escapeHTML(text){
+		return text.replace(/[\x26\x0A\<>'"]/g, function(r){
+			return "&#"+r.charCodeAt(0)+";";
+		});
+	}
 }
 
 const utils = new Utils();

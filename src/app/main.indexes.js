@@ -37,7 +37,7 @@ class IndexesManager {
           }
         };
 
-        for(const file of files) {
+        for (const file of files) {
           if (this.#indexes_caching[file]) {
             i++;
             handleIndexingWithResponse(i, file, this.#indexes_caching[file], 200);

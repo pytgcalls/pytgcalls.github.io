@@ -44,7 +44,7 @@ class Config {
         const filesListElements = dom.querySelectorAll('config > files-list');
 
         let finalList = [];
-        for(const element of filesListElements) {
+        for (const element of filesListElements) {
           if (element.hasAttribute('id')) {
             finalList.push(element.getAttribute('id'));
           }
@@ -63,7 +63,7 @@ class Config {
         const filesListElements = dom.querySelectorAll('config > files-list file');
 
         let finalList = [];
-        for(const element of filesListElements) {
+        for (const element of filesListElements) {
           finalList.push(this.#getFullPathByFileElement(element));
         }
     
@@ -80,7 +80,7 @@ class Config {
         const filesListElementsGlobal = dom.querySelectorAll('config > files-list file');
 
         let detectedId;
-        for(const file of filesListElementsGlobal) {
+        for (const file of filesListElementsGlobal) {
           if (this.#getFullPathByFileElement(file) == fileName) {
             detectedId = file.parentElement;
 
@@ -99,7 +99,7 @@ class Config {
           
           let nextFile, previousFile, previousStateFile;
           let found = false;
-          for(const file of filesListElements) {
+          for (const file of filesListElements) {
             const finalText = this.#getFullPathByFileElement(file);
 
             if (typeof nextFile == 'undefined') {
@@ -141,7 +141,7 @@ class Config {
         const filesListElements = dom.querySelectorAll('config > files-list[id="' + id + '"] file');
 
         let finalList = [];
-        for(const element of filesListElements) {
+        for (const element of filesListElements) {
           let finalText = '';
           if (element.parentElement.hasAttribute('basepath')) {
             finalText = element.parentElement.getAttribute('basepath');

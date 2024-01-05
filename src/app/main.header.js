@@ -112,7 +112,7 @@ class Header {
     const tabsContainer = document.createElement('div');
     tabsContainer.classList.add('tabs');
 
-    for(const id of ids) {
+    for (const id of ids) {
       tabsContainer.appendChild(this.#createSingleTab(id, ignoreOnChange));
     }
 

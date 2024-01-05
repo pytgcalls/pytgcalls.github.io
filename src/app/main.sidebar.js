@@ -152,7 +152,7 @@ class Sidebar {
         promise.then((files) => {
           let hasResults = false;
 
-          for(const file of files) {
+          for (const file of files) {
             const fileDataKeys = indexesManager.getIndexedValue(file);
             
             if (typeof fileDataKeys != 'undefined') {
@@ -256,7 +256,7 @@ class Sidebar {
         const basePathForMainFiles = child.getAttribute('basepath');
   
         let i = 0;
-        for(const file of child.childNodes) {
+        for (const file of child.childNodes) {
           if (file instanceof Element) {
             i++;
   
@@ -345,7 +345,7 @@ class Sidebar {
     elementsGroup.style.setProperty('--id', i.toString());
     elementsGroup.appendChild(element);
 
-    for(const file of groupFilesList) {
+    for (const file of groupFilesList) {
       let fullPath = basePathForGroupFiles + file.textContent;
 
       const element = this.#createSidebarFileElement(

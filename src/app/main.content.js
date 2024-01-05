@@ -180,7 +180,7 @@ class Content {
       }
       
       const selectedChild = data.querySelectorAll('.h1, .h2, .h3');
-      for(const child of selectedChild) {
+      for (const child of selectedChild) {
         if (utils.generateSectionRefByTextContent(child.textContent) === hash) {
           child.scrollIntoView();
           break;
@@ -190,7 +190,7 @@ class Content {
   }
 
   #iterPageSectionsData(container, currentDom, childsLimit = Infinity) {
-    for(const [id, element] of container.childNodes.entries()) {
+    for (const [id, element] of container.childNodes.entries()) {
       if (id > childsLimit) {
         break;
       }
@@ -211,10 +211,10 @@ class Content {
           cloned.addEventListener('click', () => this.updateActiveSection(element));
 
           let hasRefElement = false;
-          for(const child of element.childNodes) {
+          for (const child of element.childNodes) {
             if (child instanceof Element && child.classList.contains('ref')) {
               let hasSbElement = false;
-              for(const sb of child.childNodes) {
+              for (const sb of child.childNodes) {
                 if (sb instanceof Element && sb.classList.contains('sb')) {
                   hasSbElement = true;
                   cloned.innerHTML = sb.textContent;
@@ -237,7 +237,7 @@ class Content {
           }
 
           currentDom.append(cloned);
-        } else if(element.classList.contains('category') || element.classList.contains('subtext')) {
+        } else if (element.classList.contains('category') || element.classList.contains('subtext')) {
           const cloned = element.cloneNode(false);
           currentDom.append(cloned);
           this.#iterPageSectionsData(element, cloned);
