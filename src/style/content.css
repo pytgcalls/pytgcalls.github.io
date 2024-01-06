@@ -219,6 +219,10 @@ body .page-container .content:not(.is-loading) .h1 {
   position: relative;
 }
 
+body .page-container .content:not(.is-loading) .h1 .emoji-parsed img {
+  height: 42px;
+}
+
 body .page-container .content:not(.is-loading) .h2 {
   font-size: 30px;
   margin-top: 36px;
@@ -226,11 +230,19 @@ body .page-container .content:not(.is-loading) .h2 {
   position: relative;
 }
 
+body .page-container .content:not(.is-loading) .h2 .emoji-parsed img {
+  height: 34px;
+}
+
 body .page-container .content:not(.is-loading) .h3 {
   font-size: 25px;
   margin-top: 10px;
   font-weight: 600;
   position: relative;
+}
+
+body .page-container .content:not(.is-loading) .h3 .emoji-parsed img {
+  height: 31px;
 }
 
 body .page-container .content:not(.is-loading) .h1 .hashtag-ref,
@@ -266,11 +278,19 @@ body .page-container .content:not(.is-loading) .h4 {
   position: relative;
 }
 
+body .page-container .content:not(.is-loading) .h4 .emoji-parsed img {
+  height: 19px;
+}
+
 body .page-container .content:not(.is-loading) .text,
 body .page-container .content:not(.is-loading) .pg-title {
   color: rgba(255, 255, 255, 0.8);
   font-size: 17px;
   margin-block: 5px;
+}
+
+body .page-container .content:not(.is-loading) .text .emoji-parsed img {
+  height: 23px;
 }
 
 body .page-container .content:not(.is-loading) .pg-title {
@@ -309,6 +329,10 @@ body .page-container .content:not(.is-loading) ul.with-numbers {
 
 body .page-container .content:not(.is-loading) ul li:has(.syntax-highlight) {
   margin-block: 10px;
+}
+
+body .page-container .content:not(.is-loading) ul li .emoji-parsed img {
+  height: 23px;
 }
 
 body .page-container .content:not(.is-loading) .multisyntax,
@@ -583,6 +607,10 @@ body .page-container .content:not(.is-loading) .alert .alert-header .alert-title
 
 body .page-container .content:not(.is-loading) .alert .alert-content {
   padding: 15px;
+}
+
+body .page-container .content:not(.is-loading) .alert .alert-content .emoji-parsed img {
+  height: 22px;
 }
 
 body .page-container .content:not(.is-loading) .alert[data-type="important"] {
@@ -878,10 +906,18 @@ body .page-container .content:not(.is-loading) .banner .banner-container .bottom
   transform: translateY(5px);
 }
 
+body .page-container .content:not(.is-loading) .banner .banner-container .bottom-container .mini-title .emoji-parsed img {
+  height: 19px;
+}
+
 body .page-container .content:not(.is-loading) .banner .banner-container .bottom-container .big-title {
   font-size: 35px;
   line-height: 45px;
   font-weight: 600;
+}
+
+body .page-container .content:not(.is-loading) .banner .banner-container .bottom-container .big-title .emoji-parsed img {
+  height: 40px;
 }
 
 body .page-container .content:not(.is-loading) .banner .description {
