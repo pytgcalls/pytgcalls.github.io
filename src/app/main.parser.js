@@ -28,8 +28,9 @@ class SourceParser {
   #handleRecursive(currentDom, elementDom) {
     for (const element of currentDom.childNodes) {
       if (element instanceof Text) {
-        elementDom.appendChild(document.createTextNode(element.textContent));
+        elementDom.appendChild(emojisParser.parse(element.textContent));
       } else if (!this.#AVAILABLE_ELEMENTS.includes(element.tagName.toUpperCase())) {
+        console.error(element);
         throw new Error("An unknown element has been used "+element.tagName);
       } else {
         let newElement = document.createElement('div');
@@ -77,7 +78,7 @@ class SourceParser {
           if (containsCustomTags) {
             this.#handleRecursive(element, newElement);
           } else {
-            newElement.textContent = element.textContent;
+            newElement.appendChild(emojisParser.parse(element.textContent));
           }
 
           newElement = this.#handlePostQueryElement(element, newElement);
@@ -144,10 +145,10 @@ class SourceParser {
 
         const miniTitleContainer = document.createElement('div');
         miniTitleContainer.classList.add('mini-title');
-        miniTitleContainer.textContent = element.getAttribute('minititle');
+        miniTitleContainer.appendChild(emojisParser.parse(element.getAttribute('minititle')));
         const bigTitleContainer = document.createElement('div');
         bigTitleContainer.classList.add('big-title');
-        bigTitleContainer.textContent = element.getAttribute('bigtitle');
+        bigTitleContainer.appendChild(emojisParser.parse(element.getAttribute('bigtitle')));
         const bottomContainer = document.createElement('div');
         bottomContainer.classList.add('bottom-container');
         bottomContainer.appendChild(miniTitleContainer);
