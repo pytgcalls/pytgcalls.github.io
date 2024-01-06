@@ -74,24 +74,37 @@ body .page-container .left-container .sidebar-sticky.use-mini-title {
   border-bottom: 1px solid rgb(255, 255, 255, 0.1);
 }
 
-body .page-container .left-container .sidebar-sticky .expandable {
+body .page-container .left-container .sidebar-sticky .icons-row {
   margin-top: 10px;
-  margin-left: 15px;
+  margin-inline: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+body .page-container .left-container .sidebar-sticky .icons-row .expandable,
+body .page-container .left-container .sidebar-sticky .icons-row .settings {
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: 0.4s transform;
 }
 
-body .page-container .left-container .sidebar-sticky .expandable img {
+body .page-container .left-container .sidebar-sticky .icons-row img {
   width: 31px;
   transition: 0.4s transform;
 }
 
-body .page-container .left-container .sidebar-sticky .expandable:active img {
+body .page-container .left-container .sidebar-sticky .icons-row .expandable:active img {
   transform: scale(0.95);
 }
 
+body .page-container .left-container .sidebar-sticky .icons-row .settings:active img {
+  transform: scale(0.95) rotate(90deg);
+}
+
 @media screen and (max-width: 1330px) {
-  body .page-container .left-container .sidebar-sticky .expandable {
+  body .page-container .left-container .sidebar-sticky .icons-row .expandable {
     display: none;
   }
 }
@@ -102,7 +115,7 @@ body .page-container .left-container .sidebar-sticky .explore {
   margin-left: 16px;
   color: #FFFFFF;
   position: absolute;
-  top: 47px;
+  top: 40px;
   left: 0;
   transition: 0.4s all cubic-bezier(0.42, 0, 0, 0.97);
 }
