@@ -444,8 +444,36 @@ class SourceParser {
     
     code = this.#handleTabsWithSpacer(code);
     newElement.innerHTML = code;
+
+    const updateMark = (startAt, endAt) => {
+      newElement.style.setProperty('--start-mark', startAt);
+      newElement.style.setProperty('--offset-mark', endAt - startAt);
+      newElement.style.setProperty('--length', code.split('<br/>').length - 1);
+      newElement.classList.add('has-mark');
+    };
+
+    let hasValidMarkParameter = false;
+    if (element.hasAttribute('mark')) {
+      const markData = element.getAttribute('mark');
+      if (markData.indexOf('-') == -1) {
+        const startAt = parseInt(markData);
+
+        if (!isNaN(startAt)) {
+          hasValidMarkParameter = true;
+          updateMark(startAt, startAt);
+        }
+      } else {
+        const startAt = parseInt(markData.split('-')[0]);
+        const endAt = parseInt(markData.split('-')[1]);
+
+        if (!isNaN(startAt) && !isNaN(endAt)) {
+          hasValidMarkParameter = true;
+          updateMark(Math.min(startAt, endAt), Math.max(startAt, endAt));
+        }
+      }
+    }
     
-    if (element.tagName.toUpperCase() != 'SHI' && !hideTags) {
+    if (element.tagName.toUpperCase() != 'SHI' && !hideTags && !hasValidMarkParameter) {
       let successTimeout;
 
       const languageTagIcon = document.createElement('img');
@@ -490,31 +518,6 @@ class SourceParser {
       tagsContainer.appendChild(languageTag);
       tagsContainer.appendChild(copyTag);
       newElement.appendChild(tagsContainer);
-    }
-
-    const updateMark = (startAt, endAt) => {
-      newElement.style.setProperty('--start-mark', startAt);
-      newElement.style.setProperty('--offset-mark', endAt - startAt);
-      newElement.style.setProperty('--length', code.split('<br/>').length - 1);
-      newElement.classList.add('has-mark');
-    };
-
-    if (element.hasAttribute('mark')) {
-      const markData = element.getAttribute('mark');
-      if (markData.indexOf('-') == -1) {
-        const startAt = parseInt(markData);
-
-        if (!isNaN(startAt)) {
-          updateMark(startAt, startAt);
-        }
-      } else {
-        const startAt = parseInt(markData.split('-')[0]);
-        const endAt = parseInt(markData.split('-')[1]);
-
-        if (!isNaN(startAt) && !isNaN(endAt)) {
-          updateMark(Math.min(startAt, endAt), Math.max(startAt, endAt));
-        }
-      }
     }
   }
 
