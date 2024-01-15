@@ -105,11 +105,31 @@ class Utils {
     }
   }
   
-	escapeHTML(text){
+	escapeHTML(text) {
 		return text.replace(/[\x26\x0A\<>'"]/g, function(r){
 			return "&#"+r.charCodeAt(0)+";";
 		});
 	}
+
+  copyToClipboard(text) {
+    if (!navigator.clipboard) {
+      var textarea = document.createElement('textarea');
+      textarea.style.top = "0";
+      textarea.style.left = "0";
+      textarea.style.position = "fixed";
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+
+      const successful = document.execCommand("copy");
+      return Promise.resolve(successful);
+    } else {
+      return new Promise((resolve) => {
+        navigator.clipboard.writeText(text).then(() => resolve(true)).catch(() => resolve(false));
+      });
+    }
+  }
 }
 
 const utils = new Utils();
