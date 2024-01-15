@@ -382,7 +382,7 @@ class SourceParser {
             }
             fakeChild.textContent = response;
   
-            this.#handleSyntaxHighlight(fakeChild, codePreview);
+            this.#handleSyntaxHighlight(fakeChild, codePreview, true);
           });
         }, { once: true });
       });
@@ -433,7 +433,7 @@ class SourceParser {
     return newElement;
   }
 
-  #handleSyntaxHighlight(element, newElement) {
+  #handleSyntaxHighlight(element, newElement, hideTags = false) {
     let code = element.textContent;
     code = Prism.highlight(code, this.#detectLanguageByElement(element), 'html');
     code = code.replaceAll('\n', '<br/>');
@@ -443,12 +443,9 @@ class SourceParser {
     }
     
     code = this.#handleTabsWithSpacer(code);
+    newElement.innerHTML = code;
     
-    if (element.tagName.toUpperCase() == 'SHI') {
-      newElement.innerHTML = code;
-    } else {
-      newElement.innerHTML = code;
-
+    if (element.tagName.toUpperCase() != 'SHI' && !hideTags) {
       let successTimeout;
 
       const languageTagIcon = document.createElement('img');
@@ -632,7 +629,7 @@ class SourceParser {
         throw new Error("Syntax highlight can't contain other tags");
       }
 
-      this.#handleSyntaxHighlight(syntax, syntaxElement);
+      this.#handleSyntaxHighlight(syntax, syntaxElement, true);
       syntaxHighlightContainer.appendChild(syntaxElement);
 
       homePage.onChangeFavoriteSyntaxTab.addListener({
