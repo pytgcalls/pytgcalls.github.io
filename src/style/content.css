@@ -452,6 +452,8 @@ body .page-container .content:not(.is-loading) .syntax-highlight .tags-container
   align-items: center;
   gap: 23px;
   user-select: none;
+  position: sticky;
+  left: 0;
 }
 
 body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag {
