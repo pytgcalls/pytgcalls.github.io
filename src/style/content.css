@@ -445,6 +445,109 @@ body .page-container .content:not(.is-loading) .multisyntax > .sy-container.anim
   }
 }
 
+body .page-container .content:not(.is-loading) .syntax-highlight .tags-container {
+  width: 100%;
+  margin-top: 7px;
+  display: flex;
+  align-items: center;
+  gap: 23px;
+  user-select: none;
+  position: sticky;
+  left: 0;
+}
+
+body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag {
+  background: rgb(13, 13, 13);
+  border: 1px solid rgb(255, 255, 255, 0.1);
+  border-right: 0px;
+  width: fit-content;
+  padding-inline: 12px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  position: relative;
+}
+
+body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.is-clickable {
+  cursor: pointer;
+  transition: 0.4s background;
+}
+
+body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.is-clickable::before {
+  transition: 0.4s background;
+}
+
+body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.is-clickable:not(.success):hover::before,
+body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.is-clickable:not(.success):hover {
+  background: rgb(24, 24, 24);
+}
+
+body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.is-clickable:not(.success):active::before,
+body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.is-clickable:not(.success):active {
+  background: rgb(50, 50, 50);
+}
+
+body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag::before {
+  content: "";
+  position: absolute;
+  right: -9px;
+  top: 50%;
+  height: 19px;
+  border-right: 1px solid rgb(255, 255, 255, 0.1);
+  border-top: 1px solid rgb(255, 255, 255, 0.1);
+  background: rgb(13, 13, 13);
+  aspect-ratio: 1;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag img {
+  filter: invert(1);
+}
+
+body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag img:not(.success) {
+  transition: 0.4s opacity;
+}
+
+body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.success img:not(.success) {
+  opacity: 0;
+}
+
+body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag span {
+  z-index: 1;
+  transition: 0.4s opacity;
+}
+
+body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.success span {
+  opacity: 0;
+}
+
+body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag img.success {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  opacity: 0;
+  transition: 0.4s opacity;
+}
+
+body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.success img.success {
+  opacity: 1;
+  animation: 0.5s showSuccessIcon;
+}
+
+@keyframes showSuccessIcon {
+  from {
+    clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);;
+  }
+  to {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);;
+  }
+}
+
 body .page-container .content:not(.is-loading) .syntax-highlight.has-mark::before,
 body .page-container .content:not(.is-loading) .syntax-highlight.has-mark::after {
   content: "";
