@@ -88,22 +88,22 @@ class SourceParser {
     }
   }
 
-  #detectLanguageByElement(element) {
-    let language = Prism.languages.python;
+  #detectLanguageByElement(element, asString = false) {
+    let language = asString ? 'Python' : Prism.languages.python;
     
     if (element.hasAttribute('language')) {
       switch (element.getAttribute('language')) {
         case 'go':
-          language = Prism.languages.go;
+          language = asString ? 'Go' : Prism.languages.go;
         break;
         case 'c':
-          language = Prism.languages.c;
+          language = asString ? 'C' : Prism.languages.c;
         break;
         case 'cpp':
-          language = Prism.languages.cpp;
+          language = asString ? 'C++' : Prism.languages.cpp;
         break;
         case 'bash':
-          language = Prism.languages.bash;
+          language = asString ? 'Bash' : Prism.languages.bash;
         break;
       }
     }
@@ -382,7 +382,7 @@ class SourceParser {
             }
             fakeChild.textContent = response;
   
-            this.#handleSyntaxHighlight(fakeChild, codePreview);
+            this.#handleSyntaxHighlight(fakeChild, codePreview, true);
           });
         }, { once: true });
       });
@@ -433,7 +433,7 @@ class SourceParser {
     return newElement;
   }
 
-  #handleSyntaxHighlight(element, newElement) {
+  #handleSyntaxHighlight(element, newElement, hideTags = false) {
     let code = element.textContent;
     code = Prism.highlight(code, this.#detectLanguageByElement(element), 'html');
     code = code.replaceAll('\n', '<br/>');
@@ -452,12 +452,14 @@ class SourceParser {
       newElement.classList.add('has-mark');
     };
 
+    let hasValidMarkParameter = false;
     if (element.hasAttribute('mark')) {
       const markData = element.getAttribute('mark');
       if (markData.indexOf('-') == -1) {
         const startAt = parseInt(markData);
 
         if (!isNaN(startAt)) {
+          hasValidMarkParameter = true;
           updateMark(startAt, startAt);
         }
       } else {
@@ -465,9 +467,57 @@ class SourceParser {
         const endAt = parseInt(markData.split('-')[1]);
 
         if (!isNaN(startAt) && !isNaN(endAt)) {
+          hasValidMarkParameter = true;
           updateMark(Math.min(startAt, endAt), Math.max(startAt, endAt));
         }
       }
+    }
+    
+    if (element.tagName.toUpperCase() != 'SHI' && !hideTags && !hasValidMarkParameter) {
+      let successTimeout;
+
+      const languageTagIcon = document.createElement('img');
+      languageTagIcon.src = '/src/icons/code.svg';
+      const languageTagText = document.createElement('span');
+      languageTagText.textContent = this.#detectLanguageByElement(element, true);
+      const languageTag = document.createElement('div');
+      languageTag.classList.add('tag');
+      languageTag.appendChild(languageTagIcon);
+      languageTag.appendChild(languageTagText);
+
+      const copyTagSuccess = document.createElement('img');
+      copyTagSuccess.classList.add('success');
+      copyTagSuccess.src = '/src/icons/check.svg';
+      const copyTagIcon = document.createElement('img');
+      copyTagIcon.src = '/src/icons/copy.svg';
+      const copyTagText = document.createElement('span');
+      copyTagText.textContent = 'Copy';
+      const copyTag = document.createElement('div');
+      copyTag.classList.add('tag', 'is-clickable');
+      copyTag.addEventListener('click', () => {
+        utils.copyToClipboard(element.textContent).then((state) => {
+          if (state) {
+            if (successTimeout) {
+              clearTimeout(successTimeout);
+            }
+
+            copyTag.classList.add('success');
+            successTimeout = setTimeout(() => {
+              copyTag.classList.remove('success');
+              successTimeout = undefined;
+            }, 3000);
+          }
+        });
+      });
+      copyTag.appendChild(copyTagSuccess);
+      copyTag.appendChild(copyTagIcon);
+      copyTag.appendChild(copyTagText);
+
+      const tagsContainer = document.createElement('div');
+      tagsContainer.classList.add('tags-container');
+      tagsContainer.appendChild(languageTag);
+      tagsContainer.appendChild(copyTag);
+      newElement.appendChild(tagsContainer);
     }
   }
 
@@ -582,7 +632,7 @@ class SourceParser {
         throw new Error("Syntax highlight can't contain other tags");
       }
 
-      this.#handleSyntaxHighlight(syntax, syntaxElement);
+      this.#handleSyntaxHighlight(syntax, syntaxElement, true);
       syntaxHighlightContainer.appendChild(syntaxElement);
 
       homePage.onChangeFavoriteSyntaxTab.addListener({
