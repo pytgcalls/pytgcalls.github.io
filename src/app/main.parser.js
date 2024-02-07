@@ -73,7 +73,7 @@ class SourceParser {
             throw new Error("Banner can't contain other tags");
           }
 
-          elementDom.appendChild(newElement);
+          elementDom.appendChild(this.#handlePostQueryElement(element, newElement));
         } else {
           if (containsCustomTags) {
             this.#handleRecursive(element, newElement);
@@ -308,16 +308,23 @@ class SourceParser {
   }
 
   #handlePostQueryElement(element, newElement) {
-    if (['H1', 'H2', 'H3'].includes(element.tagName.toUpperCase())) {
-      const hashtagRef = document.createElement('div');
-      hashtagRef.classList.add('hashtag-ref');
-      hashtagRef.addEventListener('click', () => {
-        const ref = utils.generateSectionRefByTextContent(newElement.textContent);
+    if (['H1', 'H2', 'H3', 'BANNER'].includes(element.tagName.toUpperCase())) {
+      let destElement = newElement;
+      if (element.tagName.toUpperCase() == 'BANNER') {
+        const bigTitle = newElement.querySelector('.bottom-container > .big-title');
+        if (bigTitle) {
+          destElement = bigTitle;
+        } else {
+          return;
+        }
+      }
+
+      destElement.classList.add('has-hashtag-ref');
+      destElement.addEventListener('click', () => {
+        const ref = utils.generateSectionRefByTextContent(destElement.textContent);
         window.history.pushState('', '', '#' + ref);
         newElement.scrollIntoView();
       });
-      hashtagRef.textContent = '#';
-      newElement.appendChild(hashtagRef);
     } else if (element.tagName.toUpperCase() == 'REF-SHI') {
       newElement.addEventListener('click', () => {
         const src = 'https://github.com/pytgcalls/pytgcalls/tree/master/' + element.getAttribute('url');

@@ -34,12 +34,12 @@ class Utils {
 
   generateSectionRefByTextContent(textContent) {
     const alphabet = Array.from(Array(26), (_, i) => String.fromCharCode(i + 65));
-
+    const numbers = Array.from(Array(10), (_, i) => i.toString());
     const chars = ['-', '+'];
 
     let reformedText = '';
     for (const char of textContent) {
-      if (alphabet.includes(char.toUpperCase()) || chars.includes(char)) {
+      if (alphabet.includes(char.toUpperCase()) || numbers.includes(char) || chars.includes(char)) {
         reformedText += char;
       } else if (char === ' ') {
         reformedText += '=';
