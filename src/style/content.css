@@ -245,30 +245,11 @@ body .page-container .content:not(.is-loading) .h3 .emoji-parsed img {
   height: 31px;
 }
 
-body .page-container .content:not(.is-loading) .h1 .hashtag-ref,
-body .page-container .content:not(.is-loading) .h2 .hashtag-ref,
-body .page-container .content:not(.is-loading) .h3 .hashtag-ref {
-  position: absolute;
-  top: 50%;
-  right: 0;
-  transform: translateY(-50%) scale(0.7);
-  opacity: 0;
+body .page-container .content:not(.is-loading) .h1.has-hashtag-ref,
+body .page-container .content:not(.is-loading) .h2.has-hashtag-ref,
+body .page-container .content:not(.is-loading) .h3.has-hashtag-ref,
+body .page-container .content:not(.is-loading) .banner-container .bottom-container .big-title.has-hashtag-ref {
   cursor: pointer;
-  transition: 0.4s transform, 0.4s opacity;
-}
-
-body .page-container .content:not(.is-loading) .h1:hover .hashtag-ref,
-body .page-container .content:not(.is-loading) .h2:hover .hashtag-ref,
-body .page-container .content:not(.is-loading) .h3:hover .hashtag-ref {
-  transform: translateY(-50%) scale(1);
-  opacity: 0.7;
-}
-
-body .page-container .content:not(.is-loading) .h1:hover .hashtag-ref:active,
-body .page-container .content:not(.is-loading) .h2:hover .hashtag-ref:active,
-body .page-container .content:not(.is-loading) .h3:hover .hashtag-ref:active {
-  transform: translateY(-50%) scale(0.8);
-  opacity: 1;
 }
 
 body .page-container .content:not(.is-loading) .h4 {
@@ -999,7 +980,9 @@ body .page-container .content:not(.is-loading) .banner .banner-container svg cir
 body .page-container .content:not(.is-loading) .banner .banner-container .bottom-container {
   z-index: 2;
   padding-inline: 20px;
+  box-sizing: border-box;
   position: absolute;
+  width: 100%;
 }
 
 body .page-container .content:not(.is-loading) .banner .banner-container .bottom-container .mini-title {
@@ -1017,6 +1000,7 @@ body .page-container .content:not(.is-loading) .banner .banner-container .bottom
   font-size: 35px;
   line-height: 45px;
   font-weight: 600;
+  width: 100%;
 }
 
 body .page-container .content:not(.is-loading) .banner .banner-container .bottom-container .big-title .emoji-parsed img {
