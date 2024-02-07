@@ -179,9 +179,20 @@ class Content {
         hash = hash.slice(1);
       }
       
-      const selectedChild = data.querySelectorAll('.h1, .h2, .h3');
+      const selectedChild = data.querySelectorAll('.h1, .h2, .h3, .banner-container');
       for (const child of selectedChild) {
-        if (utils.generateSectionRefByTextContent(child.textContent) === hash) {
+        let destElement = child;
+        if (child.classList.contains('banner-container')) {
+          const bigTitle = child.querySelector('.bottom-container > .big-title');
+          console.log(bigTitle);
+          if (bigTitle) {
+            destElement = bigTitle;
+          } else {
+            continue;
+          }
+        }
+
+        if (utils.generateSectionRefByTextContent(destElement.textContent) === hash) {
           child.scrollIntoView();
           break;
         }
