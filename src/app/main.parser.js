@@ -553,11 +553,11 @@ class SourceParser {
   #handleMultiSyntax(element, newElement) {
     const exportAsBlame = element.hasAttribute('as-blame');
 
-    if (!element.getAttribute('id')) {
+    if (!element.getAttribute('id') && !exportAsBlame) {
       throw new Error('multisyntax must have id tag');
     }
 
-    if (!element.querySelector('tabs > tab')) {
+    if (!element.querySelector('tabs > tab') && !exportAsBlame) {
       throw new Error('multisyntax must contains tabs');
     }
 
