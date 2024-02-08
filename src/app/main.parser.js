@@ -210,6 +210,7 @@ class SourceParser {
                 for (const key of Object.keys(data['releases']).reverse()) {
                   if (key.startsWith(searchForVersion)) {
                     updateButton.href = 'https://pypi.org/project/py-tgcalls/' + key;
+                    break;
                   }
                 }
               });
