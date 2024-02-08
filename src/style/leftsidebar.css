@@ -53,14 +53,21 @@ body .page-container .left-container .sidebar-sticky {
   position: absolute;
   top: 0;
   width: 100%;
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
   z-index: 1;
   padding-bottom: 15px;
   height: 144px;
   box-sizing: border-box;
   border-bottom: 1px solid transparent;
   transition: 0.4s height cubic-bezier(0.42, 0, 0, 0.97), 0.4s border-bottom cubic-bezier(0.42, 0, 0, 0.97);
+}
+
+body.disable-blur .page-container .left-container .sidebar-sticky.use-mini-title {
+  background: #000000;
+}
+
+body:not(.disable-blur) .page-container .left-container .sidebar-sticky {
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
 }
 
 @media screen and (max-width: 1330px) {
