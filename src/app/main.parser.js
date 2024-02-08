@@ -206,12 +206,16 @@ class SourceParser {
             const searchForVersion = currentVersion.replace(/X+$/g, '');
             if (searchForVersion != '') {
               requestsManager.retrievePackageData().then((data) => {
+                let foundVersion = false;
                 for (const key of Object.keys(data['releases']).reverse()) {
                   if (key.startsWith(searchForVersion)) {
+                    foundVersion = true;
                     updateButton.href = 'https://pypi.org/project/py-tgcalls/' + key;
                     break;
                   }
                 }
+
+                updateButton.classList.toggle('hidden', !foundVersion);
               }).catch(() => updateButton.classList.add('hidden'));
             } else {
               updateButton.classList.add('hidden');
