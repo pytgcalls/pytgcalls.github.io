@@ -201,7 +201,20 @@ class SourceParser {
         if (element.hasAttribute('presentationbuttonurl') && element.getAttribute('presentationbuttonurl').startsWith('https://')) {
           updateButton.href = element.getAttribute('presentationbuttonurl');
         } else {
-          updateButton.href = 'https://pypi.org/project/py-tgcalls/' + element.getAttribute('version');
+          const currentVersion = element.getAttribute('version');
+          updateButton.href = 'https://pypi.org/project/py-tgcalls/' + currentVersion;
+          if (currentVersion.endsWith('X')) {
+            const searchForVersion = currentVersion.replace(/X+$/g, '');
+            if (searchForVersion != '') {
+              requestsManager.retrievePackageData().then((data) => {
+                for (const key of Object.keys(data['releases'].reverse())) {
+                  if (key.startsWith(searchForVersion)) {
+                    updateButton.href = 'https://pypi.org/project/py-tgcalls/' + key;
+                  }
+                }
+              });
+            }
+          }
         }
 
         const libPresentationRow = document.createElement('div');
