@@ -328,6 +328,7 @@ body .page-container .content:not(.is-loading) .syntax-highlight {
   overflow-y: hidden;
   position: relative;
   white-space: nowrap;
+  line-height: 25px;
 }
 
 body .page-container .content:not(.is-loading) .multisyntax > .sy-container {
@@ -556,6 +557,48 @@ body .page-container .content:not(.is-loading) .syntax-highlight.has-mark:hover:
 
 body .page-container .content:not(.is-loading) .syntax-highlight.has-mark:hover::after {
   transform: translateY(100%);
+}
+
+body .page-container .content:not(.is-loading) .syntax-highlight .temp-mark {
+  position: absolute;
+  left: -10px;
+  width: calc(100% + 10px);
+  background: rgba(0, 0, 0, 0.4);
+  top: calc(10px + 25px * var(--start-mark) - 25px);
+  height: 25px;
+  z-index: -1;
+}
+
+body .page-container .content:not(.is-loading) .syntax-highlight .temp-mark::after {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 15px;
+  width: 15px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body .page-container .content:not(.is-loading) .syntax-highlight .temp-mark.added-row {
+  background: #12261e;
+}
+
+body .page-container .content:not(.is-loading) .syntax-highlight .temp-mark.added-row::after {
+  background: #1c4428;
+  content: "+";
+}
+
+body .page-container .content:not(.is-loading) .syntax-highlight .temp-mark.removed-row {
+  background: #25171c;
+}
+
+body .page-container .content:not(.is-loading) .syntax-highlight .temp-mark.removed-row::after {
+  background: #542426;
+  content: "-";
 }
 
 body .page-container .content:not(.is-loading) .multisyntax {
