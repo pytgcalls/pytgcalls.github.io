@@ -1126,6 +1126,10 @@ body .page-container .content:not(.is-loading) .banner .lib-presentation .update
   transition: 0.4s transform, 0.4s background;
 }
 
+body .page-container .content:not(.is-loading) .banner .lib-presentation .update.hidden {
+  visibility: hidden;
+}
+
 @media screen and (max-width: 800px) {
   body .page-container .content:not(.is-loading) .banner .lib-presentation .update {
     margin-top: 20px;

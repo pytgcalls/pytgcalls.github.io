@@ -202,7 +202,6 @@ class SourceParser {
           updateButton.href = element.getAttribute('presentationbuttonurl');
         } else {
           const currentVersion = element.getAttribute('version');
-          updateButton.href = 'https://pypi.org/project/py-tgcalls/' + currentVersion;
           if (currentVersion.endsWith('X')) {
             const searchForVersion = currentVersion.replace(/X+$/g, '');
             if (searchForVersion != '') {
@@ -213,8 +212,12 @@ class SourceParser {
                     break;
                   }
                 }
-              });
+              }).catch(() => updateButton.classList.add('hidden'));
+            } else {
+              updateButton.classList.add('hidden');
             }
+          } else {
+            updateButton.href = 'https://pypi.org/project/py-tgcalls/' + currentVersion;
           }
         }
 
