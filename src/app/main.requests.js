@@ -71,7 +71,7 @@ class RequestsManager {
         }
 
         const XML = new XMLHttpRequest();
-        XML.open('GET', 'https://pypi.org/pypi/' + packageName + '/json', true);
+        XML.open('GET', 'https://pypi.org/pypi/' + packageName.textContent + '/json', true);
         XML.send();
         XML.addEventListener('readystatechange', (e) => {
           if (e.target.readyState === 4) {
