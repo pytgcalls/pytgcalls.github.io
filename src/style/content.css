@@ -1126,7 +1126,7 @@ body .page-container .content:not(.is-loading) .banner .lib-presentation .update
   transition: 0.4s transform, 0.4s background;
 }
 
-body .page-container .content:not(.is-loading) .banner .lib-presentation .update.hidden {
+body .page-container .content:not(.is-loading) .banner .lib-presentation .update:not([href]) {
   visibility: hidden;
 }
 
