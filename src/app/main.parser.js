@@ -207,7 +207,7 @@ class SourceParser {
             const searchForVersion = currentVersion.replace(/X+$/g, '');
             if (searchForVersion != '') {
               requestsManager.retrievePackageData().then((data) => {
-                for (const key of Object.keys(data['releases'].reverse())) {
+                for (const key of Object.keys(data['releases']).reverse()) {
                   if (key.startsWith(searchForVersion)) {
                     updateButton.href = 'https://pypi.org/project/py-tgcalls/' + key;
                   }
