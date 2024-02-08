@@ -184,7 +184,6 @@ class Content {
         let destElement = child;
         if (child.classList.contains('banner-container')) {
           const bigTitle = child.querySelector('.bottom-container > .big-title');
-          console.log(bigTitle);
           if (bigTitle) {
             destElement = bigTitle;
           } else {

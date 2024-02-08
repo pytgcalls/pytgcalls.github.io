@@ -38,7 +38,7 @@ class EmojisParser {
 			for (const emoji of element.querySelectorAll('emoji')) {
 				const imageElement = document.createElement('img');
 				imageElement.setAttribute('alt', this.#unifiedToNative(emoji.id));
-				imageElement.src = '/emoji-data/img-apple-64/'+emoji.id+'.png';
+				imageElement.src = 'https://raw.githubusercontent.com/iamcal/emoji-data/063f328d7951cb2e2a6678b06dcbdf8dd599fad7/img-apple-64/'+emoji.id+'.png';
 				imageElement.style.cursor = 'text';
 				imageElement.style.verticalAlign = 'sub';
 				imageElement.style.userDrag = 'none';

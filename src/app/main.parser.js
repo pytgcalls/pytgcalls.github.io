@@ -440,8 +440,8 @@ class SourceParser {
     return newElement;
   }
 
-  #handleSyntaxHighlight(element, newElement, hideTags = false) {
-    let code = element.textContent;
+  #handleSyntaxHighlight(element, newElement, hideTags = false, customTextContent = '') {
+    let code = customTextContent || element.textContent;
     code = Prism.highlight(code, this.#detectLanguageByElement(element), 'html');
     code = code.replaceAll('\n', '<br/>');
     
@@ -451,11 +451,11 @@ class SourceParser {
     
     code = this.#handleTabsWithSpacer(code);
     newElement.innerHTML = code;
+    newElement.style.setProperty('--length', code.split('<br/>').length - 1);
 
     const updateMark = (startAt, endAt) => {
       newElement.style.setProperty('--start-mark', startAt);
       newElement.style.setProperty('--offset-mark', endAt - startAt);
-      newElement.style.setProperty('--length', code.split('<br/>').length - 1);
       newElement.classList.add('has-mark');
     };
 
@@ -551,6 +551,8 @@ class SourceParser {
   }
 
   #handleMultiSyntax(element, newElement) {
+    const exportAsBlame = element.hasAttribute('as-blame');
+
     if (!element.getAttribute('id')) {
       throw new Error('multisyntax must have id tag');
     }
@@ -563,7 +565,87 @@ class SourceParser {
       throw new Error('multisyntax must contains syntax highlight elements');
     }
 
+    if (exportAsBlame && element.querySelectorAll('syntax-highlight').length != 2) {
+      throw new Error('multisyntax must contains 2 elements to enable as-blame-mode');
+    }
+
     newElement.classList.add('multisyntax');
+
+    if (exportAsBlame) {
+      const syntaxHighlightElements = element.querySelectorAll('syntax-highlight');
+
+      const firstElement = syntaxHighlightElements[0];
+      const secondElement = syntaxHighlightElements[1];
+
+      if (this.#detectLanguageByElement(firstElement) != this.#detectLanguageByElement(secondElement)) {
+        throw new Error('multisyntax as-blame-mode must contains 2 elements with the same language property');
+      }
+
+      if (firstElement.hasAttribute('mark') || secondElement.hasAttribute('mark')) {
+        throw new Error('multisyntax as-blame-mode doesn\'t support mark property');
+      }
+
+      requestAnimationFrame(() => {
+        this.#tryToReduceTags(firstElement);
+        this.#tryToReduceTags(secondElement);
+
+        const diff = patienceDiff(firstElement.textContent.split("\n"), secondElement.textContent.split("\n"));
+
+        let addedRows = [];
+        let removedRows = [];
+        let finalCode = '';
+        let i = 0;
+        for(const line of diff.lines) {
+          if (line.aIndex < 0) { // added row
+            addedRows.push(i);
+          } else if (line.bIndex < 0) { // removed row
+            removedRows.push(i);
+          }
+
+          i++;
+
+          finalCode += line.line + "\n";
+        }
+        if (finalCode.endsWith("\n")) {
+          finalCode = finalCode.slice(0, -2);
+        }
+
+        const fakeResyntaxElement = firstElement.cloneNode(false);
+        fakeResyntaxElement.innerHTML = finalCode;
+
+        let containsCustomTags = false;
+        for (const data of fakeResyntaxElement.querySelectorAll('*')) {
+          if (!(data instanceof Text) && data.tagName.toUpperCase() != 'BR') {
+            containsCustomTags = true;
+            break;
+          }
+        }
+        
+        if (containsCustomTags) {
+          throw new Error("Syntax highlight can't contain other tags");
+        }
+
+        newElement.classList.remove('multisyntax');
+        newElement.classList.add('syntax-highlight');
+        this.#handleSyntaxHighlight(fakeResyntaxElement, newElement, true, finalCode);
+
+        for (const addedRow of addedRows) {
+          const tempMark = document.createElement('div');
+          tempMark.classList.add('temp-mark', 'added-row');
+          tempMark.style.setProperty('--start-mark', addedRow);
+          newElement.appendChild(tempMark);
+        }
+
+        for (const addedRow of removedRows) {
+          const tempMark = document.createElement('div');
+          tempMark.classList.add('temp-mark', 'removed-row');
+          tempMark.style.setProperty('--start-mark', addedRow);
+          newElement.appendChild(tempMark);
+        }
+      });
+
+      return;
+    }
 
     const tabsContainer = document.createElement('div');
     tabsContainer.classList.add('tabs');
