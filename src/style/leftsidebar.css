@@ -8,7 +8,7 @@ body .page-container .left-container {
   background: #050505;
 }
 
-body .page-container.as-home .left-container {
+body.as-home .page-container .left-container {
   display: none;
 }
 

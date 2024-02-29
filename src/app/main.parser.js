@@ -913,6 +913,14 @@ class SourceParser {
 
     return finalText;
   }
+
+  handleHomepageSyntaxHighlightElement(element) {
+    let newElement = document.createElement('div');
+    this.#tryToReduceTags(element);
+    newElement = this.#checkAndManageElement(element, newElement, document.createElement('div'));
+    this.#handleSyntaxHighlight(element, newElement, true);
+    return newElement;
+  }
 }
 
 const sourceParser = new SourceParser();

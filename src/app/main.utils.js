@@ -130,6 +130,29 @@ class Utils {
       });
     }
   }
+
+  calculateVisibleArea(element, set1AfterScroll = false) {
+    const currentPosition = element.getBoundingClientRect().top;
+    const elementHeight = element.getBoundingClientRect().height;
+
+    let percent;
+
+    if (currentPosition > window.innerHeight) {
+      percent = 0;
+    } else if(currentPosition + elementHeight >= window.innerHeight) {
+      percent = 100 - (currentPosition + elementHeight - window.innerHeight) * 100 / elementHeight;
+    } else if(currentPosition < 0) {
+      if (set1AfterScroll) {
+        percent = 100;
+      } else {
+        percent = (currentPosition + elementHeight) * 100 / elementHeight;
+      }
+    } else {
+      percent = 100;
+    }
+
+    return Math.min(100, Math.max(0, percent));
+  }
 }
 
 const utils = new Utils();

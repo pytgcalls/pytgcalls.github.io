@@ -3,7 +3,7 @@ body .page-container .sections {
   height: 100%;
 }
 
-body .page-container.as-home .sections {
+body.as-home .page-container .sections {
   display: none;
 }
 

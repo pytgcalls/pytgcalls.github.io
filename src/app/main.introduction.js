@@ -13,6 +13,10 @@ class Introduction {
     const container = document.createElement('div');
     container.classList.add('home-container');
 
+    container.addEventListener('scroll', () => {
+      document.body.classList.toggle('expanded', container.scrollTop > 0);
+    });
+
     this.#container = container;
     return container;
   }
@@ -62,16 +66,16 @@ class Introduction {
 
     const title = document.createElement('div');
     title.classList.add('title1');
-    title.textContent = 'A single native library';
+    title.textContent = 'Play what you want';
     const title2 = document.createElement('div');
     title2.classList.add('title2');
-    title2.textContent = 'Available as libraries';
+    title2.textContent = 'whenever you want';
     const title3 = document.createElement('div');
     title3.classList.add('title3');
-    title3.textContent = 'in all your favorite languages';
+    title3.textContent = 'in all your favorite groups';
     const bigTitle = document.createElement('div');
     bigTitle.classList.add('bigtitle');
-    bigTitle.textContent = 'Native Tg Calls';
+    bigTitle.textContent = 'NTgCalls';
     const bigTitleDescription = document.createElement('div');
     bigTitleDescription.classList.add('bigtitle-description');
     bigTitleDescription.textContent = 'YOUR CALLS LIBRARY';
@@ -92,42 +96,147 @@ class Introduction {
     introduction.appendChild(animatedGif);
     introduction.appendChild(animationContainer);
     this.#container.appendChild(introduction);
-
-    const squadFormTitle = document.createElement('div');
-    squadFormTitle.classList.add('squad-title');
-    squadFormTitle.textContent = 'A large structure ...';
-    const squadFormGrid = document.createElement('div');
-    squadFormGrid.classList.add('grid');
-    squadFormGrid.appendChild(this.#composeSquareFormGrid());
-    const squadForm = document.createElement('div');
-    squadForm.classList.add('squad-form');
-    squadForm.appendChild(squadFormTitle);
-    squadForm.appendChild(squadFormGrid);
     
-    const projectsCardTitle = document.createElement('div');
-    projectsCardTitle.classList.add('projects-title');
-    projectsCardTitle.textContent = '... for your favorite language ...';
-    const projectsCard = document.createElement('div');
-    projectsCard.classList.add('projects-card');
-    projectsCard.appendChild(projectsCardTitle);
-    projectsCard.appendChild(this.#composeProjectsGrid());
+    this.#container.appendChild(this.#composeItemsPres());
 
-    const row = document.createElement('div');
-    row.classList.add('row');
-    row.appendChild(squadForm);
-    row.appendChild(projectsCard);
+  }
 
-    this.#container.appendChild(row);
+  #composeItemsPres() {
+    const finalPresentation = document.createElement('div');
+    finalPresentation.classList.add('final-pres');
 
-    const teamCardTitle = document.createElement('div');
-    teamCardTitle.classList.add('projects-title');
-    teamCardTitle.textContent = '... written by a big team';
-    const teamCard = document.createElement('div');
-    teamCard.classList.add('team-card');
-    teamCard.appendChild(teamCardTitle);
-    teamCard.appendChild(this.#composeTeamGrid());
+    config.getHomePagePresItems().then((items) => {
+      const fragment = document.createDocumentFragment();
 
-    this.#container.appendChild(teamCard);
+      let elementsRf = '';
+      let itemsList = [];
+      for(const [i, item] of items.entries()) {
+        const title = item.querySelector('title');
+        const description = item.querySelector('description');
+        const syntaxHighlight = item.querySelector('syntax-highlight');
+        const discoverRef = item.querySelector('discover-ref');
+
+        if (!title || !description || !syntaxHighlight || !discoverRef) {
+          throw new Error('homepage final-pres elements must contain title,description,syntax-highlight,discover-ref');
+        }
+
+        if (!title.textContent.trim() || !description.textContent.trim() || !syntaxHighlight.textContent.trim() || !discoverRef.textContent.trim()) {
+          throw new Error('specified elements can\'t be empty');
+        }
+
+        const presItemValuesTitle = document.createElement('div');
+        presItemValuesTitle.classList.add('title');
+        presItemValuesTitle.textContent = title.textContent;
+        const presItemValuesDescription = document.createElement('div');
+        presItemValuesDescription.classList.add('description');
+        presItemValuesDescription.textContent = description.textContent;
+        const presItemValuesLinkIcon = document.createElement('img');
+        presItemValuesLinkIcon.src = '/src/assets/arrowright.svg';
+        const presItemValuesLink = document.createElement('div');
+        presItemValuesLink.classList.add('href');
+        presItemValuesLink.addEventListener('click', () => {
+          this.hide().then(() => {
+            homePage.handleAsRedirect(discoverRef.textContent);
+          });
+        });
+        presItemValuesLink.textContent = 'Learn more about this topic';
+        presItemValuesLink.appendChild(presItemValuesLinkIcon);
+        const presItemValues = document.createElement('div');
+        presItemValues.classList.add('pres-item-values');
+        presItemValues.appendChild(presItemValuesTitle);
+        presItemValues.appendChild(presItemValuesDescription);
+        presItemValues.appendChild(presItemValuesLink);
+
+        const presItem = document.createElement('div');
+        presItem.classList.add('pres-item');
+        presItem.appendChild(presItemValues);
+        presItem.appendChild(sourceParser.handleHomepageSyntaxHighlightElement(syntaxHighlight));
+
+        for(let j = 0; j < 20; j++) {
+          const cIcon = document.createElement('img');
+          cIcon.style.setProperty('--x', Math.floor(Math.random() * 100));
+          cIcon.style.setProperty('--y', Math.floor(Math.random() * 100));
+          if (i == 0) {
+            cIcon.src = '/src/icons/play.svg';
+          } else if (i == 1) {
+            cIcon.src = '/src/icons/angellist.svg';
+          } else if (i == 2) {
+            cIcon.src = '/src/icons/microphone_fa.svg';
+          }
+          presItem.appendChild(cIcon);
+        }
+
+        itemsList.push(presItem);
+        fragment.append(presItem);
+        elementsRf += i+1 + "<br/>";
+      }
+
+      const leftArrow = document.createElement('img');
+      leftArrow.src = '/src/assets/arrowleft.svg';
+      const leftArrowContainer = document.createElement('div');
+      leftArrowContainer.classList.add('arc', 'left-arrow-container');
+      leftArrowContainer.appendChild(leftArrow);
+      const currentPage = document.createElement('div');
+      currentPage.classList.add('page');
+      currentPage.innerHTML = elementsRf;
+      const rightArrow = document.createElement('img');
+      rightArrow.src = '/src/assets/arrowright.svg';
+      const rightArrowContainer = document.createElement('div');
+      rightArrowContainer.classList.add('arc', 'right-arrow-container');
+      rightArrowContainer.appendChild(rightArrow);
+      const pagesIndicator = document.createElement('div');
+      pagesIndicator.classList.add('pages-indicator');
+      pagesIndicator.appendChild(leftArrowContainer);
+      pagesIndicator.appendChild(currentPage);
+      pagesIndicator.appendChild(rightArrowContainer);
+      fragment.prepend(pagesIndicator);
+
+      finalPresentation.appendChild(fragment);
+      finalPresentation.style.setProperty('--visible-state', utils.calculateVisibleArea(finalPresentation));
+      
+      const calculateMostVisibleElement = () => {
+        let itemsAssoc = [];
+        for(const item of itemsList) {
+          itemsAssoc.push({
+            item,
+            visible: utils.calculateVisibleArea(item)
+          });
+        }
+
+        itemsAssoc.sort((a, b) => b.visible - a.visible);
+
+        return itemsAssoc[0];
+      };
+
+      this.#container.addEventListener('scroll', (e) => {
+        const area = utils.calculateVisibleArea(finalPresentation);
+        if (area > 0) {
+          e.preventDefault();
+        }
+        
+        finalPresentation.style.setProperty('--visible-state', area);
+      });
+
+      leftArrow.addEventListener('click', () => {
+        const currentItemID = itemsList.indexOf(calculateMostVisibleElement().item);
+        if (currentItemID != 0) {
+          itemsList[currentItemID-1].scrollIntoView({
+            behavior: 'smooth'
+          });
+        }
+      });
+
+      rightArrow.addEventListener('click', () => {
+        const currentItemID = itemsList.indexOf(calculateMostVisibleElement().item);
+        if (currentItemID != itemsList.length - 1) {
+          itemsList[currentItemID+1].scrollIntoView({
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+
+    return finalPresentation;
   }
 
   #composeSquareFormGrid() {

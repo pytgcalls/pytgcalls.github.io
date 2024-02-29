@@ -72,6 +72,10 @@ body .page-container {
   animation: 0.4s appearPageContainer;
 }
 
+body.as-home .page-container {
+  height: 100%;
+}
+
 @keyframes appearPageContainer {
   from {
     opacity: 0;

@@ -8,7 +8,7 @@ body .page-container .content {
   overflow-wrap: anywhere;
 }
 
-body .page-container.as-home .content {
+body.as-home .page-container .content {
   display: none;
 }
 
@@ -320,7 +320,8 @@ body .page-container .content:not(.is-loading) ul li .emoji-parsed img {
 }
 
 body .page-container .content:not(.is-loading) .multisyntax,
-body .page-container .content:not(.is-loading) .syntax-highlight {
+body .page-container .content:not(.is-loading) .syntax-highlight,
+body.as-home .page-container .home-container .final-pres .pres-item .syntax-highlight {
   padding: 10px;
   background: rgb(45, 45, 45, 0.3);
   border: 1px solid rgb(255, 255, 255, 0.1);
@@ -640,7 +641,8 @@ body .page-container .content:not(.is-loading) .multisyntax .tabs > .tab:not(.ac
   color: rgba(255, 255, 255, 0.5);
 }
 
-body.disable-blur .page-container .content:not(.is-loading) .syntax-highlight {
+body.disable-blur .page-container .content:not(.is-loading) .syntax-highlight,
+body.as-home.disable-blur .page-container .home-container .final-pres .pres-item .syntax-highlight {
   border: none;
 }
 
@@ -649,7 +651,8 @@ body .page-container .content:not(.is-loading) .shi {
 }
 
 body .page-container .content:not(.is-loading) .syntax-highlight .spacer,
-body .page-container .content:not(.is-loading) .shi .spacer {
+body .page-container .content:not(.is-loading) .shi .spacer,
+body.as-home .page-container .home-container .final-pres .pres-item .syntax-highlight .spacer {
   display: inline-block;
   width: calc(10px * var(--id));
 }

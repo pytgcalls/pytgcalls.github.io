@@ -68,7 +68,8 @@ class HomePage {
 
     this.#introductionInstance.onVisibilityUpdateListenerInstance.addListener({
       callback: (state) => {
-        pageContainer.classList.toggle('as-home', state);
+        document.body.classList.toggle('as-home', state);
+        document.body.classList.remove('expanded');
 
         if (state) {
           this.#headerInstance.highlightTabsForIntroduction();
@@ -157,6 +158,10 @@ class HomePage {
 
   handleAsRedirect(pathName) {
     if (typeof pathName === 'string') {
+      if (!pathName.startsWith('/')) {
+        pathName = '/' + pathName;
+      }
+      
       let hash;
       if (pathName.indexOf('#') !== -1) {
         hash = '#' + pathName.split('#')[1];

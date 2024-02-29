@@ -29,9 +29,21 @@ class Config {
       this.loadConfig().then((config) => {
         const domHelper = new DOMParser();
         const dom = domHelper.parseFromString(config, 'application/xml');
-        const teamMembers = dom.querySelectorAll('team > member');
+        const teamMembers = dom.querySelectorAll('homepage-config > team > member');
     
         resolve(teamMembers);
+      });
+    });
+  }
+
+  getHomePagePresItems() {
+    return new Promise((resolve) => {
+      this.loadConfig().then((config) => {
+        const domHelper = new DOMParser();
+        const dom = domHelper.parseFromString(config, 'application/xml');
+        const presItems = dom.querySelectorAll('homepage-config > pres-items > item');
+    
+        resolve(presItems);
       });
     });
   }

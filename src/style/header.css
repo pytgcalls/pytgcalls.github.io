@@ -1,6 +1,6 @@
 body .header {
   height: 60px;
-  background: rgb(45, 45, 45, 0.3);
+  background: rgba(45, 45, 45, 0.3);
   border-bottom: 1px solid rgb(255, 255, 255, 0.1);
   position: relative;
   display: flex;
@@ -11,6 +11,30 @@ body .header {
   overflow: hidden;
   transition: 0.4s border-bottom, 0.4s background cubic-bezier(0.97,-0.02, 0, 0.98);
   animation: 0.4s appearHeader;
+}
+
+body.as-home .header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 3;
+  transition: none !important;
+}
+
+body.as-home.expanded:not(.disable-blur) .header {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+}
+
+body.as-home.expanded.disable-blur .header {
+  background: #000000;
+}
+
+body.as-home:not(.expanded) .header {
+  background: transparent;
+  border-bottom: 1px solid transparent;
 }
 
 @media screen and (max-width: 1330px) {
@@ -189,6 +213,10 @@ body .header .description .tabs {
   border-radius: 10px;
   overflow: hidden;
   position: relative;
+}
+
+body.as-home .header .description .tabs {
+  background: transparent;
 }
 
 body .header .description .tabs::before {
