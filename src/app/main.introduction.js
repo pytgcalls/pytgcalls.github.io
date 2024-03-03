@@ -86,9 +86,18 @@ class Introduction {
     const bigTitle = document.createElement('div');
     bigTitle.classList.add('bigtitle');
     bigTitle.innerHTML = 'A simplified implementation of<br/>Telegram Group Calls in a<br/>seamless way';
+    const buttonIcon = document.createElement('img');
+    buttonIcon.classList.add('button-img');
+    buttonIcon.src = '/src/assets/arrowright.svg';
+    const button = document.createElement('div');
+    button.classList.add('button');
+    button.textContent = 'Get started with Telegram Calls';
+    button.appendChild(buttonIcon);
     const textContainer = document.createElement('div');
     textContainer.classList.add('text-container');
     textContainer.appendChild(bigTitle);
+    textContainer.appendChild(button);
+    textContainer.appendChild(this.#composeSmallFileEditor());
 
     const introduction = document.createElement('div');
     introduction.classList.add('introduction');
@@ -98,6 +107,59 @@ class Introduction {
     this.#introduction = introduction;
     
     this.#container.appendChild(this.#composeItemsPres());
+  }
+
+  #composeSmallFileEditor() {
+    const topBar = document.createElement('div');
+    topBar.classList.add('vsc-top-bar');
+    topBar.appendChild(document.createElement('div'));
+    topBar.appendChild(document.createElement('div'));
+    topBar.appendChild(document.createElement('div'));
+
+    const filesIcon = document.createElement('img');
+    filesIcon.classList.add('active');
+    filesIcon.src = '/src/assets/vsc/files.svg';
+    const searchIcon = document.createElement('img');
+    searchIcon.src = '/src/assets/vsc/search.svg';
+    const runDebugIcon = document.createElement('img');
+    runDebugIcon.src = '/src/assets/vsc/debug.svg';
+    const extensionsIcon = document.createElement('img');
+    extensionsIcon.src = '/src/assets/vsc/extensions.svg';
+    const leftIcons = document.createElement('div');
+    leftIcons.classList.add('vsc-left-icons');
+    leftIcons.appendChild(filesIcon);
+    leftIcons.appendChild(searchIcon);
+    leftIcons.appendChild(runDebugIcon);
+    leftIcons.appendChild(extensionsIcon);
+
+    const rightCodeFileClose = document.createElement('img');
+    rightCodeFileClose.classList.add('file-close');
+    rightCodeFileClose.src = '/src/assets/xmark.svg';
+    const rightCodeFile = document.createElement('div');
+    rightCodeFile.classList.add('file');
+    rightCodeFile.textContent = 'pytgcalls.py';
+    rightCodeFile.appendChild(rightCodeFileClose);
+    const rightCodeFilesList = document.createElement('div');
+    rightCodeFilesList.classList.add('vsc-files-list');
+    rightCodeFilesList.appendChild(rightCodeFile);
+    const rightCodeHighlight = document.createElement('div');
+    rightCodeHighlight.classList.add('vsc-code-high');
+    rightCodeHighlight.textContent = 'High';
+    const rightCodeContainer = document.createElement('div');
+    rightCodeContainer.classList.add('vsc-right-code');
+    rightCodeContainer.appendChild(rightCodeFilesList);
+    rightCodeContainer.appendChild(rightCodeHighlight);
+
+    const bottomContainer = document.createElement('div');
+    bottomContainer.classList.add('vsc-bottom-container');
+    bottomContainer.appendChild(leftIcons);
+    bottomContainer.appendChild(rightCodeContainer);
+
+    const container = document.createElement('div');
+    container.classList.add('vsc-mockup');
+    container.appendChild(topBar);
+    container.appendChild(bottomContainer);
+    return container;
   }
 
   #composeItemsPres() {
