@@ -242,6 +242,16 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
   width: 100%;
   background: #28283d;
   border-bottom-left-radius: 10px;
+  max-height: 210px; /* fallback value */
+  overflow-x: hidden;
+  overflow-y: auto;
+  color: #FFFFFF;
+}
+
+@supports (overflow: overlay) {
+  body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-code-high {
+    overflow-y: overlay;
+  }
 }
 
 body .page-container .home-container .final-pres {

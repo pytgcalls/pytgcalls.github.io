@@ -144,11 +144,14 @@ class Introduction {
     rightCodeFilesList.appendChild(rightCodeFile);
     const rightCodeHighlight = document.createElement('div');
     rightCodeHighlight.classList.add('vsc-code-high');
-    rightCodeHighlight.textContent = 'High';
     const rightCodeContainer = document.createElement('div');
     rightCodeContainer.classList.add('vsc-right-code');
     rightCodeContainer.appendChild(rightCodeFilesList);
     rightCodeContainer.appendChild(rightCodeHighlight);
+
+    config.getHomePagePresItems().then((items) => {
+      rightCodeHighlight.appendChild(sourceParser.handleHomepageSyntaxHighlightElement(items[0].querySelector('syntax-highlight')));
+    });
 
     const bottomContainer = document.createElement('div');
     bottomContainer.classList.add('vsc-bottom-container');

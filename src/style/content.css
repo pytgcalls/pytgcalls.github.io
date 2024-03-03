@@ -321,7 +321,7 @@ body .page-container .content:not(.is-loading) ul li .emoji-parsed img {
 
 body .page-container .content:not(.is-loading) .multisyntax,
 body .page-container .content:not(.is-loading) .syntax-highlight,
-body.as-home .page-container .home-container .final-pres .pres-item .syntax-highlight {
+body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-code-high .syntax-highlight {
   padding: 10px;
   background: rgb(45, 45, 45, 0.3);
   border: 1px solid rgb(255, 255, 255, 0.1);
@@ -333,6 +333,13 @@ body.as-home .page-container .home-container .final-pres .pres-item .syntax-high
   position: relative;
   white-space: nowrap;
   line-height: 25px;
+}
+
+body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-code-high .syntax-highlight {
+  line-height: 19px;
+  font-size: 14px;
+  border: none;
+  background: none;
 }
 
 body .page-container .content:not(.is-loading) .multisyntax > .sy-container {
@@ -652,7 +659,7 @@ body .page-container .content:not(.is-loading) .shi {
 
 body .page-container .content:not(.is-loading) .syntax-highlight .spacer,
 body .page-container .content:not(.is-loading) .shi .spacer,
-body.as-home .page-container .home-container .final-pres .pres-item .syntax-highlight .spacer {
+body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-code-high .syntax-highlight .spacer {
   display: inline-block;
   width: calc(10px * var(--id));
 }
