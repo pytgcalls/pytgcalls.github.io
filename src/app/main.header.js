@@ -192,6 +192,11 @@ class Header {
         }
   
         document.title = id + ' Documentation';
+        
+        if (this.#headerProjectName.textContent == "") {
+          this.#headerProjectName.textContent = id;
+          return;
+        }
   
         this.#fakeHeaderTitle.textContent = id;
         const rect = this.#fakeHeaderTitle.getBoundingClientRect();
