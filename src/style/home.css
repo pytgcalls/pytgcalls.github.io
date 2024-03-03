@@ -71,6 +71,7 @@ body .page-container .home-container .introduction .background div {
   background: url(/src/assets/hero-background.webp) no-repeat center;
   background-size: 140% 184%;
   background-position: 50% 62%;
+  mix-blend-mode: plus-lighter;
 }
 
 body .page-container .home-container .introduction .background canvas {
