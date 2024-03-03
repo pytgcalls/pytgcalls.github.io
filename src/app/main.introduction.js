@@ -4,6 +4,8 @@ class Introduction {
   #container;
   #isCurrentlyEnabled = false;
   #isCurrentlyDisappearing = false;
+  #offscreenCanvas;
+  #introduction;
 
   constructor() {
     this.onVisibilityUpdateListenerInstance = new ListenerManagerInstance();
@@ -33,6 +35,13 @@ class Introduction {
     } else {
       executeUiUpdate();
     }
+
+    setTimeout(() => {
+      const introductionRect = this.#introduction.getBoundingClientRect();
+      this.#offscreenCanvas.width = introductionRect.width;
+      this.#offscreenCanvas.height = introductionRect.height;
+      offScreenHelper.grantCanvasToWorker(this.#offscreenCanvas);
+    }, 1500);
   }
 
   hide() {
@@ -64,41 +73,31 @@ class Introduction {
   #composeContainer() {
     this.#container.textContent = '';
 
-    const title = document.createElement('div');
-    title.classList.add('title1');
-    title.textContent = 'Play what you want';
-    const title2 = document.createElement('div');
-    title2.classList.add('title2');
-    title2.textContent = 'whenever you want';
-    const title3 = document.createElement('div');
-    title3.classList.add('title3');
-    title3.textContent = 'in all your favorite groups';
+    const backgroundCanvas = document.createElement('canvas');
+    backgroundCanvas.classList.add('background-canvas');
+    const backgroundImage = document.createElement('div');
+    backgroundImage.classList.add('background-image');
+    const background = document.createElement('div');
+    background.classList.add('background');
+    background.appendChild(backgroundCanvas);
+    background.appendChild(backgroundImage);
+    this.#offscreenCanvas = backgroundCanvas;
+
     const bigTitle = document.createElement('div');
     bigTitle.classList.add('bigtitle');
-    bigTitle.textContent = 'NTgCalls';
-    const bigTitleDescription = document.createElement('div');
-    bigTitleDescription.classList.add('bigtitle-description');
-    bigTitleDescription.textContent = 'YOUR CALLS LIBRARY';
-    const animationContainer = document.createElement('div');
-    animationContainer.classList.add('animation');
-    animationContainer.appendChild(title);
-    animationContainer.appendChild(title2);
-    animationContainer.appendChild(title3);
-    animationContainer.appendChild(bigTitle);
-    animationContainer.appendChild(bigTitleDescription);
-
-    const animatedGif = document.createElement('img');
-    animatedGif.classList.add('animated-gif');
-    animatedGif.src = '/src/assets/telegram.gif';
+    bigTitle.innerHTML = 'A simplified implementation of<br/>Telegram Group Calls in a<br/>seamless way';
+    const textContainer = document.createElement('div');
+    textContainer.classList.add('text-container');
+    textContainer.appendChild(bigTitle);
 
     const introduction = document.createElement('div');
     introduction.classList.add('introduction');
-    introduction.appendChild(animatedGif);
-    introduction.appendChild(animationContainer);
+    introduction.appendChild(background);
+    introduction.appendChild(textContainer);
     this.#container.appendChild(introduction);
+    this.#introduction = introduction;
     
     this.#container.appendChild(this.#composeItemsPres());
-
   }
 
   #composeItemsPres() {

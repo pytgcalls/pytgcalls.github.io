@@ -190,6 +190,7 @@ class HomePage {
         if (!found) {
           window.history.pushState('', '', '/');
           this.#introductionInstance.show();
+          this.#headerInstance.onChangeListenerInstance.callInternalListeners("Documentation");
         }
 
         resolve(found);
