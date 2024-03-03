@@ -186,7 +186,7 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
 body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-left-icons::after {
   content: "";
   position: absolute;
-  top: -5px;
+  top: -8px;
   left: 0;
   height: 44px;
   width: 3px;
