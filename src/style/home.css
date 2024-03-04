@@ -120,20 +120,63 @@ body .page-container .home-container .text-container .button {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 13px;
+  gap: 2px;
   border-radius: 10px;
   cursor: pointer;
   font-size: 15px;
   margin-bottom: 40px;
-  transition: 0.4s transform;
+  transition: 0.4s transform, 0.4s gap;
 }
 
 body .page-container .home-container .text-container .button:hover {
   transform: scale(0.95);
+  gap: 10px;
 }
 
 body .page-container .home-container .text-container .button:active {
   transform: scale(0.9);
+}
+
+body .page-container .home-container .text-container .button .button-icon {
+  width: 15px;
+  height: 15px;
+  position: relative;
+}
+
+body .page-container .home-container .text-container .button .button-icon div:first-child,
+body .page-container .home-container .text-container .button .button-icon div:nth-child(2) {
+  position: absolute;
+  right: 4px;
+  height: 7px;
+  width: 2px;
+  background: #000000;
+  border-radius: 10px;
+}
+
+body .page-container .home-container .text-container .button .button-icon div:first-child {
+  top: 1.5px;
+  transform: rotate(-36deg);
+}
+
+body .page-container .home-container .text-container .button .button-icon div:nth-child(2) {
+  bottom: 1.5px;
+  transform: rotate(36deg);
+}
+
+body .page-container .home-container .text-container .button .button-icon div:nth-child(3) {
+  position: absolute;
+  top: 51%;
+  right: 4px;
+  transform: translateY(-50%);
+  width: 13px;
+  height: 2px;
+  background: #000000;
+  border-radius: 10px;
+  transition: 0.4s width;
+}
+
+body .page-container .home-container .text-container .button:not(:hover) .button-icon div:nth-child(3) {
+  width: 0px;
 }
 
 body .page-container .home-container .text-container .vsc-mockup {

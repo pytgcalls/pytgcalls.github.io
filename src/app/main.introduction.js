@@ -89,9 +89,11 @@ class Introduction {
     const bigTitle = document.createElement('div');
     bigTitle.classList.add('bigtitle');
     bigTitle.innerHTML = 'A simplified implementation of<br/>Telegram Group Calls in a<br/>seamless way';
-    const buttonIcon = document.createElement('img');
-    buttonIcon.classList.add('button-img');
-    buttonIcon.src = '/src/assets/arrowright.svg';
+    const buttonIcon = document.createElement('div');
+    buttonIcon.classList.add('button-icon');
+    buttonIcon.appendChild(document.createElement('div'));
+    buttonIcon.appendChild(document.createElement('div'));
+    buttonIcon.appendChild(document.createElement('div'));
     const button = document.createElement('div');
     button.classList.add('button');
     button.textContent = 'Get started with Telegram Calls';
