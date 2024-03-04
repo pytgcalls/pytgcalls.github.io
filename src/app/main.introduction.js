@@ -110,6 +110,14 @@ class Introduction {
     introduction.appendChild(textContainer);
     this.#container.appendChild(introduction);
     this.#introduction = introduction;
+    
+    const internalPresPoints = document.createElement('div');
+    internalPresPoints.classList.add('int-pres-points');
+    internalPresPoints.appendChild(this.#composePresentationPoints());
+    const presentationPoints = document.createElement('div');
+    presentationPoints.classList.add('pres-points');
+    presentationPoints.appendChild(internalPresPoints);
+    this.#container.appendChild(presentationPoints);
   }
 
   #composeSmallFileEditor() {
@@ -244,4 +252,143 @@ class Introduction {
       })
     }
   }
-} 
+
+  #composePresentationPoints() {
+    const fragment = document.createDocumentFragment();
+
+    const smallBadge = document.createElement('div');
+    smallBadge.classList.add('small-badge');
+    smallBadge.textContent = 'Ready for Deployment';
+    fragment.append(smallBadge);
+
+    const bigTitle = document.createElement('div');
+    bigTitle.classList.add('big-text');
+    bigTitle.innerHTML = 'Gain the Competitive Advantage<br/>Developers Demand.';
+    fragment.append(bigTitle);
+
+    const firstRow = document.createElement('div');
+    firstRow.classList.add('row', 'first');
+    firstRow.appendChild(this.#composeSinglePresentationPoint('bolt'));
+    firstRow.appendChild(this.#composeSinglePresentationPoint('light'));
+    const secondRow = document.createElement('div');
+    secondRow.classList.add('row', 'second');
+    secondRow.appendChild(this.#composeSinglePresentationPoint('devices'));
+    secondRow.appendChild(this.#composeSinglePresentationPoint('dictionary'));
+    const gridElement = document.createElement('div');
+    gridElement.classList.add('grid-element');
+    gridElement.appendChild(firstRow);
+    gridElement.appendChild(secondRow);
+    fragment.append(gridElement);
+
+    return fragment;
+  }
+
+  #composeSinglePresentationPoint(type) {
+    switch(type) {
+      case 'bolt': {
+        const icon = document.createElement('img');
+        icon.classList.add('icon');
+        icon.src = '/src/assets/bolt.svg';
+        const iconContainer = document.createElement('div');
+        iconContainer.classList.add('icon-container');
+        iconContainer.appendChild(icon);
+        
+        const containerText = document.createElement('div');
+        containerText.classList.add('text');
+        containerText.innerHTML = 'Accelerate your coding<br/>process with seamless<br/>and effortless<br/>implementation.';
+
+        const container = document.createElement('div');
+        container.classList.add('container', 'light');
+        container.appendChild(iconContainer);
+        container.appendChild(containerText);
+
+        return container;
+      }
+      case 'light': {
+        const icon = document.createElement('img');
+        icon.classList.add('icon');
+        icon.src = '/src/assets/energyleaf.svg';
+        const backShadow = document.createElement('div');
+        backShadow.classList.add('back-shadow');
+        const iconContainer = document.createElement('div');
+        iconContainer.classList.add('icon-container');
+        iconContainer.appendChild(backShadow);
+        iconContainer.appendChild(icon);
+        
+        const containerText = document.createElement('div');
+        containerText.classList.add('text', 'short');
+        containerText.innerHTML = '35%';
+        
+        const smallContainerText = document.createElement('div');
+        smallContainerText.classList.add('small-text');
+        smallContainerText.innerHTML = 'Lighter than alternatives';
+
+        const container = document.createElement('div');
+        container.classList.add('container', 'dark');
+        container.appendChild(iconContainer);
+        container.appendChild(containerText);
+        container.appendChild(smallContainerText);
+
+        return container;
+      }
+      case 'devices': {
+        const icon = document.createElement('img');
+        icon.classList.add('icon');
+        icon.src = '/src/assets/devices.svg';
+
+        
+        const windowsIcon = document.createElement('img');
+        windowsIcon.classList.add('icon', 'secondary');
+        windowsIcon.src = '/src/assets/windows.svg';
+        const devicesIcon = document.createElement('img');
+        devicesIcon.classList.add('icon', 'secondary');
+        devicesIcon.src = '/src/assets/linux.svg';
+        const appleIcon = document.createElement('img');
+        appleIcon.classList.add('icon', 'secondary');
+        appleIcon.src = '/src/assets/apple.svg';
+
+        const backShadow = document.createElement('div');
+        backShadow.classList.add('back-shadow');
+        const iconContainer = document.createElement('div');
+        iconContainer.classList.add('icon-container');
+        iconContainer.appendChild(backShadow);
+        iconContainer.appendChild(icon);
+        iconContainer.appendChild(windowsIcon);
+        iconContainer.appendChild(devicesIcon);
+        iconContainer.appendChild(appleIcon);
+        
+        const containerText = document.createElement('div');
+        containerText.classList.add('text');
+        containerText.innerHTML = 'Compatible with a<br/>wide range of devices<br/>and operating<br/>systems.';
+
+        const container = document.createElement('div');
+        container.classList.add('container', 'dark');
+        container.appendChild(iconContainer);
+        container.appendChild(containerText);
+
+        return container;
+      }
+      case 'dictionary': {
+        const icon = document.createElement('img');
+        icon.classList.add('icon');
+        icon.src = '/src/assets/dictionary.svg';
+        const iconContainer = document.createElement('div');
+        iconContainer.classList.add('icon-container');
+        iconContainer.appendChild(icon);
+        
+        const containerText = document.createElement('div');
+        containerText.classList.add('text');
+        containerText.innerHTML = 'Achieve Language<br/>Flexibility with Effortless<br/>Integration through C<br/>Bindings.';
+
+        const container = document.createElement('div');
+        container.classList.add('container', 'light');
+        container.appendChild(iconContainer);
+        container.appendChild(containerText);
+
+        return container;
+      }
+      default:
+        return document.createDocumentFragment();
+    }
+  }
+}
