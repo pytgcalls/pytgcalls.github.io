@@ -340,6 +340,9 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
   font-size: 14px;
   border: none;
   background: none;
+  overflow: visible;
+  flex: 1;
+  padding: 0;
 }
 
 body .page-container .content:not(.is-loading) .multisyntax > .sy-container {

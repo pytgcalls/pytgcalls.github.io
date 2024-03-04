@@ -7,6 +7,9 @@ class Introduction {
   #offscreenCanvas;
   #introduction;
 
+  #rightCodeFilesList;
+  #rightCodeHighlight;
+
   constructor() {
     this.onVisibilityUpdateListenerInstance = new ListenerManagerInstance();
   }
@@ -132,16 +135,8 @@ class Introduction {
     leftIcons.appendChild(runDebugIcon);
     leftIcons.appendChild(extensionsIcon);
 
-    const rightCodeFileClose = document.createElement('img');
-    rightCodeFileClose.classList.add('file-close');
-    rightCodeFileClose.src = '/src/assets/xmark.svg';
-    const rightCodeFile = document.createElement('div');
-    rightCodeFile.classList.add('file');
-    rightCodeFile.textContent = 'pytgcalls.py';
-    rightCodeFile.appendChild(rightCodeFileClose);
     const rightCodeFilesList = document.createElement('div');
     rightCodeFilesList.classList.add('vsc-files-list');
-    rightCodeFilesList.appendChild(rightCodeFile);
     const rightCodeHighlight = document.createElement('div');
     rightCodeHighlight.classList.add('vsc-code-high');
     const rightCodeContainer = document.createElement('div');
@@ -149,8 +144,16 @@ class Introduction {
     rightCodeContainer.appendChild(rightCodeFilesList);
     rightCodeContainer.appendChild(rightCodeHighlight);
 
+    this.#rightCodeFilesList = rightCodeFilesList;
+    this.#rightCodeHighlight = rightCodeHighlight;
+
     config.getHomePagePresItems().then((items) => {
-      rightCodeHighlight.appendChild(sourceParser.handleHomepageSyntaxHighlightElement(items[0].querySelector('syntax-highlight')));
+      this.#animateNewCodeAddition('pytgcalls.py', items[0].querySelector('syntax-highlight'));
+
+      setTimeout(() => {
+        this.#animateNewCodeAddition('ciao.py', items[1].querySelector('syntax-highlight'));
+      }, 5000);
+      //rightCodeHighlight.appendChild(sourceParser.handleHomepageSyntaxHighlightElement(items[0].querySelector('syntax-highlight')));
     });
 
     const bottomContainer = document.createElement('div');
@@ -163,6 +166,83 @@ class Introduction {
     container.appendChild(topBar);
     container.appendChild(bottomContainer);
     return container;
+  }
+
+  #animateNewCodeAddition(tabName, syntaxHighlightElement) {
+    const rightCodeFileClose = document.createElement('img');
+    rightCodeFileClose.classList.add('file-close');
+    rightCodeFileClose.src = '/src/assets/xmark.svg';
+    const rightCodeFile = document.createElement('div');
+    rightCodeFile.classList.add('file');
+    rightCodeFile.textContent = tabName;
+    rightCodeFile.appendChild(rightCodeFileClose);
+
+    if (this.#rightCodeFilesList.childNodes.length > 0) {
+      const currentFileName = this.#rightCodeFilesList.childNodes[0];
+      currentFileName.classList.add('disappear');
+      currentFileName.addEventListener('animationend', () => {
+        currentFileName.remove();
+        this.#rightCodeFilesList.appendChild(rightCodeFile);
+      }, { once: true });
+    } else {
+      this.#rightCodeFilesList.appendChild(rightCodeFile);
+    }
+
+    const linesList = document.createElement('div');
+    linesList.classList.add('lines-list');
+    for(let i = 0; i < syntaxHighlightElement.textContent.split('\n').length; i++) {
+      const lineNumber = document.createElement('div');
+      lineNumber.style.setProperty('--id', i+1);
+      lineNumber.textContent = String(i+1);
+      linesList.appendChild(lineNumber);
+    }
+
+    const handledSyntax = sourceParser.handleHomepageSyntaxHighlightElement(syntaxHighlightElement);
+    handledSyntax.classList.add('animated');
+
+    let reformedHtml = '';
+    let i = 0;
+    for(const child of handledSyntax.childNodes) {
+      if (child instanceof HTMLBRElement || (child instanceof HTMLDivElement && child.classList.contains('spacer'))) {
+        reformedHtml += child.outerHTML;
+      } else if (child instanceof HTMLSpanElement && child.classList.contains('token')) {
+        i++;
+        child.style.setProperty('--id', i+1);
+        reformedHtml += child.outerHTML;
+      } else if (child instanceof Text) {
+        i++;
+        const spanElement = document.createElement('span');
+        spanElement.classList.add('fakespan');
+        spanElement.style.setProperty('--id', i+1);
+        spanElement.textContent = child.textContent;
+        reformedHtml += spanElement.outerHTML;
+      }
+    }
+    handledSyntax.innerHTML = reformedHtml;
+
+    const currentLL = this.#rightCodeHighlight.querySelector('.lines-list');
+    const currentSH = this.#rightCodeHighlight.querySelector('.syntax-highlight');
+    if (!currentLL && !currentSH) {
+      this.#rightCodeHighlight.appendChild(linesList);
+      this.#rightCodeHighlight.appendChild(handledSyntax);
+    } else {
+      currentSH.classList.add('disappear');
+      currentLL.classList.add('disappear');
+
+      Promise.all([
+        new Promise((resolve) => {
+          currentSH.addEventListener('animationend', resolve, { once: true });
+        }),
+        new Promise((resolve) => {
+          currentLL.addEventListener('animationend', resolve, { once: true });
+        }),
+      ]).then(() => {
+        this.#rightCodeHighlight.textContent = '';
+
+        this.#rightCodeHighlight.appendChild(linesList);
+        this.#rightCodeHighlight.appendChild(handledSyntax);
+      })
+    }
   }
 
   #composeItemsPres() {

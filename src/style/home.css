@@ -204,6 +204,15 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
   opacity: 0.54;
 }
 
+body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .fake-file-name {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  opacity: 0;
+  font-size: 16px;
+}
+
 body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code {
   flex: 1;
   display: flex;
@@ -231,6 +240,36 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
   gap: 14px;
 }
 
+body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-files-list .file:not(.disappear) {
+  animation: 0.4s appearFile;
+}
+
+@keyframes appearFile {
+  from {
+    transform: translateY(100%);
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+  }
+  to {
+    transform: translateY(0);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
+body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-files-list .file.disappear {
+  animation: 0.4s disappearFile forwards;
+}
+
+@keyframes disappearFile {
+  from {
+    transform: translateY(0);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+  to {
+    transform: translateY(100%);
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+  }
+}
+
 body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-files-list .file .file-close {
   width: 12px;
   filter: invert(1);
@@ -246,11 +285,69 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
   overflow-x: hidden;
   overflow-y: auto;
   color: #FFFFFF;
+  display: flex;
+  justify-content: center;
 }
 
 @supports (overflow: overlay) {
   body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-code-high {
     overflow-y: overlay;
+  }
+}
+
+body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-code-high .lines-list {
+  padding-inline: 15px;
+  text-align: center;
+  line-height: 19px;
+  opacity: 0.5;
+  padding-top: 4px;
+}
+
+body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-code-high .lines-list div {
+  height: 19px;
+  overflow: hidden;
+  font-size: 12px;
+}
+
+body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-code-high .lines-list:not(.disappear) div {
+  opacity: 0;
+  animation: 0.1s updateLinesListOpacityWithPositiveState forwards calc(var(--id) * 0.03s);
+}
+
+@keyframes updateLinesListOpacityWithPositiveState {
+  to {
+    opacity: 1;
+  }
+}
+
+body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-code-high .lines-list.disappear div {
+  animation: 0.1s updateLinesListOpacity forwards calc(var(--id) * 0.03s);
+}
+
+@keyframes updateLinesListOpacity {
+  to {
+    opacity: 0;
+  }
+}
+
+body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-code-high .syntax-highlight:not(.disappear) span {
+  opacity: 0;
+  animation: 0.1s updateLinesListOpacityWithPositiveState forwards calc(var(--id) * 0.03s);
+}
+
+@keyframes updateLinesListOpacityWithPositiveState {
+  to {
+    opacity: 1;
+  }
+}
+
+body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-code-high .syntax-highlight.disappear {
+  animation: 0.4s disappearSH forwards;
+}
+
+@keyframes disappearSH {
+  to {
+    opacity: 0;
   }
 }
 
