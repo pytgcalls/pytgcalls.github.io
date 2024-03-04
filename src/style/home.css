@@ -444,9 +444,9 @@ body .page-container .home-container .pres-points .int-pres-points .grid-element
 }
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container {
-  margin: 5px;
+  margin: 10px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
+  border-radius: 25px;
   padding: 25px;
   display: flex;
   justify-content: center;
