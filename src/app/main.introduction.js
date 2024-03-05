@@ -39,12 +39,10 @@ class Introduction {
       executeUiUpdate();
     }
 
-    setTimeout(() => {
-      const introductionRect = this.#introduction.getBoundingClientRect();
-      this.#offscreenCanvas.width = introductionRect.width;
-      this.#offscreenCanvas.height = introductionRect.height;
-      offScreenHelper.grantCanvasToWorker(this.#offscreenCanvas);
-    }, 1500);
+    const introductionRect = this.#introduction.getBoundingClientRect();
+    this.#offscreenCanvas.width = introductionRect.width;
+    this.#offscreenCanvas.height = introductionRect.height;
+    offScreenHelper.grantCanvasToWorker(this.#offscreenCanvas);
   }
 
   hide() {
@@ -286,6 +284,13 @@ class Introduction {
   #composeSinglePresentationPoint(type) {
     switch(type) {
       case 'bolt': {
+        const lightPseudoElement = document.createElement('div');
+        lightPseudoElement.classList.add('pseudo-bg');
+        lightPseudoElement.appendChild(document.createElement('div'));
+        lightPseudoElement.appendChild(document.createElement('div'));
+        lightPseudoElement.appendChild(document.createElement('div'));
+        lightPseudoElement.appendChild(document.createElement('div'));
+
         const icon = document.createElement('img');
         icon.classList.add('icon');
         icon.src = '/src/assets/bolt.svg';
@@ -299,6 +304,7 @@ class Introduction {
 
         const container = document.createElement('div');
         container.classList.add('container', 'light');
+        container.appendChild(lightPseudoElement);
         container.appendChild(iconContainer);
         container.appendChild(containerText);
 
@@ -335,7 +341,6 @@ class Introduction {
         const icon = document.createElement('img');
         icon.classList.add('icon');
         icon.src = '/src/assets/devices.svg';
-
         
         const windowsIcon = document.createElement('img');
         windowsIcon.classList.add('icon', 'secondary');
@@ -369,6 +374,13 @@ class Introduction {
         return container;
       }
       case 'dictionary': {
+        const lightPseudoElement = document.createElement('div');
+        lightPseudoElement.classList.add('pseudo-bg');
+        lightPseudoElement.appendChild(document.createElement('div'));
+        lightPseudoElement.appendChild(document.createElement('div'));
+        lightPseudoElement.appendChild(document.createElement('div'));
+        lightPseudoElement.appendChild(document.createElement('div'));
+
         const icon = document.createElement('img');
         icon.classList.add('icon');
         icon.src = '/src/assets/dictionary.svg';
@@ -382,6 +394,7 @@ class Introduction {
 
         const container = document.createElement('div');
         container.classList.add('container', 'light');
+        container.appendChild(lightPseudoElement);
         container.appendChild(iconContainer);
         container.appendChild(containerText);
 

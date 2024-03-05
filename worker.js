@@ -1,4 +1,9 @@
 self.addEventListener('message', (e) => {
+  if (e.data && typeof e.data.ready == 'boolean') {
+    self.postMessage({ ready: true });
+    return;
+  }
+
   if (e.data && e.data.element) {
     const context = e.data.element.getContext('2d');
 
