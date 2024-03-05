@@ -82,9 +82,6 @@ class Header {
 
     const header = document.createElement('div');
     header.classList.add('header');
-    header.addEventListener('dblclick', () => {
-      document.body.classList.toggle('disable-blur');
-    });
     header.appendChild(headerExpandSidebar);
     header.appendChild(headerMenu);
     header.appendChild(headerTitle);

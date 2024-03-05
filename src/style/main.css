@@ -117,6 +117,10 @@ body .tooltip {
   z-index: 4;
 }
 
+body .tooltip.is-complex {
+  padding: 3px;
+}
+
 body .tooltip.visible {
   opacity: 1;
   animation: 0.8s appearTooltip cubic-bezier(0.42, 0, 0, 0.98);
@@ -181,6 +185,66 @@ body .tooltip .triangle {
 
 body .tooltip.has-tabs .triangle {
   background: #000000;
+}
+
+body .tooltip .settings {
+  background: #000000;
+  border-radius: 6px;
+  padding: 20px;
+  position: relative;
+  min-width: 300px;
+}
+
+body .tooltip .settings .row {
+  padding-block: 7px;
+  padding-inline: 16px;
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+body .tooltip .settings .row + .row {
+  margin-top: 5px;
+}
+
+body .tooltip .settings .row .title {
+  flex: 1;
+}
+
+body .tooltip .settings .row .state-container {
+  width: 37px;
+  background: #39393d;
+  height: 22px;
+  border-radius: 21px;
+  position: relative;
+  transition: 0.4s background;
+  transition-timing-function: cubic-bezier(1, 0.05, 0, 0.99);
+}
+
+body .tooltip .settings .row .state-container.is-enabled {
+  background: #2ac850;
+}
+
+body .tooltip .settings .row .state-container::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  height: calc(100% - 4px);
+  width: 17px;
+  border-radius: 50%;
+  background: white;
+  transition: 0.4s transform, 0.4s left;
+  transition-timing-function: cubic-bezier(1, 0.05, 0, 0.99);
+}
+
+body .tooltip .settings .row .state-container.is-enabled::after {
+  left: calc(100% - 2px);
+  transform: translateX(-100%);
 }
 
 body .fs-code-preview {

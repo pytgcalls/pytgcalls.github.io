@@ -34,13 +34,29 @@ class Sidebar {
     });
     expandableButton.appendChild(expandableIcon);
 
+    const settingsIcon = document.createElement('img');
+    settingsIcon.src = '/src/icons/settings.svg';
+    const settingsButton = document.createElement('div');
+    settingsButton.classList.add('settings');
+    settingsButton.addEventListener('click', () => {
+      requestAnimationFrame(() => {
+        this.#openSettings(settingsButton);
+      });
+    });
+    settingsButton.appendChild(settingsIcon);
+
+    const iconsRow = document.createElement('div');
+    iconsRow.classList.add('icons-row');
+    iconsRow.appendChild(expandableButton);
+    iconsRow.appendChild(settingsButton);
+
     const exploreTitle = document.createElement('div');
     exploreTitle.classList.add('explore');
     exploreTitle.textContent = 'Explore';
 
     const sidebarSticky = document.createElement('div');
     sidebarSticky.classList.add('sidebar-sticky');
-    sidebarSticky.appendChild(expandableButton);
+    sidebarSticky.appendChild(iconsRow);
     sidebarSticky.appendChild(exploreTitle);
     sidebarSticky.appendChild(searchInput);
     this.#sidebarSticky = sidebarSticky;
@@ -388,5 +404,64 @@ class Sidebar {
 
   #globalUpdateActiveFile(file) {
     this.onChangeListenerInstance.callAllListeners(file);
+  }
+
+  #openSettings(settingsButton) {
+    const titleElement = document.createElement('div');
+    titleElement.classList.add('title-element');
+    titleElement.textContent = 'Settings';
+
+    const blurRowTitle = document.createElement('div');
+    blurRowTitle.classList.add('title');
+    blurRowTitle.textContent = 'Blur effects';
+    const blurRowStateContainer = document.createElement('div');
+    blurRowStateContainer.classList.add('state-container');
+    blurRowStateContainer.classList.toggle('is-enabled', localStorage.getItem('disableBlurEffects') !== 'true');
+    const blurRows = document.createElement('div');
+    blurRows.classList.add('row');
+    blurRows.addEventListener('click', () => {
+      const state = blurRowStateContainer.classList.toggle('is-enabled');
+      document.body.classList.toggle('disable-blur', !state);
+
+      if (!state) {
+        localStorage.setItem('disableBlurEffects', 'true');
+      } else {
+        localStorage.removeItem('disableBlurEffects');
+      }
+    });
+    blurRows.appendChild(blurRowTitle);
+    blurRows.appendChild(blurRowStateContainer);
+
+    const customEmojisRowTitle = document.createElement('div');
+    customEmojisRowTitle.classList.add('title');
+    customEmojisRowTitle.textContent = 'Custom emojis';
+    const customEmojisRowStateContainer = document.createElement('div');
+    customEmojisRowStateContainer.classList.add('state-container');
+    customEmojisRowStateContainer.classList.add('is-enabled');
+    const customEmojisRows = document.createElement('div');
+    customEmojisRows.classList.add('row');
+    customEmojisRows.addEventListener('click', () => {
+      const state = customEmojisRowStateContainer.classList.toggle('is-enabled');
+      if (!state) {
+        localStorage.setItem('disableCustomEmojis', 'true');
+      } else {
+        localStorage.removeItem('disableCustomEmojis');
+      }
+    });
+    customEmojisRows.appendChild(customEmojisRowTitle);
+    customEmojisRows.appendChild(customEmojisRowStateContainer);
+    
+    const childElement = document.createElement('div');
+    childElement.classList.add('settings');
+    childElement.appendChild(titleElement);
+    childElement.appendChild(blurRows);
+    childElement.appendChild(customEmojisRows);
+
+    tooltip.init({
+      childElement,
+      container: settingsButton,
+      isComplexContainer: true,
+      allowClickInside: true,
+    });
   }
 }

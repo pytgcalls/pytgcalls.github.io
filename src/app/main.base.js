@@ -18,7 +18,7 @@ window.addEventListener('load', () => {
     promisesList.push(config.loadConfig());
 
     Promise.all(promisesList).then(() => {
-      if (devicesManager.isAndroid()) {
+      if (devicesManager.isAndroid() || localStorage.getItem('disableBlurEffects') === 'true') {
         document.body.classList.add('disable-blur');
       }
 

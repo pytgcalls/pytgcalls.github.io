@@ -6,7 +6,9 @@ class Tooltip {
     title,
     text,
     container,
-    hasTabs = false
+    isComplexContainer = false,
+    hasTabs = false,
+    allowClickInside = false
   }) {
     this.closeTooltips();
 
@@ -16,13 +18,14 @@ class Tooltip {
     tooltipTriangle.classList.add('triangle');
     const tooltip = document.createElement('div');
     tooltip.classList.add('tooltip');
+    tooltip.classList.toggle('is-complex', isComplexContainer);
     tooltip.classList.toggle('has-tabs', hasTabs);
     tooltip.style.setProperty('--center-x', '0px');
     tooltip.style.setProperty('--center-y', elementRect.top + 'px');
     tooltip.appendChild(tooltipTriangle);
 
     if (childElement instanceof Element) {
-      tooltipText.appendChild(childElement);
+      tooltip.appendChild(childElement);
     } else {
       if (typeof title == 'string') {
         const titleElement = document.createElement('div');
@@ -49,11 +52,14 @@ class Tooltip {
     tooltip.style.setProperty('--center-x', newLeftPosition + 'px');
     tooltip.classList.add('visible');
 
-    const handler = () => {
-      this.closeTooltips();
+    const handler = (e) => {
+      console.log(e, e.target, tooltip.contains(e.target));
+      if (!allowClickInside || !tooltip.contains(e.target)) {
+        this.closeTooltips();
+      }
     };
 
-    window.addEventListener('resize', handler);
+    window.addEventListener('resize', () => this.closeTooltips());
     document.body.addEventListener('click', handler);
 
     this.#closeCallbacksList.push(() => {
