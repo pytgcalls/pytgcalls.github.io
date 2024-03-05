@@ -284,12 +284,15 @@ class Introduction {
   #composeSinglePresentationPoint(type) {
     switch(type) {
       case 'bolt': {
+        const lightPseudoElementPattern = document.createElement('img');
+        lightPseudoElementPattern.classList.add('pattern');
+        lightPseudoElementPattern.src = '/src/assets/costructionpattern.svg';
         const lightPseudoElement = document.createElement('div');
         lightPseudoElement.classList.add('pseudo-bg');
         lightPseudoElement.appendChild(document.createElement('div'));
         lightPseudoElement.appendChild(document.createElement('div'));
         lightPseudoElement.appendChild(document.createElement('div'));
-        lightPseudoElement.appendChild(document.createElement('div'));
+        lightPseudoElement.appendChild(lightPseudoElementPattern);
 
         const icon = document.createElement('img');
         icon.classList.add('icon');
@@ -374,12 +377,15 @@ class Introduction {
         return container;
       }
       case 'dictionary': {
+        const lightPseudoElementPattern = document.createElement('img');
+        lightPseudoElementPattern.classList.add('pattern');
+        lightPseudoElementPattern.src = '/src/assets/costructionpattern.svg';
         const lightPseudoElement = document.createElement('div');
         lightPseudoElement.classList.add('pseudo-bg');
         lightPseudoElement.appendChild(document.createElement('div'));
         lightPseudoElement.appendChild(document.createElement('div'));
         lightPseudoElement.appendChild(document.createElement('div'));
-        lightPseudoElement.appendChild(document.createElement('div'));
+        lightPseudoElement.appendChild(lightPseudoElementPattern);
 
         const icon = document.createElement('img');
         icon.classList.add('icon');

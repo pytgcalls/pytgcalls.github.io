@@ -27,7 +27,6 @@ class OffScreenHelper {
 
   grantCanvasToWorker(canvasElement) {
     this.#initWorker().then(() => {
-      console.log('sendng');
       const offscreen = canvasElement.transferControlToOffscreen();
       this.#initedWorker.postMessage({ element: offscreen }, [offscreen]);
     });
