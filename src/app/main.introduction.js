@@ -176,7 +176,7 @@ class Introduction {
             items[currentId].querySelector('syntax-highlight')
           ).then(() => {
             this.#currentVscTimeout = setTimeout(() => {
-              proceedWithNextCode();
+              //proceedWithNextCode();
             }, 5000);
           });
         } else if (!fallback) {
@@ -219,12 +219,18 @@ class Introduction {
       this.#rightCodeFilesList.appendChild(rightCodeFile);
     }
 
+    let removedI = 0;
     const linesList = document.createElement('div');
     linesList.classList.add('lines-list');
-    for(let i = 0; i < syntaxHighlightElement.textContent.split('\n').length; i++) {
+    for(let i = 0; i < syntaxHighlightElement.textContent.split('\n').length - 1; i++) {
+      if (i == 0 && syntaxHighlightElement.textContent.startsWith('\n')) {
+        removedI--;
+        continue;
+      }
+
       const lineNumber = document.createElement('div');
-      lineNumber.style.setProperty('--id', i+1);
-      lineNumber.textContent = String(i+1);
+      lineNumber.style.setProperty('--id', i + removedI + 1);
+      lineNumber.textContent = String(i + removedI + 1);
       linesList.appendChild(lineNumber);
     }
 
