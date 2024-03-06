@@ -176,8 +176,8 @@ class Introduction {
             items[currentId].querySelector('syntax-highlight')
           ).then(() => {
             this.#currentVscTimeout = setTimeout(() => {
-              //proceedWithNextCode();
-            }, 5000);
+              proceedWithNextCode();
+            }, 10000);
           });
         } else if (!fallback) {
           proceedWithNextCode(true);
