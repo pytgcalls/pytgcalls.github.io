@@ -36,14 +36,14 @@ class Config {
     });
   }
 
-  getHomePagePresItems() {
+  getHomePagePresFiles() {
     return new Promise((resolve) => {
       this.loadConfig().then((config) => {
         const domHelper = new DOMParser();
         const dom = domHelper.parseFromString(config, 'application/xml');
-        const presItems = dom.querySelectorAll('homepage-config > pres-items > item');
+        const presFiles = dom.querySelectorAll('homepage-config > pres-items > file');
     
-        resolve(presItems);
+        resolve(presFiles);
       });
     });
   }

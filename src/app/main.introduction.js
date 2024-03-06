@@ -153,13 +153,31 @@ class Introduction {
     this.#rightCodeFilesList = rightCodeFilesList;
     this.#rightCodeHighlight = rightCodeHighlight;
 
-    config.getHomePagePresItems().then((items) => {
-      this.#animateNewCodeAddition('pytgcalls.py', items[0].querySelector('syntax-highlight'));
+    config.getHomePagePresFiles().then((items) => {
+      let currentId = 0;
 
-      setTimeout(() => {
-        this.#animateNewCodeAddition('ciao.py', items[1].querySelector('syntax-highlight'));
-      }, 5000);
-      //rightCodeHighlight.appendChild(sourceParser.handleHomepageSyntaxHighlightElement(items[0].querySelector('syntax-highlight')));
+      const proceedWithNextCode = (fallback = false) => {
+        currentId++;
+
+        if (currentId == items.length) {
+          currentId = 0;
+        }
+
+        if (items[currentId].getAttribute('title') && items[currentId].querySelector('syntax-highlight')) {
+          this.#animateNewCodeAddition(
+            items[currentId].getAttribute('title'),
+            items[currentId].querySelector('syntax-highlight')
+          ).then(() => {
+            setTimeout(() => {
+              proceedWithNextCode();
+            }, 5000);
+          });
+        } else if (!fallback) {
+          proceedWithNextCode(true);
+        }
+      };
+
+      proceedWithNextCode();
     });
 
     const bottomContainer = document.createElement('div');
@@ -249,6 +267,18 @@ class Introduction {
         this.#rightCodeHighlight.appendChild(handledSyntax);
       })
     }
+
+    return Promise.all([
+      new Promise((resolve) => {
+        linesList.addEventListener('animationend', resolve, { once: true });
+      }),
+      new Promise((resolve) => {
+        handledSyntax.addEventListener('animationend', resolve, { once: true });
+      }),
+      new Promise((resolve) => {
+        rightCodeFile.addEventListener('animationend', resolve, { once: true });
+      }),
+    ]);
   }
 
   #composePresentationPoints() {

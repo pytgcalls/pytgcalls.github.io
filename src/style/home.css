@@ -542,7 +542,7 @@ body .page-container .home-container .pres-points .int-pres-points .grid-element
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container .icon-container .back-shadow {
   position: absolute;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 1;
   height: 100%;
   background: linear-gradient(180deg, #936bc9, #3735f1);
   border-radius: 50%;
