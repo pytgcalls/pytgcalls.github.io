@@ -7,6 +7,8 @@ class Introduction {
   #offscreenCanvas;
   #introduction;
 
+  #currentVscTimeout;
+
   #rightCodeFilesList;
   #rightCodeHighlight;
 
@@ -49,6 +51,11 @@ class Introduction {
     if (this.#isCurrentlyDisappearing instanceof Promise) {
       return this.#isCurrentlyDisappearing;
     } else if (this.#isCurrentlyEnabled) {
+      if (typeof this.#currentVscTimeout != 'undefined') {
+        clearTimeout(this.#currentVscTimeout);
+        this.#currentVscTimeout = undefined;
+      }
+
       this.#container.scrollTo(0, 0);
 
       this.#isCurrentlyDisappearing = new Promise((resolve) => {
@@ -168,7 +175,7 @@ class Introduction {
             items[currentId].getAttribute('title'),
             items[currentId].querySelector('syntax-highlight')
           ).then(() => {
-            setTimeout(() => {
+            this.#currentVscTimeout = setTimeout(() => {
               proceedWithNextCode();
             }, 5000);
           });
