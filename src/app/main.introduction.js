@@ -200,6 +200,8 @@ class Introduction {
   }
 
   #animateNewCodeAddition(tabName, syntaxHighlightElement) {
+    const languagePath = sourceParser.detectLanguageByElement(syntaxHighlightElement, false, true);
+    
     const rightCodeFileClose = document.createElement('img');
     rightCodeFileClose.classList.add('file-close');
     rightCodeFileClose.src = '/src/assets/xmark.svg';
@@ -207,6 +209,14 @@ class Introduction {
     rightCodeFile.classList.add('file');
     rightCodeFile.textContent = tabName;
     rightCodeFile.appendChild(rightCodeFileClose);
+
+    if (languagePath != '') {
+      const rightCodeFileLanguage = document.createElement('img');
+      rightCodeFileLanguage.classList.add('file-language');
+      rightCodeFileLanguage.src = languagePath;
+      rightCodeFile.prepend(rightCodeFileLanguage);
+      // TODO: finish file-language support [vscode's live-server broke everything and I have to find a way to develop this]
+    }
 
     if (this.#rightCodeFilesList.childNodes.length > 0) {
       const currentFileName = this.#rightCodeFilesList.childNodes[0];

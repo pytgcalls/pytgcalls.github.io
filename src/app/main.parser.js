@@ -88,22 +88,22 @@ class SourceParser {
     }
   }
 
-  #detectLanguageByElement(element, asString = false) {
-    let language = asString ? 'Python' : Prism.languages.python;
+  detectLanguageByElement(element, asString = false, asPathName = false) {
+    let language = asString ? 'Python' : (asPathName ? '/src/assets/languages/python.svg' : Prism.languages.python);
     
     if (element.hasAttribute('language')) {
       switch (element.getAttribute('language')) {
         case 'go':
-          language = asString ? 'Go' : Prism.languages.go;
+          language = asString ? 'Go' : (asPathName ? '/src/assets/languages/go.svg' : Prism.languages.go);
         break;
         case 'c':
-          language = asString ? 'C' : Prism.languages.c;
+          language = asString ? 'C' : (asPathName ? '/src/assets/languages/c.svg' : Prism.languages.c);
         break;
         case 'cpp':
-          language = asString ? 'C++' : Prism.languages.cpp;
+          language = asString ? 'C++' : (asPathName ? '' : Prism.languages.cpp);
         break;
         case 'bash':
-          language = asString ? 'Bash' : Prism.languages.bash;
+          language = asString ? 'Bash' : (asPathName ? '' : Prism.languages.bash);
         break;
       }
     }
@@ -457,7 +457,7 @@ class SourceParser {
 
   #handleSyntaxHighlight(element, newElement, hideTags = false, customTextContent = '') {
     let code = customTextContent || element.textContent;
-    code = Prism.highlight(code, this.#detectLanguageByElement(element), 'html');
+    code = Prism.highlight(code, this.detectLanguageByElement(element), 'html');
     code = code.replaceAll('\n', '<br/>');
     
     if (code.startsWith('<br/>')) {
@@ -501,7 +501,7 @@ class SourceParser {
       const languageTagIcon = document.createElement('img');
       languageTagIcon.src = '/src/icons/code.svg';
       const languageTagText = document.createElement('span');
-      languageTagText.textContent = this.#detectLanguageByElement(element, true);
+      languageTagText.textContent = this.detectLanguageByElement(element, true);
       const languageTag = document.createElement('div');
       languageTag.classList.add('tag');
       languageTag.appendChild(languageTagIcon);
@@ -592,7 +592,7 @@ class SourceParser {
       const firstElement = syntaxHighlightElements[0];
       const secondElement = syntaxHighlightElements[1];
 
-      if (this.#detectLanguageByElement(firstElement) != this.#detectLanguageByElement(secondElement)) {
+      if (this.detectLanguageByElement(firstElement) != this.detectLanguageByElement(secondElement)) {
         throw new Error('multisyntax as-blame-mode must contains 2 elements with the same language property');
       }
 
