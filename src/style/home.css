@@ -405,8 +405,8 @@ body .page-container .home-container .pres-points {
 }
 
 body .page-container .home-container .pres-points .int-pres-points {
-  max-width: 900px;
-  min-width: 900px; /*tmp*/
+  max-width: 1100px;
+  min-width: 1000px; /*tmp*/
 }
 
 body .page-container .home-container .pres-points .int-pres-points .small-badge {
@@ -448,7 +448,7 @@ body .page-container .home-container .pres-points .int-pres-points .grid-element
   margin: 10px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 25px;
-  padding: 25px;
+  padding: 45px;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -461,6 +461,7 @@ body .page-container .home-container .pres-points .int-pres-points .grid-element
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.light {
   position: relative;
   overflow: hidden;
+  padding-bottom: 70px;
 }
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.light .pseudo-bg,
@@ -517,15 +518,16 @@ body .page-container .home-container .pres-points .int-pres-points .grid-element
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container .icon-container img {
   filter: invert(1);
-  height: 45px;
+  height: 55px;
   padding: 5px;
   margin: 3px;
 }
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container .icon-container img.secondary {
-  width: 35px;
+  width: 38px;
   opacity: 0.6;
   margin-left: 25px;
+  height: auto;
 }
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.light .icon-container img {
@@ -551,22 +553,24 @@ body .page-container .home-container .pres-points .int-pres-points .grid-element
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container .text {
   color: #FFFFFF;
-  font-size: 29px;
-  font-weight: 500;
+  font-size: 38px;
+  font-weight: 600;
   margin-top: 20px;
   flex: 1;
   display: flex;
-  align-items: flex-end;
-  line-height: 38px;
+  line-height: 45px;
 }
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container .text.short {
-  font-size: 75px;
-  line-height: 71px;
+  font-size: 100px;
+  line-height: 90px;
+  font-weight: 400;
+  align-items: flex-end;
 }
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container .small-text {
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 25px;
 }
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.light .icon-container,
