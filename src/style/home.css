@@ -486,21 +486,21 @@ body .page-container .home-container .pres-points .int-pres-points .grid-element
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.light .pseudo-bg div:first-child {
   top: 0;
   left: 0;
-  background: linear-gradient(135deg, #3635f1 5%, transparent, #956aca 90%);
+  background: linear-gradient(135deg, #252ef8 20%, transparent, #956aca 80%)
 }
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.light .pseudo-bg div:nth-child(2) {
   top: 0;
   right: 0;
-  background: radial-gradient(#4db3a7 16%, transparent, transparent);
-  transform: scale(2) translateX(35%) translateY(-20%);
+  background: radial-gradient(#4db3a7 20%, transparent, transparent);
+  transform: scale(2) translateX(25%) translateY(-25%);
 }
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.light .pseudo-bg div:nth-child(3) {
   bottom: 0;
   left: 0;
-  background: radial-gradient(#6b2aeb 42%, transparent, transparent);
-  transform: translateX(-50%) translateY(50%);
+  background: radial-gradient(#6b2aeb 20%, transparent, transparent);
+  transform:  scale(2) translateX(-25%) translateY(25%);
 }
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.light .pseudo-bg .pattern {
