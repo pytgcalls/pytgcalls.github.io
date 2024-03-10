@@ -109,8 +109,8 @@ body .page-container .home-container .text-container {
 }
 
 body .page-container .home-container .text-container .bigtitle {
-  font-size: 51px;
-  line-height: 60px;
+  font-size: 62px;
+  line-height: 62px;
   color: #FFFFFF;
   font-weight: 600;
   text-align: center;
@@ -403,7 +403,7 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
 
 body .page-container .home-container .pres-points {
   background: #0a101b;
-  padding: 60px;
+  padding: 120px 80px;
   padding-bottom: 120px; /*tmp*/
   display: flex;
   align-items: center;
@@ -428,9 +428,10 @@ body .page-container .home-container .pres-points .int-pres-points .small-badge 
 
 body .page-container .home-container .pres-points .int-pres-points .big-text {
   color: #FFFFFF;
-  font-size: 47px;
-  line-height: 49px;
+  font-size: 60px;
+  line-height: 64px;
   font-weight: 600;
+  margin-bottom: 80px;
 }
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element {
