@@ -68,6 +68,9 @@ body .page-container .home-container .introduction .background div {
   left: 0;
   width: 100%;
   height: 100%;
+}
+
+body .page-container .home-container .introduction .background .background-image {
   opacity: 0.6;
   background: url(/src/assets/hero-background.webp) no-repeat center;
   background-size: 140%;
@@ -75,11 +78,10 @@ body .page-container .home-container .introduction .background div {
   mix-blend-mode: plus-lighter;
 }
 
-body .page-container .home-container .introduction .background canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  pointer-events: none;
+body .page-container .home-container .introduction .background .background-surface {
+  background: url("/src/assets/TextureBackground.svg");
+  background-size: 10%;
+  opacity: 0.1;
 }
 
 @media screen and (max-width: 800px) {

@@ -4,8 +4,6 @@ class Introduction {
   #container;
   #isCurrentlyEnabled = false;
   #isCurrentlyDisappearing = false;
-  #offscreenCanvas;
-  #introduction;
 
   #currentVscTimeout;
 
@@ -40,11 +38,6 @@ class Introduction {
     } else {
       executeUiUpdate();
     }
-
-    const introductionRect = this.#introduction.getBoundingClientRect();
-    this.#offscreenCanvas.width = introductionRect.width;
-    this.#offscreenCanvas.height = introductionRect.height;
-    offScreenHelper.grantCanvasToWorker(this.#offscreenCanvas);
   }
 
   hide() {
@@ -81,15 +74,14 @@ class Introduction {
   #composeContainer() {
     this.#container.textContent = '';
 
-    const backgroundCanvas = document.createElement('canvas');
-    backgroundCanvas.classList.add('background-canvas');
+    const backgroundSurface = document.createElement('div');
+    backgroundSurface.classList.add('background-surface');
     const backgroundImage = document.createElement('div');
     backgroundImage.classList.add('background-image');
     const background = document.createElement('div');
     background.classList.add('background');
-    background.appendChild(backgroundCanvas);
+    background.appendChild(backgroundSurface);
     background.appendChild(backgroundImage);
-    this.#offscreenCanvas = backgroundCanvas;
 
     const bigTitle = document.createElement('div');
     bigTitle.classList.add('bigtitle');
@@ -114,7 +106,6 @@ class Introduction {
     introduction.appendChild(background);
     introduction.appendChild(textContainer);
     this.#container.appendChild(introduction);
-    this.#introduction = introduction;
 
     const internalPresPoints = document.createElement('div');
     internalPresPoints.classList.add('int-pres-points');
