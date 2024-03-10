@@ -82,7 +82,7 @@ class Sidebar {
   updateDesktopCollapsedState(isCollapsed) {
     return this.#leftContainer.classList.toggle('collapsed', isCollapsed);
   }
-  
+
   #createSearchBar() {
     const searchIcon = document.createElement('img');
     searchIcon.src = '/src/icons/magnifyingGlass.svg';
@@ -131,7 +131,7 @@ class Sidebar {
       searchResults
     };
   }
-  
+
   #handleSearchValue(input, results) {
     config.loadConfig().then(() => {
       const onSearchReady = (text) => {
@@ -154,11 +154,11 @@ class Sidebar {
 
           for (const file of files) {
             const fileDataKeys = indexesManager.getIndexedValue(file);
-            
+
             if (typeof fileDataKeys != 'undefined') {
               const foundInName = file.toLowerCase().indexOf(text.toLowerCase()) !== -1;
               const foundInKeys = fileDataKeys.toLowerCase().indexOf(text.toLowerCase()) !== -1;
-              
+
               if (foundInName || foundInKeys) {
                 hasResults = true;
                 resultsFragment.append(this.#createSingleSearchResult(file, fileDataKeys, foundInName, text));
@@ -191,7 +191,7 @@ class Sidebar {
           this.#searchResults.textContent = '';
           this.#searchResults.appendChild(utils.createLoadingItem(50));
 
-          indexesManager.initFull(() => {}).then(() => {
+          indexesManager.initFull(() => { }).then(() => {
             onSearchReady(input.value.trim());
           });
         } else {
@@ -201,7 +201,7 @@ class Sidebar {
     });
   }
 
-  #createSingleSearchResult(file, fileDataKeys, foundInName, text) {  
+  #createSingleSearchResult(file, fileDataKeys, foundInName, text) {
     const fileDataTitle = document.createElement('div');
     fileDataTitle.classList.add('file-data-title');
     fileDataTitle.textContent = utils.parseCategoryName(file.replaceAll('/', ' > '));
@@ -232,7 +232,7 @@ class Sidebar {
     elementIcon.src = '/src/icons/chevrondown.svg';
     elementIcon.classList.add('right-icon');
     fileData.appendChild(elementIcon);
-    
+
     return fileData;
   };
 
@@ -250,43 +250,43 @@ class Sidebar {
       content.textContent = '';
 
       this.#currentLoadedSidebarId = id;
-  
+
       config.getFilesListInstanceById(id).then((child) => {
         const fragment = document.createDocumentFragment();
         const basePathForMainFiles = child.getAttribute('basepath');
-  
+
         let i = 0;
         for (const file of child.childNodes) {
           if (file instanceof Element) {
             i++;
-  
+
             switch (file.tagName.toUpperCase()) {
               case 'FILE':
                 if (file.textContent !== '.xml' && file.textContent.endsWith('.xml')) {
                   this.#handleSidebarFile(fragment, file, i, basePathForMainFiles);
                 }
-              break;
+                break;
               case 'MICROTAG':
                 if (file.textContent.length) {
                   this.#handleSidebarMicrotag(fragment, file, i);
                 }
-              break;
+                break;
               case 'GROUP':
                 const groupFilesList = file.querySelectorAll('file');
                 if (groupFilesList.length) {
                   const basePathForGroupFiles = file.getAttribute('basepath');
-  
+
                   if (!basePathForGroupFiles) {
                     throw new Error("group elements require a basepath");
                   } else {
                     this.#handleSidebarGroup(fragment, i, basePathForMainFiles, basePathForGroupFiles, groupFilesList);
                   }
                 }
-              break;
+                break;
             }
           }
         }
-  
+
         content.appendChild(fragment);
       });
     });
@@ -320,7 +320,7 @@ class Sidebar {
 
     sidebar.append(element);
   }
-  
+
   #handleSidebarMicrotag(sidebar, file, i) {
     const element = document.createElement('div');
     element.classList.add('microtag');
@@ -349,7 +349,7 @@ class Sidebar {
       let fullPath = basePathForGroupFiles + file.textContent;
 
       const element = this.#createSidebarFileElement(
-        i.toString(), 
+        i.toString(),
         utils.parseCategoryName(file.textContent).replace(basePathForGroupFiles ?? '', ''),
         fullPath,
       );

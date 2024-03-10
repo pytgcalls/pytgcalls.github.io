@@ -18,7 +18,7 @@ self.addEventListener('message', (e) => {
       const isSqRow = y % 10 == 0 && y != 0;
 
       x = 0;
-      while(x < e.data.element.width) {
+      while (x < e.data.element.width) {
         const isSqPoint = x % 15 == 0;
 
         if (isSqPoint && isSqRow) {

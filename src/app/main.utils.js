@@ -17,14 +17,14 @@ class Utils {
     const basicUnits = ['B', 'KB', 'MB', 'GB', 'TB'];
     const units = useBinaryUnits ? binaryUnits : basicUnits;
     const divisorParam = useBinaryUnits ? 1024 : 1000;
-  
+
     let divisionCounter = 0;
     let currentDivisor = size;
-    while(currentDivisor >= divisorParam && divisionCounter < 4){
+    while (currentDivisor >= divisorParam && divisionCounter < 4) {
       divisionCounter++;
       currentDivisor /= divisorParam;
     }
-    
+
     let finalString = '';
     finalString += currentDivisor.toFixed(1);
     finalString += addSpace ? ' ' : '';
@@ -104,12 +104,12 @@ class Utils {
       return text;
     }
   }
-  
-	escapeHTML(text) {
-		return text.replace(/[\x26\x0A\<>'"]/g, function(r){
-			return "&#"+r.charCodeAt(0)+";";
-		});
-	}
+
+  escapeHTML(text) {
+    return text.replace(/[\x26\x0A\<>'"]/g, function (r) {
+      return "&#" + r.charCodeAt(0) + ";";
+    });
+  }
 
   copyToClipboard(text) {
     if (!navigator.clipboard) {
@@ -139,9 +139,9 @@ class Utils {
 
     if (currentPosition > window.innerHeight) {
       percent = 0;
-    } else if(currentPosition + elementHeight >= window.innerHeight) {
+    } else if (currentPosition + elementHeight >= window.innerHeight) {
       percent = 100 - (currentPosition + elementHeight - window.innerHeight) * 100 / elementHeight;
-    } else if(currentPosition < 0) {
+    } else if (currentPosition < 0) {
       if (set1AfterScroll) {
         percent = 100;
       } else {

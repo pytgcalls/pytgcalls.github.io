@@ -51,7 +51,7 @@ class Header {
 
     const headerIcon = document.createElement('img');
     headerIcon.src = '/src/assets/splash/telegram-logo.svg';
-    
+
     const headerProjectName = document.createElement('div');
     headerProjectName.classList.add('project-name');
     this.#headerProjectName = headerProjectName;
@@ -190,14 +190,14 @@ class Header {
         if (this.#headerProjectName.textContent === id) {
           return;
         }
-  
+
         document.title = id + ' Documentation';
-        
+
         if (this.#headerProjectName.textContent == "") {
           this.#headerProjectName.textContent = id;
           return;
         }
-  
+
         this.#fakeHeaderTitle.textContent = id;
         const rect = this.#fakeHeaderTitle.getBoundingClientRect();
         this.#headerProjectName.style.setProperty('--width', rect.width.toString() + 'px');
@@ -235,7 +235,7 @@ class Header {
   #detectContainerForTooltips() {
     return (
       window.matchMedia('screen and (max-width: 1330px)').matches
-      ? this.#headerTitle : this.#headerDescription
+        ? this.#headerTitle : this.#headerDescription
     );
   }
 }

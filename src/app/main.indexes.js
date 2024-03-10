@@ -16,7 +16,7 @@ class IndexesManager {
     return new Promise((resolve) => {
       this.#isCurrentlyIndexing = true;
       hasCallback && callback(0, 0);
-      
+
       let i = 0;
 
       config.getAllFilesListFiles().then((files) => {
@@ -24,12 +24,12 @@ class IndexesManager {
 
         const handleIndexingWithResponse = (i, file, response, status) => {
           hasCallback && callback(i, files.length);
-    
+
           if (status === 200) {
             this.#indexes[file] = sourceParser.handleSearchIndexByText(response);
             this.#indexes_caching[file] = response;
           }
-    
+
           if (i === files.length) {
             this.#isCurrentlyIndexing = false;
             this.#hasIndexed = true;

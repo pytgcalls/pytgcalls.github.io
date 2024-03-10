@@ -2,7 +2,7 @@ window.addEventListener('load', () => {
   const splashScreen = document.querySelector('body .splash');
   if (splashScreen) {
     let promisesList = [];
-    
+
     promisesList.push(new Promise((resolve) => {
       if (splashScreen.classList.contains('faster')) {
         resolve();

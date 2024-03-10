@@ -63,7 +63,7 @@ class Content {
   clearBoard() {
     this.#replaceWithValidElements(true);
   }
-  
+
   #replaceWithValidElements(isEmpty = false) {
     const content = document.createElement('div');
     content.classList.add('content', 'is-loading');
@@ -108,7 +108,7 @@ class Content {
 
       try {
         this.#handleHash(data, hash);
-      } catch(e) {}
+      } catch (e) { }
 
       resolve();
     });
@@ -178,7 +178,7 @@ class Content {
       if (hash.startsWith('#')) {
         hash = hash.slice(1);
       }
-      
+
       const selectedChild = data.querySelectorAll('.h1, .h2, .h3, .banner-container');
       for (const child of selectedChild) {
         let destElement = child;
@@ -260,7 +260,7 @@ class Content {
           this.#iterPageSectionsData(element, currentDom, 1);
         } else if (element.classList.contains('banner')) {
           const bigTitle = element.querySelector('.banner-container > .bottom-container > .big-title');
-          if (bigTitle && bigTitle.textContent != '') {  
+          if (bigTitle && bigTitle.textContent != '') {
             const clonedBannerState = document.createElement('div');
             clonedBannerState.classList.add('h2');
             clonedBannerState.addEventListener('click', () => this.updateActiveSection(element));

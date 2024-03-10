@@ -118,6 +118,7 @@ body .splash .audio-shader .shader:nth-child(3) {
     transform: scale(0.8);
     opacity: 0;
   }
+
   to {
     transform: scale(1);
     opacity: 1;
@@ -128,9 +129,11 @@ body .splash .audio-shader .shader:nth-child(3) {
   0% {
     transform: scale(1.0);
   }
+
   50% {
     transform: scale(0.8);
   }
+
   100% {
     transform: scale(1.0);
   }
@@ -142,8 +145,7 @@ body .splash .audio-shader .shader[data-id="video"] {
 
 body .splash .audio-shader .shader[data-id="microphone"] {
   background: linear-gradient(45deg,
-    #377df6, #469df7
-  );
+      #377df6, #469df7);
   box-shadow: 0 0 100px rgba(55, 125, 246, 0.6);
 }
 
@@ -177,6 +179,7 @@ body .splash .audio-shader .shader:not([data-id="microphone"]) img {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -195,6 +198,7 @@ body .splash .audio-shader .shader .description {
     transform: translateY(-40px);
     opacity: 0;
   }
+
   to {
     transform: none;
     opacity: 1;
@@ -202,11 +206,11 @@ body .splash .audio-shader .shader .description {
 }
 
 
-body .splash.faster > svg {
+body .splash.faster>svg {
   animation: 0.9s rotateSvg linear infinite;
 }
 
-body .splash.faster > svg circle {
+body .splash.faster>svg circle {
   fill: none;
   stroke: #FFFFFF;
   stroke-width: 4px;

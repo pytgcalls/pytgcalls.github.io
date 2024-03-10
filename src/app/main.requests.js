@@ -13,7 +13,7 @@ class RequestsManager {
     });
   }
 
-  
+
   #tryToLoadWithUserContent(repoName, fileName) {
     if (!this.#doesLoadViaUserContentWork) {
       return Promise.reject('Ignoring githubusercontent as it isnt available');

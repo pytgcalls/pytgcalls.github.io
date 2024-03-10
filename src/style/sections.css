@@ -17,9 +17,9 @@ body.as-home .page-container .sections {
     pointer-events: none;
     background: #000000;
     z-index: 4;
-    transition: 0.4s transform cubic-bezier(0.97,-0.02, 0, 0.98);
+    transition: 0.4s transform cubic-bezier(0.97, -0.02, 0, 0.98);
   }
-  
+
   body:not(.disable-blur) .page-container .sections {
     background: rgba(0, 0, 0, 0.9);
     backdrop-filter: blur(30px);
@@ -107,8 +107,8 @@ body .page-container .sections:not(.is-loading) .category-title {
   margin-left: 10px;
 }
 
-body .page-container .sections:not(.is-loading) .category-title + .subtext .pg-title,
-body .page-container .sections:not(.is-loading) .category-title + .subtext .h3 {
+body .page-container .sections:not(.is-loading) .category-title+.subtext .pg-title,
+body .page-container .sections:not(.is-loading) .category-title+.subtext .h3 {
   margin-left: 10px;
 }
 

@@ -115,7 +115,7 @@ class Introduction {
     introduction.appendChild(textContainer);
     this.#container.appendChild(introduction);
     this.#introduction = introduction;
-    
+
     const internalPresPoints = document.createElement('div');
     internalPresPoints.classList.add('int-pres-points');
     internalPresPoints.appendChild(this.#composePresentationPoints());
@@ -201,7 +201,7 @@ class Introduction {
 
   #animateNewCodeAddition(tabName, syntaxHighlightElement) {
     const languagePath = sourceParser.detectLanguageByElement(syntaxHighlightElement, false, true);
-    
+
     const rightCodeFileClose = document.createElement('img');
     rightCodeFileClose.classList.add('file-close');
     rightCodeFileClose.src = '/src/assets/xmark.svg';
@@ -232,7 +232,7 @@ class Introduction {
     let removedI = 0;
     const linesList = document.createElement('div');
     linesList.classList.add('lines-list');
-    for(let i = 0; i < syntaxHighlightElement.textContent.split('\n').length - 1; i++) {
+    for (let i = 0; i < syntaxHighlightElement.textContent.split('\n').length - 1; i++) {
       if (i == 0 && syntaxHighlightElement.textContent.startsWith('\n')) {
         removedI--;
         continue;
@@ -249,18 +249,18 @@ class Introduction {
 
     let reformedHtml = '';
     let i = 0;
-    for(const child of handledSyntax.childNodes) {
+    for (const child of handledSyntax.childNodes) {
       if (child instanceof HTMLBRElement || (child instanceof HTMLDivElement && child.classList.contains('spacer'))) {
         reformedHtml += child.outerHTML;
       } else if (child instanceof HTMLSpanElement && child.classList.contains('token')) {
         i++;
-        child.style.setProperty('--id', i+1);
+        child.style.setProperty('--id', i + 1);
         reformedHtml += child.outerHTML;
       } else if (child instanceof Text) {
         i++;
         const spanElement = document.createElement('span');
         spanElement.classList.add('fakespan');
-        spanElement.style.setProperty('--id', i+1);
+        spanElement.style.setProperty('--id', i + 1);
         spanElement.textContent = child.textContent;
         reformedHtml += spanElement.outerHTML;
       }
@@ -335,7 +335,7 @@ class Introduction {
   }
 
   #composeSinglePresentationPoint(type) {
-    switch(type) {
+    switch (type) {
       case 'bolt': {
         const lightPseudoElementPattern = document.createElement('img');
         lightPseudoElementPattern.classList.add('pattern');
@@ -353,7 +353,7 @@ class Introduction {
         const iconContainer = document.createElement('div');
         iconContainer.classList.add('icon-container');
         iconContainer.appendChild(icon);
-        
+
         const containerText = document.createElement('div');
         containerText.classList.add('text');
         containerText.innerHTML = 'Accelerate your coding<br/>process with seamless<br/>and effortless<br/>implementation.';
@@ -376,11 +376,11 @@ class Introduction {
         iconContainer.classList.add('icon-container');
         iconContainer.appendChild(backShadow);
         iconContainer.appendChild(icon);
-        
+
         const containerText = document.createElement('div');
         containerText.classList.add('text', 'short');
         containerText.innerHTML = '35%';
-        
+
         const smallContainerText = document.createElement('div');
         smallContainerText.classList.add('small-text');
         smallContainerText.innerHTML = 'Lighter than alternatives';
@@ -397,7 +397,7 @@ class Introduction {
         const icon = document.createElement('img');
         icon.classList.add('icon');
         icon.src = '/src/assets/devices.svg';
-        
+
         const windowsIcon = document.createElement('img');
         windowsIcon.classList.add('icon', 'secondary');
         windowsIcon.src = '/src/assets/windows.svg';
@@ -417,7 +417,7 @@ class Introduction {
         iconContainer.appendChild(windowsIcon);
         iconContainer.appendChild(devicesIcon);
         iconContainer.appendChild(appleIcon);
-        
+
         const containerText = document.createElement('div');
         containerText.classList.add('text');
         containerText.innerHTML = 'Compatible with a<br/>wide range of devices<br/>and operating<br/>systems.';
@@ -446,7 +446,7 @@ class Introduction {
         const iconContainer = document.createElement('div');
         iconContainer.classList.add('icon-container');
         iconContainer.appendChild(icon);
-        
+
         const containerText = document.createElement('div');
         containerText.classList.add('text');
         containerText.innerHTML = 'Achieve Language<br/>Flexibility with Effortless<br/>Integration through C<br/>Bindings.';

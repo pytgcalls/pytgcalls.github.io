@@ -302,6 +302,7 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
     transform: translateY(100%);
     clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
   }
+
   to {
     transform: translateY(0);
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
@@ -317,6 +318,7 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
     transform: translateY(0);
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
   }
+
   to {
     transform: translateY(100%);
     clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
@@ -404,7 +406,8 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
 body .page-container .home-container .pres-points {
   background: #0a101b;
   padding: 120px 80px;
-  padding-bottom: 120px; /*tmp*/
+  padding-bottom: 120px;
+  /*tmp*/
   display: flex;
   align-items: center;
   justify-content: center;
@@ -412,7 +415,8 @@ body .page-container .home-container .pres-points {
 
 body .page-container .home-container .pres-points .int-pres-points {
   max-width: 1100px;
-  min-width: 1000px; /*tmp*/
+  min-width: 1000px;
+  /*tmp*/
 }
 
 body .page-container .home-container .pres-points .int-pres-points .small-badge {
@@ -507,7 +511,7 @@ body .page-container .home-container .pres-points .int-pres-points .grid-element
   bottom: 0;
   left: 0;
   background: radial-gradient(#6a29ea 20%, transparent, transparent);
-  transform:  scale(2) translateX(-20%) translateY(20%);
+  transform: scale(2) translateX(-20%) translateY(20%);
 }
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.light .pseudo-bg .pattern {

@@ -9,7 +9,7 @@ body .header {
   padding-inline: calc(calc(100vw - 1100px) / 2);
   box-sizing: border-box;
   overflow: hidden;
-  transition: 0.4s border-bottom, 0.4s background cubic-bezier(0.97,-0.02, 0, 0.98);
+  transition: 0.4s border-bottom, 0.4s background cubic-bezier(0.97, -0.02, 0, 0.98);
   animation: 0.4s appearHeader;
 }
 
