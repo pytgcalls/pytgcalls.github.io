@@ -416,12 +416,12 @@ body .page-container .home-container .pres-points .int-pres-points {
 }
 
 body .page-container .home-container .pres-points .int-pres-points .small-badge {
-  color: #FFFFFF;
-  padding: 3px;
-  padding-inline: 11px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.8);
+  padding: 4px;
+  padding-inline: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   width: fit-content;
-  font-size: 13px;
+  font-size: 14px;
   border-radius: 22px;
   margin-bottom: 20px;
 }
@@ -452,7 +452,7 @@ body .page-container .home-container .pres-points .int-pres-points .grid-element
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container {
   margin: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
   border-radius: 25px;
   padding: 45px;
   display: flex;
@@ -484,7 +484,7 @@ body .page-container .home-container .pres-points .int-pres-points .grid-element
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.light .pseudo-bg {
   top: 0;
   left: 0;
-  background: linear-gradient(135deg, #3635f1, #956aca);
+  background: #502af5;
   display: flex;
   justify-content: center;
 }
@@ -492,21 +492,21 @@ body .page-container .home-container .pres-points .int-pres-points .grid-element
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.light .pseudo-bg div:first-child {
   top: 0;
   left: 0;
-  background: linear-gradient(135deg, #252ef8 20%, transparent, #956aca 80%)
+  background: linear-gradient(135deg, #252ef8 20%, transparent, #8e5bce 80%)
 }
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.light .pseudo-bg div:nth-child(2) {
   top: 0;
   right: 0;
   background: radial-gradient(#4db3a7 20%, transparent, transparent);
-  transform: scale(2) translateX(25%) translateY(-25%);
+  transform: scale(2) translateX(35%) translateY(-20%);
 }
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.light .pseudo-bg div:nth-child(3) {
   bottom: 0;
   left: 0;
-  background: radial-gradient(#6b2aeb 20%, transparent, transparent);
-  transform:  scale(2) translateX(-25%) translateY(25%);
+  background: radial-gradient(#6a29ea 20%, transparent, transparent);
+  transform:  scale(2) translateX(-20%) translateY(20%);
 }
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.light .pseudo-bg .pattern {
@@ -531,7 +531,7 @@ body .page-container .home-container .pres-points .int-pres-points .grid-element
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container .icon-container img.secondary {
   width: 38px;
-  opacity: 0.6;
+  opacity: 0.7;
   margin-left: 25px;
   height: auto;
 }
@@ -552,7 +552,7 @@ body .page-container .home-container .pres-points .int-pres-points .grid-element
   position: absolute;
   aspect-ratio: 1;
   height: 100%;
-  background: linear-gradient(180deg, #936bc9, #3735f1);
+  background: linear-gradient(45deg, #8750fd 20%, #3735f1 40%, #2ec594 90%);
   border-radius: 50%;
   box-shadow: 0px 0px 15px 0px rgba(89, 148, 255, 0.6);
 }
