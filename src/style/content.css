@@ -352,29 +352,29 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
   width: 100%;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax > .sy-container {
+body .page-container .content:not(.is-loading) .multisyntax>.sy-container {
   position: relative;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax > .sy-container > .syntax-highlight {
+body .page-container .content:not(.is-loading) .multisyntax>.sy-container>.syntax-highlight {
   background: none;
   border: none;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax > .sy-container.preparing-animation {
+body .page-container .content:not(.is-loading) .multisyntax>.sy-container.preparing-animation {
   height: var(--height);
   overflow: hidden;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax > .sy-container:not(.preparing-animation):not(.animating) > .syntax-highlight:not(.active) {
+body .page-container .content:not(.is-loading) .multisyntax>.sy-container:not(.preparing-animation):not(.animating)>.syntax-highlight:not(.active) {
   display: none;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax > .sy-container.preparing-animation > .syntax-highlight:not(.active) {
+body .page-container .content:not(.is-loading) .multisyntax>.sy-container.preparing-animation>.syntax-highlight:not(.active) {
   visibility: hidden;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax > .sy-container.animating {
+body .page-container .content:not(.is-loading) .multisyntax>.sy-container.animating {
   overflow: hidden;
   animation: 0.4s updateHeight forwards;
 }
@@ -383,19 +383,20 @@ body .page-container .content:not(.is-loading) .multisyntax > .sy-container.anim
   from {
     height: var(--height);
   }
+
   to {
     height: var(--to-height);
   }
 }
 
-body .page-container .content:not(.is-loading) .multisyntax > .sy-container.animating .syntax-highlight.disappearing,
-body .page-container .content:not(.is-loading) .multisyntax > .sy-container.animating .syntax-highlight.appearing {
+body .page-container .content:not(.is-loading) .multisyntax>.sy-container.animating .syntax-highlight.disappearing,
+body .page-container .content:not(.is-loading) .multisyntax>.sy-container.animating .syntax-highlight.appearing {
   position: absolute;
   top: 0;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax > .sy-container.animating.animating-asback .syntax-highlight.disappearing {
-  animation: 0.4s disappearSy forwards cubic-bezier(1,-0.02, 0, 0.97);
+body .page-container .content:not(.is-loading) .multisyntax>.sy-container.animating.animating-asback .syntax-highlight.disappearing {
+  animation: 0.4s disappearSy forwards cubic-bezier(1, -0.02, 0, 0.97);
 }
 
 @keyframes disappearSy {
@@ -405,8 +406,8 @@ body .page-container .content:not(.is-loading) .multisyntax > .sy-container.anim
   }
 }
 
-body .page-container .content:not(.is-loading) .multisyntax > .sy-container.animating.animating-asback .syntax-highlight.appearing {
-  animation: 0.4s appearSy forwards cubic-bezier(1,-0.02, 0, 0.97);
+body .page-container .content:not(.is-loading) .multisyntax>.sy-container.animating.animating-asback .syntax-highlight.appearing {
+  animation: 0.4s appearSy forwards cubic-bezier(1, -0.02, 0, 0.97);
 }
 
 @keyframes appearSy {
@@ -416,8 +417,8 @@ body .page-container .content:not(.is-loading) .multisyntax > .sy-container.anim
   }
 }
 
-body .page-container .content:not(.is-loading) .multisyntax > .sy-container.animating:not(.animating-asback) .syntax-highlight.disappearing {
-  animation: 0.4s disappearSyRev forwards cubic-bezier(1,-0.02, 0, 0.97);
+body .page-container .content:not(.is-loading) .multisyntax>.sy-container.animating:not(.animating-asback) .syntax-highlight.disappearing {
+  animation: 0.4s disappearSyRev forwards cubic-bezier(1, -0.02, 0, 0.97);
 }
 
 @keyframes disappearSyRev {
@@ -427,8 +428,8 @@ body .page-container .content:not(.is-loading) .multisyntax > .sy-container.anim
   }
 }
 
-body .page-container .content:not(.is-loading) .multisyntax > .sy-container.animating:not(.animating-asback) .syntax-highlight.appearing {
-  animation: 0.4s appearSyRev forwards cubic-bezier(1,-0.02, 0, 0.97);
+body .page-container .content:not(.is-loading) .multisyntax>.sy-container.animating:not(.animating-asback) .syntax-highlight.appearing {
+  animation: 0.4s appearSyRev forwards cubic-bezier(1, -0.02, 0, 0.97);
 }
 
 @keyframes appearSyRev {
@@ -438,7 +439,7 @@ body .page-container .content:not(.is-loading) .multisyntax > .sy-container.anim
   }
 }
 
-body .page-container .content:not(.is-loading) .multisyntax > .sy-container.animating .hidden {
+body .page-container .content:not(.is-loading) .multisyntax>.sy-container.animating .hidden {
   visibility: hidden;
 }
 
@@ -544,10 +545,13 @@ body .page-container .content:not(.is-loading) .syntax-highlight .tags-container
 
 @keyframes showSuccessIcon {
   from {
-    clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);;
+    clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
+    ;
   }
+
   to {
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    ;
   }
 }
 
@@ -646,14 +650,14 @@ body .page-container .content:not(.is-loading) .multisyntax .tabs::before {
   transition: 0.2s left;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax .tabs > .tab {
+body .page-container .content:not(.is-loading) .multisyntax .tabs>.tab {
   width: calc(100% / var(--i));
   text-align: center;
   padding-block: 12px;
   transition: 0.2s color;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax .tabs > .tab:not(.active) {
+body .page-container .content:not(.is-loading) .multisyntax .tabs>.tab:not(.active) {
   cursor: pointer;
   color: rgba(255, 255, 255, 0.5);
 }
@@ -694,8 +698,8 @@ body .page-container .content:not(.is-loading) .subtext {
   margin-left: 20px;
 }
 
-body .page-container .content:not(.is-loading) .text + .category-title,
-body .page-container .content:not(.is-loading) .subtext + .category-title {
+body .page-container .content:not(.is-loading) .text+.category-title,
+body .page-container .content:not(.is-loading) .subtext+.category-title {
   margin-top: 20px;
 }
 
@@ -812,7 +816,7 @@ body .page-container .content:not(.is-loading) .github-ref {
   transition: 0.4s gap, 0.4s background;
 }
 
-body .page-container .content:not(.is-loading) .github-ref + .github-ref {
+body .page-container .content:not(.is-loading) .github-ref+.github-ref {
   margin-top: 10px;
 }
 
@@ -825,7 +829,7 @@ body .page-container .content:not(.is-loading) a.github-ref {
   body .page-container .content:not(.is-loading) .github-ref:hover {
     gap: 20px;
   }
-  
+
   body .page-container .content:not(.is-loading) .github-ref:active {
     gap: 70px;
   }
@@ -856,7 +860,7 @@ body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) {
 }
 
 @media screen and (max-width: 1300px) {
-  body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) { 
+  body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) {
     flex-direction: column;
     padding: 18px;
     height: auto;
@@ -910,18 +914,18 @@ body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .rep
 }
 
 @media screen and (max-width: 1300px) {
-  body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info { 
+  body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info {
     width: 100%;
     text-align: center;
   }
 
-  body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info .repo-title { 
+  body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info .repo-title {
     font-size: 23px;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info .repo-description { 
+  body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info .repo-description {
     display: none;
   }
 
@@ -1014,7 +1018,7 @@ body .page-container .content:not(.is-loading) .banner .banner-container::before
   background: linear-gradient(0deg, var(--mainbg) 10%, transparent);
 }
 
-body .page-container .content:not(.is-loading) .banner .banner-container .main-image { 
+body .page-container .content:not(.is-loading) .banner .banner-container .main-image {
   width: 100%;
   border: 4px solid var(--mainbg);
   aspect-ratio: var(--width) / var(--height);
@@ -1023,7 +1027,7 @@ body .page-container .content:not(.is-loading) .banner .banner-container .main-i
   transition: 0.4s opacity;
 }
 
-body .page-container .content:not(.is-loading) .banner .banner-container .main-image:not(.loaded) { 
+body .page-container .content:not(.is-loading) .banner .banner-container .main-image:not(.loaded) {
   opacity: 0.2;
 }
 
@@ -1080,7 +1084,7 @@ body .page-container .content:not(.is-loading) .banner .description {
   color: rgba(255, 255, 255, 0.4);
 }
 
-body .page-container .content:not(.is-loading) .banner .description .emoji-parsed > img {
+body .page-container .content:not(.is-loading) .banner .description .emoji-parsed>img {
   height: 23px;
 }
 
