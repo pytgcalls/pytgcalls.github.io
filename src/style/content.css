@@ -345,6 +345,13 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
   padding: 0;
 }
 
+body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-code-high .syntax-highlight::after {
+  content: "";
+  display: block;
+  height: 10px;
+  width: 100%;
+}
+
 body .page-container .content:not(.is-loading) .multisyntax > .sy-container {
   position: relative;
 }

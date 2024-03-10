@@ -70,8 +70,8 @@ body .page-container .home-container .introduction .background div {
   height: 100%;
   opacity: 0.6;
   background: url(/src/assets/hero-background.webp) no-repeat center;
-  background-size: 140% 184%;
-  background-position: 50% 71%;
+  background-size: 140%;
+  background-position: 50% 75%;
   mix-blend-mode: plus-lighter;
 }
 
@@ -101,6 +101,11 @@ body .page-container .home-container.disappear .introduction {
 
 body .page-container .home-container .text-container {
   z-index: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
 }
 
 body .page-container .home-container .text-container .bigtitle {
@@ -110,6 +115,9 @@ body .page-container .home-container .text-container .bigtitle {
   font-weight: 600;
   text-align: center;
   margin-bottom: 25px;
+  height: 37%;
+  align-items: end;
+  display: flex;
 }
 
 body .page-container .home-container .text-container .button {
@@ -181,20 +189,25 @@ body .page-container .home-container .text-container .button:not(:hover) .button
 }
 
 body .page-container .home-container .text-container .vsc-mockup {
-  height: 300px;
   background: #100f32;
-  border-radius: 20px;
+  border-radius: 15px 15px 0 0;
   display: flex;
   align-items: center;
+  bottom: 0;
+  transform: translateY(2px);
+  position: absolute;
   justify-content: center;
   flex-direction: column;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  width: 90%;
+  max-width: 1000px;
+  height: 50%;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
 body .page-container .home-container .text-container .vsc-mockup .vsc-top-bar {
   width: 100%;
-  height: 37px;
+  height: 35px;
   display: flex;
   align-items: center;
   gap: 7px;
@@ -212,8 +225,7 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
   flex: 1;
   width: 100%;
   display: flex;
-  align-items: flex-start;
-  justify-content: center;
+  height: calc(100% - 35px);
 }
 
 body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-left-icons {
@@ -221,7 +233,7 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
   display: flex;
   align-items: center;
   flex-direction: column;
-  width: 60px;
+  width: 50px;
   gap: 20px;
   padding-top: 20px;
   position: relative;
@@ -230,10 +242,10 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
 body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-left-icons::after {
   content: "";
   position: absolute;
-  top: 10px;
+  top: 12px;
   left: 0;
   height: 44px;
-  width: 3px;
+  width: 2px;
   background: white;
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
@@ -245,7 +257,7 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
 }
 
 body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-left-icons img:not(.active) {
-  opacity: 0.54;
+  opacity: 0.1;
 }
 
 body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .fake-file-name {
@@ -258,12 +270,9 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
 }
 
 body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code {
-  flex: 1;
   display: flex;
-  align-items: center;
-  justify-content: center;
   flex-direction: column;
-  height: 100%;
+  width: calc(100% - 50px);
 }
 
 body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-files-list {
@@ -275,7 +284,7 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
   height: 100%;
   width: fit-content;
   padding-inline: 12px;
-  background: #28283d;
+  background: rgba(255, 255, 255, 0.06);
   color: white;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
@@ -321,11 +330,8 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
 
 body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-code-high {
   flex: 1;
-  height: 100%;
   width: 100%;
-  background: #28283d;
-  border-bottom-left-radius: 10px;
-  max-height: 210px; /* fallback value */
+  background: rgba(255, 255, 255, 0.06);
   overflow-x: hidden;
   overflow-y: auto;
   color: #FFFFFF;
