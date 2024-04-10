@@ -114,6 +114,26 @@ class Introduction {
     presentationPoints.classList.add('pres-points');
     presentationPoints.appendChild(internalPresPoints);
     this.#container.appendChild(presentationPoints);
+
+    const bottomNocheEffect = document.createElement('img');
+    bottomNocheEffect.classList.add('bottom-noche');
+    bottomNocheEffect.src = '/src/assets/noche-effect-background.webp';
+    const rightNocheEffect = document.createElement('img');
+    rightNocheEffect.classList.add('right-noche');
+    rightNocheEffect.src = '/src/assets/right-noche-effect.webp';
+    const backgroundEffectsLayer = document.createElement('div');
+    backgroundEffectsLayer.classList.add('background-effects');
+    backgroundEffectsLayer.appendChild(bottomNocheEffect);
+    backgroundEffectsLayer.appendChild(rightNocheEffect);
+
+    const numericPresPoints = document.createElement('div');
+    numericPresPoints.classList.add('int-pres-points');
+    numericPresPoints.appendChild(this.#composeNumericPresentation());
+    const numericPresentationPoints = document.createElement('div');
+    numericPresentationPoints.classList.add('pres-points', 'has-margin');
+    numericPresentationPoints.appendChild(backgroundEffectsLayer);
+    numericPresentationPoints.appendChild(numericPresPoints);
+    this.#container.appendChild(numericPresentationPoints);
   }
 
   #composeSmallFileEditor() {
@@ -453,5 +473,134 @@ class Introduction {
       default:
         return document.createDocumentFragment();
     }
+  }
+
+  #composeSingleNumericPresentationPoint(title, description, origin) {
+    const bigTitle = document.createElement('div');
+    bigTitle.classList.add('text', 'short');
+    bigTitle.textContent = title;
+
+    const containerText = document.createElement('div');
+    containerText.classList.add('text');
+    containerText.textContent = description;
+
+    const container = document.createElement('div');
+    container.classList.add('container', 'numeric');
+    container.appendChild(bigTitle);
+    container.appendChild(containerText);
+
+    if (origin != "") {
+      const smallContainerText = document.createElement('div');
+      smallContainerText.classList.add('small-text');
+      smallContainerText.textContent = origin;
+      container.appendChild(smallContainerText);
+    }
+
+    return container;
+  }
+
+  #composeOwnerCitation() {
+    const mainIcon = document.createElement('img');
+    mainIcon.classList.add('citation-icon');
+    mainIcon.src = '/src/icons/quotev2.svg';
+
+    const citationElement = document.createElement('div');
+    citationElement.classList.add('citation-text');
+
+    config.getOwnerCitation().then((citation) => {
+      if (citation && citation.textContent.trim()) {
+        citationElement.textContent = citation.textContent.trim();
+      }
+    });
+
+    const ownerImage = document.createElement('img');
+    ownerImage.classList.add('owner-image');
+    const ownerTitle = document.createElement('div');
+    ownerTitle.classList.add('owner-title');
+    const ownerDescription = document.createElement('div');
+    ownerDescription.classList.add('owner-description');
+    const ownerDetails = document.createElement('div');
+    ownerDetails.classList.add('owner-details');
+    ownerDetails.appendChild(ownerTitle);
+    ownerDetails.appendChild(ownerDescription);
+    const ownerRow = document.createElement('div');
+    ownerRow.classList.add('owner-row');
+    ownerRow.appendChild(ownerImage);
+    ownerRow.appendChild(ownerDetails);
+
+    config.getOwnerData().then((ownerData) => {
+      if (ownerData) {
+        if (!ownerData.querySelector('name') || !ownerData.querySelector('name').textContent.trim()) {
+          return;
+        }
+
+        if (!ownerData.querySelector('role') || !ownerData.querySelector('role').textContent.trim()) {
+          return;
+        }
+
+        if (!ownerData.querySelector('github-username') || !ownerData.querySelector('github-username').textContent.trim()) {
+          return;
+        }
+
+        ownerImage.src = "https://github.com/" + ownerData.querySelector('github-username').textContent.trim() + ".png?size=90";
+        ownerTitle.textContent = ownerData.querySelector('name').textContent.trim();
+        ownerDescription.textContent = ownerData.querySelector('role').textContent.trim();
+      }
+    });
+
+    const container = document.createElement('div');
+    container.classList.add('container', 'citation');
+    container.appendChild(mainIcon);
+    container.appendChild(citationElement);
+    container.appendChild(ownerRow);
+
+    return container;
+  }
+
+  #composeNumericPresentation() {
+    const fragment = document.createDocumentFragment();
+
+    const smallBadge = document.createElement('div');
+    smallBadge.classList.add('small-badge');
+    smallBadge.textContent = 'High-End Library';
+    fragment.append(smallBadge);
+
+    const bigTitle = document.createElement('div');
+    bigTitle.classList.add('big-text');
+    bigTitle.innerHTML = 'The Industry Standard';
+    fragment.append(bigTitle);
+
+    const firstRow = document.createElement('div');
+    firstRow.classList.add('row', 'numeric');
+
+    config.getNumericPresPoints().then((points) => {
+      for (const presPoint of points) {
+        if (!presPoint.hasAttribute('title') || !presPoint.hasAttribute('description')) {
+          continue;
+        }
+
+        if (!presPoint.getAttribute('title').trim() || !presPoint.getAttribute('description').trim()) {
+          continue;
+        }
+
+        firstRow.appendChild(this.#composeSingleNumericPresentationPoint(
+          presPoint.getAttribute('title').trim(),
+          presPoint.getAttribute('description').trim(),
+          presPoint.hasAttribute('origin') ? presPoint.getAttribute('origin').trim() : ''
+        ));
+      }
+    });
+
+    const secondRow = document.createElement('div');
+    secondRow.classList.add('row', 'citation');
+    secondRow.appendChild(this.#composeOwnerCitation());
+
+    const gridElement = document.createElement('div');
+    gridElement.classList.add('grid-element');
+    gridElement.appendChild(firstRow);
+    gridElement.appendChild(secondRow);
+    fragment.append(gridElement);
+
+    return fragment;
   }
 }
