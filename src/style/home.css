@@ -658,6 +658,7 @@ body .page-container .home-container .pres-points .int-pres-points .grid-element
   backdrop-filter: blur(30px);
   padding: 60px;
   gap: 25px;
+  box-shadow: none;
 }
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.citation .citation-icon {
