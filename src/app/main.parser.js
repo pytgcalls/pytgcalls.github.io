@@ -89,15 +89,15 @@ class SourceParser {
   }
 
   detectLanguageByElement(element, asString = false, asPathName = false) {
-    let language = asString ? 'Python' : (asPathName ? '/src/assets/languages/python.svg' : Prism.languages.python);
+    let language = asString ? 'Python' : (asPathName ? '/src/icons/python.svg' : Prism.languages.python);
 
     if (element.hasAttribute('language')) {
       switch (element.getAttribute('language')) {
         case 'go':
-          language = asString ? 'Go' : (asPathName ? '/src/assets/languages/go.svg' : Prism.languages.go);
+          language = asString ? 'Go' : (asPathName ? '/src/icons/go.svg' : Prism.languages.go);
           break;
         case 'c':
-          language = asString ? 'C' : (asPathName ? '/src/assets/languages/c.svg' : Prism.languages.c);
+          language = asString ? 'C' : (asPathName ? '/src/icons/c.svg' : Prism.languages.c);
           break;
         case 'cpp':
           language = asString ? 'C++' : (asPathName ? '' : Prism.languages.cpp);
