@@ -7,17 +7,25 @@ class Config {
     } else {
       return new Promise((resolve) => {
         const configPromise = requestsManager.initRequest('config.xml');
-        
+
         configPromise.then((response) => {
           this.#precachedConfig = response;
           resolve(response);
         });
-        
+
         configPromise.catch(() => {
           alert("This documentation isn't available in your country");
         });
       });
     }
+  }
+
+  setAsConfig(text) {
+    if (window.location.protocol != 'http:') {
+      return;
+    }
+
+    this.#precachedConfig = text;
   }
 
   isConfigReady() {
@@ -30,7 +38,7 @@ class Config {
         const domHelper = new DOMParser();
         const dom = domHelper.parseFromString(config, 'application/xml');
         const teamMembers = dom.querySelectorAll('team > member');
-    
+
         resolve(teamMembers);
       });
     });
@@ -49,7 +57,7 @@ class Config {
             finalList.push(element.getAttribute('id'));
           }
         }
-    
+
         resolve(finalList);
       });
     });
@@ -66,7 +74,7 @@ class Config {
         for (const element of filesListElements) {
           finalList.push(this.#getFullPathByFileElement(element));
         }
-    
+
         resolve(finalList);
       });
     });
@@ -96,7 +104,7 @@ class Config {
           reject('dcid not found');
         } else {
           const filesListElements = detectedId.querySelectorAll('file');
-          
+
           let nextFile, previousFile, previousStateFile;
           let found = false;
           for (const file of filesListElements) {
@@ -149,7 +157,7 @@ class Config {
           finalText += element.textContent;
           finalList.push(finalText);
         }
-    
+
         resolve(finalList);
       });
     });
@@ -182,7 +190,7 @@ class Config {
         const domHelper = new DOMParser();
         const dom = domHelper.parseFromString(config, 'application/xml');
         const filesListElements = dom.querySelector('config > files-list[id="' + id + '"]');
-    
+
         resolve(filesListElements);
       });
     });
@@ -205,7 +213,7 @@ class Config {
         return child.childElementCount || !(child.firstChild instanceof Text);
       }
     }
-    
+
     return false;
   }
 
@@ -224,7 +232,7 @@ class Config {
         const domHelper = new DOMParser();
         const dom = domHelper.parseFromString(config, 'application/xml');
         const redirectTo = dom.querySelector('config > redirects > redirect[path="' + path.toLowerCase() + '"]');
-    
+
         resolve(redirectTo && redirectTo.textContent);
       });
     });
