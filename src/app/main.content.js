@@ -54,10 +54,19 @@ class Content {
   }
 
   handleCustomCodeInsert() {
+    if (window.location.protocol != 'http:') {
+      return;
+    }
+
     const data = prompt('Insert here your script');
 
-    const { content, pageSections } = this.#replaceWithValidElements();
-    this.#handleResponse("", content, pageSections, data, '');
+    if (data.trim().startsWith('<config>')) {
+      config.setAsConfig(data.trim());
+      alert('Config updated successfully!');
+    } else {
+      const { content, pageSections } = this.#replaceWithValidElements();
+      this.#handleResponse("", content, pageSections, data, '');
+    }
   }
 
   clearBoard() {
