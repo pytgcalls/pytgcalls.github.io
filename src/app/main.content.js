@@ -53,20 +53,13 @@ class Content {
     }
   }
 
-  handleCustomCodeInsert() {
-    if (window.location.protocol != 'http:') {
+  handleCustomCodeInsert(data) {
+    if (!debug.isSafeToUseDebugItems()) {
       return;
     }
 
-    const data = prompt('Insert here your script');
-
-    if (data.trim().startsWith('<config>')) {
-      config.setAsConfig(data.trim());
-      alert('Config updated successfully!');
-    } else {
-      const { content, pageSections } = this.#replaceWithValidElements();
-      this.#handleResponse("", content, pageSections, data, '');
-    }
+    const { content, pageSections } = this.#replaceWithValidElements();
+    this.#handleResponse("", content, pageSections, data, "");
   }
 
   clearBoard() {
@@ -91,6 +84,7 @@ class Content {
   #handleResponse(fileName, content, pageSections, response, hash) {
     return new Promise((resolve) => {
       const data = sourceParser.getContentByData(response);
+      console.log(data, response);
       content.classList.remove('is-loading');
       content.textContent = '';
       content.appendChild(data);

@@ -249,6 +249,10 @@ class Sidebar {
       const content = this.#leftSidebar;
       content.textContent = '';
 
+      if (debug.isSafeToUseDebugItems()) {
+        content.appendChild(this.#composeDebugProperties());
+      }
+
       this.#currentLoadedSidebarId = id;
 
       config.getFilesListInstanceById(id).then((child) => {
@@ -263,12 +267,12 @@ class Sidebar {
             switch (file.tagName.toUpperCase()) {
               case 'FILE':
                 if (file.textContent !== '.xml' && file.textContent.endsWith('.xml')) {
-                  this.#handleSidebarFile(fragment, file, i, basePathForMainFiles);
+                  fragment.append(this.#handleSidebarFile(file, i, basePathForMainFiles));
                 }
                 break;
               case 'MICROTAG':
                 if (file.textContent.length) {
-                  this.#handleSidebarMicrotag(fragment, file, i);
+                  fragment.append(this.#handleSidebarMicrotag(file, i));
                 }
                 break;
               case 'GROUP':
@@ -279,7 +283,7 @@ class Sidebar {
                   if (!basePathForGroupFiles) {
                     throw new Error("group elements require a basepath");
                   } else {
-                    this.#handleSidebarGroup(fragment, i, basePathForMainFiles, basePathForGroupFiles, groupFilesList);
+                    fragment.append(this.#handleSidebarGroup(i, basePathForMainFiles, basePathForGroupFiles, groupFilesList));
                   }
                 }
                 break;
@@ -309,7 +313,7 @@ class Sidebar {
     }
   }
 
-  #handleSidebarFile(sidebar, file, i, basePathForMainFiles) {
+  #handleSidebarFile(file, i, basePathForMainFiles) {
     const fullPath = basePathForMainFiles ? (basePathForMainFiles + file.textContent) : undefined;
 
     const element = this.#createSidebarFileElement(
@@ -318,18 +322,19 @@ class Sidebar {
       fullPath
     );
 
-    sidebar.append(element);
+    return element;
   }
 
-  #handleSidebarMicrotag(sidebar, file, i) {
+  #handleSidebarMicrotag(file, i) {
     const element = document.createElement('div');
     element.classList.add('microtag');
     element.style.setProperty('--id', i.toString());
     element.textContent = file.textContent;
-    sidebar.append(element);
+
+    return element;
   }
 
-  #handleSidebarGroup(sidebar, i, basePathForMainFiles, basePathForGroupFiles, groupFilesList) {
+  #handleSidebarGroup(i, basePathForMainFiles, basePathForGroupFiles, groupFilesList) {
     const elementText = document.createElement('div');
     elementText.classList.add('text');
     elementText.textContent = utils.parseCategoryName(basePathForGroupFiles).replace(basePathForMainFiles ?? '', '');
@@ -359,7 +364,7 @@ class Sidebar {
     elementsGroup.style.setProperty('--items', elementsGroup.childNodes.length.toString());
     element.addEventListener('click', () => elementsGroup.classList.toggle('expanded'));
 
-    sidebar.append(elementsGroup);
+    return elementsGroup;
   }
 
   #createSidebarFileElement(id, textContent, contentUri = textContent) {
@@ -380,6 +385,61 @@ class Sidebar {
     });
 
     return element;
+  }
+
+  #composeDebugProperties() {
+    if (!debug.isSafeToUseDebugItems()) {
+      return document.createDocumentFragment();
+    }
+
+    const elementText = document.createElement('div');
+    elementText.classList.add('text');
+    elementText.textContent = 'Internal debug options';
+    const elementIcon = document.createElement('img');
+    elementIcon.src = '/src/icons/chevrondown.svg';
+    const element = document.createElement('div');
+    element.classList.add('element');
+    element.appendChild(elementText);
+    element.appendChild(elementIcon);
+
+    const elementsGroup = document.createElement('div');
+    elementsGroup.classList.add('elements');
+    elementsGroup.style.setProperty('--id', 0);
+    elementsGroup.appendChild(element);
+
+    const customCodeElement = document.createElement('div');
+    customCodeElement.classList.add('element');
+    customCodeElement.addEventListener('click', () => debug.tryCustomPageCode(false));
+    customCodeElement.style.setProperty('--id', 1);
+    customCodeElement.textContent = 'Try custom page code';
+    elementsGroup.append(customCodeElement);
+
+    const customConfigElement = document.createElement('div');
+    customConfigElement.classList.add('element');
+    customConfigElement.addEventListener('click', () => debug.tryCustomPageCode(true));
+    customConfigElement.style.setProperty('--id', 2);
+    customConfigElement.textContent = 'Try custom config code';
+    elementsGroup.append(customConfigElement);
+
+    const customDataDocsServer = document.createElement('div');
+    customDataDocsServer.classList.add('element');
+    customDataDocsServer.addEventListener('click', () => {
+    });
+    customDataDocsServer.style.setProperty('--id', 3);
+    customDataDocsServer.textContent = 'Try custom server';
+    elementsGroup.append(customDataDocsServer);
+
+    const reloadPage = document.createElement('div');
+    reloadPage.classList.add('element');
+    reloadPage.addEventListener('click', () => debug.reloadPageData());
+    reloadPage.style.setProperty('--id', 4);
+    reloadPage.textContent = 'Reload page data';
+    elementsGroup.append(reloadPage);
+
+    elementsGroup.style.setProperty('--items', '5');
+    element.addEventListener('click', () => elementsGroup.classList.toggle('expanded'));
+
+    return elementsGroup;
   }
 
   updateActiveFile(file) {

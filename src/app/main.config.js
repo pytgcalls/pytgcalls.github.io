@@ -21,11 +21,19 @@ class Config {
   }
 
   setAsConfig(text) {
-    if (window.location.protocol != 'http:') {
+    if (!debug.isSafeToUseDebugItems()) {
       return;
     }
 
     this.#precachedConfig = text;
+  }
+
+  resetConfigByDebug() {
+    if (!debug.isSafeToUseDebugItems()) {
+      return;
+    }
+
+    this.#precachedConfig = undefined;
   }
 
   isConfigReady() {

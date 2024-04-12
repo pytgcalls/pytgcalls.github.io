@@ -1,0 +1,120 @@
+body>.popup-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body>.popup-container:not(.disappear) {
+  animation: 0.4s appearPopupContainer;
+}
+
+@keyframes appearPopupContainer {
+  from {
+    opacity: 0;
+  }
+}
+
+body>.popup-container.disappear {
+  animation: 0.4s disappearPopupContainer;
+}
+
+@keyframes disappearPopupContainer {
+  to {
+    opacity: 0;
+  }
+}
+
+body>.popup-container .popup-element {
+  background: #151515;
+  padding: 20px;
+  min-width: 500px;
+  max-width: min(500px, 80vw);
+  color: white;
+  border-radius: 20px;
+  border: 1px solid #ffffff1f;
+}
+
+body>.popup-container:not(.disappear) .popup-element {
+  animation: 0.4s appearPopupElement;
+}
+
+@keyframes appearPopupElement {
+  from {
+    transform: translateY(-50px);
+  }
+}
+
+body>.popup-container.disappear .popup-element {
+  animation: 0.4s disappearPopupElement;
+}
+
+@keyframes disappearPopupElement {
+  to {
+    transform: translateY(50px);
+  }
+}
+
+body>.popup-container .popup-element .title {
+  font-size: 27px;
+  font-weight: 600;
+}
+
+body>.popup-container .popup-element .description {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 18px;
+}
+
+body>.popup-container .popup-element .custom-editor {
+  margin-block-start: 20px;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  position: relative;
+  box-sizing: border-box;
+  max-width: min(500px, 80vw);
+  max-height: min(800px, 70vh);
+  white-space: nowrap;
+  overflow: auto;
+}
+
+body>.popup-container .popup-element .custom-editor textarea {
+  position: absolute;
+  height: calc(100% - 30px);
+  width: calc(100% - 30px);
+  font-family: 'Poppins';
+  font-size: 1em;
+  tab-size: 4;
+  resize: none;
+  white-space: nowrap;
+  overflow: hidden;
+  color: transparent;
+  caret-color: #FFFFFF;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+body>.popup-container .popup-element .custom-editor.defined-width textarea,
+body>.popup-container .popup-element .custom-editor.defined-width .prism-code {
+  width: var(--width);
+}
+
+body>.popup-container .popup-element .custom-editor.defined-height textarea,
+body>.popup-container .popup-element .custom-editor.defined-height .prism-code {
+  height: var(--height);
+}
+
+body>.popup-container .popup-element .custom-editor .prism-code {
+  pointer-events: none;
+  white-space: pre;
+  tab-size: 4;
+  overflow: hidden;
+  min-height: 30px;
+}

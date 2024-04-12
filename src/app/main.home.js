@@ -234,8 +234,12 @@ class HomePage {
     this.#contentInstance.loadFile(file, hash);
   }
 
-  handleCustomCodeInsert() {
-    this.#contentInstance.handleCustomCodeInsert();
+  handleCustomCodeInsert(data) {
+    if (!debug.isSafeToUseDebugItems()) {
+      return;
+    }
+
+    this.#contentInstance.handleCustomCodeInsert(data);
   }
 }
 
