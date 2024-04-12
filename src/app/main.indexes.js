@@ -42,16 +42,12 @@ class IndexesManager {
             i++;
             handleIndexingWithResponse(i, file, this.#indexes_caching[file], 200);
           } else {
-            const XML = new XMLHttpRequest();
-            XML.open('GET', 'https://raw.githubusercontent.com/pytgcalls/docsdata/master/' + file, true);
-            setTimeout(() => {
-              XML.send();
-            }, i * 60);
-            XML.addEventListener('readystatechange', (e) => {
-              if (e.target.readyState === 4) {
-                i++;
-                handleIndexingWithResponse(i, file, e.target.response, e.target.status);
-              }
+            requestsManager.initRequest(file).then((data) => {
+              i++;
+              handleIndexingWithResponse(i, file, data, 200);
+            }).catch(() => {
+              i++;
+              handleIndexingWithResponse(i, file, data, 500);
             });
           }
         }
