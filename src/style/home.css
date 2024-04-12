@@ -701,3 +701,122 @@ body .page-container .home-container .pres-points .int-pres-points .grid-element
   color: rgba(255, 255, 255, 0.6);
   font-size: 17px;
 }
+
+body .page-container .home-container .team-members {
+  margin-top: 20px;
+  background: #050d1b;
+  padding: 80px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+body .page-container .home-container .team-members .int-team-members {
+  max-width: 1000px;
+  text-align: center;
+  color: #FFFFFF;
+}
+
+body .page-container .home-container .team-members .int-team-members .big-text {
+  font-size: 60px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+body .page-container .home-container .team-members .int-team-members .description {
+  font-size: 26px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+body .page-container .home-container .team-members .carousel-container {
+  margin-top: 40px;
+  padding-block: 40px;
+  background: linear-gradient(45deg, rgb(5 13 27), rgba(5, 13, 27, 0.8), rgb(5 13 27)), url("/src/assets/DotsNocheBackground.svg");
+  background-size: 0.3%;
+  padding-block: 80px;
+}
+
+body .page-container .home-container .team-members .carousel-container .carousel {
+  display: flex;
+  gap: 40px;
+}
+
+body .page-container .home-container .team-members .carousel-container .carousel:first-child {
+  margin-bottom: 40px;
+}
+
+body .page-container .home-container .team-members .carousel-container .carousel .member {
+  width: 450px;
+  background: #151b25;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+body .page-container .home-container .team-members .carousel-container .carousel .member .member-top-container {
+  display: flex;
+  align-items: center;
+  padding-inline: 15px;
+  height: 105px;
+  gap: 20px;
+  color: #FFFFFF;
+}
+
+body .page-container .home-container .team-members .carousel-container .carousel .member .member-top-container img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+}
+
+body .page-container .home-container .team-members .carousel-container .carousel .member .member-top-container .member-details .member-name {
+  font-size: 22px;
+}
+
+body .page-container .home-container .team-members .carousel-container .carousel .member .member-top-container .member-details .member-role {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+body .page-container .home-container .team-members .carousel-container .carousel .member .icons {
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(2, 1fr);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
+body .page-container .home-container .team-members .carousel-container .carousel .member .icons a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  font-size: 18px;
+  gap: 10px;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.7);
+  transition: 0.4s color;
+}
+
+body .page-container .home-container .team-members .carousel-container .carousel .member .icons a img {
+  opacity: 0.7;
+  transition: 0.4s opacity;
+}
+
+body .page-container .home-container .team-members .carousel-container .carousel .member .icons a:first-child {
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body .page-container .home-container .team-members .carousel-container .carousel .member .icons a:hover {
+  color: rgb(255, 255, 255);
+}
+
+body .page-container .home-container .team-members .carousel-container .carousel .member .icons a:hover img {
+  opacity: 1;
+}
+
+body .page-container .home-container .team-members .carousel-container .carousel .member .icons:hover a:not(:hover) {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+body .page-container .home-container .team-members .carousel-container .carousel .member .icons:hover a:not(:hover) img {
+  opacity: 0.3;
+}

@@ -134,6 +134,11 @@ class Introduction {
     numericPresentationPoints.appendChild(backgroundEffectsLayer);
     numericPresentationPoints.appendChild(numericPresPoints);
     this.#container.appendChild(numericPresentationPoints);
+
+    const teamMembers = document.createElement('div');
+    teamMembers.classList.add('team-members');
+    teamMembers.appendChild(this.#composeTeamMembers());
+    this.#container.appendChild(teamMembers);
   }
 
   #composeSmallFileEditor() {
@@ -530,21 +535,17 @@ class Introduction {
 
     config.getOwnerData().then((ownerData) => {
       if (ownerData) {
-        if (!ownerData.querySelector('name') || !ownerData.querySelector('name').textContent.trim()) {
+        const name = ownerData.querySelector('name');
+        const role = ownerData.querySelector('role');
+        const github = ownerData.querySelector('github-username');
+
+        if (!name || !name.textContent.trim() || !role || !role.textContent.trim() || !github || !github.textContent.trim()) {
           return;
         }
 
-        if (!ownerData.querySelector('role') || !ownerData.querySelector('role').textContent.trim()) {
-          return;
-        }
-
-        if (!ownerData.querySelector('github-username') || !ownerData.querySelector('github-username').textContent.trim()) {
-          return;
-        }
-
-        ownerImage.src = "https://github.com/" + ownerData.querySelector('github-username').textContent.trim() + ".png?size=90";
-        ownerTitle.textContent = ownerData.querySelector('name').textContent.trim();
-        ownerDescription.textContent = ownerData.querySelector('role').textContent.trim();
+        ownerImage.src = "https://github.com/" + github.textContent.trim() + ".png?size=90";
+        ownerTitle.textContent = name.textContent.trim();
+        ownerDescription.textContent = role.textContent.trim();
       }
     });
 
@@ -575,17 +576,16 @@ class Introduction {
 
     config.getNumericPresPoints().then((points) => {
       for (const presPoint of points) {
-        if (!presPoint.hasAttribute('title') || !presPoint.hasAttribute('description')) {
-          continue;
-        }
+        const title = presPoint.getAttribute('title');
+        const description = presPoint.getAttribute('description');
 
-        if (!presPoint.getAttribute('title').trim() || !presPoint.getAttribute('description').trim()) {
+        if (!title || !description || !title.trim() || !description.trim()) {
           continue;
         }
 
         firstRow.appendChild(this.#composeSingleNumericPresentationPoint(
-          presPoint.getAttribute('title').trim(),
-          presPoint.getAttribute('description').trim(),
+          title.trim(),
+          description.trim(),
           presPoint.hasAttribute('origin') ? presPoint.getAttribute('origin').trim() : ''
         ));
       }
@@ -600,6 +600,111 @@ class Introduction {
     gridElement.appendChild(firstRow);
     gridElement.appendChild(secondRow);
     fragment.append(gridElement);
+
+    return fragment;
+  }
+
+  #composeTeamMembers() {
+    const fragment = document.createDocumentFragment();
+
+    const bigTitle = document.createElement('div');
+    bigTitle.classList.add('big-text');
+    bigTitle.textContent = 'Team Members';
+
+    const description = document.createElement('div');
+    description.classList.add('description');
+    description.textContent = 'Each member contributes their specific skills and knowledge to the team. They can include technical expertise, communication skills, problem-solving abilities or creative thinking.';
+
+    const intTeamMembers = document.createElement('div');
+    intTeamMembers.classList.add('int-team-members');
+    intTeamMembers.appendChild(bigTitle);
+    intTeamMembers.appendChild(description);
+    fragment.append(intTeamMembers);
+
+    const firstCarousel = document.createElement('div');
+    firstCarousel.classList.add('carousel');
+    const secondCarousel = document.createElement('div');
+    secondCarousel.classList.add('carousel', 'reverse');
+    const carouselContainer = document.createElement('div');
+    carouselContainer.classList.add('carousel-container');
+    carouselContainer.appendChild(firstCarousel);
+    carouselContainer.appendChild(secondCarousel);
+    fragment.append(carouselContainer);
+
+
+    config.getTeamMembers().then((members) => {
+      const fragment = document.createDocumentFragment();
+      let validMembersCount = 0;
+
+      for (const member of members) {
+        const name = member.querySelector('name');
+        const role = member.querySelector('role');
+        const github = member.querySelector('github-username');
+        const telegram = member.querySelector('telegram-username');
+
+        if (!name || !name.textContent.trim() || !role || !role.textContent.trim()) {
+          continue;
+        }
+
+        if (!github || !github.textContent.trim() || !telegram || !telegram.textContent.trim()) {
+          continue;
+        }
+
+        if (name && role && github && telegram && github.textContent.trim() && telegram.textContent.trim()) {
+          validMembersCount++;
+
+          const memberImage = document.createElement('img');
+          memberImage.src = 'https://github.com/' + github.textContent + '.png?size=90';
+
+          const memberName = document.createElement('div');
+          memberName.classList.add('member-name');
+          memberName.textContent = name.textContent.trim();
+          const memberRole = document.createElement('div');
+          memberRole.classList.add('member-role');
+          memberRole.textContent = role.textContent.trim();
+          const memberDetails = document.createElement('div');
+          memberDetails.classList.add('member-details');
+          memberDetails.appendChild(memberName);
+          memberDetails.appendChild(memberRole);
+
+          const memberTopContainer = document.createElement('div');
+          memberTopContainer.classList.add('member-top-container');
+          memberTopContainer.appendChild(memberImage);
+          memberTopContainer.appendChild(memberDetails);
+
+          const telegramLogoIcon = document.createElement('img');
+          telegramLogoIcon.src = '/src/assets/splash/telegram-logo.svg';
+          const telegramLogo = document.createElement('a');
+          telegramLogo.href = 'tg://resolve?username=' + telegram.textContent.trim();
+          telegramLogo.appendChild(telegramLogoIcon);
+          telegramLogo.appendChild(document.createTextNode('Telegram'));
+
+          const githubLogoIcon = document.createElement('img');
+          githubLogoIcon.src = '/src/icons/github.svg';
+          const githubLogo = document.createElement('a');
+          githubLogo.href = 'https://github.com/' + github.textContent.trim();
+          githubLogo.target = '_blank';
+          githubLogo.appendChild(githubLogoIcon);
+          githubLogo.appendChild(document.createTextNode('Github'));
+
+          const memberIcons = document.createElement('div');
+          memberIcons.classList.add('icons');
+          memberIcons.appendChild(telegramLogo);
+          memberIcons.appendChild(githubLogo);
+
+          const memberContainer = document.createElement('div');
+          memberContainer.classList.add('member');
+          memberContainer.appendChild(memberTopContainer);
+          memberContainer.appendChild(memberIcons);
+
+          firstCarousel.appendChild(memberContainer);
+          secondCarousel.appendChild(memberContainer.cloneNode(true));
+        }
+      }
+
+      teamGrid.style.setProperty('--items', validMembersCount.toString());
+      teamGrid.appendChild(fragment);
+    });
 
     return fragment;
   }
