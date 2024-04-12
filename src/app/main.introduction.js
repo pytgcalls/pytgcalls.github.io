@@ -634,7 +634,19 @@ class Introduction {
 
     config.getTeamMembers().then((members) => {
       let validMembersCount = 0;
-      let membersChildren = [];
+      let validMembersCountFirst = 0;
+      let validMembersCountSecond = 0;
+      let firstMembersChildren = [];
+      let secondMembersChildren = [];
+
+      const validChildrenCount = [...members].filter((x) => (
+        x.querySelector('name') && x.querySelector('name').textContent.trim()
+        && x.querySelector('role') && x.querySelector('role').textContent.trim()
+        && x.querySelector('github-username') && x.querySelector('github-username').textContent.trim()
+        && x.querySelector('telegram-username') && x.querySelector('telegram-username').textContent.trim()
+      )).length;
+
+      const minimumDiv = parseInt(validChildrenCount / 2);
 
       for (const member of members) {
         const name = member.querySelector('name');
@@ -696,19 +708,30 @@ class Introduction {
         memberContainer.appendChild(memberTopContainer);
         memberContainer.appendChild(memberIcons);
 
-        firstCarousel.appendChild(memberContainer);
-        secondCarousel.appendChild(memberContainer.cloneNode(true));
-
-        membersChildren.push(memberContainer);
+        if (validMembersCount > minimumDiv) {
+          validMembersCountFirst++;
+          secondCarousel.appendChild(memberContainer);
+          secondMembersChildren.push(memberContainer);
+        } else {
+          validMembersCountSecond++;
+          firstCarousel.appendChild(memberContainer);
+          firstMembersChildren.push(memberContainer);
+        }
       }
 
-      for (const child of membersChildren) {
+      for (const child of firstMembersChildren) {
         firstCarousel.appendChild(child.cloneNode(true));
+      }
+
+      for (const child of secondMembersChildren) {
         secondCarousel.appendChild(child.cloneNode(true));
       }
 
-      carouselContainer.style.setProperty('--items', (validMembersCount + membersChildren.length).toString());
-      carouselContainer.style.setProperty('--items-translate', validMembersCount.toString());
+      firstCarousel.style.setProperty('--items', (validMembersCountFirst + firstMembersChildren.length).toString());
+      firstCarousel.style.setProperty('--items-translate', validMembersCountFirst.toString());
+
+      secondCarousel.style.setProperty('--items', (validMembersCountSecond + secondMembersChildren.length).toString());
+      secondCarousel.style.setProperty('--items-translate', validMembersCountSecond.toString());
     });
 
     return fragment;
