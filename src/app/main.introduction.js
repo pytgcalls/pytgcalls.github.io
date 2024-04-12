@@ -633,8 +633,8 @@ class Introduction {
 
 
     config.getTeamMembers().then((members) => {
-      const fragment = document.createDocumentFragment();
       let validMembersCount = 0;
+      let membersChildren = [];
 
       for (const member of members) {
         const name = member.querySelector('name');
@@ -650,60 +650,65 @@ class Introduction {
           continue;
         }
 
-        if (name && role && github && telegram && github.textContent.trim() && telegram.textContent.trim()) {
-          validMembersCount++;
+        validMembersCount++;
 
-          const memberImage = document.createElement('img');
-          memberImage.src = 'https://github.com/' + github.textContent + '.png?size=90';
+        const memberImage = document.createElement('img');
+        memberImage.src = 'https://github.com/' + github.textContent + '.png?size=90';
 
-          const memberName = document.createElement('div');
-          memberName.classList.add('member-name');
-          memberName.textContent = name.textContent.trim();
-          const memberRole = document.createElement('div');
-          memberRole.classList.add('member-role');
-          memberRole.textContent = role.textContent.trim();
-          const memberDetails = document.createElement('div');
-          memberDetails.classList.add('member-details');
-          memberDetails.appendChild(memberName);
-          memberDetails.appendChild(memberRole);
+        const memberName = document.createElement('div');
+        memberName.classList.add('member-name');
+        memberName.textContent = name.textContent.trim();
+        const memberRole = document.createElement('div');
+        memberRole.classList.add('member-role');
+        memberRole.textContent = role.textContent.trim();
+        const memberDetails = document.createElement('div');
+        memberDetails.classList.add('member-details');
+        memberDetails.appendChild(memberName);
+        memberDetails.appendChild(memberRole);
 
-          const memberTopContainer = document.createElement('div');
-          memberTopContainer.classList.add('member-top-container');
-          memberTopContainer.appendChild(memberImage);
-          memberTopContainer.appendChild(memberDetails);
+        const memberTopContainer = document.createElement('div');
+        memberTopContainer.classList.add('member-top-container');
+        memberTopContainer.appendChild(memberImage);
+        memberTopContainer.appendChild(memberDetails);
 
-          const telegramLogoIcon = document.createElement('img');
-          telegramLogoIcon.src = '/src/assets/splash/telegram-logo.svg';
-          const telegramLogo = document.createElement('a');
-          telegramLogo.href = 'tg://resolve?username=' + telegram.textContent.trim();
-          telegramLogo.appendChild(telegramLogoIcon);
-          telegramLogo.appendChild(document.createTextNode('Telegram'));
+        const telegramLogoIcon = document.createElement('img');
+        telegramLogoIcon.src = '/src/assets/splash/telegram-logo.svg';
+        const telegramLogo = document.createElement('a');
+        telegramLogo.href = 'tg://resolve?username=' + telegram.textContent.trim();
+        telegramLogo.appendChild(telegramLogoIcon);
+        telegramLogo.appendChild(document.createTextNode('Telegram'));
 
-          const githubLogoIcon = document.createElement('img');
-          githubLogoIcon.src = '/src/icons/github.svg';
-          const githubLogo = document.createElement('a');
-          githubLogo.href = 'https://github.com/' + github.textContent.trim();
-          githubLogo.target = '_blank';
-          githubLogo.appendChild(githubLogoIcon);
-          githubLogo.appendChild(document.createTextNode('Github'));
+        const githubLogoIcon = document.createElement('img');
+        githubLogoIcon.src = '/src/icons/github.svg';
+        const githubLogo = document.createElement('a');
+        githubLogo.href = 'https://github.com/' + github.textContent.trim();
+        githubLogo.target = '_blank';
+        githubLogo.appendChild(githubLogoIcon);
+        githubLogo.appendChild(document.createTextNode('Github'));
 
-          const memberIcons = document.createElement('div');
-          memberIcons.classList.add('icons');
-          memberIcons.appendChild(telegramLogo);
-          memberIcons.appendChild(githubLogo);
+        const memberIcons = document.createElement('div');
+        memberIcons.classList.add('icons');
+        memberIcons.appendChild(telegramLogo);
+        memberIcons.appendChild(githubLogo);
 
-          const memberContainer = document.createElement('div');
-          memberContainer.classList.add('member');
-          memberContainer.appendChild(memberTopContainer);
-          memberContainer.appendChild(memberIcons);
+        const memberContainer = document.createElement('div');
+        memberContainer.classList.add('member');
+        memberContainer.appendChild(memberTopContainer);
+        memberContainer.appendChild(memberIcons);
 
-          firstCarousel.appendChild(memberContainer);
-          secondCarousel.appendChild(memberContainer.cloneNode(true));
-        }
+        firstCarousel.appendChild(memberContainer);
+        secondCarousel.appendChild(memberContainer.cloneNode(true));
+
+        membersChildren.push(memberContainer);
       }
 
-      teamGrid.style.setProperty('--items', validMembersCount.toString());
-      teamGrid.appendChild(fragment);
+      for (const child of membersChildren) {
+        firstCarousel.appendChild(child.cloneNode(true));
+        secondCarousel.appendChild(child.cloneNode(true));
+      }
+
+      carouselContainer.style.setProperty('--items', (validMembersCount + membersChildren.length).toString());
+      carouselContainer.style.setProperty('--items-translate', validMembersCount.toString());
     });
 
     return fragment;
