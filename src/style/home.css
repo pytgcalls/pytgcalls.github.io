@@ -769,7 +769,7 @@ body .page-container .home-container .team-members .carousel-container .carousel
   }
 }
 
-body .page-container .home-container .team-members .carousel-container:hover .carousel {
+body .page-container .home-container .team-members .carousel-container:has(.member:hover) .carousel {
   animation-play-state: paused;
 }
 
@@ -785,7 +785,7 @@ body .page-container .home-container .team-members .carousel-container .carousel
   transition: 0.4s opacity;
 }
 
-body .page-container .home-container .team-members .carousel-container:hover .member:not(:hover) {
+body .page-container .home-container .team-members .carousel-container:has(.member:hover) .member:not(:hover) {
   opacity: 0.3;
 }
 
