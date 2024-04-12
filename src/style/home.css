@@ -741,11 +741,7 @@ body .page-container .home-container .team-members .carousel-container .carousel
 }
 
 body .page-container .home-container .team-members .carousel-container .carousel:not(.reverse) {
-  animation: 25s moveCarousel infinite linear;
-}
-
-body .page-container .home-container .team-members .carousel-container .carousel:not(.reverse):hover {
-  animation-play-state: paused;
+  animation: 40s moveCarousel infinite linear;
 }
 
 @keyframes moveCarousel {
@@ -759,20 +755,23 @@ body .page-container .home-container .team-members .carousel-container .carousel
 }
 
 body .page-container .home-container .team-members .carousel-container .carousel.reverse {
-  animation: 25s moveCarouselRev infinite linear;
+  animation: 40s moveCarouselRev infinite linear;
 }
 
-/*
+
 @keyframes moveCarouselRev {
   from {
-    transform: translateX(calc(-1 * 490px * var(--items-transla)));
+    transform: translateX(calc(-1 * 490px * var(--items-translate)));
   }
 
   to {
-    transform: translateX(calc(-1 * 490px * var(--items-translate)));
+    transform: translateX(0);
   }
 }
-*/
+
+body .page-container .home-container .team-members .carousel-container:hover .carousel {
+  animation-play-state: paused;
+}
 
 body .page-container .home-container .team-members .carousel-container .carousel:first-child {
   margin-bottom: 40px;
@@ -783,6 +782,11 @@ body .page-container .home-container .team-members .carousel-container .carousel
   background: #151b25;
   border-radius: 20px;
   overflow: hidden;
+  transition: 0.4s opacity;
+}
+
+body .page-container .home-container .team-members .carousel-container:hover .member:not(:hover) {
+  opacity: 0.3;
 }
 
 body .page-container .home-container .team-members .carousel-container .carousel .member .member-top-container {
