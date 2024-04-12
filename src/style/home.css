@@ -744,6 +744,10 @@ body .page-container .home-container .team-members .carousel-container .carousel
   animation: 25s moveCarousel infinite linear;
 }
 
+body .page-container .home-container .team-members .carousel-container .carousel:not(.reverse):hover {
+  animation-play-state: paused;
+}
+
 @keyframes moveCarousel {
   from {
     transform: translateX(0);
