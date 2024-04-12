@@ -8,6 +8,9 @@ body .splash {
   height: 100%;
   overflow: hidden;
   transform: scale(var(--zlm));
+}
+
+body .splash:not(.faster) {
   animation: 0.2s hideSplash 1.3s forwards;
 }
 

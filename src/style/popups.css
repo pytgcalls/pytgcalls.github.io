@@ -22,6 +22,7 @@ body>.popup-container:not(.disappear) {
 }
 
 body>.popup-container.disappear {
+  pointer-events: none;
   animation: 0.4s disappearPopupContainer;
 }
 
@@ -42,22 +43,22 @@ body>.popup-container .popup-element {
 }
 
 body>.popup-container:not(.disappear) .popup-element {
-  animation: 0.4s appearPopupElement;
+  animation: 0.3s appearPopupElement;
 }
 
 @keyframes appearPopupElement {
   from {
-    transform: translateY(-50px);
+    transform: translateY(-15px) scale(0.95);
   }
 }
 
 body>.popup-container.disappear .popup-element {
-  animation: 0.4s disappearPopupElement;
+  animation: 0.3s disappearPopupElement;
 }
 
 @keyframes disappearPopupElement {
   to {
-    transform: translateY(50px);
+    transform: translateY(15px) scale(0.95);
   }
 }
 
@@ -71,8 +72,20 @@ body>.popup-container .popup-element .description {
   font-size: 18px;
 }
 
+body>.popup-container .popup-element input {
+  background: rgba(0, 0, 0, 0.5);
+  color: #FFFFFF;
+  font-size: 1em;
+  border-radius: 10px;
+  padding: 15px;
+  border-radius: 10px;
+  border: none;
+  width: calc(100% - 30px);
+  margin-top: 20px;
+}
+
 body>.popup-container .popup-element .custom-editor {
-  margin-block-start: 20px;
+  margin-top: 20px;
   padding: 15px;
   background: rgba(0, 0, 0, 0.5);
   border-radius: 10px;

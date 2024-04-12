@@ -6,6 +6,11 @@ class Debug {
 
     document.body.innerHTML = '';
 
+    const splashScreen = document.createElement('div');
+    splashScreen.classList.add('splash', 'faster');
+    splashScreen.appendChild(utils.createLoadingItem(100));
+    document.body.appendChild(splashScreen);
+
     const onReady = () => {
       config.getRedirectDataForPath(window.location.pathname).then((data) => {
         if (data && (data.startsWith('https://') || data.startsWith('http://'))) {
@@ -59,6 +64,10 @@ class Debug {
     popupContainer.appendChild(popupElement);
     document.body.appendChild(popupContainer);
 
+    this.#handlePopupContainerHandlers(popupContainer, popupElement);
+  }
+
+  #handlePopupContainerHandlers(popupContainer, popupElement) {
     popupContainer.addEventListener('click', (e) => {
       const currentPopupElementRect = popupElement.getBoundingClientRect();
 
@@ -143,6 +152,58 @@ class Debug {
       element: customEditor,
       getCode: () => transparentTextarea.value
     };
+  }
+
+  tryCustomServer() {
+    if (!this.isSafeToUseDebugItems()) {
+      return;
+    }
+
+    const popupElementTitle = document.createElement('div');
+    popupElementTitle.classList.add('title');
+    popupElementTitle.textContent = 'Try custom server';
+    const popupElementDescription = document.createElement('div');
+    popupElementDescription.classList.add('description');
+    popupElementDescription.textContent = 'Insert here your custom server without http://. Example: "127.0.0.1:5500". Then, press SHIFT+M to confirm.';
+    const popupElementInput = document.createElement('input');
+    popupElementInput.classList.add('popup-input');
+    popupElementInput.setAttribute('placeholder', 'Link');
+    const popupElement = document.createElement('div');
+    popupElement.classList.add('popup-element');
+    popupElement.appendChild(popupElementTitle);
+    popupElement.appendChild(popupElementDescription);
+    popupElement.appendChild(popupElementInput);
+    const popupContainer = document.createElement('div');
+    popupContainer.classList.add('popup-container');
+    popupContainer.appendChild(popupElement);
+    document.body.appendChild(popupContainer);
+
+    const handleKeyDown = (e) => {
+      if (e.key == 'M' && e.shiftKey) {
+        e.preventDefault();
+
+        const value = popupElementInput.value.trim();
+        if (value.startsWith('localhost:') || value.startsWith('127.0.0.1:')) {
+          let port;
+          if (value.startsWith('localhost:')) {
+            port = value.replace('localhost:', '');
+          } else if (value.startsWith('127.0.0.1:')) {
+            port = value.replace('127.0.0.1:', '');
+          }
+
+          const parsedPort = parseInt(port);
+          if (isFinite(parsedPort) && !isNaN(parsedPort)) {
+            requestsManager.setAsDebugAlternative('pytgcalls/docsdata', 'http://' + value);
+            indexesManager.clearFullFromDebug();
+            this.#handlePopupContainerClose(popupContainer);
+            this.reloadPageData();
+          }
+        }
+      }
+    };
+
+    popupElementInput.addEventListener('keydown', handleKeyDown);
+    this.#handlePopupContainerHandlers(popupContainer, popupElement);
   }
 
   isSafeToUseDebugItems() {

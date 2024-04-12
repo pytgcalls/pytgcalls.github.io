@@ -59,6 +59,17 @@ class IndexesManager {
     });
   }
 
+  clearFullFromDebug() {
+    if (!debug.isSafeToUseDebugItems()) {
+      return;
+    }
+
+    this.#hasIndexed = false;
+    this.#isCurrentlyIndexing = false;
+    this.#indexes = {};
+    this.#indexes_caching = {};
+  }
+
   hasIndexed() {
     return this.#hasIndexed;
   }

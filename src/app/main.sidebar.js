@@ -423,8 +423,7 @@ class Sidebar {
 
     const customDataDocsServer = document.createElement('div');
     customDataDocsServer.classList.add('element');
-    customDataDocsServer.addEventListener('click', () => {
-    });
+    customDataDocsServer.addEventListener('click', () => debug.tryCustomServer());
     customDataDocsServer.style.setProperty('--id', 3);
     customDataDocsServer.textContent = 'Try custom server';
     elementsGroup.append(customDataDocsServer);
