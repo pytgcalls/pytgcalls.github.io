@@ -657,18 +657,39 @@ class Introduction {
         }
       }
 
+      let multiplier = 1;
       for (const child of firstMembersChildren) {
-        firstCarousel.appendChild(child.cloneNode(true));
+        const newChild = child.cloneNode(true);
+        newChild.classList.add('clone');
+        firstCarousel.appendChild(newChild);
       }
 
       for (const child of secondMembersChildren) {
-        secondCarousel.appendChild(child.cloneNode(true));
+        const newChild = child.cloneNode(true);
+        newChild.classList.add('clone');
+        secondCarousel.appendChild(newChild);
       }
 
-      firstCarousel.style.setProperty('--items', (validMembersCountFirst + firstMembersChildren.length).toString());
+      if (window.innerWidth > 2000) {
+        multiplier = 2;
+
+        for (const child of firstMembersChildren) {
+          const newChild = child.cloneNode(true);
+          newChild.classList.add('clone');
+          firstCarousel.appendChild(newChild);
+        }
+
+        for (const child of secondMembersChildren) {
+          const newChild = child.cloneNode(true);
+          newChild.classList.add('clone');
+          secondCarousel.appendChild(newChild);
+        }
+      }
+
+      firstCarousel.style.setProperty('--items', (validMembersCountFirst + firstMembersChildren.length * multiplier).toString());
       firstCarousel.style.setProperty('--items-translate', validMembersCountFirst.toString());
 
-      secondCarousel.style.setProperty('--items', (validMembersCountSecond + secondMembersChildren.length).toString());
+      secondCarousel.style.setProperty('--items', (validMembersCountSecond + secondMembersChildren.length * multiplier).toString());
       secondCarousel.style.setProperty('--items-translate', validMembersCountSecond.toString());
     });
 
