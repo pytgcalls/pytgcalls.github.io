@@ -670,6 +670,7 @@ body .page-container .home-container .pres-points .int-pres-points .grid-element
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.citation .citation-icon {
   width: 115px;
+  height: 115px;
 }
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.citation .citation-text {

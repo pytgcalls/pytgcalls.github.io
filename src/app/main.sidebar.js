@@ -23,8 +23,7 @@ class Sidebar {
     leftSidebar.classList.add('left-sidebar', 'expanded');
     this.#leftSidebar = leftSidebar;
 
-    const expandableIcon = document.createElement('img');
-    expandableIcon.src = '/src/icons/tablecolumns.svg';
+    const expandableIcon = iconsManager.get('special', 'tablecolumns');
     const expandableButton = document.createElement('div');
     expandableButton.classList.add('expandable');
     expandableButton.addEventListener('click', () => {

@@ -88,12 +88,14 @@ body .page-container .left-container .sidebar-sticky .expandable {
   transition: 0.4s transform;
 }
 
-body .page-container .left-container .sidebar-sticky .expandable img {
+body .page-container .left-container .sidebar-sticky .expandable .icon-container svg {
   width: 31px;
+  height: 31px;
+  vertical-align: middle;
   transition: 0.4s transform;
 }
 
-body .page-container .left-container .sidebar-sticky .expandable:active img {
+body .page-container .left-container .sidebar-sticky .expandable:active .icon-container svg {
   transform: scale(0.95);
 }
 

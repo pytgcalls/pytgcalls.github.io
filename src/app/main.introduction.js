@@ -495,9 +495,8 @@ class Introduction {
   }
 
   #composeOwnerCitation() {
-    const mainIcon = document.createElement('img');
+    const mainIcon = iconsManager.get('special', 'quote');
     mainIcon.classList.add('citation-icon');
-    mainIcon.src = '/src/icons/quotev2.svg';
 
     const citationElement = document.createElement('div');
     citationElement.classList.add('citation-text');

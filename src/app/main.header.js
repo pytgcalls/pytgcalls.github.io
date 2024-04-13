@@ -41,12 +41,11 @@ class Header {
     headerMenu.appendChild(document.createElement('div'));
     this.#headerMenu = headerMenu;
 
-    const headerExpandSidebar = document.createElement('img');
+    const headerExpandSidebar = iconsManager.get('special', 'tablecolumns');
     headerExpandSidebar.classList.add('expand-sidebar');
     headerExpandSidebar.addEventListener('click', () => {
       this.onSidebarUpdateListenerInstance.callAllListeners(false);
     });
-    headerExpandSidebar.src = '/src/icons/tablecolumns.svg';
     this.#headerExpanded = headerExpandSidebar;
 
     const headerIcon = iconsManager.get('socials', 'telegram');

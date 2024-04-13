@@ -266,6 +266,10 @@ body .header .expand-sidebar {
   transition: 0.4s transform 0.4s, 0.4s opacity 0.4s;
 }
 
+body .header .expand-sidebar svg {
+  vertical-align: middle;
+}
+
 body .header .expand-sidebar:not(.show) {
   transform: translateY(100%);
   opacity: 0;
