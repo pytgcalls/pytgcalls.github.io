@@ -2,8 +2,6 @@ class Introduction {
   onVisibilityUpdateListenerInstance;
 
   #container;
-  #isCurrentlyEnabled = false;
-  #isCurrentlyDisappearing = false;
 
   #currentVscTimeout;
 
@@ -27,47 +25,16 @@ class Introduction {
   }
 
   show() {
-    const executeUiUpdate = () => {
-      this.#isCurrentlyEnabled = true;
-      this.onVisibilityUpdateListenerInstance.callAllListeners(true);
-      this.#composeContainer();
-    };
-
-    if (this.#isCurrentlyDisappearing instanceof Promise) {
-      this.#isCurrentlyDisappearing.then(executeUiUpdate);
-    } else {
-      executeUiUpdate();
-    }
+    this.onVisibilityUpdateListenerInstance.callAllListeners(true);
+    this.#composeContainer();
   }
 
   hide() {
-    if (this.#isCurrentlyDisappearing instanceof Promise) {
-      return this.#isCurrentlyDisappearing;
-    } else if (this.#isCurrentlyEnabled) {
-      if (typeof this.#currentVscTimeout != 'undefined') {
-        clearTimeout(this.#currentVscTimeout);
-        this.#currentVscTimeout = undefined;
-      }
+    this.#container.textContent = '';
+    this.onVisibilityUpdateListenerInstance.callAllListeners(false);
 
-      this.#container.scrollTo(0, 0);
-
-      this.#isCurrentlyDisappearing = new Promise((resolve) => {
-        this.#isCurrentlyEnabled = false;
-
-        this.#container.classList.add('disappear');
-        this.#container.addEventListener('animationend', () => {
-          this.#container.classList.remove('disappear');
-          this.#container.textContent = '';
-          this.onVisibilityUpdateListenerInstance.callAllListeners(false);
-
-          this.#isCurrentlyDisappearing = false;
-
-          resolve();
-        }, { once: true });
-      });
-      return this.#isCurrentlyDisappearing;
-    } else {
-      return Promise.resolve();
+    if (typeof this.#currentVscTimeout != 'undefined') {
+      clearTimeout(this.#currentVscTimeout);
     }
   }
 

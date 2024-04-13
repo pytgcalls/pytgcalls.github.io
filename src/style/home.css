@@ -10,12 +10,12 @@ body .page-container .home-container {
 }
 
 body.as-home .page-container .home-container.disappear {
-  animation: 0.4s disappearBg forwards;
+  animation: 0.4s disappearElement forwards;
 }
 
-@keyframes disappearBg {
+@keyframes disappearElement {
   to {
-    background: transparent;
+    opacity: 0;
   }
 }
 
@@ -87,17 +87,6 @@ body .page-container .home-container .introduction .background .background-surfa
 @media screen and (max-width: 800px) {
   body .page-container .home-container .introduction {
     height: 300px;
-  }
-}
-
-body .page-container .home-container.disappear .introduction {
-  animation: 0.4s disappearIntroduction forwards cubic-bezier(1, 0.05, 0, 1);
-}
-
-@keyframes disappearIntroduction {
-  to {
-    transform: translateY(-50px);
-    opacity: 0;
   }
 }
 
@@ -674,7 +663,7 @@ body .page-container .home-container .pres-points .int-pres-points .grid-element
   box-shadow: none;
 }
 
-body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.citation .citation-icon {
+body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.citation .citation-icon svg {
   width: 115px;
   height: 115px;
 }
