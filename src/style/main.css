@@ -302,10 +302,11 @@ body:not(.disable-blur) .fs-code-preview .top-bar .url-bar {
   -webkit-backdrop-filter: blur(20px);
 }
 
-body .fs-code-preview .top-bar .url-bar .icon {
+body .fs-code-preview .top-bar .url-bar .icon-container svg {
   height: 24px;
   width: 24px;
-  filter: invert(0.8);
+  fill: rgba(255, 255, 255, 0.8);
+  vertical-align: middle;
 }
 
 body .fs-code-preview .top-bar .url-bar a {

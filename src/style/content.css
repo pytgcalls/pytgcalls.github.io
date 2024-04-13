@@ -148,12 +148,16 @@ body .page-container .content:not(.is-loading) .go-to-container .go-to {
   }
 }
 
-body .page-container .content:not(.is-loading) .go-to-container .go-to img {
-  filter: invert(1);
+body .page-container .content:not(.is-loading) .go-to-container .go-to .icon-container {
   transition: 0.4s margin-right, 0.4s opacity;
 }
 
-body .page-container .content:not(.is-loading) .go-to-container .go-to:hover img {
+body .page-container .content:not(.is-loading) .go-to-container .go-to .icon-container svg {
+  vertical-align: middle;
+  fill: #FFFFFF;
+}
+
+body .page-container .content:not(.is-loading) .go-to-container .go-to:hover .icon-container {
   margin-right: -25px;
   opacity: 0;
 }
@@ -508,19 +512,20 @@ body .page-container .content:not(.is-loading) .syntax-highlight .tags-container
   transform: translateY(-50%) rotate(45deg);
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag img {
-  filter: invert(1);
+body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag .icon-container svg {
+  vertical-align: middle;
+  fill: #FFFFFF;
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag img:not(.success) {
+body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag .icon-container:not(.success) {
   transition: 0.4s opacity;
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.success img:not(.success) {
+body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.success .icon-containr:not(.success) {
   opacity: 0;
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag span {
+body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag>span {
   z-index: 1;
   transition: 0.4s opacity;
 }
@@ -529,7 +534,7 @@ body .page-container .content:not(.is-loading) .syntax-highlight .tags-container
   opacity: 0;
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag img.success {
+body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag .icon-container.success {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -538,7 +543,7 @@ body .page-container .content:not(.is-loading) .syntax-highlight .tags-container
   transition: 0.4s opacity;
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.success img.success {
+body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.success .icon-container.success {
   opacity: 1;
   animation: 0.5s showSuccessIcon;
 }
@@ -755,6 +760,10 @@ body .page-container .content:not(.is-loading) .alert .alert-header {
   gap: 10px;
 }
 
+body .page-container .content:not(.is-loading) .alert .alert-header .icon-container svg {
+  vertical-align: middle;
+}
+
 body .page-container .content:not(.is-loading) .alert .alert-header .alert-title {
   font-weight: 500;
 }
@@ -768,15 +777,19 @@ body .page-container .content:not(.is-loading) .alert .alert-content .emoji-pars
 }
 
 body .page-container .content:not(.is-loading) .alert[data-type="important"] {
-  border-left: 3px solid #00b0ff;
+  border-left: 3px solid #f42b3c;
 }
 
 body .page-container .content:not(.is-loading) .alert[data-type="important"] .alert-header {
-  background: #00b0ff17;
+  background: #f42b3c17;
+}
+
+body .page-container .content:not(.is-loading) .alert[data-type="important"] .alert-header .icon-container svg {
+  fill: #f42b3c;
 }
 
 body .page-container .content:not(.is-loading) .alert[data-type="important"] .alert-header .alert-title {
-  color: #00b0ff;
+  color: #f42b3c;
 }
 
 body .page-container .content:not(.is-loading) .alert[data-type="note"] {
@@ -785,6 +798,10 @@ body .page-container .content:not(.is-loading) .alert[data-type="note"] {
 
 body .page-container .content:not(.is-loading) .alert[data-type="note"] .alert-header {
   background: #00ff4b21;
+}
+
+body .page-container .content:not(.is-loading) .alert[data-type="note"] .alert-header .icon-container svg {
+  fill: #00ff4b;
 }
 
 body .page-container .content:not(.is-loading) .alert[data-type="note"] .alert-header .alert-title {
@@ -799,8 +816,48 @@ body .page-container .content:not(.is-loading) .alert[data-type="warning"] .aler
   background: #ff91001a;
 }
 
+body .page-container .content:not(.is-loading) .alert[data-type="warning"] .alert-header .icon-container svg {
+  fill: #ff9100;
+}
+
 body .page-container .content:not(.is-loading) .alert[data-type="warning"] .alert-header .alert-title {
   color: #ff9100;
+}
+
+body .page-container .content:not(.is-loading) .alert[data-type="p2p"] {
+  border-left: 3px solid #00b0ff;
+  text-align: center;
+}
+
+body .page-container .content:not(.is-loading) .alert[data-type="p2p"] .alert-header {
+  background: #00b0ff17;
+}
+
+body .page-container .content:not(.is-loading) .alert[data-type="p2p"] .alert-header .icon-container svg {
+  fill: #00b0ff;
+}
+
+body .page-container .content:not(.is-loading) .alert[data-type="p2p"] .alert-header .alert-title {
+  color: #00b0ff;
+}
+
+body .page-container .content:not(.is-loading) .alert[data-type="p2p"] img {
+  width: 140px;
+  height: 140px;
+  margin-top: 40px;
+}
+
+body .page-container .content:not(.is-loading) .alert[data-type="p2p"]>.alert-title {
+  font-size: 25px;
+  font-weight: 600;
+}
+
+body .page-container .content:not(.is-loading) .alert[data-type="p2p"] .alert-content {
+  max-width: 80%;
+  margin-inline: auto;
+  padding: 0px;
+  padding-bottom: 20px;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 body .page-container .content:not(.is-loading) .github-ref {
@@ -979,9 +1036,11 @@ body .page-container .content:not(.is-loading) .github-ref:not(.is-loading):hove
   background: rgba(0, 0, 0, 0.8);
 }
 
-body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .illustration .container .icon {
+body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .illustration .container .icon-container svg {
   width: 21px;
-  filter: invert(0.8);
+  height: 21px;
+  vertical-align: middle;
+  fill: rgba(255, 255, 255, 0.8);
   padding-right: 10px;
 }
 

@@ -84,18 +84,15 @@ class Sidebar {
   }
 
   #createSearchBar() {
-    const searchIcon = document.createElement('img');
-    searchIcon.src = '/src/icons/magnifyingGlass.svg';
     const searchText = document.createElement('input');
     searchText.classList.add('is-empty');
     searchText.placeholder = 'Search...';
     this.#searchInputText = searchText;
-    const searchCancelIcon = document.createElement('img');
+    const searchCancelIcon = iconsManager.get('main', 'circlexmark');
     searchCancelIcon.classList.add('cancel');
-    searchCancelIcon.src = '/src/icons/circlexmark.svg';
     const searchInput = document.createElement('div');
     searchInput.classList.add('search-input');
-    searchInput.appendChild(searchIcon);
+    searchInput.appendChild(iconsManager.get('main', 'magnifyingGlass'));
     searchInput.appendChild(searchText);
     searchInput.appendChild(searchCancelIcon);
 
@@ -167,14 +164,11 @@ class Sidebar {
           }
 
           if (!hasResults) {
-            const errorImage = document.createElement('img');
-            errorImage.classList.add('image');
-            errorImage.src = '/src/icons/heartCrack.svg';
             const errorText = document.createElement('div');
             errorText.textContent = 'No results found.';
             const error = document.createElement('div');
             error.classList.add('error');
-            error.appendChild(errorImage);
+            error.appendChild(iconsManager.get('main', 'heartCrack'));
             error.appendChild(errorText);
             resultsFragment.append(error);
           }
@@ -228,8 +222,7 @@ class Sidebar {
       fileData.appendChild(fileDataDescription);
     }
 
-    const elementIcon = document.createElement('img');
-    elementIcon.src = '/src/icons/chevrondown.svg';
+    const elementIcon = iconsManager.get('main', 'chevrondown');
     elementIcon.classList.add('right-icon');
     fileData.appendChild(elementIcon);
 
@@ -338,12 +331,10 @@ class Sidebar {
     const elementText = document.createElement('div');
     elementText.classList.add('text');
     elementText.textContent = utils.parseCategoryName(basePathForGroupFiles).replace(basePathForMainFiles ?? '', '');
-    const elementIcon = document.createElement('img');
-    elementIcon.src = '/src/icons/chevrondown.svg';
     const element = document.createElement('div');
     element.classList.add('element');
     element.appendChild(elementText);
-    element.appendChild(elementIcon);
+    element.appendChild(iconsManager.get('main', 'chevrondown'));
 
     const elementsGroup = document.createElement('div');
     elementsGroup.classList.add('elements');
@@ -395,12 +386,10 @@ class Sidebar {
     const elementText = document.createElement('div');
     elementText.classList.add('text');
     elementText.textContent = 'Internal debug options';
-    const elementIcon = document.createElement('img');
-    elementIcon.src = '/src/icons/chevrondown.svg';
     const element = document.createElement('div');
     element.classList.add('element');
     element.appendChild(elementText);
-    element.appendChild(elementIcon);
+    element.appendChild(iconsManager.get('main', 'chevrondown'));
 
     const elementsGroup = document.createElement('div');
     elementsGroup.classList.add('elements');

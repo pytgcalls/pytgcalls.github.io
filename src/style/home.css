@@ -253,12 +253,13 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
   border-bottom-right-radius: 10px;
 }
 
-body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-left-icons img {
+body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-left-icons .icon-container svg {
   height: 27px;
   width: 27px;
+  fill: #FFFFFF;
 }
 
-body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-left-icons img:not(.active) {
+body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-left-icons .icon-container:not(.active) {
   opacity: 0.1;
 }
 
@@ -327,9 +328,13 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
 }
 
 body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-files-list .file .file-language {
+  margin-right: 6px;
+}
+
+body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-files-list .file .file-language svg {
   height: 21px;
   width: 21px;
-  margin-right: 6px;
+  vertical-align: middle;
 }
 
 body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-files-list .file .file-close {
@@ -812,7 +817,7 @@ body .page-container .home-container .team-members .carousel-container .carousel
   color: rgba(255, 255, 255, 0.5);
 }
 
-body .page-container .home-container .team-members .carousel-container .carousel .member .icons {
+body .page-container .home-container .team-members .carousel-container .carousel .member .buttons {
   display: grid;
   grid-template-rows: 1fr;
   grid-template-columns: repeat(2, 1fr);
@@ -820,7 +825,7 @@ body .page-container .home-container .team-members .carousel-container .carousel
 }
 
 
-body .page-container .home-container .team-members .carousel-container .carousel .member .icons a {
+body .page-container .home-container .team-members .carousel-container .carousel .member .buttons a {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -832,27 +837,34 @@ body .page-container .home-container .team-members .carousel-container .carousel
   transition: 0.4s color;
 }
 
-body .page-container .home-container .team-members .carousel-container .carousel .member .icons a img {
+body .page-container .home-container .team-members .carousel-container .carousel .member .buttons a .icon-container {
   opacity: 0.7;
   transition: 0.4s opacity;
 }
 
-body .page-container .home-container .team-members .carousel-container .carousel .member .icons a:first-child {
+body .page-container .home-container .team-members .carousel-container .carousel .member .buttons a .icon-container svg {
+  vertical-align: middle;
+  fill: #FFFFFF;
+  width: 25px;
+  height: 25px;
+}
+
+body .page-container .home-container .team-members .carousel-container .carousel .member .buttons a:first-child {
   border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-body .page-container .home-container .team-members .carousel-container .carousel .member .icons a:hover {
+body .page-container .home-container .team-members .carousel-container .carousel .member .buttons a:hover {
   color: rgb(255, 255, 255);
 }
 
-body .page-container .home-container .team-members .carousel-container .carousel .member .icons a:hover img {
+body .page-container .home-container .team-members .carousel-container .carousel .member .buttons a:hover .icon-container {
   opacity: 1;
 }
 
-body .page-container .home-container .team-members .carousel-container .carousel .member .icons:hover a:not(:hover) {
+body .page-container .home-container .team-members .carousel-container .carousel .member .buttons:hover a:not(:hover) {
   color: rgba(255, 255, 255, 0.3);
 }
 
-body .page-container .home-container .team-members .carousel-container .carousel .member .icons:hover a:not(:hover) img {
+body .page-container .home-container .team-members .carousel-container .carousel .member .buttons:hover a:not(:hover) .icon-container {
   opacity: 0.3;
 }

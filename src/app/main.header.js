@@ -49,8 +49,7 @@ class Header {
     headerExpandSidebar.src = '/src/icons/tablecolumns.svg';
     this.#headerExpanded = headerExpandSidebar;
 
-    const headerIcon = document.createElement('img');
-    headerIcon.src = '/src/assets/splash/telegram-logo.svg';
+    const headerIcon = iconsManager.get('socials', 'telegram');
 
     const headerProjectName = document.createElement('div');
     headerProjectName.classList.add('project-name');
@@ -68,12 +67,12 @@ class Header {
     fakeHeaderTitle.classList.add('fake-title');
     this.#fakeHeaderTitle = fakeHeaderTitle;
 
-    const headerCompass = document.createElement('img');
+    const headerCompass = document.createElement('div');
     headerCompass.classList.add('header-compass');
     headerCompass.addEventListener('click', () => {
       this.onCompassUpdateListenerInstance.callAllListeners();
     });
-    headerCompass.src = '/src/icons/compass.svg';
+    headerCompass.appendChild(iconsManager.get('main', 'compass'));
     this.#headerCompass = headerCompass;
 
     const headerDescription = document.createElement('div');

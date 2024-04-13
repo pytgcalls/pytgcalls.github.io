@@ -148,21 +148,14 @@ class Introduction {
     topBar.appendChild(document.createElement('div'));
     topBar.appendChild(document.createElement('div'));
 
-    const filesIcon = document.createElement('img');
+    const filesIcon = iconsManager.get('vsc', 'files');
     filesIcon.classList.add('active');
-    filesIcon.src = '/src/assets/vsc/files.svg';
-    const searchIcon = document.createElement('img');
-    searchIcon.src = '/src/assets/vsc/search.svg';
-    const runDebugIcon = document.createElement('img');
-    runDebugIcon.src = '/src/assets/vsc/debug.svg';
-    const extensionsIcon = document.createElement('img');
-    extensionsIcon.src = '/src/assets/vsc/extensions.svg';
     const leftIcons = document.createElement('div');
     leftIcons.classList.add('vsc-left-icons');
     leftIcons.appendChild(filesIcon);
-    leftIcons.appendChild(searchIcon);
-    leftIcons.appendChild(runDebugIcon);
-    leftIcons.appendChild(extensionsIcon);
+    leftIcons.appendChild(iconsManager.get('vsc', 'search'));
+    leftIcons.appendChild(iconsManager.get('vsc', 'debug'));
+    leftIcons.appendChild(iconsManager.get('vsc', 'extensions'));
 
     const rightCodeFilesList = document.createElement('div');
     rightCodeFilesList.classList.add('vsc-files-list');
@@ -216,22 +209,19 @@ class Introduction {
   }
 
   #animateNewCodeAddition(tabName, syntaxHighlightElement) {
-    const languagePath = sourceParser.detectLanguageByElement(syntaxHighlightElement, false, true);
+    const languageDetails = sourceParser.detectLanguageByElement(syntaxHighlightElement, false, true);
 
-    const rightCodeFileClose = document.createElement('img');
+    const rightCodeFileClose = iconsManager.get('main', 'xmark');
     rightCodeFileClose.classList.add('file-close');
-    rightCodeFileClose.src = '/src/assets/xmark.svg';
     const rightCodeFile = document.createElement('div');
     rightCodeFile.classList.add('file');
     rightCodeFile.textContent = tabName;
     rightCodeFile.appendChild(rightCodeFileClose);
 
-    if (languagePath != '') {
-      const rightCodeFileLanguage = document.createElement('img');
+    if (languageDetails.icon.name != '') {
+      const rightCodeFileLanguage = iconsManager.get(languageDetails.icon.category, languageDetails.icon.name);
       rightCodeFileLanguage.classList.add('file-language');
-      rightCodeFileLanguage.src = languagePath;
       rightCodeFile.prepend(rightCodeFileLanguage);
-      // TODO: finish file-language support [vscode's live-server broke everything and I have to find a way to develop this]
     }
 
     if (this.#rightCodeFilesList.childNodes.length > 0) {
@@ -683,30 +673,26 @@ class Introduction {
         memberTopContainer.appendChild(memberImage);
         memberTopContainer.appendChild(memberDetails);
 
-        const telegramLogoIcon = document.createElement('img');
-        telegramLogoIcon.src = '/src/assets/splash/telegram-logo.svg';
-        const telegramLogo = document.createElement('a');
-        telegramLogo.href = 'tg://resolve?username=' + telegram.textContent.trim();
-        telegramLogo.appendChild(telegramLogoIcon);
-        telegramLogo.appendChild(document.createTextNode('Telegram'));
+        const telegramButton = document.createElement('a');
+        telegramButton.href = 'tg://resolve?username=' + telegram.textContent.trim();
+        telegramButton.appendChild(iconsManager.get('socials', 'telegram'));
+        telegramButton.appendChild(document.createTextNode('Telegram'));
 
-        const githubLogoIcon = document.createElement('img');
-        githubLogoIcon.src = '/src/icons/github.svg';
-        const githubLogo = document.createElement('a');
-        githubLogo.href = 'https://github.com/' + github.textContent.trim();
-        githubLogo.target = '_blank';
-        githubLogo.appendChild(githubLogoIcon);
-        githubLogo.appendChild(document.createTextNode('Github'));
+        const githubButton = document.createElement('a');
+        githubButton.href = 'https://github.com/' + github.textContent.trim();
+        githubButton.target = '_blank';
+        githubButton.appendChild(iconsManager.get('socials', 'github'));
+        githubButton.appendChild(document.createTextNode('Github'));
 
-        const memberIcons = document.createElement('div');
-        memberIcons.classList.add('icons');
-        memberIcons.appendChild(telegramLogo);
-        memberIcons.appendChild(githubLogo);
+        const memberButtons = document.createElement('div');
+        memberButtons.classList.add('buttons');
+        memberButtons.appendChild(telegramButton);
+        memberButtons.appendChild(githubButton);
 
         const memberContainer = document.createElement('div');
         memberContainer.classList.add('member');
         memberContainer.appendChild(memberTopContainer);
-        memberContainer.appendChild(memberIcons);
+        memberContainer.appendChild(memberButtons);
 
         if (validMembersCount > minimumDiv) {
           validMembersCountFirst++;

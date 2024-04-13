@@ -101,7 +101,7 @@ body .header.header.tabs-expanded .menu div:nth-child(3) {
 body .header .header-compass {
   width: 25px;
   height: 25px;
-  filter: invert(0.7);
+  opacity: 0.7;
   cursor: pointer;
   position: relative;
   transition: 0.4s filter, 0.4s transform, 0.4s opacity;
@@ -114,8 +114,14 @@ body .header .header-compass:not(.visible) {
 }
 
 body .header .header-compass.show {
-  filter: invert(1);
+  opacity: 1;
   transform: rotate(90deg);
+}
+
+body .header .header-compass svg {
+  width: 25px;
+  height: 25px;
+  fill: #FFFFFF;
 }
 
 body .header .title {
@@ -126,6 +132,13 @@ body .header .title {
   font-size: 24px;
   gap: 11px;
   transition: 0.4s transform, 0.4s opacity, 0.4s gap;
+}
+
+body .header .title .icon-container svg {
+  vertical-align: middle;
+  fill: #FFFFFF;
+  height: 27px;
+  width: 27px;
 }
 
 body .header .title:has(.project-name:empty) {
