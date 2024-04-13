@@ -569,40 +569,46 @@ body .page-container .home-container .pres-points .int-pres-points .grid-element
   height: 100%;
 }
 
-body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container .icon-container {
+body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container .pseudo-icons {
   position: relative;
   display: flex;
   align-items: center;
   width: fit-content;
 }
 
-body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container .icon-container img {
-  filter: invert(1);
-  height: 55px;
-  padding: 5px;
+body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container .pseudo-icons .icon-container {
   margin: 3px;
+  padding: 5px;
 }
 
-body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container .icon-container img.secondary {
+body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container .pseudo-icons .icon-container svg {
+  height: 52px;
+  width: 52px;
+  fill: #FFFFFF;
+  vertical-align: middle;
+}
+
+body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container .pseudo-icons .icon-container.secondary {
   width: 38px;
   opacity: 0.7;
   margin-left: 25px;
   height: auto;
 }
 
-body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.light .icon-container img {
-  border: 5px solid #000000;
+body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.light .pseudo-icons .icon-container {
+  border: 5px solid #FFFFFF;
   border-radius: 50%;
   opacity: 0.8;
 }
 
-body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.dark .icon-container img:not(.secondary) {
-  background: #FFFFFF;
+body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.dark .pseudo-icons .icon-container:not(.secondary) {
+  background: #000000;
   border-radius: 50%;
   padding: 10px;
+  z-index: 0;
 }
 
-body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container .icon-container .back-shadow {
+body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container .pseudo-icons .back-shadow {
   position: absolute;
   aspect-ratio: 1;
   height: 100%;

@@ -353,12 +353,9 @@ class Introduction {
         lightPseudoElement.appendChild(document.createElement('div'));
         lightPseudoElement.appendChild(lightPseudoElementPattern);
 
-        const icon = document.createElement('img');
-        icon.classList.add('icon');
-        icon.src = '/src/assets/bolt.svg';
         const iconContainer = document.createElement('div');
-        iconContainer.classList.add('icon-container');
-        iconContainer.appendChild(icon);
+        iconContainer.classList.add('pseudo-icons');
+        iconContainer.appendChild(iconsManager.get('main', 'bolt'));
 
         const containerText = document.createElement('div');
         containerText.classList.add('text');
@@ -373,15 +370,12 @@ class Introduction {
         return container;
       }
       case 'light': {
-        const icon = document.createElement('img');
-        icon.classList.add('icon');
-        icon.src = '/src/assets/energyleaf.svg';
         const backShadow = document.createElement('div');
         backShadow.classList.add('back-shadow');
         const iconContainer = document.createElement('div');
-        iconContainer.classList.add('icon-container');
+        iconContainer.classList.add('pseudo-icons');
         iconContainer.appendChild(backShadow);
-        iconContainer.appendChild(icon);
+        iconContainer.appendChild(iconsManager.get('main', 'energyleaf'));
 
         const containerText = document.createElement('div');
         containerText.classList.add('text', 'short');
@@ -400,24 +394,19 @@ class Introduction {
         return container;
       }
       case 'devices': {
-        const icon = document.createElement('img');
-        icon.classList.add('icon');
-        icon.src = '/src/assets/devices.svg';
+        const icon = iconsManager.get('main', 'devices');
 
-        const windowsIcon = document.createElement('img');
-        windowsIcon.classList.add('icon', 'secondary');
-        windowsIcon.src = '/src/assets/windows.svg';
-        const devicesIcon = document.createElement('img');
-        devicesIcon.classList.add('icon', 'secondary');
-        devicesIcon.src = '/src/assets/linux.svg';
-        const appleIcon = document.createElement('img');
-        appleIcon.classList.add('icon', 'secondary');
-        appleIcon.src = '/src/assets/apple.svg';
+        const windowsIcon = iconsManager.get('devices', 'windows');
+        windowsIcon.classList.add('secondary');
+        const devicesIcon = iconsManager.get('devices', 'linux');
+        devicesIcon.classList.add('secondary');
+        const appleIcon = iconsManager.get('devices', 'apple');
+        appleIcon.classList.add('secondary');
 
         const backShadow = document.createElement('div');
         backShadow.classList.add('back-shadow');
         const iconContainer = document.createElement('div');
-        iconContainer.classList.add('icon-container');
+        iconContainer.classList.add('pseudo-icons');
         iconContainer.appendChild(backShadow);
         iconContainer.appendChild(icon);
         iconContainer.appendChild(windowsIcon);
@@ -446,12 +435,9 @@ class Introduction {
         lightPseudoElement.appendChild(document.createElement('div'));
         lightPseudoElement.appendChild(lightPseudoElementPattern);
 
-        const icon = document.createElement('img');
-        icon.classList.add('icon');
-        icon.src = '/src/assets/dictionary.svg';
         const iconContainer = document.createElement('div');
-        iconContainer.classList.add('icon-container');
-        iconContainer.appendChild(icon);
+        iconContainer.classList.add('pseudo-icons');
+        iconContainer.appendChild(iconsManager.get('main', 'dictionary'));
 
         const containerText = document.createElement('div');
         containerText.classList.add('text');
