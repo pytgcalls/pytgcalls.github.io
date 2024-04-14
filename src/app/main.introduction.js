@@ -59,7 +59,7 @@ class Introduction {
     buttonIcon.appendChild(document.createElement('div'));
     buttonIcon.appendChild(document.createElement('div'));
     const button = document.createElement('div');
-    button.classList.add('button');
+    button.classList.add('mgc-button');
     button.textContent = 'Get started with Telegram Calls';
     button.appendChild(buttonIcon);
     const textContainer = document.createElement('div');
@@ -106,6 +106,11 @@ class Introduction {
     teamMembers.classList.add('team-members');
     teamMembers.appendChild(this.#composeTeamMembers());
     this.#container.appendChild(teamMembers);
+
+    const footer = document.createElement('div');
+    footer.classList.add('footer');
+    footer.appendChild(this.#composeFooter());
+    this.#container.appendChild(footer);
   }
 
   #composeSmallFileEditor() {
@@ -573,7 +578,6 @@ class Introduction {
     carouselContainer.appendChild(secondCarousel);
     fragment.append(carouselContainer);
 
-
     config.getTeamMembers().then((members) => {
       let validMembersCount = 0;
       let validMembersCountFirst = 0;
@@ -691,6 +695,117 @@ class Introduction {
 
       secondCarousel.style.setProperty('--items', (validMembersCountSecond + secondMembersChildren.length * multiplier).toString());
       secondCarousel.style.setProperty('--items-translate', validMembersCountSecond.toString());
+    });
+
+    return fragment;
+  }
+
+  #createSingleFooterDedicatedSection(iconCategory, iconName, title) {
+    const icon = iconsManager.get(iconCategory, iconName);
+
+    const titleElement = document.createElement('div');
+    titleElement.classList.add('title');
+    titleElement.innerHTML = title;
+
+    const buttonIcon = document.createElement('div');
+    buttonIcon.classList.add('button-icon');
+    buttonIcon.appendChild(document.createElement('div'));
+    buttonIcon.appendChild(document.createElement('div'));
+    buttonIcon.appendChild(document.createElement('div'));
+    const linkElement = document.createElement('a');
+    linkElement.classList.add('mgc-button');
+    linkElement.target = '_blank';
+    linkElement.textContent = "Discover more...";
+    linkElement.appendChild(buttonIcon);
+
+    const dedSection = document.createElement('div');
+    dedSection.classList.add('ded-section');
+    dedSection.appendChild(icon);
+    dedSection.appendChild(titleElement);
+    dedSection.appendChild(linkElement);
+
+    return {
+      element: dedSection,
+      setLink: (link) => {
+        linkElement.href = link;
+      }
+    };
+  }
+
+  #composeFooter() {
+    const fragment = document.createDocumentFragment();
+
+    const bigTitle = document.createElement('div');
+    bigTitle.classList.add('big-text');
+    bigTitle.textContent = 'The Project';
+    fragment.append(bigTitle);
+
+    const groupElement = this.#createSingleFooterDedicatedSection(
+      'main', 'group', 'Ask for support<br/>in our official group'
+    );
+    const channelElement = this.#createSingleFooterDedicatedSection(
+      'main', 'newspaper', 'Be updated<br/>in our channel'
+    );
+    const linksContainer = document.createElement('div');
+    linksContainer.classList.add('links-container');
+    linksContainer.appendChild(groupElement.element);
+    linksContainer.appendChild(channelElement.element);
+    fragment.append(linksContainer);
+
+    const descriptionElement = document.createElement('div');
+    descriptionElement.classList.add('description');
+    fragment.append(descriptionElement);
+
+    config.getFooterCategories().then((categories) => {
+      for (const category of categories) {
+        const title = category.getAttribute('title');
+
+        if (!title || !title.trim()) {
+          continue;
+        }
+
+        const categoryTitle = document.createElement('div');
+        categoryTitle.classList.add('category-title');
+        categoryTitle.textContent = title.trim();
+        const categoryContainer = document.createElement('div');
+        categoryContainer.classList.add('category-container');
+        categoryContainer.appendChild(categoryTitle);
+
+        for (const links of category.querySelectorAll('link')) {
+          const linkTitle = links.textContent;
+          const linkHref = links.getAttribute('href');
+
+          if (!linkTitle || !linkTitle.textContent || !linkHref || !linkHref.textContent) {
+            const categoryLink = document.createElement('a');
+            categoryLink.href = linkHref.trim();
+            categoryLink.target = '_blank';
+            categoryLink.textContent = linkTitle.trim();
+            categoryContainer.appendChild(categoryLink);
+          }
+        }
+
+        linksContainer.appendChild(categoryContainer);
+      }
+    });
+
+    config.getFooterGrouplink().then((groupLink) => {
+      if (groupLink && groupLink.textContent.trim()) {
+        groupElement.setLink(groupLink.textContent.trim());
+        // TODO: check grouplink validity
+      }
+    });
+
+    config.getFooterChannelLink().then((channelLink) => {
+      if (channelLink && channelLink.textContent.trim()) {
+        channelElement.setLink(channelLink.textContent.trim());
+        // TODO: check channellink validity
+      }
+    });
+
+    config.getFooterDescription().then((description) => {
+      if (description && description.textContent.trim()) {
+        descriptionElement.textContent = description.textContent.trim();
+      }
     });
 
     return fragment;

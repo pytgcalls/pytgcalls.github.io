@@ -100,6 +100,54 @@ class Config {
     });
   }
 
+  getFooterCategories() {
+    return new Promise((resolve) => {
+      this.loadConfig().then((config) => {
+        const domHelper = new DOMParser();
+        const dom = domHelper.parseFromString(config, 'application/xml');
+        const presFiles = dom.querySelectorAll('homepage-config > footer-links > category');
+
+        resolve(presFiles);
+      });
+    });
+  }
+
+  getFooterGrouplink() {
+    return new Promise((resolve) => {
+      this.loadConfig().then((config) => {
+        const domHelper = new DOMParser();
+        const dom = domHelper.parseFromString(config, 'application/xml');
+        const presFiles = dom.querySelector('homepage-config > footer-links > main-group-channel');
+
+        resolve(presFiles);
+      });
+    });
+  }
+
+  getFooterChannelLink() {
+    return new Promise((resolve) => {
+      this.loadConfig().then((config) => {
+        const domHelper = new DOMParser();
+        const dom = domHelper.parseFromString(config, 'application/xml');
+        const presFiles = dom.querySelector('homepage-config > footer-links > main-news-channel');
+
+        resolve(presFiles);
+      });
+    });
+  }
+
+  getFooterDescription() {
+    return new Promise((resolve) => {
+      this.loadConfig().then((config) => {
+        const domHelper = new DOMParser();
+        const dom = domHelper.parseFromString(config, 'application/xml');
+        const presFiles = dom.querySelector('homepage-config > footer-links > dsc');
+
+        resolve(presFiles);
+      });
+    });
+  }
+
   getAvailableCategories() {
     return new Promise((resolve) => {
       this.loadConfig().then((config) => {

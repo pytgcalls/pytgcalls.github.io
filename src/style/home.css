@@ -30,6 +30,74 @@ body:not(.as-home) .page-container .home-container {
   }
 }
 
+body .page-container .home-container .mgc-button {
+  background: white;
+  padding: 12px;
+  width: fit-content;
+  margin-inline: auto;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  margin-bottom: 40px;
+  transition: 0.4s transform, 0.4s gap;
+}
+
+body .page-container .home-container .mgc-button:hover {
+  transform: scale(0.95);
+  gap: 10px;
+}
+
+body .page-container .home-container .mgc-button:active {
+  transform: scale(0.9);
+}
+
+body .page-container .home-container .mgc-button .button-icon {
+  width: 15px;
+  height: 15px;
+  position: relative;
+}
+
+body .page-container .home-container .mgc-button .button-icon div:first-child,
+body .page-container .home-container .mgc-button .button-icon div:nth-child(2) {
+  position: absolute;
+  right: 4px;
+  height: 7px;
+  width: 2px;
+  background: #000000;
+  border-radius: 10px;
+}
+
+body .page-container .home-container .mgc-button .button-icon div:first-child {
+  top: 1.5px;
+  transform: rotate(-36deg);
+}
+
+body .page-container .home-container .mgc-button .button-icon div:nth-child(2) {
+  bottom: 1.5px;
+  transform: rotate(36deg);
+}
+
+body .page-container .home-container .mgc-button .button-icon div:nth-child(3) {
+  position: absolute;
+  top: 51%;
+  right: 4px;
+  transform: translateY(-50%);
+  width: 13px;
+  height: 2px;
+  background: #000000;
+  border-radius: 10px;
+  transition: 0.4s width;
+}
+
+body .page-container .home-container .mgc-button:not(:hover) .button-icon div:nth-child(3) {
+  width: 0px;
+}
+
 body .page-container .home-container .introduction {
   height: calc(100vh - 66px);
   width: 100%;
@@ -109,74 +177,6 @@ body .page-container .home-container .text-container .bigtitle {
   height: 37%;
   align-items: end;
   display: flex;
-}
-
-body .page-container .home-container .text-container .button {
-  background: white;
-  padding: 12px;
-  width: fit-content;
-  margin-inline: auto;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 15px;
-  margin-bottom: 40px;
-  transition: 0.4s transform, 0.4s gap;
-}
-
-body .page-container .home-container .text-container .button:hover {
-  transform: scale(0.95);
-  gap: 10px;
-}
-
-body .page-container .home-container .text-container .button:active {
-  transform: scale(0.9);
-}
-
-body .page-container .home-container .text-container .button .button-icon {
-  width: 15px;
-  height: 15px;
-  position: relative;
-}
-
-body .page-container .home-container .text-container .button .button-icon div:first-child,
-body .page-container .home-container .text-container .button .button-icon div:nth-child(2) {
-  position: absolute;
-  right: 4px;
-  height: 7px;
-  width: 2px;
-  background: #000000;
-  border-radius: 10px;
-}
-
-body .page-container .home-container .text-container .button .button-icon div:first-child {
-  top: 1.5px;
-  transform: rotate(-36deg);
-}
-
-body .page-container .home-container .text-container .button .button-icon div:nth-child(2) {
-  bottom: 1.5px;
-  transform: rotate(36deg);
-}
-
-body .page-container .home-container .text-container .button .button-icon div:nth-child(3) {
-  position: absolute;
-  top: 51%;
-  right: 4px;
-  transform: translateY(-50%);
-  width: 13px;
-  height: 2px;
-  background: #000000;
-  border-radius: 10px;
-  transition: 0.4s width;
-}
-
-body .page-container .home-container .text-container .button:not(:hover) .button-icon div:nth-child(3) {
-  width: 0px;
 }
 
 body .page-container .home-container .text-container .vsc-mockup {
@@ -881,4 +881,75 @@ body .page-container .home-container .team-members .carousel-container .carousel
 
 body .page-container .home-container .team-members .carousel-container .carousel .member .buttons:hover a:not(:hover) .icon-container {
   opacity: 0.3;
+}
+
+body .page-container .home-container .footer {
+  padding: 80px;
+  background: #151b25;
+  margin-top: 20px;
+}
+
+body .page-container .home-container .footer .big-text {
+  font-size: 60px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #FFFFFF;
+}
+
+body .page-container .home-container .footer .links-container {
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 150px;
+  padding-inline: 50px;
+  padding-block: 30px;
+}
+
+body .page-container .home-container .footer .links-container .ded-section .icon-container svg {
+  width: 150px;
+  height: 150px;
+  fill: #FFFFFF;
+}
+
+body .page-container .home-container .footer .links-container .ded-section .title {
+  color: #FFFFFF;
+  font-size: 30px;
+}
+
+body .page-container .home-container .footer .links-container .ded-section .mgc-button {
+  width: 100%;
+  margin-top: 20px;
+  text-decoration: none;
+  color: #000000;
+}
+
+body .page-container .home-container .footer .links-container .category-container {
+  display: flex;
+  flex-direction: column;
+}
+
+body .page-container .home-container .footer .links-container .category-container .category-title {
+  color: #FFFFFF;
+  font-size: 32px;
+}
+
+body .page-container .home-container .footer .links-container .category-container a {
+  text-decoration: none;
+  color: #007fff;
+  position: relative;
+  padding-right: 15px;
+  width: fit-content;
+}
+
+body .page-container .home-container .footer .links-container .category-container a::after {
+  content: ">";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+body .page-container .home-container .footer .description {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.8);
 }
