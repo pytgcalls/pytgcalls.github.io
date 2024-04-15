@@ -406,9 +406,8 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
 }
 
 body .page-container .home-container .pres-points {
-  background: #0a101b;
+  background: #0d1117;
   padding: 120px 80px;
-  padding-bottom: 120px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -707,7 +706,7 @@ body .page-container .home-container .pres-points .int-pres-points .grid-element
 
 body .page-container .home-container .team-members {
   margin-top: 20px;
-  background: url("/src/assets/NocheInsightsBackground.svg") #050d1b;
+  background: url("/src/assets/NocheInsightsBackground.svg") #0d1117;
   padding: 80px 0;
 }
 
@@ -725,14 +724,14 @@ body .page-container .home-container .team-members .int-team-members .big-text {
 }
 
 body .page-container .home-container .team-members .int-team-members .description {
-  font-size: 26px;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.3);
 }
 
 body .page-container .home-container .team-members .carousel-container {
   margin-top: 40px;
   background-size: 0.75%;
-  padding-top: 80px;
+  padding-top: 50px;
 }
 
 body .page-container .home-container .team-members .carousel-container .carousel {
