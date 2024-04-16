@@ -53,8 +53,7 @@ body .page-container .sections.is-loading svg circle {
 }
 
 body .page-container .sections:not(.is-loading) {
-  padding-left: 18px;
-  padding-top: 15px;
+  padding: 25px;
   box-sizing: border-box;
   display: flex;
   justify-content: flex-start;

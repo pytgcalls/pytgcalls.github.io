@@ -110,8 +110,7 @@ body .page-container .content.disappear {
 
 body .page-container .content:not(.is-loading) {
   box-sizing: border-box;
-  padding-inline: 20px;
-  padding-bottom: 20px;
+  padding: 30px;
   color: #FFFFFF;
 }
 
@@ -221,9 +220,12 @@ body .page-container .content:not(.is-loading) .separator {
 
 body .page-container .content:not(.is-loading) .h1 {
   font-size: 40px;
-  margin-top: 10px;
   font-weight: 700;
   position: relative;
+}
+
+body .page-container .content:not(.is-loading) .h1:not(:first-child) {
+  margin-top: 10px;
 }
 
 body .page-container .content:not(.is-loading) .h1 .emoji-parsed img {
