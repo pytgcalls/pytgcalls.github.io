@@ -61,7 +61,7 @@ body .page-container .left-container .sidebar-sticky {
 }
 
 body.disable-blur .page-container .left-container .sidebar-sticky.use-mini-title {
-  background: #000000;
+  background: #0d1117;
 }
 
 body:not(.disable-blur) .page-container .left-container .sidebar-sticky {
@@ -116,7 +116,8 @@ body .page-container .left-container .sidebar-sticky .search-input {
   align-items: center;
   justify-content: center;
   width: calc(100% - 13px * 2);
-  background: #191919;
+  background: #161a20;
+  border: 1px solid rgba(93, 106, 129, 0.2);
   border-radius: 10px;
   min-height: 35px;
   max-height: 35px;
@@ -373,7 +374,7 @@ body .page-container .left-container .left-sidebar .elements .element:first-chil
 }
 
 body .page-container .left-container .left-sidebar .elements .element:first-child .icon-container svg {
-  fill: #007bf5;
+  fill: #5d6a81;
 }
 
 body .page-container .left-container .left-sidebar .elements.expanded .element:first-child .icon-container {
@@ -393,7 +394,7 @@ body .page-container .left-container .left-sidebar .element {
 }
 
 body .page-container .left-container .left-sidebar .element.active {
-  background: rgb(255, 255, 255, 0.04);
+  background: rgb(22, 26, 32);
   pointer-events: none;
 }
 

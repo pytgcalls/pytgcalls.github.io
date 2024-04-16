@@ -129,12 +129,12 @@ body .page-container .content:not(.is-loading) .go-to-container.has-only-next {
 body .page-container .content:not(.is-loading) .go-to-container .go-to {
   display: flex;
   align-items: center;
-  background: #111111;
+  background: #161a20;
+  border: 1px solid rgba(93, 106, 129, 0.2);
   padding: 17px;
   gap: 11px;
   position: relative;
   min-width: 153px;
-  border: 1px solid rgb(255, 255, 255, 0.1);
   border-radius: 10px;
   cursor: pointer;
   overflow: hidden;
@@ -199,7 +199,7 @@ body .page-container .content:not(.is-loading) .go-to-container .go-to:hover .mi
 }
 
 body .page-container .content:not(.is-loading) a {
-  color: #007fff;
+  color: #5d6a81;
 }
 
 body .page-container .content:not(.is-loading) a.ref-shi {
@@ -328,7 +328,7 @@ body .page-container .content:not(.is-loading) .syntax-highlight,
 body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-code-high .syntax-highlight {
   padding: 10px;
   background: rgb(45, 45, 45, 0.3);
-  border: 1px solid rgb(255, 255, 255, 0.1);
+  border: 1px solid rgba(93, 106, 129, 0.2);
   margin-block: 5px;
   border-radius: 10px;
   user-select: text;
@@ -465,8 +465,8 @@ body .page-container .content:not(.is-loading) .syntax-highlight .tags-container
 }
 
 body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag {
-  background: rgb(13, 13, 13);
-  border: 1px solid rgb(255, 255, 255, 0.1);
+  background: #0d1117;
+  border: 1px solid rgba(93, 106, 129, 0.2);
   border-right: 0px;
   width: fit-content;
   padding-inline: 12px;
@@ -491,12 +491,12 @@ body .page-container .content:not(.is-loading) .syntax-highlight .tags-container
 
 body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.is-clickable:not(.success):hover::before,
 body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.is-clickable:not(.success):hover {
-  background: rgb(24, 24, 24);
+  background: rgb(22, 29, 39);
 }
 
 body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.is-clickable:not(.success):active::before,
 body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.is-clickable:not(.success):active {
-  background: rgb(50, 50, 50);
+  background: rgb(28, 36, 48);
 }
 
 body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag::before {
@@ -507,7 +507,7 @@ body .page-container .content:not(.is-loading) .syntax-highlight .tags-container
   height: 19px;
   border-right: 1px solid rgb(255, 255, 255, 0.1);
   border-top: 1px solid rgb(255, 255, 255, 0.1);
-  background: rgb(13, 13, 13);
+  background: #0d1117;
   aspect-ratio: 1;
   transform: translateY(-50%) rotate(45deg);
 }
@@ -566,7 +566,7 @@ body .page-container .content:not(.is-loading) .syntax-highlight.has-mark::after
   position: absolute;
   left: -10px;
   width: calc(100% + 10px);
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(13, 17, 23, 0.7);
   transition: 0.4s transform;
 }
 
@@ -684,14 +684,10 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
 }
 
 body .page-container .content:not(.is-loading) .category-title {
-  background: rgb(45, 45, 45, 0.3);
-  border: 1px solid rgb(255, 255, 255, 0.1);
+  background: #161a20;
+  border: 1px solid rgba(93, 106, 129, 0.2);
   padding: 9px;
   border-radius: 10px;
-}
-
-body.disable-blur .page-container .content:not(.is-loading) .category-title {
-  border: none;
 }
 
 body .page-container .content:not(.is-loading) .category-title .spacer {
@@ -745,7 +741,8 @@ body .page-container .content:not(.is-loading) table tr:not(:last-child) td {
 }
 
 body .page-container .content:not(.is-loading) .alert {
-  background: rgb(45, 45, 45, 0.3);
+  background: #161a20;
+  border: 1px solid rgba(93, 106, 129, 0.2);
   border-radius: 10px;
   overflow: hidden;
   margin-block: 20px;
@@ -862,7 +859,7 @@ body .page-container .content:not(.is-loading) .alert[data-type="p2p"] .alert-co
 
 body .page-container .content:not(.is-loading) .github-ref {
   width: 100%;
-  background: #202020;
+  background: #161a20;
   border: 1px solid #ffffff26;
   height: 190px;
   border-radius: 10px;

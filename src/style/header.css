@@ -1,6 +1,6 @@
 body .header {
   height: 65px;
-  background: rgba(45, 45, 45, 0.3);
+  background: #0d1117;
   border-bottom: 1px solid rgb(255, 255, 255, 0.1);
   position: relative;
   display: flex;
@@ -10,7 +10,6 @@ body .header {
   box-sizing: border-box;
   overflow: hidden;
   transition: 0.4s border-bottom, 0.4s background cubic-bezier(0.97, -0.02, 0, 0.98);
-  animation: 0.4s appearHeader;
 }
 
 body.as-home.expanded:not(.disable-blur) .header {
@@ -32,12 +31,6 @@ body.as-home .header {
   body .header:has(.header-compass.visible.show) {
     background: #050505;
     border-bottom: 1px solid transparent;
-  }
-}
-
-@keyframes appearHeader {
-  from {
-    transform: translateY(-60px);
   }
 }
 
