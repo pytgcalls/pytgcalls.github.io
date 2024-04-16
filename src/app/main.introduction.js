@@ -618,11 +618,19 @@ class Introduction {
         memberName.textContent = name.textContent.trim();
         const memberRole = document.createElement('div');
         memberRole.classList.add('member-role');
-        memberRole.textContent = role.textContent.trim();
         const memberDetails = document.createElement('div');
         memberDetails.classList.add('member-details');
         memberDetails.appendChild(memberName);
         memberDetails.appendChild(memberRole);
+
+        for (const rolePart of role.textContent.trim().split(', ')) {
+          if (rolePart != '') {
+            const rolePartElement = document.createElement('span');
+            rolePartElement.classList.add('member-role-part');
+            rolePartElement.textContent = rolePart;
+            memberRole.appendChild(rolePartElement);
+          }
+        }
 
         const memberTopContainer = document.createElement('div');
         memberTopContainer.classList.add('member-top-container');

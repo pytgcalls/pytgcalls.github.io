@@ -882,7 +882,18 @@ body .page-container .home-container .team-members .carousel-container .carousel
 }
 
 body .page-container .home-container .team-members .carousel-container .carousel .member .member-top-container .member-details .member-role {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+body .page-container .home-container .team-members .carousel-container .carousel .member .member-top-container .member-details .member-role .member-role-part {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding-inline: 11px;
+  font-size: 12px;
 }
 
 body .page-container .home-container .team-members .carousel-container .carousel .member .buttons {
