@@ -154,7 +154,7 @@ body .page-container .home-container .introduction .background .background-surfa
 
 @media screen and (max-width: 800px) {
   body .page-container .home-container .introduction {
-    height: 300px;
+    height: 100vh;
   }
 }
 
@@ -168,8 +168,7 @@ body .page-container .home-container .text-container {
 }
 
 body .page-container .home-container .text-container .bigtitle {
-  font-size: 62px;
-  line-height: 62px;
+  font-size: min(5.5vw, 48px);
   color: #FFFFFF;
   font-weight: 600;
   text-align: center;
