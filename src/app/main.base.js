@@ -22,6 +22,7 @@ window.addEventListener('load', () => {
         document.body.classList.add('disable-blur');
       }
 
+      reloadScreenData();
       splashScreen.remove();
       config.getRedirectDataForPath(window.location.pathname).then((data) => {
         if (data && (data.startsWith('https://') || data.startsWith('http://'))) {
@@ -33,3 +34,9 @@ window.addEventListener('load', () => {
     });
   }
 });
+
+function reloadScreenData() {
+  document.body.style.setProperty('--wd', window.innerWidth.toString());
+}
+
+window.addEventListener('resize', reloadScreenData);
