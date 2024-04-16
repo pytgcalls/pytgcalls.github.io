@@ -286,6 +286,11 @@ body .page-container .left-container .search-results:not(.is-loading) .right-ico
   transform: rotate(-90deg);
 }
 
+body .page-container .left-container .search-results:not(.is-loading) .right-icon svg {
+  fill: #FFFFFF;
+  vertical-align: middle;
+}
+
 body .page-container .left-container .left-sidebar {
   flex: 1;
   border-radius: 10px;
