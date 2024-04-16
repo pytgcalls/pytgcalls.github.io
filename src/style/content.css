@@ -706,8 +706,8 @@ body .page-container .content:not(.is-loading) .subtext+.category-title {
 
 body .page-container .content:not(.is-loading) table {
   border-spacing: 0;
-  background: rgb(45, 45, 45, 0.3);
-  border: 1px solid rgb(255, 255, 255, 0.1);
+  background: #0d1117;
+  border: 1px solid rgba(93, 106, 129, 0.2);
   padding: 7px;
   border-radius: 20px;
   margin-top: 20px;
@@ -718,7 +718,7 @@ body.disable-blur .page-container .content:not(.is-loading) table {
 }
 
 body .page-container .content:not(.is-loading) table tr.as-definitions th {
-  background: #202020;
+  background: #161a20;
 }
 
 body .page-container .content:not(.is-loading) table tr.as-definitions th:first-child {
