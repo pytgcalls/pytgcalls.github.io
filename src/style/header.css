@@ -146,10 +146,6 @@ body .header .title:has(.project-name:empty) {
 }
 
 @media screen and (max-width: 1330px) {
-  body .header .expand-sidebar {
-    display: none;
-  }
-
   body .header .title {
     cursor: pointer;
   }
@@ -256,24 +252,4 @@ body .header .description .tabs .tab:hover {
 
 body .header .description .tabs .tab:active {
   transform: scale(0.9);
-}
-
-body .header .expand-sidebar {
-  position: absolute;
-  top: 50%;
-  left: 15px;
-  width: 25px;
-  cursor: pointer;
-  transform: translateY(-50%);
-  transition: 0.4s transform 0.4s, 0.4s opacity 0.4s;
-}
-
-body .header .expand-sidebar svg {
-  vertical-align: middle;
-}
-
-body .header .expand-sidebar:not(.show) {
-  transform: translateY(100%);
-  opacity: 0;
-  transition: 0.4s transform, 0.4s opacity;
 }

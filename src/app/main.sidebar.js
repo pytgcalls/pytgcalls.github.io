@@ -23,23 +23,12 @@ class Sidebar {
     leftSidebar.classList.add('left-sidebar', 'expanded');
     this.#leftSidebar = leftSidebar;
 
-    const expandableIcon = iconsManager.get('special', 'tablecolumns');
-    const expandableButton = document.createElement('div');
-    expandableButton.classList.add('expandable');
-    expandableButton.addEventListener('click', () => {
-      this.#leftContainer.classList.add('collapsed');
-      this.onCollapsedListenerInstance.callAllListeners(true);
-      this.killSearch();
-    });
-    expandableButton.appendChild(expandableIcon);
-
     const exploreTitle = document.createElement('div');
     exploreTitle.classList.add('explore');
     exploreTitle.textContent = 'Explore';
 
     const sidebarSticky = document.createElement('div');
     sidebarSticky.classList.add('sidebar-sticky');
-    sidebarSticky.appendChild(expandableButton);
     sidebarSticky.appendChild(exploreTitle);
     sidebarSticky.appendChild(searchInput);
     this.#sidebarSticky = sidebarSticky;

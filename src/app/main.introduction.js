@@ -749,10 +749,10 @@ class Introduction {
     fragment.append(bigTitle);
 
     const groupElement = this.#createSingleFooterDedicatedSection(
-      'main', 'group', 'Ask for support<br/>in our official group'
+      'main', 'group', 'Ask for support in our official group'
     );
     const channelElement = this.#createSingleFooterDedicatedSection(
-      'main', 'newspaper', 'Be updated<br/>in our channel'
+      'main', 'newspaper', 'Be updated in our channel'
     );
     const linksContainer = document.createElement('div');
     linksContainer.classList.add('links-container');

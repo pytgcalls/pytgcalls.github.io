@@ -5,7 +5,7 @@ body .page-container .left-container {
   height: 100%;
   position: relative;
   overflow: hidden;
-  background: #050505;
+  background: #0d1117;
 }
 
 body.as-home .page-container .left-container {
@@ -81,29 +81,6 @@ body .page-container .left-container .sidebar-sticky.use-mini-title {
   border-bottom: 1px solid rgb(255, 255, 255, 0.1);
 }
 
-body .page-container .left-container .sidebar-sticky .expandable {
-  margin-top: 10px;
-  margin-left: 15px;
-  cursor: pointer;
-  transition: 0.4s transform;
-}
-
-body .page-container .left-container .sidebar-sticky .expandable .icon-container svg {
-  width: 31px;
-  height: 31px;
-  vertical-align: middle;
-  transition: 0.4s transform;
-}
-
-body .page-container .left-container .sidebar-sticky .expandable:active .icon-container svg {
-  transform: scale(0.95);
-}
-
-@media screen and (max-width: 1330px) {
-  body .page-container .left-container .sidebar-sticky .expandable {
-    display: none;
-  }
-}
 
 body .page-container .left-container .sidebar-sticky .explore {
   font-size: 30px;

@@ -41,13 +41,6 @@ class Header {
     headerMenu.appendChild(document.createElement('div'));
     this.#headerMenu = headerMenu;
 
-    const headerExpandSidebar = iconsManager.get('special', 'tablecolumns');
-    headerExpandSidebar.classList.add('expand-sidebar');
-    headerExpandSidebar.addEventListener('click', () => {
-      this.onSidebarUpdateListenerInstance.callAllListeners(false);
-    });
-    this.#headerExpanded = headerExpandSidebar;
-
     const headerIcon = iconsManager.get('socials', 'telegram');
 
     const headerProjectName = document.createElement('div');
@@ -83,7 +76,6 @@ class Header {
     header.addEventListener('dblclick', () => {
       document.body.classList.toggle('disable-blur');
     });
-    header.appendChild(headerExpandSidebar);
     header.appendChild(headerMenu);
     header.appendChild(headerTitle);
     header.appendChild(fakeHeaderTitle);
