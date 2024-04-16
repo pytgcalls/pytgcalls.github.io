@@ -422,6 +422,12 @@ body .page-container .home-container .pres-points {
   overflow: hidden;
 }
 
+@media screen and (max-width: 1000px) {
+  body .page-container .home-container .pres-points {
+    padding: 40px 120px;
+  }
+}
+
 body .page-container .home-container .pres-points.has-margin {
   margin-top: 20px;
 }
@@ -716,10 +722,9 @@ body .page-container .home-container .pres-points .int-pres-points .grid-element
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.citation .citation-text {
   color: #FFFFFF;
-  font-size: min(5vw, 38px);
+  font-size: min(6vw, 38px);
   /* TODO: test line-height */
   font-weight: 500;
-  line-height: 46px;
 }
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.citation .owner-row {
@@ -782,7 +787,7 @@ body .page-container .home-container .team-members .carousel-container {
   padding-top: 50px;
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 550px) {
   body .page-container .home-container .team-members .carousel-container {
     margin-top: 0;
     transform: scale(calc(var(--wd) / 600));
