@@ -189,7 +189,10 @@ class Header {
           return;
         }
 
-        document.title = id + ' Documentation';
+        document.title = id;
+        if (id != 'Documentation') {
+          document.title += ' Documentation';
+        }
 
         if (this.#headerProjectName.textContent == "") {
           this.#headerProjectName.textContent = id;
