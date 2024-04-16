@@ -78,7 +78,7 @@ class Introduction {
     internalPresPoints.classList.add('int-pres-points');
     internalPresPoints.appendChild(this.#composePresentationPoints());
     const presentationPoints = document.createElement('div');
-    presentationPoints.classList.add('pres-points');
+    presentationPoints.classList.add('pres-points', 'has-margin');
     presentationPoints.appendChild(internalPresPoints);
     this.#container.appendChild(presentationPoints);
 
