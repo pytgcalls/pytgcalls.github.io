@@ -225,27 +225,29 @@ body .header .description .tabs .tab {
   cursor: pointer;
   text-align: center;
   font-size: 19px;
-  color: rgba(255, 255, 255, 0.5);
+  color: #FFFFFF;
   transition: 0.4s transform, 0.4s color;
 }
 
 body .header .description .tabs .tab.active {
-  color: #FFFFFF;
   pointer-events: none;
 }
 
-body .header .description .tabs .tab:after {
+body .header .description .tabs .tab::after {
+  content: "";
   position: absolute;
-  bottom: -10px;
-  left: 0;
-  width: 100%;
-  height: 3px;
+  bottom: 5px;
+  left: 20%;
+  width: 60%;
+  height: 2px;
   background: #FFFFFF;
-  transition: 0.4s bottom;
+  border-radius: 10px;
+  transition: 0.4s transform, 0.4s opacity;
 }
 
-body .header .description .tabs .tab.active:after {
-  bottom: 0;
+body .header .description .tabs .tab:not(.active)::after {
+  transform: translateY(30px);
+  opacity: 0;
 }
 
 body .header .description .tabs .tab:hover {
