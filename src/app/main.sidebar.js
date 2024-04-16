@@ -23,9 +23,11 @@ class Sidebar {
     leftSidebar.classList.add('left-sidebar', 'expanded');
     this.#leftSidebar = leftSidebar;
 
+    const exploreString = document.createElement('span');
+    exploreString.textContent = 'Explore';
     const exploreTitle = document.createElement('div');
     exploreTitle.classList.add('explore');
-    exploreTitle.textContent = 'Explore';
+    exploreTitle.appendChild(exploreString);
 
     const sidebarSticky = document.createElement('div');
     sidebarSticky.classList.add('sidebar-sticky');

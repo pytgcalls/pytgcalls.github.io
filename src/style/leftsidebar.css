@@ -55,7 +55,6 @@ body .page-container .left-container .sidebar-sticky {
   width: 100%;
   z-index: 1;
   padding-bottom: 15px;
-  height: 144px;
   box-sizing: border-box;
   border-bottom: 1px solid transparent;
   transition: 0.4s height cubic-bezier(0.42, 0, 0, 0.97), 0.4s border-bottom cubic-bezier(0.42, 0, 0, 0.97);
@@ -77,32 +76,37 @@ body:not(.disable-blur) .page-container .left-container .sidebar-sticky {
 }
 
 body .page-container .left-container .sidebar-sticky.use-mini-title {
-  height: 105px;
   border-bottom: 1px solid rgb(255, 255, 255, 0.1);
 }
 
 
 body .page-container .left-container .sidebar-sticky .explore {
-  font-size: 30px;
   font-weight: 600;
   margin-left: 16px;
   color: #FFFFFF;
-  position: absolute;
-  top: 47px;
-  left: 0;
+  height: 50px;
+  position: relative;
+  margin-top: 20px;
   transition: 0.4s all cubic-bezier(0.42, 0, 0, 0.97);
 }
 
-@media screen and (max-width: 1330px) {
-  body .page-container .left-container .sidebar-sticky .explore {
-    top: 0;
-  }
+body .page-container .left-container .sidebar-sticky .explore span {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 30px;
+  transition: 0.4s all cubic-bezier(0.42, 0, 0, 0.97);
 }
 
 body .page-container .left-container .sidebar-sticky.use-mini-title .explore {
-  top: 5px;
+  margin-top: 0;
+}
+
+body .page-container .left-container .sidebar-sticky.use-mini-title .explore span {
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%) scale(0.6);
+  transform: translateX(-50%) translateY(-50%) scale(0.6);
   margin-left: 0;
   font-weight: 500;
 }
@@ -118,15 +122,6 @@ body .page-container .left-container .sidebar-sticky .search-input {
   max-height: 35px;
   margin-inline: auto;
   overflow: hidden;
-  margin-top: 46px;
-  transition: 0.4s margin-top cubic-bezier(0.42, 0, 0, 0.97);
-}
-
-
-@media screen and (min-width: 1330px) {
-  body .page-container .left-container .sidebar-sticky.use-mini-title .search-input {
-    margin-top: 10px;
-  }
 }
 
 body .page-container .left-container .sidebar-sticky .search-input .icon-container:not(.cancel) {
