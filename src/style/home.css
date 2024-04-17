@@ -463,8 +463,8 @@ body .page-container .home-container .pres-points .int-pres-points {
 
 @media screen and (max-width: 1000px) {
   body .page-container .home-container .pres-points .int-pres-points {
-    max-width: 95vw;
-    min-width: 95vw;
+    max-width: 95%;
+    min-width: 95%;
   }
 }
 
@@ -978,7 +978,7 @@ body .page-container .home-container .footer .links-container {
   body .page-container .home-container .footer .links-container {
     flex-wrap: wrap;
     justify-content: space-between;
-    padding-inline: 5vw;
+    padding-inline: 5%;
   }
 
   body .page-container .home-container .footer .links-container .ded-section {
