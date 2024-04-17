@@ -60,6 +60,10 @@ class Introduction {
     buttonIcon.appendChild(document.createElement('div'));
     const button = document.createElement('div');
     button.classList.add('mgc-button');
+    button.addEventListener('click', () => {
+      this.hide();
+      homePage.handleAsRedirect('/NTgCalls');
+    });
     button.textContent = 'Get started with Telegram Calls';
     button.appendChild(buttonIcon);
     const textContainer = document.createElement('div');
