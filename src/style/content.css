@@ -611,7 +611,7 @@ body .page-container .content:not(.is-loading) .multisyntax .tabs::before {
   left: calc(calc(100% * var(--eid)) / var(--i));
   width: calc(100% / var(--i));
   height: 100%;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
   transition: 0.2s left;
 }
 
@@ -702,7 +702,7 @@ body .page-container .content:not(.is-loading) table tr:not(:last-child) td {
 
 body .page-container .content:not(.is-loading) .alert {
   background: #161a20;
-  border: 1px solid rgba(93, 106, 129, 0.2);
+  box-shadow: 0 0 0 1px rgba(93, 106, 129, 0.2);
   border-radius: 10px;
   overflow: hidden;
   margin-block: 20px;
@@ -807,6 +807,8 @@ body .page-container .content:not(.is-loading) .alert[data-type="p2p"] img {
 body .page-container .content:not(.is-loading) .alert[data-type="p2p"]>.alert-title {
   font-size: 25px;
   font-weight: 600;
+  max-width: 80%;
+  margin-inline: auto;
 }
 
 body .page-container .content:not(.is-loading) .alert[data-type="p2p"] .alert-content {
