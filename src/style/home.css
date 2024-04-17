@@ -975,22 +975,39 @@ body .page-container .home-container .footer .links-container {
   padding-block: 30px;
 }
 
-body .page-container .home-container .footer .links-container .ded-section .icon-container svg {
-  width: 150px;
-  height: 150px;
-  fill: #FFFFFF;
+body .page-container .home-container .footer .links-container .ded-section {
+  color: #FFFFFF;
 }
 
 body .page-container .home-container .footer .links-container .ded-section .title {
-  color: #FFFFFF;
   font-size: 30px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+body .page-container .home-container .footer .links-container .ded-section .description {
+  margin-top: 20px;
+  font-size: 17px;
+  font-weight: 500;
+}
+
+body .page-container .home-container .footer .links-container .ded-section .mini-description {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-block: 10px;
 }
 
 body .page-container .home-container .footer .links-container .ded-section .mgc-button {
   width: 100%;
   margin-top: 20px;
   text-decoration: none;
-  color: #000000;
+  color: #FFFFFF;
+  background: #161a20;
+  border: 1px solid rgba(93, 106, 129, 0.2);
+}
+
+body .page-container .home-container .footer .links-container .ded-section .mgc-button .button-icon div {
+  background: #FFFFFF;
 }
 
 body .page-container .home-container .footer .links-container .category-container {
@@ -1000,26 +1017,19 @@ body .page-container .home-container .footer .links-container .category-containe
 
 body .page-container .home-container .footer .links-container .category-container .category-title {
   color: #FFFFFF;
-  font-size: 32px;
+  font-size: 20px;
+  font-weight: 600;
 }
 
 body .page-container .home-container .footer .links-container .category-container a {
   text-decoration: none;
-  color: #007fff;
-  position: relative;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 18px;
   padding-right: 15px;
   width: fit-content;
 }
 
-body .page-container .home-container .footer .links-container .category-container a::after {
-  content: ">";
-  position: absolute;
-  top: 50%;
-  right: 0;
-  transform: translateY(-50%);
-}
-
-body .page-container .home-container .footer .description {
+body .page-container .home-container .footer>.description {
   text-align: center;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.6);
 }

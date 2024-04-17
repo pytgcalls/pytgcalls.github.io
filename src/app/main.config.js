@@ -112,24 +112,12 @@ class Config {
     });
   }
 
-  getFooterGrouplink() {
+  getFooterContributionLink() {
     return new Promise((resolve) => {
       this.loadConfig().then((config) => {
         const domHelper = new DOMParser();
         const dom = domHelper.parseFromString(config, 'application/xml');
-        const presFiles = dom.querySelector('homepage-config > footer-links > main-group-channel');
-
-        resolve(presFiles);
-      });
-    });
-  }
-
-  getFooterChannelLink() {
-    return new Promise((resolve) => {
-      this.loadConfig().then((config) => {
-        const domHelper = new DOMParser();
-        const dom = domHelper.parseFromString(config, 'application/xml');
-        const presFiles = dom.querySelector('homepage-config > footer-links > main-news-channel');
+        const presFiles = dom.querySelector('homepage-config > footer-links > contribution-link');
 
         resolve(presFiles);
       });

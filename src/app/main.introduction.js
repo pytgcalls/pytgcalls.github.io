@@ -708,56 +708,39 @@ class Introduction {
     return fragment;
   }
 
-  #createSingleFooterDedicatedSection(iconCategory, iconName, title) {
-    const icon = iconsManager.get(iconCategory, iconName);
+  #composeFooter() {
+    const fragment = document.createDocumentFragment();
 
-    const titleElement = document.createElement('div');
-    titleElement.classList.add('title');
-    titleElement.innerHTML = title;
+    const dedSectionTitle = document.createElement('div');
+    dedSectionTitle.classList.add('title');
+    dedSectionTitle.textContent = 'PyTgCalls Foundation';
+    const dedSectionDescription = document.createElement('div');
+    dedSectionDescription.classList.add('description');
+    dedSectionDescription.textContent = 'Help us make these docs great!';
+    const dedSectionDescriptionMini = document.createElement('div');
+    dedSectionDescriptionMini.classList.add('mini-description');
+    dedSectionDescriptionMini.textContent = 'All Github docs are open source. See something that\'s wrong or unclear? Submit a pull request.';
 
     const buttonIcon = document.createElement('div');
     buttonIcon.classList.add('button-icon');
     buttonIcon.appendChild(document.createElement('div'));
     buttonIcon.appendChild(document.createElement('div'));
     buttonIcon.appendChild(document.createElement('div'));
-    const linkElement = document.createElement('a');
-    linkElement.classList.add('mgc-button');
-    linkElement.target = '_blank';
-    linkElement.textContent = "Discover more...";
-    linkElement.appendChild(buttonIcon);
+    const button = document.createElement('a');
+    button.classList.add('mgc-button');
+    button.textContent = 'Make a contribution';
+    button.appendChild(buttonIcon);
 
     const dedSection = document.createElement('div');
     dedSection.classList.add('ded-section');
-    dedSection.appendChild(icon);
-    dedSection.appendChild(titleElement);
-    dedSection.appendChild(linkElement);
+    dedSection.appendChild(dedSectionTitle);
+    dedSection.appendChild(dedSectionDescription);
+    dedSection.appendChild(dedSectionDescriptionMini);
+    dedSection.appendChild(button);
 
-    return {
-      element: dedSection,
-      setLink: (link) => {
-        linkElement.href = link;
-      }
-    };
-  }
-
-  #composeFooter() {
-    const fragment = document.createDocumentFragment();
-
-    const bigTitle = document.createElement('div');
-    bigTitle.classList.add('big-text');
-    bigTitle.textContent = 'The Project';
-    fragment.append(bigTitle);
-
-    const groupElement = this.#createSingleFooterDedicatedSection(
-      'main', 'group', 'Ask for support in our official group'
-    );
-    const channelElement = this.#createSingleFooterDedicatedSection(
-      'main', 'newspaper', 'Be updated in our channel'
-    );
     const linksContainer = document.createElement('div');
     linksContainer.classList.add('links-container');
-    linksContainer.appendChild(groupElement.element);
-    linksContainer.appendChild(channelElement.element);
+    linksContainer.appendChild(dedSection);
     fragment.append(linksContainer);
 
     const descriptionElement = document.createElement('div');
@@ -796,17 +779,10 @@ class Introduction {
       }
     });
 
-    config.getFooterGrouplink().then((groupLink) => {
-      if (groupLink && groupLink.textContent.trim()) {
-        groupElement.setLink(groupLink.textContent.trim());
-        // TODO: check grouplink validity
-      }
-    });
-
-    config.getFooterChannelLink().then((channelLink) => {
-      if (channelLink && channelLink.textContent.trim()) {
-        channelElement.setLink(channelLink.textContent.trim());
-        // TODO: check channellink validity
+    config.getFooterContributionLink().then((contribLink) => {
+      if (contribLink && contribLink.textContent.trim()) {
+        button.href = contribLink.textContent.trim();
+        button.target = '_blank';
       }
     });
 
