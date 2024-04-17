@@ -316,6 +316,10 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
   width: 100%;
 }
 
+body .page-container .content:not(.is-loading) .syntax-highlight.has-diff-on-zero {
+  padding-left: 30px;
+}
+
 body .page-container .content:not(.is-loading) .multisyntax>.sy-container {
   position: relative;
 }
