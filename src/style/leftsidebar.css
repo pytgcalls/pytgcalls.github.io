@@ -36,16 +36,6 @@ body.as-home .page-container .left-container {
     position: absolute;
     left: 0;
     bottom: 0;
-    transition: 0.4s transform cubic-bezier(0.42, 0, 0, 0.97);
-  }
-
-  body .page-container:not(:has(.left-container.collapsed)) {
-    width: calc(100% - 23vw - 10px);
-    padding-left: calc(23vw + 10px);
-  }
-
-  body .page-container .left-container.collapsed {
-    transform: translateX(-100%);
   }
 }
 
