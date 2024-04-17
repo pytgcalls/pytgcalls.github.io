@@ -51,7 +51,7 @@ class ListenerManagerInstance {
       if ((onlyInternal && callback.isInternal) || !onlyInternal) {
         try {
           callback.callback(data);
-        } catch(e) {}
+        } catch (e) { }
       }
     }
 

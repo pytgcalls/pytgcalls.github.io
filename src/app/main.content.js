@@ -53,20 +53,13 @@ class Content {
     }
   }
 
-  handleCustomCodeInsert() {
-    if (window.location.protocol != 'http:') {
+  handleCustomCodeInsert(data) {
+    if (!debug.isSafeToUseDebugItems()) {
       return;
     }
 
-    const data = prompt('Insert here your script');
-
-    if (data.trim().startsWith('<config>')) {
-      config.setAsConfig(data.trim());
-      alert('Config updated successfully!');
-    } else {
-      const { content, pageSections } = this.#replaceWithValidElements();
-      this.#handleResponse("", content, pageSections, data, '');
-    }
+    const { content, pageSections } = this.#replaceWithValidElements();
+    this.#handleResponse("", content, pageSections, data, "");
   }
 
   clearBoard() {
@@ -125,8 +118,6 @@ class Content {
 
   #handlePathPNManager(content, fileName) {
     config.getTheNextFileAfter(fileName).then(({ previousFile, nextFile, basePath }) => {
-      const goToPreviousIcon = document.createElement('img');
-      goToPreviousIcon.src = '/src/assets/arrowleft.svg';
       const goToPreviousBigTitle = document.createElement('div');
       goToPreviousBigTitle.classList.add('big-title');
       goToPreviousBigTitle.textContent = 'Previous';
@@ -134,12 +125,10 @@ class Content {
       goToPreviousMiniTitle.classList.add('mini-title');
       const goToPreviousContainer = document.createElement('div');
       goToPreviousContainer.classList.add('go-to');
-      goToPreviousContainer.appendChild(goToPreviousIcon);
+      goToPreviousContainer.appendChild(iconsManager.get('main', 'arrowleft'));
       goToPreviousContainer.appendChild(goToPreviousBigTitle);
       goToPreviousContainer.appendChild(goToPreviousMiniTitle);
 
-      const goToNextIcon = document.createElement('img');
-      goToNextIcon.src = '/src/assets/arrowright.svg';
       const goToNextBigTitle = document.createElement('div');
       goToNextBigTitle.classList.add('big-title');
       goToNextBigTitle.textContent = 'Next';
@@ -147,7 +136,7 @@ class Content {
       goToNextMiniTitle.classList.add('mini-title');
       const goToNextContainer = document.createElement('div');
       goToNextContainer.classList.add('go-to');
-      goToNextContainer.appendChild(goToNextIcon);
+      goToNextContainer.appendChild(iconsManager.get('main', 'arrowright'));
       goToNextContainer.appendChild(goToNextBigTitle);
       goToNextContainer.appendChild(goToNextMiniTitle);
 

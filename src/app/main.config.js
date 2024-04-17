@@ -21,11 +21,19 @@ class Config {
   }
 
   setAsConfig(text) {
-    if (window.location.protocol != 'http:') {
+    if (!debug.isSafeToUseDebugItems()) {
       return;
     }
 
     this.#precachedConfig = text;
+  }
+
+  resetConfigByDebug() {
+    if (!debug.isSafeToUseDebugItems()) {
+      return;
+    }
+
+    this.#precachedConfig = undefined;
   }
 
   isConfigReady() {
@@ -40,6 +48,90 @@ class Config {
         const teamMembers = dom.querySelectorAll('team > member');
 
         resolve(teamMembers);
+      });
+    });
+  }
+
+  getOwnerData() {
+    return new Promise((resolve) => {
+      this.loadConfig().then((config) => {
+        const domHelper = new DOMParser();
+        const dom = domHelper.parseFromString(config, 'application/xml');
+        const teamMember = dom.querySelector('homepage-config > team > member[owner="true"]');
+
+        resolve(teamMember);
+      });
+    });
+  }
+
+  getOwnerCitation() {
+    return new Promise((resolve) => {
+      this.loadConfig().then((config) => {
+        const domHelper = new DOMParser();
+        const dom = domHelper.parseFromString(config, 'application/xml');
+        const citationValue = dom.querySelector('homepage-config > citation > value');
+
+        resolve(citationValue);
+      });
+    });
+  }
+
+  getNumericPresPoints() {
+    return new Promise((resolve) => {
+      this.loadConfig().then((config) => {
+        const domHelper = new DOMParser();
+        const dom = domHelper.parseFromString(config, 'application/xml');
+        const presentationPoints = dom.querySelectorAll('homepage-config > numeric-pres-points > item');
+
+        resolve(presentationPoints);
+      });
+    });
+  }
+
+  getHomePagePresFiles() {
+    return new Promise((resolve) => {
+      this.loadConfig().then((config) => {
+        const domHelper = new DOMParser();
+        const dom = domHelper.parseFromString(config, 'application/xml');
+        const presFiles = dom.querySelectorAll('homepage-config > pres-items > file');
+
+        resolve(presFiles);
+      });
+    });
+  }
+
+  getFooterCategories() {
+    return new Promise((resolve) => {
+      this.loadConfig().then((config) => {
+        const domHelper = new DOMParser();
+        const dom = domHelper.parseFromString(config, 'application/xml');
+        const presFiles = dom.querySelectorAll('homepage-config > footer-links > category');
+
+        resolve(presFiles);
+      });
+    });
+  }
+
+  getFooterContributionLink() {
+    return new Promise((resolve) => {
+      this.loadConfig().then((config) => {
+        const domHelper = new DOMParser();
+        const dom = domHelper.parseFromString(config, 'application/xml');
+        const presFiles = dom.querySelector('homepage-config > footer-links > contribution-link');
+
+        resolve(presFiles);
+      });
+    });
+  }
+
+  getFooterDescription() {
+    return new Promise((resolve) => {
+      this.loadConfig().then((config) => {
+        const domHelper = new DOMParser();
+        const dom = domHelper.parseFromString(config, 'application/xml');
+        const presFiles = dom.querySelector('homepage-config > footer-links > dsc');
+
+        resolve(presFiles);
       });
     });
   }

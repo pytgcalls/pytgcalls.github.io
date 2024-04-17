@@ -7,7 +7,7 @@ class SourceParser {
     'LIST', 'ITEM', 'MULTISYNTAX',
     'TABLE', 'DEFINITIONS', 'COLUMN', 'ITEM',
     'DOCS-REF', 'GITHUB-REF', 'REF-SHI',
-    'CONFIG', 'BANNER'
+    'CONFIG', 'BANNER', 'P2P-BANNER'
   ];
 
   getContentByData(text) {
@@ -31,7 +31,7 @@ class SourceParser {
         elementDom.appendChild(emojisParser.parse(element.textContent));
       } else if (!this.#AVAILABLE_ELEMENTS.includes(element.tagName.toUpperCase())) {
         console.error(element);
-        throw new Error("An unknown element has been used "+element.tagName);
+        throw new Error("An unknown element has been used " + element.tagName);
       } else {
         let newElement = document.createElement('div');
         this.#tryToReduceTags(element);
@@ -44,7 +44,7 @@ class SourceParser {
             break;
           }
         }
-        
+
         if (element.hasAttribute('noref')) {
           newElement.setAttribute('noref', element.getAttribute('noref'));
         }
@@ -54,7 +54,7 @@ class SourceParser {
           element.innerHTML = element.innerHTML.replace('\n\n', spacesMultiplier);
           containsCustomTags = true;
         }
-        
+
         if (['SYNTAX-HIGHLIGHT', 'SHI'].includes(element.tagName.toUpperCase())) {
           if (containsCustomTags) {
             throw new Error("Syntax highlight can't contain other tags");
@@ -74,6 +74,12 @@ class SourceParser {
           }
 
           elementDom.appendChild(this.#handlePostQueryElement(element, newElement));
+        } else if (element.tagName.toUpperCase() === 'P2P-BANNER') {
+          if (containsCustomTags) {
+            throw new Error("P2PBanner can't contain other tags");
+          }
+
+          elementDom.appendChild(this.#handlePostQueryElement(element, newElement));
         } else {
           if (containsCustomTags) {
             this.#handleRecursive(element, newElement);
@@ -88,23 +94,38 @@ class SourceParser {
     }
   }
 
-  #detectLanguageByElement(element, asString = false) {
-    let language = asString ? 'Python' : Prism.languages.python;
-    
+  detectLanguageByElement(element) {
+    let language = {
+      prism: Prism.languages.python,
+      name: 'Python',
+      icon: {
+        category: 'languages',
+        name: 'python',
+      }
+    };
+
     if (element.hasAttribute('language')) {
       switch (element.getAttribute('language')) {
         case 'go':
-          language = asString ? 'Go' : Prism.languages.go;
-        break;
+          language.prism = Prism.languages.go;
+          language.name = 'Go';
+          language.icon.name = 'go';
+          break;
         case 'c':
-          language = asString ? 'C' : Prism.languages.c;
-        break;
+          language.prism = Prism.languages.c;
+          language.name = 'C';
+          language.icon.name = 'c';
+          break;
         case 'cpp':
-          language = asString ? 'C++' : Prism.languages.cpp;
-        break;
+          language.prism = Prism.languages.cpp;
+          language.name = 'C++';
+          language.icon.name = 'cpp';
+          break;
         case 'bash':
-          language = asString ? 'Bash' : Prism.languages.bash;
-        break;
+          language.prism = Prism.languages.bash;
+          language.name = 'Bash';
+          language.icon.name = '';
+          break;
       }
     }
 
@@ -162,7 +183,7 @@ class SourceParser {
         bannerContainer.appendChild(imageLoaderItem);
         bannerContainer.appendChild(bottomContainer);
         newElement.appendChild(bannerContainer);
-        
+
         mainImage.addEventListener('load', () => {
           imageLoaderItem.remove();
           mainImage.classList.add('loaded');
@@ -269,7 +290,7 @@ class SourceParser {
           throw new Error('invalid link for docs-ref');
         }
       });
-    } else if(element.tagName.toUpperCase() === 'GITHUB-REF') {
+    } else if (element.tagName.toUpperCase() === 'GITHUB-REF') {
       newElement = document.createElement('a');
       newElement.classList.add('github-ref');
       newElement.target = '_blank';
@@ -280,7 +301,7 @@ class SourceParser {
 
       newElement.setAttribute('reponame', element.getAttribute('reponame'));
       newElement.setAttribute('user', element.getAttribute('user'));
-    } else if(element.tagName.toUpperCase() === 'REF-SHI') {
+    } else if (element.tagName.toUpperCase() === 'REF-SHI') {
       newElement = document.createElement('a');
       newElement.classList.add('ref-shi');
 
@@ -310,7 +331,7 @@ class SourceParser {
             child.replaceWith(document.createTextNode(currentOptionData.textContent));
           }
         } else {
-          throw new Error("A config key that doesn't exist has been requested "+child.getAttribute('id'));
+          throw new Error("A config key that doesn't exist has been requested " + child.getAttribute('id'));
         }
       }
     };
@@ -318,7 +339,7 @@ class SourceParser {
     handleItem(element);
 
     for (const child of element.childNodes) {
-      handleItem(child); 
+      handleItem(child);
     }
   }
 
@@ -357,15 +378,11 @@ class SourceParser {
         closeButton.appendChild(document.createElement('div'));
         closeButton.appendChild(document.createElement('div'));
 
-        const urlBarGithub = document.createElement('img');
-        urlBarGithub.classList.add('icon');
-        urlBarGithub.src = '/src/assets/github.svg';
         const urlBarText = document.createElement('div');
         urlBarText.classList.add('url');
         urlBarText.textContent = src;
-        const urlBarOpenImage = document.createElement('img');
-        urlBarOpenImage.classList.add('icon', 'open');
-        urlBarOpenImage.src = '/src/assets/uprightfromsquare.svg';
+        const urlBarOpenImage = iconsManager.get('main', 'uprightfromsquare');
+        urlBarOpenImage.classList.add('open');
         const urlBarOpen = document.createElement('a');
         urlBarOpen.classList.add('link');
         urlBarOpen.addEventListener('click', closePopup);
@@ -374,7 +391,7 @@ class SourceParser {
         urlBarOpen.appendChild(urlBarOpenImage);
         const urlBar = document.createElement('div');
         urlBar.classList.add('url-bar');
-        urlBar.appendChild(urlBarGithub);
+        urlBar.appendChild(iconsManager.get('socials', 'github'));
         urlBar.appendChild(urlBarText);
         urlBar.appendChild(urlBarOpen);
 
@@ -397,24 +414,22 @@ class SourceParser {
           requestsManager.initRequest(element.getAttribute('url'), 'pytgcalls/pytgcalls').then((response) => {
             codePreview.textContent = '';
             codePreview.classList.remove('is-loading');
-  
+
             const fakeChild = document.createElement('div');
             if (element.hasAttribute('language')) {
               fakeChild.setAttribute('language', element.getAttribute('language'));
             }
             fakeChild.textContent = response;
-  
+
             this.#handleSyntaxHighlight(fakeChild, codePreview, true);
           });
         }, { once: true });
       });
     } else if (element.tagName.toUpperCase() === 'ALERT') {
-      const elementHeaderImage = document.createElement('img');
       const elementHeaderText = document.createElement('div');
       elementHeaderText.classList.add('alert-title');
       const elementHeader = document.createElement('div');
       elementHeader.classList.add('alert-header');
-      elementHeader.appendChild(elementHeaderImage);
       elementHeader.appendChild(elementHeaderText);
 
       const elementData = document.createElement('div');
@@ -428,25 +443,56 @@ class SourceParser {
 
       if (['note', 'warning', 'important'].includes(element.getAttribute('type'))) {
         compElement.dataset.type = element.getAttribute('type');
-        
+
         switch (element.getAttribute('type')) {
           case 'important':
-            elementHeaderImage.src = '/src/icons/important.svg';
+            elementHeader.prepend(iconsManager.get('main', 'important'));
             elementHeaderText.textContent = 'Important!';
-          break;
+            break;
           case 'note':
-            elementHeaderImage.src = '/src/icons/note.svg';
+            elementHeader.prepend(iconsManager.get('main', 'note'));
             elementHeaderText.textContent = 'Note';
-          break;
+            break;
           case 'warning':
-            elementHeaderImage.src = '/src/icons/warning.svg';
+            elementHeader.prepend(iconsManager.get('main', 'warning'));
             elementHeaderText.textContent = 'Warning!';
-          break;
+            break;
         }
 
       } else {
         throw new Error("An unknown type has been specified for ALERT element");
       }
+
+      newElement.replaceWith(compElement);
+      return compElement;
+    } else if (element.tagName.toUpperCase() === 'P2P-BANNER') {
+      const elementHeaderText = document.createElement('div');
+      elementHeaderText.classList.add('alert-title');
+      elementHeaderText.textContent = 'Security';
+      const elementHeader = document.createElement('div');
+      elementHeader.classList.add('alert-header');
+      elementHeader.appendChild(iconsManager.get('main', 'check'));
+      elementHeader.appendChild(elementHeaderText);
+
+      const elementLockAnimation = document.createElement('img');
+      elementLockAnimation.setAttribute('loading', 'lazy');
+      elementLockAnimation.src = '/src/assets/speed.gif';
+
+      const elementTitle = document.createElement('div');
+      elementTitle.classList.add('alert-title');
+      elementTitle.appendChild(document.createTextNode("Don't give up on safety and speed!"));
+
+      const elementData = document.createElement('div');
+      elementData.classList.add('alert-content');
+      elementData.textContent = "Calls that are made through NTgCalls are 100% encrypted as if you were making them from your trusted Telegram app. All this in just a few lines of code, thanks to the work of our amazing team.";
+
+      const compElement = document.createElement('div');
+      compElement.classList.add('alert');
+      compElement.dataset.type = 'p2p';
+      compElement.appendChild(elementHeader);
+      compElement.appendChild(elementLockAnimation);
+      compElement.appendChild(elementTitle);
+      compElement.appendChild(elementData);
 
       newElement.replaceWith(compElement);
       return compElement;
@@ -457,13 +503,13 @@ class SourceParser {
 
   #handleSyntaxHighlight(element, newElement, hideTags = false, customTextContent = '') {
     let code = customTextContent || element.textContent;
-    code = Prism.highlight(code, this.#detectLanguageByElement(element), 'html');
+    code = Prism.highlight(code, this.detectLanguageByElement(element).prism, 'html');
     code = code.replaceAll('\n', '<br/>');
-    
+
     if (code.startsWith('<br/>')) {
       code = code.slice(5);
     }
-    
+
     code = this.#handleTabsWithSpacer(code);
     newElement.innerHTML = code;
     newElement.style.setProperty('--length', code.split('<br/>').length - 1);
@@ -494,24 +540,19 @@ class SourceParser {
         }
       }
     }
-    
+
     if (element.tagName.toUpperCase() != 'SHI' && !hideTags && !hasValidMarkParameter) {
       let successTimeout;
 
-      const languageTagIcon = document.createElement('img');
-      languageTagIcon.src = '/src/icons/code.svg';
       const languageTagText = document.createElement('span');
-      languageTagText.textContent = this.#detectLanguageByElement(element, true);
+      languageTagText.textContent = this.detectLanguageByElement(element).name;
       const languageTag = document.createElement('div');
       languageTag.classList.add('tag');
-      languageTag.appendChild(languageTagIcon);
+      languageTag.appendChild(iconsManager.get('main', 'code'));
       languageTag.appendChild(languageTagText);
 
-      const copyTagSuccess = document.createElement('img');
+      const copyTagSuccess = iconsManager.get('main', 'check');
       copyTagSuccess.classList.add('success');
-      copyTagSuccess.src = '/src/icons/check.svg';
-      const copyTagIcon = document.createElement('img');
-      copyTagIcon.src = '/src/icons/copy.svg';
       const copyTagText = document.createElement('span');
       copyTagText.textContent = 'Copy';
       const copyTag = document.createElement('div');
@@ -532,7 +573,7 @@ class SourceParser {
         });
       });
       copyTag.appendChild(copyTagSuccess);
-      copyTag.appendChild(copyTagIcon);
+      copyTag.appendChild(iconsManager.get('main', 'copy'));
       copyTag.appendChild(copyTagText);
 
       const tagsContainer = document.createElement('div');
@@ -558,10 +599,10 @@ class SourceParser {
 
     for (let i = 20; i > 1; i--) {
       const newSpacer = baseString + (' '.repeat(i));
-      const replacer = '<div class="spacer" style="--id: '+i+'">&nbsp;</div>';
+      const replacer = '<div class="spacer" style="--id: ' + i + '">&nbsp;</div>';
       code = code.replaceAll(newSpacer, replacer);
     }
-    
+
     return code;
   }
 
@@ -592,7 +633,7 @@ class SourceParser {
       const firstElement = syntaxHighlightElements[0];
       const secondElement = syntaxHighlightElements[1];
 
-      if (this.#detectLanguageByElement(firstElement) != this.#detectLanguageByElement(secondElement)) {
+      if (this.detectLanguageByElement(firstElement).name != this.detectLanguageByElement(secondElement).name) {
         throw new Error('multisyntax as-blame-mode must contains 2 elements with the same language property');
       }
 
@@ -610,7 +651,7 @@ class SourceParser {
         let removedRows = [];
         let finalCode = '';
         let i = 0;
-        for(const line of diff.lines) {
+        for (const line of diff.lines) {
           if (line.aIndex < 0) { // added row
             addedRows.push(i);
           } else if (line.bIndex < 0) { // removed row
@@ -635,7 +676,7 @@ class SourceParser {
             break;
           }
         }
-        
+
         if (containsCustomTags) {
           throw new Error("Syntax highlight can't contain other tags");
         }
@@ -666,13 +707,13 @@ class SourceParser {
     tabsContainer.classList.add('tabs');
     tabsContainer.style.setProperty('--i', element.querySelectorAll('tabs > tab').length);
     newElement.appendChild(tabsContainer);
-    
+
     let tabIds = [];
     for (const [id, tab] of Object.entries(element.querySelectorAll('tabs > tab'))) {
       if (!tab.textContent || !tab.getAttribute('id')) {
         throw new Error('tab has invalid data for multisyntax');
       }
-      
+
       tabIds.push(tab.getAttribute('id'));
 
       const tabElement = document.createElement('div');
@@ -696,7 +737,7 @@ class SourceParser {
             if (tab.getAttribute('id') == currentData) {
               tabsContainer.style.setProperty('--eid', parseInt(id));
             }
-          } else if(!currentData && !parseInt(id)) {
+          } else if (!currentData && !parseInt(id)) {
             tabElement.classList.add('active');
             tabsContainer.style.setProperty('--eid', 0);
           }
@@ -718,9 +759,9 @@ class SourceParser {
       }
 
       syntaxIds.push(syntax.getAttribute('id'));
-      
+
       let syntaxElement = document.createElement('div');
-      
+
       this.#tryToReduceTags(syntax);
       syntaxElement = this.#checkAndManageElement(syntax, syntaxElement, document.createElement('div'));
 
@@ -731,7 +772,7 @@ class SourceParser {
           break;
         }
       }
-      
+
       if (containsCustomTags) {
         throw new Error("Syntax highlight can't contain other tags");
       }
@@ -747,7 +788,7 @@ class SourceParser {
             if (activeItem) {
               if (activeItem != syntaxElement && syntax.getAttribute('id') == currentData) {
                 homePage.onChangeFavoriteSyntaxTabAnimationState.callAllListeners(true);
-                
+
                 const childNodes = [...syntaxHighlightContainer.childNodes];
                 let updatedChildren = [];
                 for (const syntax of childNodes) {
@@ -760,17 +801,17 @@ class SourceParser {
                 const asBack = childNodes.indexOf(activeItem) > childNodes.indexOf(syntaxElement);
 
                 const activeItemRect = activeItem.getBoundingClientRect();
-                syntaxHighlightContainer.style.setProperty('--height', (activeItemRect.height + 10)+'px');
+                syntaxHighlightContainer.style.setProperty('--height', (activeItemRect.height + 10) + 'px');
                 syntaxHighlightContainer.classList.add('preparing-animation');
-                
+
                 const currentItemRect = syntaxElement.getBoundingClientRect();
-                syntaxHighlightContainer.style.setProperty('--to-height', (currentItemRect.height + 10)+'px');
+                syntaxHighlightContainer.style.setProperty('--to-height', (currentItemRect.height + 10) + 'px');
                 activeItem.classList.add('disappearing');
                 syntaxHighlightContainer.classList.add('animating');
                 syntaxHighlightContainer.classList.toggle('animating-asback', asBack);
                 syntaxHighlightContainer.classList.remove('preparing-animation');
                 syntaxElement.classList.add('appearing');
-                
+
                 Promise.all([
                   new Promise((resolve) => syntaxHighlightContainer.addEventListener('animationend', resolve, { once: true })),
                   new Promise((resolve) => activeItem.addEventListener('animationend', resolve, { once: true })),
@@ -857,26 +898,26 @@ class SourceParser {
             repoInformations.appendChild(repoDescription);
             repoInformations.appendChild(repoOwner);
             repoInformations.appendChild(repoLanguage);
-            
+
             const repoIllustration = document.createElement('div');
             repoIllustration.classList.add('illustration');
             repoIllustration.appendChild(this.#createIconNameContainerForGithub(
-              '/src/icons/codefork.svg', String(response['forks'])
+              'main', 'codefork', String(response['forks'])
             ));
             repoIllustration.appendChild(this.#createIconNameContainerForGithub(
-              '/src/icons/eye.svg', String(response['subscribers_count'])
+              'main', 'eye', String(response['subscribers_count'])
             ));
             repoIllustration.appendChild(this.#createIconNameContainerForGithub(
-              '/src/icons/gavel.svg', response['license'] ? String(response['license']['spdx_id']) : '-'
+              'main', 'gavel', response['license'] ? String(response['license']['spdx_id']) : '-'
             ));
             repoIllustration.appendChild(this.#createIconNameContainerForGithub(
-              '/src/icons/star.svg', String(response['stargazers_count'])
+              'main', 'star', String(response['stargazers_count'])
             ));
 
             element.classList.remove('is-loading');
             element.textContent = '';
             element.setAttribute('href', response['html_url']);
-            element.style.setProperty('--url', 'url(" '+ response['owner']['avatar_url'] + '")');
+            element.style.setProperty('--url', 'url(" ' + response['owner']['avatar_url'] + '")');
             element.appendChild(repoInformations);
             element.appendChild(repoIllustration);
           }
@@ -885,20 +926,17 @@ class SourceParser {
     });
   }
 
-  #createIconNameContainerForGithub(icon, title) {
-    const iconImage = document.createElement('img');
-    iconImage.classList.add('icon');
-    iconImage.src = icon;
+  #createIconNameContainerForGithub(iconCategory, iconName, title) {
     const titleElement = document.createElement('div');
     titleElement.classList.add('title');
     titleElement.textContent = title;
     const container = document.createElement('div');
     container.classList.add('container');
-    container.appendChild(iconImage);
+    container.appendChild(iconsManager.get(iconCategory, iconName));
     container.appendChild(titleElement);
     return container;
   }
-  
+
   handleSearchIndexByText(text) {
     const domHelper = new DOMParser();
     const dom = domHelper.parseFromString(text, 'application/xml');
@@ -912,6 +950,14 @@ class SourceParser {
     }
 
     return finalText;
+  }
+
+  handleHomepageSyntaxHighlightElement(element) {
+    let newElement = document.createElement('div');
+    this.#tryToReduceTags(element);
+    newElement = this.#checkAndManageElement(element, newElement, document.createElement('div'));
+    this.#handleSyntaxHighlight(element, newElement, true);
+    return newElement;
   }
 }
 

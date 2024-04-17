@@ -41,17 +41,8 @@ class Header {
     headerMenu.appendChild(document.createElement('div'));
     this.#headerMenu = headerMenu;
 
-    const headerExpandSidebar = document.createElement('img');
-    headerExpandSidebar.classList.add('expand-sidebar');
-    headerExpandSidebar.addEventListener('click', () => {
-      this.onSidebarUpdateListenerInstance.callAllListeners(false);
-    });
-    headerExpandSidebar.src = '/src/icons/tablecolumns.svg';
-    this.#headerExpanded = headerExpandSidebar;
+    const headerIcon = iconsManager.get('socials', 'telegram');
 
-    const headerIcon = document.createElement('img');
-    headerIcon.src = '/src/assets/splash/telegram-logo.svg';
-    
     const headerProjectName = document.createElement('div');
     headerProjectName.classList.add('project-name');
     this.#headerProjectName = headerProjectName;
@@ -68,12 +59,12 @@ class Header {
     fakeHeaderTitle.classList.add('fake-title');
     this.#fakeHeaderTitle = fakeHeaderTitle;
 
-    const headerCompass = document.createElement('img');
+    const headerCompass = document.createElement('div');
     headerCompass.classList.add('header-compass');
     headerCompass.addEventListener('click', () => {
       this.onCompassUpdateListenerInstance.callAllListeners();
     });
-    headerCompass.src = '/src/icons/compass.svg';
+    headerCompass.appendChild(iconsManager.get('main', 'compass'));
     this.#headerCompass = headerCompass;
 
     const headerDescription = document.createElement('div');
@@ -85,7 +76,6 @@ class Header {
     header.addEventListener('dblclick', () => {
       document.body.classList.toggle('disable-blur');
     });
-    header.appendChild(headerExpandSidebar);
     header.appendChild(headerMenu);
     header.appendChild(headerTitle);
     header.appendChild(fakeHeaderTitle);
@@ -190,9 +180,17 @@ class Header {
         if (this.#headerProjectName.textContent === id) {
           return;
         }
-  
-        document.title = id + ' Documentation';
-  
+
+        document.title = id;
+        if (id != 'Documentation') {
+          document.title += ' Documentation';
+        }
+
+        if (this.#headerProjectName.textContent == "") {
+          this.#headerProjectName.textContent = id;
+          return;
+        }
+
         this.#fakeHeaderTitle.textContent = id;
         const rect = this.#fakeHeaderTitle.getBoundingClientRect();
         this.#headerProjectName.style.setProperty('--width', rect.width.toString() + 'px');
@@ -230,7 +228,7 @@ class Header {
   #detectContainerForTooltips() {
     return (
       window.matchMedia('screen and (max-width: 1330px)').matches
-      ? this.#headerTitle : this.#headerDescription
+        ? this.#headerTitle : this.#headerDescription
     );
   }
 }
