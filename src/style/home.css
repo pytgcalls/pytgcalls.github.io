@@ -1002,6 +1002,7 @@ body .page-container .home-container .footer .links-container .ded-section .mgc-
   margin-top: 20px;
   text-decoration: none;
   color: #FFFFFF;
+  box-sizing: border-box;
   background: #161a20;
   border: 1px solid rgba(93, 106, 129, 0.2);
 }
