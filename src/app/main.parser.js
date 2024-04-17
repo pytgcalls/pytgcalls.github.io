@@ -606,6 +606,28 @@ class SourceParser {
     return code;
   }
 
+  #getRowStartSpaces(row, firstRow) {
+    let spacesCount = 0;
+    for (let i = 0; i < row.length; i++) {
+      if (row[i] === ' ') {
+        spacesCount++;
+      } else {
+        break;
+      }
+    }
+
+    let firstRowSpaces = 0;
+    for (let i = 0; i < firstRow.length; i++) {
+      if (firstRow[i] === ' ') {
+        firstRowSpaces++;
+      } else {
+        break;
+      }
+    }
+
+    return firstRowSpaces > spacesCount ? 0 : spacesCount - firstRowSpaces;
+  }
+
   #handleMultiSyntax(element, newElement) {
     const exportAsBlame = element.hasAttribute('as-blame');
 
@@ -645,17 +667,28 @@ class SourceParser {
         this.#tryToReduceTags(firstElement);
         this.#tryToReduceTags(secondElement);
 
-        const diff = patienceDiff(firstElement.textContent.split("\n"), secondElement.textContent.split("\n"));
+        const firstElementLines = firstElement.textContent.split("\n");
+        const secondElementLines = secondElement.textContent.split("\n");
+        const diff = patienceDiff(firstElementLines, secondElementLines);
 
         let addedRows = [];
         let removedRows = [];
         let finalCode = '';
         let i = 0;
+        let hasDiffOnRowsWithIndex0 = false;
         for (const line of diff.lines) {
           if (line.aIndex < 0) { // added row
             addedRows.push(i);
+
+            if (!this.#getRowStartSpaces(secondElementLines[i - 1], secondElementLines[0])) {
+              hasDiffOnRowsWithIndex0 = true;
+            }
           } else if (line.bIndex < 0) { // removed row
             removedRows.push(i);
+
+            if (!this.#getRowStartSpaces(firstElementLines[i - 1], firstElementLines[0])) {
+              hasDiffOnRowsWithIndex0 = true;
+            }
           }
 
           i++;
@@ -683,6 +716,7 @@ class SourceParser {
 
         newElement.classList.remove('multisyntax');
         newElement.classList.add('syntax-highlight');
+        newElement.classList.toggle('has-diff-on-zero', hasDiffOnRowsWithIndex0);
         this.#handleSyntaxHighlight(fakeResyntaxElement, newElement, true, finalCode);
 
         for (const addedRow of addedRows) {
