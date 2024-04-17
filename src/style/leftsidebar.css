@@ -408,16 +408,15 @@ body .page-container .left-container .left-sidebar .element:active {
 }
 
 body .page-container .left-container .left-sidebar.faster {
-  --animation-delay: 0.003s;
+  --animation-delay: 0.01s;
   --animation-timing: 0.15s;
 }
 
 body .page-container .left-container .left-sidebar:not(.disappear) .element,
-body .page-container .left-container .left-sidebar:not(.disappear) .microtag,
-body .page-container .left-container .left-sidebar:not(.disappear) .elements {
-  transform: translateX(-100%);
-  opacity: 1;
-  animation: var(--animation-timing, 0.4s) appearElement forwards calc(var(--id) * var(--animation-delay, 0.02s));
+body .page-container .left-container .left-sidebar:not(.disappear) .microtag {
+  transform: translateX(-10%);
+  opacity: 0;
+  animation: var(--animation-timing, 0.4s) appearElement forwards calc(var(--id) * var(--animation-delay, 0.03s));
 }
 
 @keyframes appearElement {
@@ -428,15 +427,14 @@ body .page-container .left-container .left-sidebar:not(.disappear) .elements {
 }
 
 body .page-container .left-container .left-sidebar.disappear .element,
-body .page-container .left-container .left-sidebar.disappear .microtag,
-body .page-container .left-container .left-sidebar.disappear .elements {
+body .page-container .left-container .left-sidebar.disappear .microtag {
   transform: translateX(0);
-  animation: var(--animation-timing, 0.4s) disappearElement forwards calc(var(--id) * var(--animation-delay, 0.02s));
+  animation: var(--animation-timing, 0.4s) disappearElement forwards calc(var(--id) * var(--animation-delay, 0.03s));
 }
 
 @keyframes disappearElement {
   to {
     opacity: 0;
-    transform: translateX(100%);
+    transform: translateX(10%);
   }
 }
