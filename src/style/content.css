@@ -44,48 +44,6 @@ body .page-container .content.is-loading svg circle {
   }
 }
 
-body .page-container .content.is-loading .try-container {
-  padding: 15px;
-  background: rgb(45, 45, 45, 0.3);
-  border: 1px solid rgb(255, 255, 255, 0.1);
-  border-radius: 10px;
-  animation: 0.4s appearTryContainer;
-}
-
-body.disable-blur .page-container .content.is-loading .try-container {
-  border: none;
-}
-
-@keyframes appearTryContainer {
-  from {
-    transform: scale(0.9);
-    opacity: 0;
-  }
-}
-
-body .page-container .content.is-loading .try-container textarea {
-  width: 30vw;
-  height: 40vh;
-  border-radius: 10px;
-  background: transparent;
-  border: 1px solid rgb(255, 255, 255, 0.1);
-  color: #FFFFFF;
-  font-family: 'Poppins', sans-serif;
-  font-size: 12px;
-  padding: 10px;
-}
-
-body .page-container .content.is-loading .try-container .button {
-  margin-inline: auto;
-  background: #050505;
-  color: #FFFFFF;
-  text-align: center;
-  width: fit-content;
-  padding: 10px;
-  padding-inline: 34px;
-  border-radius: 10px;
-}
-
 body .page-container .content:not(.disappear) .page {
   animation: 0.4s appearPage cubic-bezier(0.42, 0, 0, 0.97);
 }
@@ -290,8 +248,8 @@ body .page-container .content:not(.is-loading) .pg-title {
 
 body .page-container .content:not(.is-loading) .code {
   display: inline-block;
-  background: rgb(45, 45, 45, 0.3);
-  border: 1px solid rgb(255, 255, 255, 0.1);
+  background: #161a20;
+  border: 1px solid rgba(93, 106, 129, 0.2);
   padding-inline: 7px;
   box-sizing: border-box;
   border-radius: 5px;

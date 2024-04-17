@@ -36,17 +36,10 @@ body .page-container {
   position: absolute;
   padding-left: 0;
   transition: 0.4s width cubic-bezier(0.42, 0, 0, 0.97), 0.4s padding-left cubic-bezier(0.42, 0, 0, 0.97);
-  animation: 0.4s appearPageContainer;
 }
 
 body.as-home .page-container {
   height: 100%;
-}
-
-@keyframes appearPageContainer {
-  from {
-    opacity: 0;
-  }
 }
 
 ::-webkit-scrollbar {
