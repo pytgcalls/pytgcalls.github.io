@@ -316,7 +316,7 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
   width: 100%;
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight.has-diff-on-zero {
+body .page-container .content:not(.is-loading) .syntax-highlight.has-blame {
   padding-left: 30px;
 }
 
