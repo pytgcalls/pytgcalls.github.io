@@ -30,12 +30,8 @@ body.as-home .page-container .left-container {
 
 @media screen and (min-width: 1330px) {
   body .page-container .left-container {
-    --timing: cubic-bezier(1, 0.01, 0, 0.98);
     border-right: 1px solid rgb(255, 255, 255, 0.1);
     width: calc(23vw + 10px);
-    position: absolute;
-    left: 0;
-    bottom: 0;
   }
 }
 
