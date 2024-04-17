@@ -196,6 +196,11 @@ class Debug {
             this.#handlePopupContainerClose(popupContainer);
             this.reloadPageData();
           }
+        } else if (value.startsWith('https://')) {
+          requestsManager.setAsDebugAlternative('pytgcalls/docsdata', value);
+          indexesManager.clearFullFromDebug();
+          this.#handlePopupContainerClose(popupContainer);
+          this.reloadPageData();
         }
       }
     };
