@@ -2,8 +2,6 @@ class HomePage {
   onChangeFavoriteSyntaxTab;
   onChangeFavoriteSyntaxTabAnimationState;
 
-  #COLORS = ['red', 'green', 'blue', 'yellow'];
-  
   #headerInstance;
   #sidebarInstance;
   #contentInstance;
@@ -18,7 +16,7 @@ class HomePage {
     if (syntaxTabData != null) {
       try {
         baseParsedSyntaxTab = JSON.parse(syntaxTabData);
-      } catch(_) {}
+      } catch (_) { }
     }
 
     this.onChangeFavoriteSyntaxTab.callAllListeners(baseParsedSyntaxTab);
@@ -36,23 +34,9 @@ class HomePage {
     pageContainer.appendChild(this.#sidebarInstance.getElement());
     pageContainer.appendChild(this.#contentInstance.getElement());
     pageContainer.appendChild(this.#introductionInstance.getElement());
-    
+
     document.body.appendChild(this.#headerInstance.getElement());
     document.body.appendChild(pageContainer);
-
-    for (let i = 0; i < 4; i++) {
-      if (this.#COLORS[i]) {
-        const randomX = Math.floor(Math.random() * 100);
-        const randomY = Math.floor(Math.random() * 100);
-
-        const shadowElement = document.createElement('div');
-        shadowElement.classList.add('shadow-element');
-        shadowElement.style.setProperty('--x', randomX.toString() + '%');
-        shadowElement.style.setProperty('--y', randomY.toString() + '%');
-        shadowElement.style.setProperty('--color', this.#COLORS[i]);
-        document.body.appendChild(shadowElement);
-      }
-    }
 
     requestAnimationFrame(() => {
       if (typeof pathName === 'string' && pathName.length) {
@@ -63,12 +47,13 @@ class HomePage {
         });
       } else {
         this.#introductionInstance.show();
-      }  
+      }
     });
 
     this.#introductionInstance.onVisibilityUpdateListenerInstance.addListener({
       callback: (state) => {
-        pageContainer.classList.toggle('as-home', state);
+        document.body.classList.toggle('as-home', state);
+        document.body.classList.remove('expanded');
 
         if (state) {
           this.#headerInstance.highlightTabsForIntroduction();
@@ -89,19 +74,18 @@ class HomePage {
 
     this.#headerInstance.onChangeListenerInstance.addListener({
       callback: (id) => {
-        this.#introductionInstance.hide().then(() => {
-          const promise = this.#sidebarInstance.loadSidebar(id);
-          this.#sidebarInstance.focusOnSidebar();
-          this.#headerInstance.updateCompassVisibilityState(false);
-          this.#headerInstance.updateCompassExpandedState(false);
-          this.#headerInstance.updateTabsMobileVisibility(false);
-          this.#contentInstance.clearBoard();
-    
-          config.getFilesListDefaultFileById(id).then((file) => {
-            if (typeof file == 'string') {
-              this.#updateLoadedFile(file, null, promise);
-            }
-          });
+        this.#introductionInstance.hide();
+        const promise = this.#sidebarInstance.loadSidebar(id);
+        this.#sidebarInstance.focusOnSidebar();
+        this.#headerInstance.updateCompassVisibilityState(false);
+        this.#headerInstance.updateCompassExpandedState(false);
+        this.#headerInstance.updateTabsMobileVisibility(false);
+        this.#contentInstance.clearBoard();
+
+        config.getFilesListDefaultFileById(id).then((file) => {
+          if (typeof file == 'string') {
+            this.#updateLoadedFile(file, null, promise);
+          }
         });
       }
     });
@@ -157,6 +141,10 @@ class HomePage {
 
   handleAsRedirect(pathName) {
     if (typeof pathName === 'string') {
+      if (!pathName.startsWith('/')) {
+        pathName = '/' + pathName;
+      }
+
       let hash;
       if (pathName.indexOf('#') !== -1) {
         hash = '#' + pathName.split('#')[1];
@@ -165,7 +153,7 @@ class HomePage {
       this.#chooseRightTab(pathName, hash);
     }
   }
-  
+
   #chooseRightTab(pathName, hash) {
     return new Promise((resolve) => {
       config.getAvailableCategories().then((ids) => {
@@ -181,10 +169,11 @@ class HomePage {
             this.#tryToIndexFilePathFromId(id, pathName, hash, promise);
           }
         }
-        
+
         if (!found) {
           window.history.pushState('', '', '/');
           this.#introductionInstance.show();
+          this.#headerInstance.onChangeListenerInstance.callInternalListeners("Documentation");
         }
 
         resolve(found);
@@ -203,7 +192,7 @@ class HomePage {
           break;
         }
       }
-      
+
       if (!found) {
         config.getFilesListDefaultFileById(id).then((file) => {
           if (typeof file == 'string') {
@@ -228,8 +217,12 @@ class HomePage {
     this.#contentInstance.loadFile(file, hash);
   }
 
-  handleCustomCodeInsert() {
-    this.#contentInstance.handleCustomCodeInsert();
+  handleCustomCodeInsert(data) {
+    if (!debug.isSafeToUseDebugItems()) {
+      return;
+    }
+
+    this.#contentInstance.handleCustomCodeInsert(data);
   }
 }
 

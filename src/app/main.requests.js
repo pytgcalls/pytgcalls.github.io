@@ -4,24 +4,45 @@ class RequestsManager {
   #pypiDataPromise;
   #pypiDataResult;
 
+  #alternativesList = {};
+
   initRequest(fileName, repoName = 'pytgcalls/docsdata') {
     return new Promise((resolve, reject) => {
+      const isUsingAnAlternative = !!this.#alternativesList[repoName];
       this.#tryToLoadWithUserContent(repoName, fileName).then(resolve).catch(() => {
         this.#doesLoadViaUserContentWork = false;
+
+        if (isUsingAnAlternative) {
+          alert("Connection to your custom datadocs server failed! We're using GitHub as fallback. Check your port.");
+        }
+
         this.#tryToLoadWithApi(repoName, fileName).then(resolve).catch(reject);
       });
     });
   }
 
-  
+  setAsDebugAlternative(original, alternative) {
+    if (!debug.isSafeToUseDebugItems()) {
+      return;
+    }
+
+    this.#alternativesList[original] = alternative;
+    this.#doesLoadViaUserContentWork = true;
+  }
+
   #tryToLoadWithUserContent(repoName, fileName) {
     if (!this.#doesLoadViaUserContentWork) {
       return Promise.reject('Ignoring githubusercontent as it isnt available');
     } else {
       return new Promise((resolve, reject) => {
+        let completeUrl = 'https://raw.githubusercontent.com/' + repoName + '/master/' + fileName;
+        if (this.#alternativesList[repoName]) {
+          completeUrl = this.#alternativesList[repoName] + '/' + fileName;
+        }
+
         const XML = new XMLHttpRequest();
         XML.timeout = 3500;
-        XML.open('GET', 'https://raw.githubusercontent.com/' + repoName + '/master/' + fileName, true);
+        XML.open('GET', completeUrl, true);
         XML.send();
         XML.addEventListener('readystatechange', (e) => {
           if (e.target.readyState === 4) {

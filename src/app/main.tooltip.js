@@ -1,6 +1,6 @@
 class Tooltip {
   #closeCallbacksList = [];
-  
+
   init({
     childElement,
     title,
@@ -71,7 +71,7 @@ class Tooltip {
     for (const callback of this.#closeCallbacksList) {
       try {
         callback();
-      } catch(e) {}
+      } catch (e) { }
     }
     this.#closeCallbacksList = [];
   }

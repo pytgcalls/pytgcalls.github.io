@@ -2,6 +2,7 @@
 @import url("header.css");
 @import url("home.css");
 @import url("leftsidebar.css");
+@import url("popups.css");
 @import url("sections.css");
 @import url("splash.css");
 
@@ -10,7 +11,7 @@ html {
 }
 
 body {
-  background: #050505;
+  background: #0d1117;
   font-family: 'Poppins', sans-serif;
   overflow: hidden;
   height: 100%;
@@ -25,78 +26,42 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-body .shadow-element {
-  height: 0;
-  width: 0;
-  box-shadow: 0 0 400px 60px var(--color);
-  position: fixed;
-  top: var(--x);
-  left: var(--y);
-  z-index: -1;
-  transform: scale(0);
-  opacity: 0;
-  animation: 3s moveShadow forwards linear;
-}
-
-body.disable-blur .shadow-element {
-  display: none;
-}
-
-@keyframes moveShadow {
-  from {
-    opacity: 0;
-    transform: scale(0);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@media screen and (max-width: 1330px) {
-  body .shadow-element {
-    box-shadow: 0 0 400px 50px var(--color);
-  }
-}
-
 body .page-container {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: calc(100% - 61px);
+  height: calc(100% - 66px);
   overflow: hidden;
   position: absolute;
   padding-left: 0;
   transition: 0.4s width cubic-bezier(0.42, 0, 0, 0.97), 0.4s padding-left cubic-bezier(0.42, 0, 0, 0.97);
-  animation: 0.4s appearPageContainer;
 }
 
-@keyframes appearPageContainer {
-  from {
-    opacity: 0;
-  }
+body.as-home .page-container {
+  height: 100%;
 }
 
 ::-webkit-scrollbar {
-	width: 5px;
+  width: 5px;
 }
 
 ::-webkit-scrollbar-track {
-	background: transparent;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-	background: transparent;
-	transition: 0.4s background;
+  background: transparent;
+  transition: 0.4s background;
 }
 
 :root:hover ::-webkit-scrollbar-thumb {
-	background: #666666a1;
-	border-radius: 10px;
+  background: #666666a1;
+  border-radius: 10px;
 }
 
-input:focus, textarea:focus {
+input:focus,
+textarea:focus {
   outline: none;
   border: none;
 }
@@ -106,7 +71,7 @@ body .tooltip {
   top: calc(var(--center-y) + 49px);
   left: var(--center-x);
   color: black;
-  background: linear-gradient(45deg, #685eab, #3d49d3);
+  background: linear-gradient(45deg, #535f70, #2f3744);
   padding: 15px;
   max-width: min(360px, 80vw);
   box-sizing: border-box;
@@ -164,7 +129,6 @@ body .tooltip.remove {
 @keyframes removeTooltip {
   to {
     opacity: 0;
-    transform: translateY(-50%) scale(0.4);
   }
 }
 
@@ -173,7 +137,7 @@ body .tooltip .triangle {
   left: 50%;
   width: 10px;
   height: 10px;
-  background: #4c50c5;
+  background: #3c4654;
   top: -5px;
   border-top-left-radius: 3px;
   transform: translateX(-50%) rotate(45deg);
@@ -295,10 +259,11 @@ body:not(.disable-blur) .fs-code-preview .top-bar .url-bar {
   -webkit-backdrop-filter: blur(20px);
 }
 
-body .fs-code-preview .top-bar .url-bar .icon {
+body .fs-code-preview .top-bar .url-bar .icon-container svg {
   height: 24px;
   width: 24px;
-  filter: invert(0.8);
+  fill: rgba(255, 255, 255, 0.8);
+  vertical-align: middle;
 }
 
 body .fs-code-preview .top-bar .url-bar a {

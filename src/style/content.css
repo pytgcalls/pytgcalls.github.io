@@ -8,7 +8,7 @@ body .page-container .content {
   overflow-wrap: anywhere;
 }
 
-body .page-container.as-home .content {
+body.as-home .page-container .content {
   display: none;
 }
 
@@ -44,48 +44,6 @@ body .page-container .content.is-loading svg circle {
   }
 }
 
-body .page-container .content.is-loading .try-container {
-  padding: 15px;
-  background: rgb(45, 45, 45, 0.3);
-  border: 1px solid rgb(255, 255, 255, 0.1);
-  border-radius: 10px;
-  animation: 0.4s appearTryContainer;
-}
-
-body.disable-blur .page-container .content.is-loading .try-container {
-  border: none;
-}
-
-@keyframes appearTryContainer {
-  from {
-    transform: scale(0.9);
-    opacity: 0;
-  }
-}
-
-body .page-container .content.is-loading .try-container textarea {
-  width: 30vw;
-  height: 40vh;
-  border-radius: 10px;
-  background: transparent;
-  border: 1px solid rgb(255, 255, 255, 0.1);
-  color: #FFFFFF;
-  font-family: 'Poppins', sans-serif;
-  font-size: 12px;
-  padding: 10px;
-}
-
-body .page-container .content.is-loading .try-container .button {
-  margin-inline: auto;
-  background: #050505;
-  color: #FFFFFF;
-  text-align: center;
-  width: fit-content;
-  padding: 10px;
-  padding-inline: 34px;
-  border-radius: 10px;
-}
-
 body .page-container .content:not(.disappear) .page {
   animation: 0.4s appearPage cubic-bezier(0.42, 0, 0, 0.97);
 }
@@ -110,8 +68,7 @@ body .page-container .content.disappear {
 
 body .page-container .content:not(.is-loading) {
   box-sizing: border-box;
-  padding-inline: 20px;
-  padding-bottom: 20px;
+  padding: 30px;
   color: #FFFFFF;
 }
 
@@ -129,12 +86,12 @@ body .page-container .content:not(.is-loading) .go-to-container.has-only-next {
 body .page-container .content:not(.is-loading) .go-to-container .go-to {
   display: flex;
   align-items: center;
-  background: #111111;
+  background: #161a20;
+  border: 1px solid rgba(93, 106, 129, 0.2);
   padding: 17px;
   gap: 11px;
   position: relative;
   min-width: 153px;
-  border: 1px solid rgb(255, 255, 255, 0.1);
   border-radius: 10px;
   cursor: pointer;
   overflow: hidden;
@@ -148,12 +105,16 @@ body .page-container .content:not(.is-loading) .go-to-container .go-to {
   }
 }
 
-body .page-container .content:not(.is-loading) .go-to-container .go-to img {
-  filter: invert(1);
+body .page-container .content:not(.is-loading) .go-to-container .go-to .icon-container {
   transition: 0.4s margin-right, 0.4s opacity;
 }
 
-body .page-container .content:not(.is-loading) .go-to-container .go-to:hover img {
+body .page-container .content:not(.is-loading) .go-to-container .go-to .icon-container svg {
+  vertical-align: middle;
+  fill: #FFFFFF;
+}
+
+body .page-container .content:not(.is-loading) .go-to-container .go-to:hover .icon-container {
   margin-right: -25px;
   opacity: 0;
 }
@@ -195,7 +156,7 @@ body .page-container .content:not(.is-loading) .go-to-container .go-to:hover .mi
 }
 
 body .page-container .content:not(.is-loading) a {
-  color: #007fff;
+  color: #5d6a81;
 }
 
 body .page-container .content:not(.is-loading) a.ref-shi {
@@ -217,9 +178,12 @@ body .page-container .content:not(.is-loading) .separator {
 
 body .page-container .content:not(.is-loading) .h1 {
   font-size: 40px;
-  margin-top: 10px;
   font-weight: 700;
   position: relative;
+}
+
+body .page-container .content:not(.is-loading) .h1:not(:first-child) {
+  margin-top: 10px;
 }
 
 body .page-container .content:not(.is-loading) .h1 .emoji-parsed img {
@@ -284,8 +248,8 @@ body .page-container .content:not(.is-loading) .pg-title {
 
 body .page-container .content:not(.is-loading) .code {
   display: inline-block;
-  background: rgb(45, 45, 45, 0.3);
-  border: 1px solid rgb(255, 255, 255, 0.1);
+  background: #161a20;
+  border: 1px solid rgba(93, 106, 129, 0.2);
   padding-inline: 7px;
   box-sizing: border-box;
   border-radius: 5px;
@@ -320,10 +284,11 @@ body .page-container .content:not(.is-loading) ul li .emoji-parsed img {
 }
 
 body .page-container .content:not(.is-loading) .multisyntax,
-body .page-container .content:not(.is-loading) .syntax-highlight {
+body .page-container .content:not(.is-loading) .syntax-highlight,
+body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-code-high .syntax-highlight {
   padding: 10px;
   background: rgb(45, 45, 45, 0.3);
-  border: 1px solid rgb(255, 255, 255, 0.1);
+  border: 1px solid rgba(93, 106, 129, 0.2);
   margin-block: 5px;
   border-radius: 10px;
   user-select: text;
@@ -334,29 +299,46 @@ body .page-container .content:not(.is-loading) .syntax-highlight {
   line-height: 25px;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax > .sy-container {
+body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-code-high .syntax-highlight {
+  line-height: 19px;
+  font-size: 14px;
+  border: none;
+  background: none;
+  overflow: visible;
+  flex: 1;
+  padding: 0;
+}
+
+body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-code-high .syntax-highlight::after {
+  content: "";
+  display: block;
+  height: 10px;
+  width: 100%;
+}
+
+body .page-container .content:not(.is-loading) .multisyntax>.sy-container {
   position: relative;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax > .sy-container > .syntax-highlight {
+body .page-container .content:not(.is-loading) .multisyntax>.sy-container>.syntax-highlight {
   background: none;
   border: none;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax > .sy-container.preparing-animation {
+body .page-container .content:not(.is-loading) .multisyntax>.sy-container.preparing-animation {
   height: var(--height);
   overflow: hidden;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax > .sy-container:not(.preparing-animation):not(.animating) > .syntax-highlight:not(.active) {
+body .page-container .content:not(.is-loading) .multisyntax>.sy-container:not(.preparing-animation):not(.animating)>.syntax-highlight:not(.active) {
   display: none;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax > .sy-container.preparing-animation > .syntax-highlight:not(.active) {
+body .page-container .content:not(.is-loading) .multisyntax>.sy-container.preparing-animation>.syntax-highlight:not(.active) {
   visibility: hidden;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax > .sy-container.animating {
+body .page-container .content:not(.is-loading) .multisyntax>.sy-container.animating {
   overflow: hidden;
   animation: 0.4s updateHeight forwards;
 }
@@ -365,19 +347,20 @@ body .page-container .content:not(.is-loading) .multisyntax > .sy-container.anim
   from {
     height: var(--height);
   }
+
   to {
     height: var(--to-height);
   }
 }
 
-body .page-container .content:not(.is-loading) .multisyntax > .sy-container.animating .syntax-highlight.disappearing,
-body .page-container .content:not(.is-loading) .multisyntax > .sy-container.animating .syntax-highlight.appearing {
+body .page-container .content:not(.is-loading) .multisyntax>.sy-container.animating .syntax-highlight.disappearing,
+body .page-container .content:not(.is-loading) .multisyntax>.sy-container.animating .syntax-highlight.appearing {
   position: absolute;
   top: 0;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax > .sy-container.animating.animating-asback .syntax-highlight.disappearing {
-  animation: 0.4s disappearSy forwards cubic-bezier(1,-0.02, 0, 0.97);
+body .page-container .content:not(.is-loading) .multisyntax>.sy-container.animating.animating-asback .syntax-highlight.disappearing {
+  animation: 0.4s disappearSy forwards cubic-bezier(1, -0.02, 0, 0.97);
 }
 
 @keyframes disappearSy {
@@ -387,8 +370,8 @@ body .page-container .content:not(.is-loading) .multisyntax > .sy-container.anim
   }
 }
 
-body .page-container .content:not(.is-loading) .multisyntax > .sy-container.animating.animating-asback .syntax-highlight.appearing {
-  animation: 0.4s appearSy forwards cubic-bezier(1,-0.02, 0, 0.97);
+body .page-container .content:not(.is-loading) .multisyntax>.sy-container.animating.animating-asback .syntax-highlight.appearing {
+  animation: 0.4s appearSy forwards cubic-bezier(1, -0.02, 0, 0.97);
 }
 
 @keyframes appearSy {
@@ -398,8 +381,8 @@ body .page-container .content:not(.is-loading) .multisyntax > .sy-container.anim
   }
 }
 
-body .page-container .content:not(.is-loading) .multisyntax > .sy-container.animating:not(.animating-asback) .syntax-highlight.disappearing {
-  animation: 0.4s disappearSyRev forwards cubic-bezier(1,-0.02, 0, 0.97);
+body .page-container .content:not(.is-loading) .multisyntax>.sy-container.animating:not(.animating-asback) .syntax-highlight.disappearing {
+  animation: 0.4s disappearSyRev forwards cubic-bezier(1, -0.02, 0, 0.97);
 }
 
 @keyframes disappearSyRev {
@@ -409,8 +392,8 @@ body .page-container .content:not(.is-loading) .multisyntax > .sy-container.anim
   }
 }
 
-body .page-container .content:not(.is-loading) .multisyntax > .sy-container.animating:not(.animating-asback) .syntax-highlight.appearing {
-  animation: 0.4s appearSyRev forwards cubic-bezier(1,-0.02, 0, 0.97);
+body .page-container .content:not(.is-loading) .multisyntax>.sy-container.animating:not(.animating-asback) .syntax-highlight.appearing {
+  animation: 0.4s appearSyRev forwards cubic-bezier(1, -0.02, 0, 0.97);
 }
 
 @keyframes appearSyRev {
@@ -420,7 +403,7 @@ body .page-container .content:not(.is-loading) .multisyntax > .sy-container.anim
   }
 }
 
-body .page-container .content:not(.is-loading) .multisyntax > .sy-container.animating .hidden {
+body .page-container .content:not(.is-loading) .multisyntax>.sy-container.animating .hidden {
   visibility: hidden;
 }
 
@@ -442,9 +425,9 @@ body .page-container .content:not(.is-loading) .syntax-highlight .tags-container
 }
 
 body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag {
-  background: rgb(13, 13, 13);
-  border: 1px solid rgb(255, 255, 255, 0.1);
-  border-right: 0px;
+  background: #0d1117;
+  border: 1px solid rgba(93, 106, 129, 0.2);
+  border-right: 0;
   width: fit-content;
   padding-inline: 12px;
   height: 26px;
@@ -468,12 +451,12 @@ body .page-container .content:not(.is-loading) .syntax-highlight .tags-container
 
 body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.is-clickable:not(.success):hover::before,
 body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.is-clickable:not(.success):hover {
-  background: rgb(24, 24, 24);
+  background: rgb(22, 29, 39);
 }
 
 body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.is-clickable:not(.success):active::before,
 body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.is-clickable:not(.success):active {
-  background: rgb(50, 50, 50);
+  background: rgb(28, 36, 48);
 }
 
 body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag::before {
@@ -484,24 +467,25 @@ body .page-container .content:not(.is-loading) .syntax-highlight .tags-container
   height: 19px;
   border-right: 1px solid rgb(255, 255, 255, 0.1);
   border-top: 1px solid rgb(255, 255, 255, 0.1);
-  background: rgb(13, 13, 13);
+  background: #0d1117;
   aspect-ratio: 1;
   transform: translateY(-50%) rotate(45deg);
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag img {
-  filter: invert(1);
+body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag .icon-container svg {
+  vertical-align: middle;
+  fill: #FFFFFF;
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag img:not(.success) {
+body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag .icon-container:not(.success) {
   transition: 0.4s opacity;
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.success img:not(.success) {
+body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.success .icon-containr:not(.success) {
   opacity: 0;
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag span {
+body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag>span {
   z-index: 1;
   transition: 0.4s opacity;
 }
@@ -510,7 +494,7 @@ body .page-container .content:not(.is-loading) .syntax-highlight .tags-container
   opacity: 0;
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag img.success {
+body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag .icon-container.success {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -519,17 +503,20 @@ body .page-container .content:not(.is-loading) .syntax-highlight .tags-container
   transition: 0.4s opacity;
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.success img.success {
+body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.success .icon-container.success {
   opacity: 1;
   animation: 0.5s showSuccessIcon;
 }
 
 @keyframes showSuccessIcon {
   from {
-    clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);;
+    clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
+    ;
   }
+
   to {
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    ;
   }
 }
 
@@ -539,7 +526,7 @@ body .page-container .content:not(.is-loading) .syntax-highlight.has-mark::after
   position: absolute;
   left: -10px;
   width: calc(100% + 10px);
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(13, 17, 23, 0.7);
   transition: 0.4s transform;
 }
 
@@ -624,23 +611,24 @@ body .page-container .content:not(.is-loading) .multisyntax .tabs::before {
   left: calc(calc(100% * var(--eid)) / var(--i));
   width: calc(100% / var(--i));
   height: 100%;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
   transition: 0.2s left;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax .tabs > .tab {
+body .page-container .content:not(.is-loading) .multisyntax .tabs>.tab {
   width: calc(100% / var(--i));
   text-align: center;
   padding-block: 12px;
   transition: 0.2s color;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax .tabs > .tab:not(.active) {
+body .page-container .content:not(.is-loading) .multisyntax .tabs>.tab:not(.active) {
   cursor: pointer;
   color: rgba(255, 255, 255, 0.5);
 }
 
-body.disable-blur .page-container .content:not(.is-loading) .syntax-highlight {
+body.disable-blur .page-container .content:not(.is-loading) .syntax-highlight,
+body.as-home.disable-blur .page-container .home-container .final-pres .pres-item .syntax-highlight {
   border: none;
 }
 
@@ -649,20 +637,17 @@ body .page-container .content:not(.is-loading) .shi {
 }
 
 body .page-container .content:not(.is-loading) .syntax-highlight .spacer,
-body .page-container .content:not(.is-loading) .shi .spacer {
+body .page-container .content:not(.is-loading) .shi .spacer,
+body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-code-high .syntax-highlight .spacer {
   display: inline-block;
   width: calc(10px * var(--id));
 }
 
 body .page-container .content:not(.is-loading) .category-title {
-  background: rgb(45, 45, 45, 0.3);
-  border: 1px solid rgb(255, 255, 255, 0.1);
+  background: #161a20;
+  border: 1px solid rgba(93, 106, 129, 0.2);
   padding: 9px;
   border-radius: 10px;
-}
-
-body.disable-blur .page-container .content:not(.is-loading) .category-title {
-  border: none;
 }
 
 body .page-container .content:not(.is-loading) .category-title .spacer {
@@ -674,15 +659,15 @@ body .page-container .content:not(.is-loading) .subtext {
   margin-left: 20px;
 }
 
-body .page-container .content:not(.is-loading) .text + .category-title,
-body .page-container .content:not(.is-loading) .subtext + .category-title {
+body .page-container .content:not(.is-loading) .text+.category-title,
+body .page-container .content:not(.is-loading) .subtext+.category-title {
   margin-top: 20px;
 }
 
 body .page-container .content:not(.is-loading) table {
   border-spacing: 0;
-  background: rgb(45, 45, 45, 0.3);
-  border: 1px solid rgb(255, 255, 255, 0.1);
+  background: #0d1117;
+  border: 1px solid rgba(93, 106, 129, 0.2);
   padding: 7px;
   border-radius: 20px;
   margin-top: 20px;
@@ -693,7 +678,7 @@ body.disable-blur .page-container .content:not(.is-loading) table {
 }
 
 body .page-container .content:not(.is-loading) table tr.as-definitions th {
-  background: #202020;
+  background: #161a20;
 }
 
 body .page-container .content:not(.is-loading) table tr.as-definitions th:first-child {
@@ -716,7 +701,8 @@ body .page-container .content:not(.is-loading) table tr:not(:last-child) td {
 }
 
 body .page-container .content:not(.is-loading) .alert {
-  background: rgb(45, 45, 45, 0.3);
+  background: #161a20;
+  box-shadow: 0 0 0 1px rgba(93, 106, 129, 0.2);
   border-radius: 10px;
   overflow: hidden;
   margin-block: 20px;
@@ -729,6 +715,10 @@ body .page-container .content:not(.is-loading) .alert .alert-header {
   padding-block: 7px;
   color: #FFFFFF;
   gap: 10px;
+}
+
+body .page-container .content:not(.is-loading) .alert .alert-header .icon-container svg {
+  vertical-align: middle;
 }
 
 body .page-container .content:not(.is-loading) .alert .alert-header .alert-title {
@@ -744,15 +734,19 @@ body .page-container .content:not(.is-loading) .alert .alert-content .emoji-pars
 }
 
 body .page-container .content:not(.is-loading) .alert[data-type="important"] {
-  border-left: 3px solid #00b0ff;
+  border-left: 3px solid #f42b3c;
 }
 
 body .page-container .content:not(.is-loading) .alert[data-type="important"] .alert-header {
-  background: #00b0ff17;
+  background: #f42b3c17;
+}
+
+body .page-container .content:not(.is-loading) .alert[data-type="important"] .alert-header .icon-container svg {
+  fill: #f42b3c;
 }
 
 body .page-container .content:not(.is-loading) .alert[data-type="important"] .alert-header .alert-title {
-  color: #00b0ff;
+  color: #f42b3c;
 }
 
 body .page-container .content:not(.is-loading) .alert[data-type="note"] {
@@ -761,6 +755,10 @@ body .page-container .content:not(.is-loading) .alert[data-type="note"] {
 
 body .page-container .content:not(.is-loading) .alert[data-type="note"] .alert-header {
   background: #00ff4b21;
+}
+
+body .page-container .content:not(.is-loading) .alert[data-type="note"] .alert-header .icon-container svg {
+  fill: #00ff4b;
 }
 
 body .page-container .content:not(.is-loading) .alert[data-type="note"] .alert-header .alert-title {
@@ -775,13 +773,55 @@ body .page-container .content:not(.is-loading) .alert[data-type="warning"] .aler
   background: #ff91001a;
 }
 
+body .page-container .content:not(.is-loading) .alert[data-type="warning"] .alert-header .icon-container svg {
+  fill: #ff9100;
+}
+
 body .page-container .content:not(.is-loading) .alert[data-type="warning"] .alert-header .alert-title {
   color: #ff9100;
 }
 
+body .page-container .content:not(.is-loading) .alert[data-type="p2p"] {
+  border-left: 3px solid #00b0ff;
+  text-align: center;
+}
+
+body .page-container .content:not(.is-loading) .alert[data-type="p2p"] .alert-header {
+  background: #00b0ff17;
+}
+
+body .page-container .content:not(.is-loading) .alert[data-type="p2p"] .alert-header .icon-container svg {
+  fill: #00b0ff;
+}
+
+body .page-container .content:not(.is-loading) .alert[data-type="p2p"] .alert-header .alert-title {
+  color: #00b0ff;
+}
+
+body .page-container .content:not(.is-loading) .alert[data-type="p2p"] img {
+  width: 140px;
+  height: 140px;
+  margin-top: 40px;
+}
+
+body .page-container .content:not(.is-loading) .alert[data-type="p2p"]>.alert-title {
+  font-size: 25px;
+  font-weight: 600;
+  max-width: 80%;
+  margin-inline: auto;
+}
+
+body .page-container .content:not(.is-loading) .alert[data-type="p2p"] .alert-content {
+  max-width: 80%;
+  margin-inline: auto;
+  padding: 0;
+  padding-bottom: 20px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
 body .page-container .content:not(.is-loading) .github-ref {
   width: 100%;
-  background: #202020;
+  background: #161a20;
   border: 1px solid #ffffff26;
   height: 190px;
   border-radius: 10px;
@@ -792,7 +832,7 @@ body .page-container .content:not(.is-loading) .github-ref {
   transition: 0.4s gap, 0.4s background;
 }
 
-body .page-container .content:not(.is-loading) .github-ref + .github-ref {
+body .page-container .content:not(.is-loading) .github-ref+.github-ref {
   margin-top: 10px;
 }
 
@@ -805,7 +845,7 @@ body .page-container .content:not(.is-loading) a.github-ref {
   body .page-container .content:not(.is-loading) .github-ref:hover {
     gap: 20px;
   }
-  
+
   body .page-container .content:not(.is-loading) .github-ref:active {
     gap: 70px;
   }
@@ -836,7 +876,7 @@ body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) {
 }
 
 @media screen and (max-width: 1300px) {
-  body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) { 
+  body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) {
     flex-direction: column;
     padding: 18px;
     height: auto;
@@ -890,18 +930,18 @@ body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .rep
 }
 
 @media screen and (max-width: 1300px) {
-  body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info { 
+  body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info {
     width: 100%;
     text-align: center;
   }
 
-  body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info .repo-title { 
+  body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info .repo-title {
     font-size: 23px;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info .repo-description { 
+  body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info .repo-description {
     display: none;
   }
 
@@ -955,9 +995,11 @@ body .page-container .content:not(.is-loading) .github-ref:not(.is-loading):hove
   background: rgba(0, 0, 0, 0.8);
 }
 
-body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .illustration .container .icon {
+body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .illustration .container .icon-container svg {
   width: 21px;
-  filter: invert(0.8);
+  height: 21px;
+  vertical-align: middle;
+  fill: rgba(255, 255, 255, 0.8);
   padding-right: 10px;
 }
 
@@ -994,7 +1036,7 @@ body .page-container .content:not(.is-loading) .banner .banner-container::before
   background: linear-gradient(0deg, var(--mainbg) 10%, transparent);
 }
 
-body .page-container .content:not(.is-loading) .banner .banner-container .main-image { 
+body .page-container .content:not(.is-loading) .banner .banner-container .main-image {
   width: 100%;
   border: 4px solid var(--mainbg);
   aspect-ratio: var(--width) / var(--height);
@@ -1003,7 +1045,7 @@ body .page-container .content:not(.is-loading) .banner .banner-container .main-i
   transition: 0.4s opacity;
 }
 
-body .page-container .content:not(.is-loading) .banner .banner-container .main-image:not(.loaded) { 
+body .page-container .content:not(.is-loading) .banner .banner-container .main-image:not(.loaded) {
   opacity: 0.2;
 }
 
@@ -1060,7 +1102,7 @@ body .page-container .content:not(.is-loading) .banner .description {
   color: rgba(255, 255, 255, 0.4);
 }
 
-body .page-container .content:not(.is-loading) .banner .description .emoji-parsed > img {
+body .page-container .content:not(.is-loading) .banner .description .emoji-parsed>img {
   height: 23px;
 }
 

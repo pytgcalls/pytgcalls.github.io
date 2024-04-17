@@ -16,7 +16,7 @@ class IndexesManager {
     return new Promise((resolve) => {
       this.#isCurrentlyIndexing = true;
       hasCallback && callback(0, 0);
-      
+
       let i = 0;
 
       config.getAllFilesListFiles().then((files) => {
@@ -24,12 +24,12 @@ class IndexesManager {
 
         const handleIndexingWithResponse = (i, file, response, status) => {
           hasCallback && callback(i, files.length);
-    
+
           if (status === 200) {
             this.#indexes[file] = sourceParser.handleSearchIndexByText(response);
             this.#indexes_caching[file] = response;
           }
-    
+
           if (i === files.length) {
             this.#isCurrentlyIndexing = false;
             this.#hasIndexed = true;
@@ -37,26 +37,36 @@ class IndexesManager {
           }
         };
 
-        for (const file of files) {
-          if (this.#indexes_caching[file]) {
-            i++;
-            handleIndexingWithResponse(i, file, this.#indexes_caching[file], 200);
-          } else {
-            const XML = new XMLHttpRequest();
-            XML.open('GET', 'https://raw.githubusercontent.com/pytgcalls/docsdata/master/' + file, true);
-            setTimeout(() => {
-              XML.send();
-            }, i * 60);
-            XML.addEventListener('readystatechange', (e) => {
-              if (e.target.readyState === 4) {
+        // TODO: wait for animationend event
+        setTimeout(() => {
+          for (const file of files) {
+            if (this.#indexes_caching[file]) {
+              i++;
+              handleIndexingWithResponse(i, file, this.#indexes_caching[file], 200);
+            } else {
+              requestsManager.initRequest(file).then((data) => {
                 i++;
-                handleIndexingWithResponse(i, file, e.target.response, e.target.status);
-              }
-            });
+                handleIndexingWithResponse(i, file, data, 200);
+              }).catch(() => {
+                i++;
+                handleIndexingWithResponse(i, file, data, 500);
+              });
+            }
           }
-        }
+        }, 700);
       });
     });
+  }
+
+  clearFullFromDebug() {
+    if (!debug.isSafeToUseDebugItems()) {
+      return;
+    }
+
+    this.#hasIndexed = false;
+    this.#isCurrentlyIndexing = false;
+    this.#indexes = {};
+    this.#indexes_caching = {};
   }
 
   hasIndexed() {
