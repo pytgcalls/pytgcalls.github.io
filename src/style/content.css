@@ -427,7 +427,7 @@ body .page-container .content:not(.is-loading) .syntax-highlight .tags-container
 body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag {
   background: #0d1117;
   border: 1px solid rgba(93, 106, 129, 0.2);
-  border-right: 0px;
+  border-right: 0;
   width: fit-content;
   padding-inline: 12px;
   height: 26px;
@@ -814,7 +814,7 @@ body .page-container .content:not(.is-loading) .alert[data-type="p2p"]>.alert-ti
 body .page-container .content:not(.is-loading) .alert[data-type="p2p"] .alert-content {
   max-width: 80%;
   margin-inline: auto;
-  padding: 0px;
+  padding: 0;
   padding-bottom: 20px;
   color: rgba(255, 255, 255, 0.7);
 }

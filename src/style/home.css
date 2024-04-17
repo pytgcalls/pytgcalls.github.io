@@ -95,7 +95,7 @@ body .page-container .home-container .mgc-button .button-icon div:nth-child(3) {
 }
 
 body .page-container .home-container .mgc-button:not(:hover) .button-icon div:nth-child(3) {
-  width: 0px;
+  width: 0;
 }
 
 body .page-container .home-container .introduction {
@@ -424,7 +424,7 @@ body .page-container .home-container .pres-points {
 
 @media screen and (max-width: 1000px) {
   body .page-container .home-container .pres-points {
-    padding: 40px 120px;
+    padding: 40px 0;
   }
 }
 
@@ -442,7 +442,7 @@ body .page-container .home-container .pres-points .background-effects {
 
 body .page-container .home-container .pres-points .background-effects .bottom-noche {
   position: absolute;
-  bottom: 0px;
+  bottom: 0;
   left: 0;
   width: 50%;
 }
@@ -652,7 +652,7 @@ body .page-container .home-container .pres-points .int-pres-points .grid-element
   height: 100%;
   background: linear-gradient(45deg, #8750fd 20%, #3735f1 40%, #2ec594 90%);
   border-radius: 50%;
-  box-shadow: 0px 0px 15px 0px rgba(89, 148, 255, 0.6);
+  box-shadow: 0 0 15px 0 rgba(89, 148, 255, 0.6);
 }
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container .text {
