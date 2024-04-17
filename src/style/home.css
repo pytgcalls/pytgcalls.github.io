@@ -705,6 +705,7 @@ body .page-container .home-container .pres-points .int-pres-points .grid-element
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.citation {
   background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
   padding: 80px;
   gap: 25px;
   box-shadow: none;
@@ -860,8 +861,7 @@ body .page-container .home-container .team-members .carousel-container .carousel
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.1);
   transition: 0.4s opacity;
-  backdrop-filter: blur(30px);
-  background: rgba(5, 13, 27, 0.2);
+  background: rgb(20, 25, 33);
 }
 
 body .page-container .home-container .team-members .carousel-container:has(.member:hover) .member:not(:hover) {
