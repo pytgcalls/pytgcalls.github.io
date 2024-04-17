@@ -140,8 +140,6 @@ class Debug {
       } else if (e.key == 'M' && e.shiftKey) {
         e.preventDefault();
         onConfirm();
-      } else {
-        console.log("Recv", e);
       }
     };
 

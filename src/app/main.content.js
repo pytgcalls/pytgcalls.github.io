@@ -84,7 +84,6 @@ class Content {
   #handleResponse(fileName, content, pageSections, response, hash) {
     return new Promise((resolve) => {
       const data = sourceParser.getContentByData(response);
-      console.log(data, response);
       content.classList.remove('is-loading');
       content.textContent = '';
       content.appendChild(data);

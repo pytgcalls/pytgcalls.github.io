@@ -71,7 +71,7 @@ body .tooltip {
   top: calc(var(--center-y) + 49px);
   left: var(--center-x);
   color: black;
-  background: linear-gradient(45deg, #685eab, #3d49d3);
+  background: linear-gradient(45deg, #535f70, #2f3744);
   padding: 15px;
   max-width: min(360px, 80vw);
   box-sizing: border-box;
@@ -129,7 +129,6 @@ body .tooltip.remove {
 @keyframes removeTooltip {
   to {
     opacity: 0;
-    transform: translateY(-50%) scale(0.4);
   }
 }
 
@@ -138,7 +137,7 @@ body .tooltip .triangle {
   left: 50%;
   width: 10px;
   height: 10px;
-  background: #4c50c5;
+  background: #3c4654;
   top: -5px;
   border-top-left-radius: 3px;
   transform: translateX(-50%) rotate(45deg);
