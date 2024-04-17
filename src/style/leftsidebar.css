@@ -302,12 +302,6 @@ body .page-container .left-container .left-sidebar {
   box-sizing: border-box;
 }
 
-@media screen and (max-width: 1330px) {
-  body .page-container .left-container .left-sidebar {
-    padding-top: 103px;
-  }
-}
-
 body .page-container .left-container .left-sidebar::-webkit-scrollbar {
   display: none;
 }
