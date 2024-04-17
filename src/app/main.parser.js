@@ -675,20 +675,11 @@ class SourceParser {
         let removedRows = [];
         let finalCode = '';
         let i = 0;
-        let hasDiffOnRowsWithIndex0 = false;
         for (const line of diff.lines) {
           if (line.aIndex < 0) { // added row
             addedRows.push(i);
-
-            if (!this.#getRowStartSpaces(secondElementLines[i - 1], secondElementLines[0])) {
-              hasDiffOnRowsWithIndex0 = true;
-            }
           } else if (line.bIndex < 0) { // removed row
             removedRows.push(i);
-
-            if (!this.#getRowStartSpaces(firstElementLines[i - 1], firstElementLines[0])) {
-              hasDiffOnRowsWithIndex0 = true;
-            }
           }
 
           i++;
@@ -716,7 +707,7 @@ class SourceParser {
 
         newElement.classList.remove('multisyntax');
         newElement.classList.add('syntax-highlight');
-        newElement.classList.toggle('has-diff-on-zero', hasDiffOnRowsWithIndex0);
+        newElement.classList.add('has-blame');
         this.#handleSyntaxHighlight(fakeResyntaxElement, newElement, true, finalCode);
 
         for (const addedRow of addedRows) {
