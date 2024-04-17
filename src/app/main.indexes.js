@@ -37,20 +37,23 @@ class IndexesManager {
           }
         };
 
-        for (const file of files) {
-          if (this.#indexes_caching[file]) {
-            i++;
-            handleIndexingWithResponse(i, file, this.#indexes_caching[file], 200);
-          } else {
-            requestsManager.initRequest(file).then((data) => {
+        // TODO: wait for animationend event
+        setTimeout(() => {
+          for (const file of files) {
+            if (this.#indexes_caching[file]) {
               i++;
-              handleIndexingWithResponse(i, file, data, 200);
-            }).catch(() => {
-              i++;
-              handleIndexingWithResponse(i, file, data, 500);
-            });
+              handleIndexingWithResponse(i, file, this.#indexes_caching[file], 200);
+            } else {
+              requestsManager.initRequest(file).then((data) => {
+                i++;
+                handleIndexingWithResponse(i, file, data, 200);
+              }).catch(() => {
+                i++;
+                handleIndexingWithResponse(i, file, data, 500);
+              });
+            }
           }
-        }
+        }, 700);
       });
     });
   }
