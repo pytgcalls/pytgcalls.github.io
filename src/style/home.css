@@ -424,7 +424,7 @@ body .page-container .home-container .pres-points {
 
 @media screen and (max-width: 1000px) {
   body .page-container .home-container .pres-points {
-    padding: 40px 0;
+    padding: 40px 20px;
   }
 }
 
@@ -457,7 +457,6 @@ body .page-container .home-container .pres-points .background-effects .right-noc
 
 body .page-container .home-container .pres-points .int-pres-points {
   max-width: 1100px;
-  min-width: 1000px;
   z-index: 1;
 }
 
@@ -518,7 +517,7 @@ body .page-container .home-container .pres-points .int-pres-points .grid-element
   }
 
   body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container {
-    width: 95vw;
+    width: 100%;
     box-sizing: border-box;
   }
 }
@@ -530,7 +529,7 @@ body .page-container .home-container .pres-points .int-pres-points .grid-element
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container {
   margin: 10px;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
-  border-radius: 35px;
+  border-radius: 24px;
   padding: 45px;
   display: flex;
   justify-content: center;
@@ -612,6 +611,7 @@ body .page-container .home-container .pres-points .int-pres-points .grid-element
   display: flex;
   align-items: center;
   width: fit-content;
+  margin-bottom: 50px;
 }
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container .pseudo-icons .icon-container {
@@ -657,9 +657,9 @@ body .page-container .home-container .pres-points .int-pres-points .grid-element
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container .text {
   color: #FFFFFF;
-  font-size: min(6vw, 38px);
-  font-weight: 600;
-  margin-top: 20px;
+  font-size: min(6vw, 40px);
+  line-height: min(7vw, 50px);
+  font-weight: 500;
   flex: 1;
   display: flex;
 }
@@ -673,10 +673,10 @@ body .page-container .home-container .pres-points .int-pres-points .grid-element
 }
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container .text.short {
-  font-size: min(14.5vw, 100px);
-  font-weight: 400;
+  font-size: min(14.5vw, 96px);
+  font-weight: 500;
   align-items: flex-end;
-  margin-top: 0;
+  line-height: min(14.5vw, 91px);
 }
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.numeric .text.short {
@@ -688,7 +688,7 @@ body .page-container .home-container .pres-points .int-pres-points .grid-element
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container .small-text {
   color: rgba(255, 255, 255, 0.5);
-  font-size: min(5vw, 38px);
+  font-size: min(4.5vw, 24px);
 }
 
 body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.numeric .small-text {
