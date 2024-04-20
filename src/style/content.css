@@ -842,6 +842,7 @@ body .page-container .content:not(.is-loading) .page .github-ref {
   display: flex;
   align-items: center;
   gap: 0;
+  user-select: none;
   transition: 0.4s gap, 0.4s background;
 }
 
