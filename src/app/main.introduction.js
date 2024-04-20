@@ -663,11 +663,11 @@ class Introduction {
         memberContainer.appendChild(memberButtons);
 
         if (validMembersCount > minimumDiv) {
-          validMembersCountFirst++;
+          validMembersCountSecond++;
           secondCarousel.appendChild(memberContainer);
           secondMembersChildren.push(memberContainer);
         } else {
-          validMembersCountSecond++;
+          validMembersCountFirst++;
           firstCarousel.appendChild(memberContainer);
           firstMembersChildren.push(memberContainer);
         }
