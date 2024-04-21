@@ -72,6 +72,11 @@ body .page-container .content:not(.is-loading) {
   color: #FFFFFF;
 }
 
+body .page-container .content:not(.is-loading) ::selection {
+  background: #5d6a81;
+  color: #FFFFFF;
+}
+
 body .page-container .content:not(.is-loading) .go-to-container {
   display: flex;
   align-items: center;
@@ -155,20 +160,24 @@ body .page-container .content:not(.is-loading) .go-to-container .go-to:hover .mi
   }
 }
 
-body .page-container .content:not(.is-loading) a {
+body .page-container .content:not(.is-loading) .page {
+  user-select: text;
+}
+
+body .page-container .content:not(.is-loading) .page a {
   color: #5d6a81;
 }
 
-body .page-container .content:not(.is-loading) a.ref-shi {
+body .page-container .content:not(.is-loading) .page a.ref-shi {
   cursor: pointer;
 }
 
-body .page-container .content:not(.is-loading) .ref {
+body .page-container .content:not(.is-loading) .page .ref {
   display: inline-block;
   color: #f08d49;
 }
 
-body .page-container .content:not(.is-loading) .separator {
+body .page-container .content:not(.is-loading) .page .separator {
   margin-top: 30px;
   width: 100%;
   height: 1px;
@@ -176,77 +185,77 @@ body .page-container .content:not(.is-loading) .separator {
   opacity: 0.2;
 }
 
-body .page-container .content:not(.is-loading) .h1 {
+body .page-container .content:not(.is-loading) .page .h1 {
   font-size: 40px;
   font-weight: 700;
   position: relative;
 }
 
-body .page-container .content:not(.is-loading) .h1:not(:first-child) {
+body .page-container .content:not(.is-loading) .page .h1:not(:first-child) {
   margin-top: 10px;
 }
 
-body .page-container .content:not(.is-loading) .h1 .emoji-parsed img {
+body .page-container .content:not(.is-loading) .page .h1 .emoji-parsed img {
   height: 42px;
 }
 
-body .page-container .content:not(.is-loading) .h2 {
+body .page-container .content:not(.is-loading) .page .h2 {
   font-size: 30px;
   margin-top: 36px;
   font-weight: 600;
   position: relative;
 }
 
-body .page-container .content:not(.is-loading) .h2 .emoji-parsed img {
+body .page-container .content:not(.is-loading) .page .h2 .emoji-parsed img {
   height: 34px;
 }
 
-body .page-container .content:not(.is-loading) .h3 {
+body .page-container .content:not(.is-loading) .page .h3 {
   font-size: 25px;
   margin-top: 10px;
   font-weight: 600;
   position: relative;
 }
 
-body .page-container .content:not(.is-loading) .h3 .emoji-parsed img {
+body .page-container .content:not(.is-loading) .page .h3 .emoji-parsed img {
   height: 31px;
 }
 
-body .page-container .content:not(.is-loading) .h1.has-hashtag-ref,
-body .page-container .content:not(.is-loading) .h2.has-hashtag-ref,
-body .page-container .content:not(.is-loading) .h3.has-hashtag-ref,
-body .page-container .content:not(.is-loading) .banner-container .bottom-container .big-title.has-hashtag-ref {
+body .page-container .content:not(.is-loading) .page .h1.has-hashtag-ref,
+body .page-container .content:not(.is-loading) .page .h2.has-hashtag-ref,
+body .page-container .content:not(.is-loading) .page .h3.has-hashtag-ref,
+body .page-container .content:not(.is-loading) .page .banner-container .bottom-container .big-title.has-hashtag-ref {
   cursor: pointer;
 }
 
-body .page-container .content:not(.is-loading) .h4 {
+body .page-container .content:not(.is-loading) .page .h4 {
   font-size: 18px;
   margin-top: 5px;
   font-weight: 600;
   position: relative;
 }
 
-body .page-container .content:not(.is-loading) .h4 .emoji-parsed img {
+body .page-container .content:not(.is-loading) .page .h4 .emoji-parsed img {
   height: 19px;
 }
 
-body .page-container .content:not(.is-loading) .text,
-body .page-container .content:not(.is-loading) .pg-title {
+body .page-container .content:not(.is-loading) .page .text,
+body .page-container .content:not(.is-loading) .page .pg-title {
   color: rgba(255, 255, 255, 0.8);
   font-size: 17px;
   margin-block: 5px;
 }
 
-body .page-container .content:not(.is-loading) .text .emoji-parsed img {
+body .page-container .content:not(.is-loading) .page .text .emoji-parsed img {
   height: 23px;
 }
 
-body .page-container .content:not(.is-loading) .pg-title {
+body .page-container .content:not(.is-loading) .page .pg-title {
   font-weight: 500;
   text-transform: uppercase;
 }
 
-body .page-container .content:not(.is-loading) .code {
+body .page-container .content:not(.is-loading) .page .code {
   display: inline-block;
   background: #161a20;
   border: 1px solid rgba(93, 106, 129, 0.2);
@@ -260,12 +269,12 @@ body.disable-blur .page-container .content:not(.is-loading) .code {
   border: none;
 }
 
-body .page-container .content:not(.is-loading) .sb {
+body .page-container .content:not(.is-loading) .page .sb {
   display: inline-block;
   font-weight: 600;
 }
 
-body .page-container .content:not(.is-loading) .docs-ref {
+body .page-container .content:not(.is-loading) .page .docs-ref {
   display: inline-block;
   color: #007fff;
   cursor: pointer;
@@ -283,8 +292,8 @@ body .page-container .content:not(.is-loading) ul li .emoji-parsed img {
   height: 23px;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax,
-body .page-container .content:not(.is-loading) .syntax-highlight,
+body .page-container .content:not(.is-loading) .page .multisyntax,
+body .page-container .content:not(.is-loading) .page .syntax-highlight,
 body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-code-high .syntax-highlight {
   padding: 10px;
   background: rgb(45, 45, 45, 0.3);
@@ -316,33 +325,33 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
   width: 100%;
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight.has-blame {
+body .page-container .content:not(.is-loading) .page .syntax-highlight.has-blame {
   padding-left: 30px;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax>.sy-container {
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container {
   position: relative;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax>.sy-container>.syntax-highlight {
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container>.syntax-highlight {
   background: none;
   border: none;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax>.sy-container.preparing-animation {
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.preparing-animation {
   height: var(--height);
   overflow: hidden;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax>.sy-container:not(.preparing-animation):not(.animating)>.syntax-highlight:not(.active) {
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container:not(.preparing-animation):not(.animating)>.syntax-highlight:not(.active) {
   display: none;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax>.sy-container.preparing-animation>.syntax-highlight:not(.active) {
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.preparing-animation>.syntax-highlight:not(.active) {
   visibility: hidden;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax>.sy-container.animating {
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating {
   overflow: hidden;
   animation: 0.4s updateHeight forwards;
 }
@@ -357,13 +366,13 @@ body .page-container .content:not(.is-loading) .multisyntax>.sy-container.animat
   }
 }
 
-body .page-container .content:not(.is-loading) .multisyntax>.sy-container.animating .syntax-highlight.disappearing,
-body .page-container .content:not(.is-loading) .multisyntax>.sy-container.animating .syntax-highlight.appearing {
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating .syntax-highlight.disappearing,
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating .syntax-highlight.appearing {
   position: absolute;
   top: 0;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax>.sy-container.animating.animating-asback .syntax-highlight.disappearing {
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating.animating-asback .syntax-highlight.disappearing {
   animation: 0.4s disappearSy forwards cubic-bezier(1, -0.02, 0, 0.97);
 }
 
@@ -374,7 +383,7 @@ body .page-container .content:not(.is-loading) .multisyntax>.sy-container.animat
   }
 }
 
-body .page-container .content:not(.is-loading) .multisyntax>.sy-container.animating.animating-asback .syntax-highlight.appearing {
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating.animating-asback .syntax-highlight.appearing {
   animation: 0.4s appearSy forwards cubic-bezier(1, -0.02, 0, 0.97);
 }
 
@@ -385,7 +394,7 @@ body .page-container .content:not(.is-loading) .multisyntax>.sy-container.animat
   }
 }
 
-body .page-container .content:not(.is-loading) .multisyntax>.sy-container.animating:not(.animating-asback) .syntax-highlight.disappearing {
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating:not(.animating-asback) .syntax-highlight.disappearing {
   animation: 0.4s disappearSyRev forwards cubic-bezier(1, -0.02, 0, 0.97);
 }
 
@@ -396,7 +405,7 @@ body .page-container .content:not(.is-loading) .multisyntax>.sy-container.animat
   }
 }
 
-body .page-container .content:not(.is-loading) .multisyntax>.sy-container.animating:not(.animating-asback) .syntax-highlight.appearing {
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating:not(.animating-asback) .syntax-highlight.appearing {
   animation: 0.4s appearSyRev forwards cubic-bezier(1, -0.02, 0, 0.97);
 }
 
@@ -407,17 +416,17 @@ body .page-container .content:not(.is-loading) .multisyntax>.sy-container.animat
   }
 }
 
-body .page-container .content:not(.is-loading) .multisyntax>.sy-container.animating .hidden {
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating .hidden {
   visibility: hidden;
 }
 
 @supports (overflow-x: overlay) {
-  body .page-container .content:not(.is-loading) .syntax-highlight {
+  body .page-container .content:not(.is-loading) .page .syntax-highlight {
     overflow-x: overlay;
   }
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .tags-container {
+body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container {
   width: 100%;
   margin-top: 7px;
   display: flex;
@@ -428,7 +437,7 @@ body .page-container .content:not(.is-loading) .syntax-highlight .tags-container
   left: 0;
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag {
+body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag {
   background: #0d1117;
   border: 1px solid rgba(93, 106, 129, 0.2);
   border-right: 0;
@@ -444,26 +453,26 @@ body .page-container .content:not(.is-loading) .syntax-highlight .tags-container
   position: relative;
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.is-clickable {
+body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag.is-clickable {
   cursor: pointer;
   transition: 0.4s background;
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.is-clickable::before {
+body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag.is-clickable::before {
   transition: 0.4s background;
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.is-clickable:not(.success):hover::before,
-body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.is-clickable:not(.success):hover {
+body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag.is-clickable:not(.success):hover::before,
+body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag.is-clickable:not(.success):hover {
   background: rgb(22, 29, 39);
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.is-clickable:not(.success):active::before,
-body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.is-clickable:not(.success):active {
+body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag.is-clickable:not(.success):active::before,
+body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag.is-clickable:not(.success):active {
   background: rgb(28, 36, 48);
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag::before {
+body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag::before {
   content: "";
   position: absolute;
   right: -9px;
@@ -476,29 +485,29 @@ body .page-container .content:not(.is-loading) .syntax-highlight .tags-container
   transform: translateY(-50%) rotate(45deg);
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag .icon-container svg {
+body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag .icon-container svg {
   vertical-align: middle;
   fill: #FFFFFF;
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag .icon-container:not(.success) {
+body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag .icon-container:not(.success) {
   transition: 0.4s opacity;
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.success .icon-containr:not(.success) {
+body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag.success .icon-containr:not(.success) {
   opacity: 0;
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag>span {
+body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag>span {
   z-index: 1;
   transition: 0.4s opacity;
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.success span {
+body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag.success span {
   opacity: 0;
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag .icon-container.success {
+body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag .icon-container.success {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -507,7 +516,7 @@ body .page-container .content:not(.is-loading) .syntax-highlight .tags-container
   transition: 0.4s opacity;
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .tags-container .tag.success .icon-container.success {
+body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag.success .icon-container.success {
   opacity: 1;
   animation: 0.5s showSuccessIcon;
 }
@@ -524,8 +533,8 @@ body .page-container .content:not(.is-loading) .syntax-highlight .tags-container
   }
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight.has-mark::before,
-body .page-container .content:not(.is-loading) .syntax-highlight.has-mark::after {
+body .page-container .content:not(.is-loading) .page .syntax-highlight.has-mark::before,
+body .page-container .content:not(.is-loading) .page .syntax-highlight.has-mark::after {
   content: "";
   position: absolute;
   left: -10px;
@@ -534,26 +543,26 @@ body .page-container .content:not(.is-loading) .syntax-highlight.has-mark::after
   transition: 0.4s transform;
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight.has-mark::before {
+body .page-container .content:not(.is-loading) .page .syntax-highlight.has-mark::before {
   top: 0;
   height: calc(10px + 25px * var(--start-mark) - 25px);
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight.has-mark::after {
+body .page-container .content:not(.is-loading) .page .syntax-highlight.has-mark::after {
   --top: calc(10px + 25px * calc(var(--start-mark) + var(--offset-mark)));
   top: var(--top);
   height: calc(var(--length) * 25px - var(--top) + 20px);
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight.has-mark:hover::before {
+body .page-container .content:not(.is-loading) .page .syntax-highlight.has-mark:hover::before {
   transform: translateY(-100%);
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight.has-mark:hover::after {
+body .page-container .content:not(.is-loading) .page .syntax-highlight.has-mark:hover::after {
   transform: translateY(100%);
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .temp-mark {
+body .page-container .content:not(.is-loading) .page .syntax-highlight .temp-mark {
   position: absolute;
   left: -10px;
   width: calc(100% + 10px);
@@ -563,7 +572,7 @@ body .page-container .content:not(.is-loading) .syntax-highlight .temp-mark {
   z-index: -1;
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .temp-mark::after {
+body .page-container .content:not(.is-loading) .page .syntax-highlight .temp-mark::after {
   content: "";
   position: absolute;
   left: 15px;
@@ -577,30 +586,30 @@ body .page-container .content:not(.is-loading) .syntax-highlight .temp-mark::aft
   justify-content: center;
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .temp-mark.added-row {
+body .page-container .content:not(.is-loading) .page .syntax-highlight .temp-mark.added-row {
   background: #12261e;
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .temp-mark.added-row::after {
+body .page-container .content:not(.is-loading) .page .syntax-highlight .temp-mark.added-row::after {
   background: #1c4428;
   content: "+";
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .temp-mark.removed-row {
+body .page-container .content:not(.is-loading) .page .syntax-highlight .temp-mark.removed-row {
   background: #25171c;
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .temp-mark.removed-row::after {
+body .page-container .content:not(.is-loading) .page .syntax-highlight .temp-mark.removed-row::after {
   background: #542426;
   content: "-";
 }
 
-body .page-container .content:not(.is-loading) .multisyntax {
+body .page-container .content:not(.is-loading) .page .multisyntax {
   padding: 0;
   user-select: none;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax .tabs {
+body .page-container .content:not(.is-loading) .page .multisyntax .tabs {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -608,7 +617,7 @@ body .page-container .content:not(.is-loading) .multisyntax .tabs {
   position: relative;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax .tabs::before {
+body .page-container .content:not(.is-loading) .page .multisyntax .tabs::before {
   content: "";
   position: absolute;
   top: 0;
@@ -619,14 +628,14 @@ body .page-container .content:not(.is-loading) .multisyntax .tabs::before {
   transition: 0.2s left;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax .tabs>.tab {
+body .page-container .content:not(.is-loading) .page .multisyntax .tabs>.tab {
   width: calc(100% / var(--i));
   text-align: center;
   padding-block: 12px;
   transition: 0.2s color;
 }
 
-body .page-container .content:not(.is-loading) .multisyntax .tabs>.tab:not(.active) {
+body .page-container .content:not(.is-loading) .page .multisyntax .tabs>.tab:not(.active) {
   cursor: pointer;
   color: rgba(255, 255, 255, 0.5);
 }
@@ -636,35 +645,35 @@ body.as-home.disable-blur .page-container .home-container .final-pres .pres-item
   border: none;
 }
 
-body .page-container .content:not(.is-loading) .shi {
+body .page-container .content:not(.is-loading) .page .shi {
   display: inline-block;
 }
 
-body .page-container .content:not(.is-loading) .syntax-highlight .spacer,
-body .page-container .content:not(.is-loading) .shi .spacer,
+body .page-container .content:not(.is-loading) .page .syntax-highlight .spacer,
+body .page-container .content:not(.is-loading) .page .shi .spacer,
 body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-code-high .syntax-highlight .spacer {
   display: inline-block;
   width: calc(10px * var(--id));
 }
 
-body .page-container .content:not(.is-loading) .category-title {
+body .page-container .content:not(.is-loading) .page .category-title {
   background: #161a20;
   border: 1px solid rgba(93, 106, 129, 0.2);
   padding: 9px;
   border-radius: 10px;
 }
 
-body .page-container .content:not(.is-loading) .category-title .spacer {
+body .page-container .content:not(.is-loading) .page .category-title .spacer {
   display: inline-block;
   width: calc(10px * var(--id));
 }
 
-body .page-container .content:not(.is-loading) .subtext {
+body .page-container .content:not(.is-loading) .page .subtext {
   margin-left: 20px;
 }
 
-body .page-container .content:not(.is-loading) .text+.category-title,
-body .page-container .content:not(.is-loading) .subtext+.category-title {
+body .page-container .content:not(.is-loading) .page .text+.category-title,
+body .page-container .content:not(.is-loading) .page .subtext+.category-title {
   margin-top: 20px;
 }
 
@@ -704,7 +713,7 @@ body .page-container .content:not(.is-loading) table tr:not(:last-child) td {
   border-bottom: 2px solid #ffffff0d;
 }
 
-body .page-container .content:not(.is-loading) .alert {
+body .page-container .content:not(.is-loading) .page .alert {
   background: #161a20;
   box-shadow: 0 0 0 1px rgba(93, 106, 129, 0.2);
   border-radius: 10px;
@@ -712,7 +721,7 @@ body .page-container .content:not(.is-loading) .alert {
   margin-block: 20px;
 }
 
-body .page-container .content:not(.is-loading) .alert .alert-header {
+body .page-container .content:not(.is-loading) .page .alert .alert-header {
   display: flex;
   align-items: center;
   padding-left: 16px;
@@ -721,101 +730,101 @@ body .page-container .content:not(.is-loading) .alert .alert-header {
   gap: 10px;
 }
 
-body .page-container .content:not(.is-loading) .alert .alert-header .icon-container svg {
+body .page-container .content:not(.is-loading) .page .alert .alert-header .icon-container svg {
   vertical-align: middle;
 }
 
-body .page-container .content:not(.is-loading) .alert .alert-header .alert-title {
+body .page-container .content:not(.is-loading) .page .alert .alert-header .alert-title {
   font-weight: 500;
 }
 
-body .page-container .content:not(.is-loading) .alert .alert-content {
+body .page-container .content:not(.is-loading) .page .alert .alert-content {
   padding: 15px;
 }
 
-body .page-container .content:not(.is-loading) .alert .alert-content .emoji-parsed img {
+body .page-container .content:not(.is-loading) .page .alert .alert-content .emoji-parsed img {
   height: 22px;
 }
 
-body .page-container .content:not(.is-loading) .alert[data-type="important"] {
+body .page-container .content:not(.is-loading) .page .alert[data-type="important"] {
   border-left: 3px solid #f42b3c;
 }
 
-body .page-container .content:not(.is-loading) .alert[data-type="important"] .alert-header {
+body .page-container .content:not(.is-loading) .page .alert[data-type="important"] .alert-header {
   background: #f42b3c17;
 }
 
-body .page-container .content:not(.is-loading) .alert[data-type="important"] .alert-header .icon-container svg {
+body .page-container .content:not(.is-loading) .page .alert[data-type="important"] .alert-header .icon-container svg {
   fill: #f42b3c;
 }
 
-body .page-container .content:not(.is-loading) .alert[data-type="important"] .alert-header .alert-title {
+body .page-container .content:not(.is-loading) .page .alert[data-type="important"] .alert-header .alert-title {
   color: #f42b3c;
 }
 
-body .page-container .content:not(.is-loading) .alert[data-type="note"] {
+body .page-container .content:not(.is-loading) .page .alert[data-type="note"] {
   border-left: 3px solid #00ff4b;
 }
 
-body .page-container .content:not(.is-loading) .alert[data-type="note"] .alert-header {
+body .page-container .content:not(.is-loading) .page .alert[data-type="note"] .alert-header {
   background: #00ff4b21;
 }
 
-body .page-container .content:not(.is-loading) .alert[data-type="note"] .alert-header .icon-container svg {
+body .page-container .content:not(.is-loading) .page .alert[data-type="note"] .alert-header .icon-container svg {
   fill: #00ff4b;
 }
 
-body .page-container .content:not(.is-loading) .alert[data-type="note"] .alert-header .alert-title {
+body .page-container .content:not(.is-loading) .page .alert[data-type="note"] .alert-header .alert-title {
   color: #00ff4b;
 }
 
-body .page-container .content:not(.is-loading) .alert[data-type="warning"] {
+body .page-container .content:not(.is-loading) .page .alert[data-type="warning"] {
   border-left: 3px solid #ff9100;
 }
 
-body .page-container .content:not(.is-loading) .alert[data-type="warning"] .alert-header {
+body .page-container .content:not(.is-loading) .page .alert[data-type="warning"] .alert-header {
   background: #ff91001a;
 }
 
-body .page-container .content:not(.is-loading) .alert[data-type="warning"] .alert-header .icon-container svg {
+body .page-container .content:not(.is-loading) .page .alert[data-type="warning"] .alert-header .icon-container svg {
   fill: #ff9100;
 }
 
-body .page-container .content:not(.is-loading) .alert[data-type="warning"] .alert-header .alert-title {
+body .page-container .content:not(.is-loading) .page .alert[data-type="warning"] .alert-header .alert-title {
   color: #ff9100;
 }
 
-body .page-container .content:not(.is-loading) .alert[data-type="p2p"] {
+body .page-container .content:not(.is-loading) .page .alert[data-type="p2p"] {
   border-left: 3px solid #00b0ff;
   text-align: center;
 }
 
-body .page-container .content:not(.is-loading) .alert[data-type="p2p"] .alert-header {
+body .page-container .content:not(.is-loading) .page .alert[data-type="p2p"] .alert-header {
   background: #00b0ff17;
 }
 
-body .page-container .content:not(.is-loading) .alert[data-type="p2p"] .alert-header .icon-container svg {
+body .page-container .content:not(.is-loading) .page .alert[data-type="p2p"] .alert-header .icon-container svg {
   fill: #00b0ff;
 }
 
-body .page-container .content:not(.is-loading) .alert[data-type="p2p"] .alert-header .alert-title {
+body .page-container .content:not(.is-loading) .page .alert[data-type="p2p"] .alert-header .alert-title {
   color: #00b0ff;
 }
 
-body .page-container .content:not(.is-loading) .alert[data-type="p2p"] img {
+body .page-container .content:not(.is-loading) .page .alert[data-type="p2p"] img {
   width: 140px;
   height: 140px;
   margin-top: 40px;
 }
 
-body .page-container .content:not(.is-loading) .alert[data-type="p2p"]>.alert-title {
+body .page-container .content:not(.is-loading) .page .alert[data-type="p2p"]>.alert-title {
   font-size: 25px;
   font-weight: 600;
   max-width: 80%;
   margin-inline: auto;
 }
 
-body .page-container .content:not(.is-loading) .alert[data-type="p2p"] .alert-content {
+body .page-container .content:not(.is-loading) .page .alert[data-type="p2p"] .alert-content {
   max-width: 80%;
   margin-inline: auto;
   padding: 0;
@@ -823,7 +832,7 @@ body .page-container .content:not(.is-loading) .alert[data-type="p2p"] .alert-co
   color: rgba(255, 255, 255, 0.7);
 }
 
-body .page-container .content:not(.is-loading) .github-ref {
+body .page-container .content:not(.is-loading) .page .github-ref {
   width: 100%;
   background: #161a20;
   border: 1px solid #ffffff26;
@@ -833,10 +842,11 @@ body .page-container .content:not(.is-loading) .github-ref {
   display: flex;
   align-items: center;
   gap: 0;
+  user-select: none;
   transition: 0.4s gap, 0.4s background;
 }
 
-body .page-container .content:not(.is-loading) .github-ref+.github-ref {
+body .page-container .content:not(.is-loading) .page .github-ref+.github-ref {
   margin-top: 10px;
 }
 
@@ -846,24 +856,24 @@ body .page-container .content:not(.is-loading) a.github-ref {
 }
 
 @media screen and (min-width: 1301px) {
-  body .page-container .content:not(.is-loading) .github-ref:hover {
+  body .page-container .content:not(.is-loading) .page .github-ref:hover {
     gap: 20px;
   }
 
-  body .page-container .content:not(.is-loading) .github-ref:active {
+  body .page-container .content:not(.is-loading) .page .github-ref:active {
     gap: 70px;
   }
 }
 
-body .page-container .content:not(.is-loading) .github-ref.is-loading {
+body .page-container .content:not(.is-loading) .page .github-ref.is-loading {
   justify-content: center;
 }
 
-body .page-container .content:not(.is-loading) .github-ref.is-loading svg {
+body .page-container .content:not(.is-loading) .page .github-ref.is-loading svg {
   animation: 0.9s rotateSvg linear infinite;
 }
 
-body .page-container .content:not(.is-loading) .github-ref.is-loading svg circle {
+body .page-container .content:not(.is-loading) .page .github-ref.is-loading svg circle {
   fill: none;
   stroke: #FFFFFF;
   stroke-width: 4px;
@@ -872,7 +882,7 @@ body .page-container .content:not(.is-loading) .github-ref.is-loading svg circle
   animation: 1.5s animateStroke linear infinite;
 }
 
-body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) {
+body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) {
   justify-content: space-around;
   overflow: hidden;
   background: transparent;
@@ -880,14 +890,14 @@ body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) {
 }
 
 @media screen and (max-width: 1300px) {
-  body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) {
+  body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) {
     flex-direction: column;
     padding: 18px;
     height: auto;
   }
 }
 
-body .page-container .content:not(.is-loading) .github-ref:not(.is-loading)::before {
+body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading)::before {
   content: "";
   position: absolute;
   top: 0;
@@ -900,21 +910,21 @@ body .page-container .content:not(.is-loading) .github-ref:not(.is-loading)::bef
   filter: blur(10px);
 }
 
-body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info {
+body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .repo-info {
   z-index: 1;
   width: min(45%, 440px);
 }
 
-body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info .repo-title {
+body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .repo-info .repo-title {
   font-size: 29px;
   font-weight: 500;
 }
 
-body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info .repo-description {
+body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .repo-info .repo-description {
   font-size: 19px;
 }
 
-body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info .repo-owner {
+body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .repo-info .repo-owner {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -923,45 +933,45 @@ body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .rep
   opacity: 0.7;
 }
 
-body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info .repo-owner img {
+body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .repo-info .repo-owner img {
   width: 18px;
   border-radius: 50%;
 }
 
-body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info .repo-language {
+body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .repo-info .repo-language {
   font-size: 13px;
   opacity: 0.7;
 }
 
 @media screen and (max-width: 1300px) {
-  body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info {
+  body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .repo-info {
     width: 100%;
     text-align: center;
   }
 
-  body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info .repo-title {
+  body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .repo-info .repo-title {
     font-size: 23px;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info .repo-description {
+  body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .repo-info .repo-description {
     display: none;
   }
 
-  body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .repo-info .repo-owner {
+  body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .repo-info .repo-owner {
     justify-content: center;
   }
 }
 
-body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .illustration {
+body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .illustration {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
   gap: 10px;
 }
 
-body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .illustration .container {
+body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .illustration .container {
   background: #0c0c0c94;
   width: 100%;
   height: 100%;
@@ -978,28 +988,28 @@ body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .ill
 }
 
 @media screen and (max-width: 1300px) {
-  body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .illustration {
+  body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .illustration {
     width: 100%;
     margin-top: 20px;
   }
 
-  body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .illustration .container {
+  body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .illustration .container {
     min-width: 0;
   }
 }
 
 @media screen and (max-width: 1300px) and (min-width: 600px) {
-  body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .illustration {
+  body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .illustration {
     grid-template-rows: 1fr;
     grid-template-columns: repeat(4, 1fr);
   }
 }
 
-body .page-container .content:not(.is-loading) .github-ref:not(.is-loading):hover .illustration .container {
+body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading):hover .illustration .container {
   background: rgba(0, 0, 0, 0.8);
 }
 
-body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .illustration .container .icon-container svg {
+body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .illustration .container .icon-container svg {
   width: 21px;
   height: 21px;
   vertical-align: middle;
@@ -1007,14 +1017,14 @@ body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .ill
   padding-right: 10px;
 }
 
-body .page-container .content:not(.is-loading) .github-ref:not(.is-loading) .illustration .container .title {
+body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .illustration .container .title {
   font-size: 19px;
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-body .page-container .content:not(.is-loading) .banner {
+body .page-container .content:not(.is-loading) .page .banner {
   width: 100%;
   border-radius: 20px;
   overflow: hidden;
@@ -1022,14 +1032,14 @@ body .page-container .content:not(.is-loading) .banner {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-body .page-container .content:not(.is-loading) .banner .banner-container {
+body .page-container .content:not(.is-loading) .page .banner .banner-container {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   position: relative;
 }
 
-body .page-container .content:not(.is-loading) .banner .banner-container::before {
+body .page-container .content:not(.is-loading) .page .banner .banner-container::before {
   content: "";
   position: absolute;
   bottom: 0;
@@ -1040,7 +1050,7 @@ body .page-container .content:not(.is-loading) .banner .banner-container::before
   background: linear-gradient(0deg, var(--mainbg) 10%, transparent);
 }
 
-body .page-container .content:not(.is-loading) .banner .banner-container .main-image {
+body .page-container .content:not(.is-loading) .page .banner .banner-container .main-image {
   width: 100%;
   border: 4px solid var(--mainbg);
   aspect-ratio: var(--width) / var(--height);
@@ -1049,18 +1059,18 @@ body .page-container .content:not(.is-loading) .banner .banner-container .main-i
   transition: 0.4s opacity;
 }
 
-body .page-container .content:not(.is-loading) .banner .banner-container .main-image:not(.loaded) {
+body .page-container .content:not(.is-loading) .page .banner .banner-container .main-image:not(.loaded) {
   opacity: 0.2;
 }
 
-body .page-container .content:not(.is-loading) .banner .banner-container svg {
+body .page-container .content:not(.is-loading) .page .banner .banner-container svg {
   position: absolute;
   top: calc(50% - 50px);
   left: calc(50% - 50px);
   animation: 0.9s rotateSvg linear infinite;
 }
 
-body .page-container .content:not(.is-loading) .banner .banner-container svg circle {
+body .page-container .content:not(.is-loading) .page .banner .banner-container svg circle {
   fill: none;
   stroke: #FFFFFF;
   stroke-width: 4px;
@@ -1069,7 +1079,7 @@ body .page-container .content:not(.is-loading) .banner .banner-container svg cir
   animation: 1.5s animateStroke linear infinite;
 }
 
-body .page-container .content:not(.is-loading) .banner .banner-container .bottom-container {
+body .page-container .content:not(.is-loading) .page .banner .banner-container .bottom-container {
   z-index: 2;
   padding-inline: 20px;
   box-sizing: border-box;
@@ -1077,40 +1087,40 @@ body .page-container .content:not(.is-loading) .banner .banner-container .bottom
   width: 100%;
 }
 
-body .page-container .content:not(.is-loading) .banner .banner-container .bottom-container .mini-title {
+body .page-container .content:not(.is-loading) .page .banner .banner-container .bottom-container .mini-title {
   font-size: 17px;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.4);
   transform: translateY(5px);
 }
 
-body .page-container .content:not(.is-loading) .banner .banner-container .bottom-container .mini-title .emoji-parsed img {
+body .page-container .content:not(.is-loading) .page .banner .banner-container .bottom-container .mini-title .emoji-parsed img {
   height: 19px;
 }
 
-body .page-container .content:not(.is-loading) .banner .banner-container .bottom-container .big-title {
+body .page-container .content:not(.is-loading) .page .banner .banner-container .bottom-container .big-title {
   font-size: 35px;
   line-height: 45px;
   font-weight: 600;
   width: 100%;
 }
 
-body .page-container .content:not(.is-loading) .banner .banner-container .bottom-container .big-title .emoji-parsed img {
+body .page-container .content:not(.is-loading) .page .banner .banner-container .bottom-container .big-title .emoji-parsed img {
   height: 40px;
 }
 
-body .page-container .content:not(.is-loading) .banner .description {
+body .page-container .content:not(.is-loading) .page .banner .description {
   font-size: 17px;
   font-weight: 300;
   padding-inline: 20px;
   color: rgba(255, 255, 255, 0.4);
 }
 
-body .page-container .content:not(.is-loading) .banner .description .emoji-parsed>img {
+body .page-container .content:not(.is-loading) .page .banner .description .emoji-parsed>img {
   height: 23px;
 }
 
-body .page-container .content:not(.is-loading) .banner .lib-presentation {
+body .page-container .content:not(.is-loading) .page .banner .lib-presentation {
   background: rgba(0, 0, 0, 0.5);
   width: calc(100% - 8px);
   border-radius: 16px;
@@ -1124,40 +1134,40 @@ body .page-container .content:not(.is-loading) .banner .lib-presentation {
 }
 
 @media screen and (max-width: 800px) {
-  body .page-container .content:not(.is-loading) .banner .lib-presentation {
+  body .page-container .content:not(.is-loading) .page .banner .lib-presentation {
     flex-direction: column;
     align-items: unset;
   }
 }
 
-body .page-container .content:not(.is-loading) .banner .lib-presentation .presentation-data {
+body .page-container .content:not(.is-loading) .page .banner .lib-presentation .presentation-data {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-body .page-container .content:not(.is-loading) .banner .lib-presentation .icon {
+body .page-container .content:not(.is-loading) .page .banner .lib-presentation .icon {
   height: 47px;
   width: 47px;
   margin-right: 15px;
 }
 
-body .page-container .content:not(.is-loading) .banner .lib-presentation .lib-details {
+body .page-container .content:not(.is-loading) .page .banner .lib-presentation .lib-details {
   flex: 1;
 }
 
-body .page-container .content:not(.is-loading) .banner .lib-presentation .lib-details .pres-title {
+body .page-container .content:not(.is-loading) .page .banner .lib-presentation .lib-details .pres-title {
   font-size: 19px;
   font-weight: 500;
 }
 
-body .page-container .content:not(.is-loading) .banner .lib-presentation .lib-details .pres-description {
+body .page-container .content:not(.is-loading) .page .banner .lib-presentation .lib-details .pres-description {
   line-height: 18px;
   font-weight: 100;
   opacity: 0.4;
 }
 
-body .page-container .content:not(.is-loading) .banner .lib-presentation .update {
+body .page-container .content:not(.is-loading) .page .banner .lib-presentation .update {
   text-decoration: none;
   color: white;
   display: block;
@@ -1172,21 +1182,21 @@ body .page-container .content:not(.is-loading) .banner .lib-presentation .update
   transition: 0.4s transform, 0.4s background;
 }
 
-body .page-container .content:not(.is-loading) .banner .lib-presentation .update:not([href]) {
+body .page-container .content:not(.is-loading) .page .banner .lib-presentation .update:not([href]) {
   visibility: hidden;
 }
 
 @media screen and (max-width: 800px) {
-  body .page-container .content:not(.is-loading) .banner .lib-presentation .update {
+  body .page-container .content:not(.is-loading) .page .banner .lib-presentation .update {
     margin-top: 20px;
     margin-left: 0;
   }
 }
 
-body .page-container .content:not(.is-loading) .banner .lib-presentation .update:hover {
+body .page-container .content:not(.is-loading) .page .banner .lib-presentation .update:hover {
   background: rgba(255, 255, 255, 0.2);
 }
 
-body .page-container .content:not(.is-loading) .banner .lib-presentation .update:active {
+body .page-container .content:not(.is-loading) .page .banner .lib-presentation .update:active {
   transform: scale(0.95);
 }
