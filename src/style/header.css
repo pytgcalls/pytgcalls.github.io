@@ -145,10 +145,10 @@ body .header .title:has(.project-name:empty) {
 
   body .header .description {
     position: absolute;
+    left: 55px;
+    right: min(55px, 4vw);
     top: 50%;
     transform: translateY(-100%);
-    width: 71vw;
-    right: 45px;
     opacity: 0;
     transition: 0.4s transform, 0.4s opacity;
     transition-timing-function: cubic-bezier(0.42, 0, 0, 0.97);
