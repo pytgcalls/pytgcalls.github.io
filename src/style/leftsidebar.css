@@ -181,7 +181,7 @@ body .page-container .left-container .search-results.is-loading .error .image {
   width: 78px;
 }
 
-body .page-container .left-container .search-results.is-loading svg {
+body .page-container .left-container .search-results.is-loading>svg {
   --scale: 0.5;
   animation: 0.9s rotateSvg linear infinite;
 }
@@ -196,7 +196,7 @@ body .page-container .left-container .search-results.is-loading svg {
   }
 }
 
-body .page-container .left-container .search-results.is-loading svg circle {
+body .page-container .left-container .search-results.is-loading>svg circle {
   fill: none;
   stroke: #FFFFFF;
   stroke-width: 4px;
@@ -225,6 +225,12 @@ body .page-container .left-container .search-results.is-loading svg circle {
 
 body .page-container .left-container .search-results.is-loading span {
   color: #FFFFFF;
+}
+
+body .page-container .left-container .search-results.is-loading .icon-container svg {
+  width: 50px;
+  height: 50px;
+  fill: #FFFFFF;
 }
 
 body .page-container .left-container .search-results:not(.is-loading) .file-data {
