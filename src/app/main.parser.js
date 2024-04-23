@@ -381,7 +381,7 @@ class SourceParser {
         const urlBarText = document.createElement('div');
         urlBarText.classList.add('url');
         urlBarText.textContent = src;
-        const urlBarOpenImage = iconsManager.get('main', 'uprightfromsquare');
+        const urlBarOpenImage = iconsManager.get('main', 'upRightFromSquare');
         urlBarOpenImage.classList.add('open');
         const urlBarOpen = document.createElement('a');
         urlBarOpen.classList.add('link');
@@ -927,7 +927,7 @@ class SourceParser {
             const repoIllustration = document.createElement('div');
             repoIllustration.classList.add('illustration');
             repoIllustration.appendChild(this.#createIconNameContainerForGithub(
-              'main', 'codefork', String(response['forks'])
+              'main', 'codeFork', String(response['forks'])
             ));
             repoIllustration.appendChild(this.#createIconNameContainerForGithub(
               'main', 'eye', String(response['subscribers_count'])
