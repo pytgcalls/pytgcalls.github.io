@@ -927,7 +927,7 @@ class SourceParser {
             repoStars.appendChild(document.createTextNode(response['stargazers_count'] + ' stars'));
             const repoForks = document.createElement('div');
             repoForks.classList.add('value', 'repo-forks');
-            repoForks.appendChild(iconsManager.get('main', 'codefork'));
+            repoForks.appendChild(iconsManager.get('main', 'codeFork'));
             repoForks.appendChild(document.createTextNode(response['forks'] + ' forks'));
             const repoValues = document.createElement('div');
             repoValues.classList.add('repo-values');
