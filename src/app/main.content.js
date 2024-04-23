@@ -125,7 +125,7 @@ class Content {
       goToPreviousMiniTitle.classList.add('mini-title');
       const goToPreviousContainer = document.createElement('div');
       goToPreviousContainer.classList.add('go-to');
-      goToPreviousContainer.appendChild(iconsManager.get('main', 'arrowleft'));
+      goToPreviousContainer.appendChild(iconsManager.get('main', 'arrowLeft'));
       goToPreviousContainer.appendChild(goToPreviousBigTitle);
       goToPreviousContainer.appendChild(goToPreviousMiniTitle);
 
@@ -136,7 +136,7 @@ class Content {
       goToNextMiniTitle.classList.add('mini-title');
       const goToNextContainer = document.createElement('div');
       goToNextContainer.classList.add('go-to');
-      goToNextContainer.appendChild(iconsManager.get('main', 'arrowright'));
+      goToNextContainer.appendChild(iconsManager.get('main', 'arrowRight'));
       goToNextContainer.appendChild(goToNextBigTitle);
       goToNextContainer.appendChild(goToNextMiniTitle);
 

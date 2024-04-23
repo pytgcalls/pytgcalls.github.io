@@ -78,7 +78,7 @@ class Sidebar {
     searchText.classList.add('is-empty');
     searchText.placeholder = 'Search...';
     this.#searchInputText = searchText;
-    const searchCancelIcon = iconsManager.get('main', 'circlexmark');
+    const searchCancelIcon = iconsManager.get('main', 'circleXMark');
     searchCancelIcon.classList.add('cancel');
     const searchInput = document.createElement('div');
     searchInput.classList.add('search-input');
@@ -212,7 +212,7 @@ class Sidebar {
       fileData.appendChild(fileDataDescription);
     }
 
-    const elementIcon = iconsManager.get('main', 'chevrondown');
+    const elementIcon = iconsManager.get('main', 'chevronDown');
     elementIcon.classList.add('right-icon');
     fileData.appendChild(elementIcon);
 
@@ -324,7 +324,7 @@ class Sidebar {
     const element = document.createElement('div');
     element.classList.add('element');
     element.appendChild(elementText);
-    element.appendChild(iconsManager.get('main', 'chevrondown'));
+    element.appendChild(iconsManager.get('main', 'chevronDown'));
 
     const elementsGroup = document.createElement('div');
     elementsGroup.classList.add('elements');
@@ -379,7 +379,7 @@ class Sidebar {
     const element = document.createElement('div');
     element.classList.add('element');
     element.appendChild(elementText);
-    element.appendChild(iconsManager.get('main', 'chevrondown'));
+    element.appendChild(iconsManager.get('main', 'chevronDown'));
 
     const elementsGroup = document.createElement('div');
     elementsGroup.classList.add('elements');

@@ -351,7 +351,7 @@ class Introduction {
         const iconContainer = document.createElement('div');
         iconContainer.classList.add('pseudo-icons');
         iconContainer.appendChild(backShadow);
-        iconContainer.appendChild(iconsManager.get('main', 'energyleaf'));
+        iconContainer.appendChild(iconsManager.get('main', 'energyLeaf'));
 
         const containerText = document.createElement('div');
         containerText.classList.add('text', 'short');
