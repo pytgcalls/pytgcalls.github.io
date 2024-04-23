@@ -919,7 +919,7 @@ body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading
   width: min(62px, 13vw);
   aspect-ratio: 1;
   border: 1px solid #ffffff26;
-  border-radius: 15px;
+  border-radius: 12px;
 }
 
 body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .repo-presentation .repo-details {
