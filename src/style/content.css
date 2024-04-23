@@ -895,10 +895,8 @@ body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading
 }
 
 body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .recommended-badge .icon-container svg {
-  vertical-align: baseline;
-  fill: transparent;
-  stroke: #FFFFFF;
-  stroke-width: 18px;
+  vertical-align: middle;
+  fill: #FFFFFF;
 }
 
 body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .repo-presentation {
@@ -940,6 +938,7 @@ body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading
   align-items: center;
   justify-content: center;
   gap: 10px;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .repo-values .value svg {
