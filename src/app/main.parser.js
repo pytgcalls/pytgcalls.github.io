@@ -915,8 +915,8 @@ class SourceParser {
             repoOwnerImage.src = response['owner']['avatar_url'];
             const repoPresentation = document.createElement('div');
             repoPresentation.classList.add('repo-presentation');
-            repoPresentation.appendChild(repoOwnerImage);
             repoPresentation.appendChild(repoDetails);
+            repoPresentation.appendChild(repoOwnerImage);
 
             const repoLanguage = document.createElement('div');
             repoLanguage.classList.add('value', 'repo-language');
@@ -924,11 +924,11 @@ class SourceParser {
             const repoStars = document.createElement('div');
             repoStars.classList.add('value', 'repo-stars');
             repoStars.appendChild(iconsManager.get('main', 'star'));
-            repoStars.appendChild(document.createTextNode(response['stargazers_count'] + ' stars'));
+            repoStars.appendChild(document.createTextNode(response['stargazers_count']));
             const repoForks = document.createElement('div');
             repoForks.classList.add('value', 'repo-forks');
             repoForks.appendChild(iconsManager.get('main', 'codeFork'));
-            repoForks.appendChild(document.createTextNode(response['forks'] + ' forks'));
+            repoForks.appendChild(document.createTextNode(response['forks']));
             const repoValues = document.createElement('div');
             repoValues.classList.add('repo-values');
             repoValues.appendChild(repoLanguage);
