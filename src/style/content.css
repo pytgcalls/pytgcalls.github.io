@@ -894,6 +894,10 @@ body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading
   gap: 10px;
 }
 
+body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .recommended-badge .icon-container {
+  display: flex;
+}
+
 body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .recommended-badge .icon-container svg {
   vertical-align: middle;
   fill: #FFFFFF;
@@ -941,7 +945,11 @@ body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading
   color: rgba(255, 255, 255, 0.7);
 }
 
-body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .repo-values .value svg {
+body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .repo-values .value .icon-container {
+  display: flex;
+}
+
+body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .repo-values .value .icon-container svg {
   vertical-align: middle;
   fill: rgba(255, 255, 255, 0.7);
   width: 15px;
