@@ -381,7 +381,7 @@ class SourceParser {
         const urlBarText = document.createElement('div');
         urlBarText.classList.add('url');
         urlBarText.textContent = src;
-        const urlBarOpenImage = iconsManager.get('main', 'uprightfromsquare');
+        const urlBarOpenImage = iconsManager.get('main', 'upRightFromSquare');
         urlBarOpenImage.classList.add('open');
         const urlBarOpen = document.createElement('a');
         urlBarOpen.classList.add('link');
