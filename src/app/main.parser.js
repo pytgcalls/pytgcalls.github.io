@@ -132,6 +132,28 @@ class SourceParser {
     return language;
   }
 
+  getLanguageColorByName(name) {
+    // reference: https://raw.githubusercontent.com/github/linguist/master/lib/linguist/languages.yml
+    switch (name) {
+      case 'Python':
+        return '#3572A5';
+      case 'Go':
+        return '#00ADD8';
+      case 'C':
+        return '#555555';
+      case 'C++':
+        return '#f34b7d';
+      case 'PHP':
+        return '#4F5D95';
+      case 'TypeScript':
+        return '#3178c6';
+      case 'Rust':
+        return '#dea584';
+      default:
+        return '#000000';
+    }
+  }
+
   #checkAndManageElement(element, newElement, elementDom) {
     if (element.tagName.toUpperCase() === 'A') {
       if (element.getAttribute('href').startsWith('https')) {
@@ -920,6 +942,7 @@ class SourceParser {
 
             const repoLanguage = document.createElement('div');
             repoLanguage.classList.add('value', 'repo-language');
+            repoLanguage.style.setProperty('--color', this.getLanguageColorByName(response['language']));
             repoLanguage.textContent = response['language'];
             const repoStars = document.createElement('div');
             repoStars.classList.add('value', 'repo-stars');
@@ -945,17 +968,6 @@ class SourceParser {
         }
       });
     });
-  }
-
-  #createIconNameContainerForGithub(iconCategory, iconName, title) {
-    const titleElement = document.createElement('div');
-    titleElement.classList.add('title');
-    titleElement.textContent = title;
-    const container = document.createElement('div');
-    container.classList.add('container');
-    container.appendChild(iconsManager.get(iconCategory, iconName));
-    container.appendChild(titleElement);
-    return container;
   }
 
   handleSearchIndexByText(text) {

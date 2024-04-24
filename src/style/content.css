@@ -969,7 +969,7 @@ body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading
   display: inline-block;
   width: 10px;
   height: 10px;
-  background: #326b9b;
+  background: var(--color);
   border-radius: 50%;
 }
 
