@@ -208,7 +208,7 @@ body .page-container .home-container .text-container .vsc-mockup {
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 550px) {
   body .page-container .home-container .text-container .vsc-mockup {
     transform: scale(calc(300 / var(--wd)));
     transform-origin: bottom center;
