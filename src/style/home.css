@@ -148,7 +148,7 @@ body .page-container .home-container .introduction .background .background-image
 
 body .page-container .home-container .introduction .background .background-surface {
   background: url("/src/assets/TextureBackground.svg");
-  background-size: 10%;
+  background-size: min(12vh, 25%);
   opacity: 0.1;
 }
 
