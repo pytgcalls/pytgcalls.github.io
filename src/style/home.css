@@ -126,7 +126,6 @@ body .page-container .home-container .introduction .background::after {
   left: 0;
   width: 100%;
   height: 100%;
-  mix-blend-mode: luminosity;
   background: linear-gradient(#000117 0%, transparent, #000117 100%);
 }
 
