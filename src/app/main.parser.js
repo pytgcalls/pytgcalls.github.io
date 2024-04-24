@@ -132,6 +132,28 @@ class SourceParser {
     return language;
   }
 
+  getLanguageColorByName(name) {
+    // reference: https://raw.githubusercontent.com/github/linguist/master/lib/linguist/languages.yml
+    switch (name) {
+      case 'Python':
+        return '#3572A5';
+      case 'Go':
+        return '#00ADD8';
+      case 'C':
+        return '#555555';
+      case 'C++':
+        return '#f34b7d';
+      case 'PHP':
+        return '#4F5D95';
+      case 'TypeScript':
+        return '#3178c6';
+      case 'Rust':
+        return '#dea584';
+      default:
+        return '#000000';
+    }
+  }
+
   #checkAndManageElement(element, newElement, elementDom) {
     if (element.tagName.toUpperCase() === 'A') {
       if (element.getAttribute('href').startsWith('https')) {
@@ -894,72 +916,58 @@ class SourceParser {
           if (response['message']) {
             throw new Error('the repository is invalid');
           } else {
+            const recommendedIcon = iconsManager.get('main', 'star');
+            const recommendedBadge = document.createElement('div');
+            recommendedBadge.classList.add('recommended-badge');
+            recommendedBadge.appendChild(recommendedIcon);
+            recommendedBadge.appendChild(document.createTextNode('Recommended by our staff'));
+
             const repoTitle = document.createElement('div');
             repoTitle.classList.add('repo-title');
             repoTitle.textContent = response['full_name'];
             const repoDescription = document.createElement('div');
             repoDescription.classList.add('repo-description');
             repoDescription.textContent = response['description'];
+            const repoDetails = document.createElement('div');
+            repoDetails.classList.add('repo-details');
+            repoDetails.appendChild(repoTitle);
+            repoDetails.appendChild(repoDescription);
 
             const repoOwnerImage = document.createElement('img');
             repoOwnerImage.src = response['owner']['avatar_url'];
-            const repoOwnerName = document.createElement('div');
-            repoOwnerName.classList.add('repo-owner-name');
-            repoOwnerName.textContent = response['owner']['login'];
-            const repoOwner = document.createElement('div');
-            repoOwner.classList.add('repo-owner');
-            repoOwner.appendChild(document.createTextNode('Created by'));
-            repoOwner.appendChild(repoOwnerImage);
-            repoOwner.appendChild(repoOwnerName);
+            const repoPresentation = document.createElement('div');
+            repoPresentation.classList.add('repo-presentation');
+            repoPresentation.appendChild(repoDetails);
+            repoPresentation.appendChild(repoOwnerImage);
 
             const repoLanguage = document.createElement('div');
-            repoLanguage.classList.add('repo-language');
-            repoLanguage.textContent = 'Written in ' + response['language'];
-            repoLanguage.textContent += ' (' + utils.calculateSize(response['size']) + ')';
-
-            const repoInformations = document.createElement('div');
-            repoInformations.classList.add('repo-info');
-            repoInformations.appendChild(repoTitle);
-            repoInformations.appendChild(repoDescription);
-            repoInformations.appendChild(repoOwner);
-            repoInformations.appendChild(repoLanguage);
-
-            const repoIllustration = document.createElement('div');
-            repoIllustration.classList.add('illustration');
-            repoIllustration.appendChild(this.#createIconNameContainerForGithub(
-              'main', 'codeFork', String(response['forks'])
-            ));
-            repoIllustration.appendChild(this.#createIconNameContainerForGithub(
-              'main', 'eye', String(response['subscribers_count'])
-            ));
-            repoIllustration.appendChild(this.#createIconNameContainerForGithub(
-              'main', 'gavel', response['license'] ? String(response['license']['spdx_id']) : '-'
-            ));
-            repoIllustration.appendChild(this.#createIconNameContainerForGithub(
-              'main', 'star', String(response['stargazers_count'])
-            ));
+            repoLanguage.classList.add('value', 'repo-language');
+            repoLanguage.style.setProperty('--color', this.getLanguageColorByName(response['language']));
+            repoLanguage.textContent = response['language'];
+            const repoStars = document.createElement('div');
+            repoStars.classList.add('value', 'repo-stars');
+            repoStars.appendChild(iconsManager.get('main', 'star'));
+            repoStars.appendChild(document.createTextNode(response['stargazers_count']));
+            const repoForks = document.createElement('div');
+            repoForks.classList.add('value', 'repo-forks');
+            repoForks.appendChild(iconsManager.get('main', 'codeFork'));
+            repoForks.appendChild(document.createTextNode(response['forks']));
+            const repoValues = document.createElement('div');
+            repoValues.classList.add('repo-values');
+            repoValues.appendChild(repoLanguage);
+            repoValues.appendChild(repoStars);
+            repoValues.appendChild(repoForks);
 
             element.classList.remove('is-loading');
             element.textContent = '';
             element.setAttribute('href', response['html_url']);
-            element.style.setProperty('--url', 'url(" ' + response['owner']['avatar_url'] + '")');
-            element.appendChild(repoInformations);
-            element.appendChild(repoIllustration);
+            element.appendChild(recommendedBadge);
+            element.appendChild(repoPresentation);
+            element.appendChild(repoValues);
           }
         }
       });
     });
-  }
-
-  #createIconNameContainerForGithub(iconCategory, iconName, title) {
-    const titleElement = document.createElement('div');
-    titleElement.classList.add('title');
-    titleElement.textContent = title;
-    const container = document.createElement('div');
-    container.classList.add('container');
-    container.appendChild(iconsManager.get(iconCategory, iconName));
-    container.appendChild(titleElement);
-    return container;
   }
 
   handleSearchIndexByText(text) {
