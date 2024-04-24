@@ -137,11 +137,24 @@ body .page-container .home-container .introduction .background div {
   height: 100%;
 }
 
+@media screen and (max-width: 1279px) {
+  body .page-container .home-container .introduction .background .background-image {
+    background: url(/src/assets/hero-background.jpg) no-repeat center;
+    background-size: 140%;
+    background-position: 50% 75%;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  body .page-container .home-container .introduction .background .background-image {
+    background: url(/src/assets/hero-background-lg.webp) no-repeat center;
+    background-size: 140%;
+    background-position: 50% 75%;
+  }
+}
+
 body .page-container .home-container .introduction .background .background-image {
   opacity: 0.6;
-  background: url(/src/assets/hero-background.webp) no-repeat center;
-  background-size: 140%;
-  background-position: 50% 75%;
   mix-blend-mode: plus-lighter;
 }
 
