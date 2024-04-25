@@ -48,6 +48,7 @@ class Tooltip {
 
     tooltip.style.setProperty('--center-x', newLeftPosition + 'px');
     tooltip.classList.add('visible');
+    container.classList.add('focused-tooltip');
 
     const handler = () => {
       this.closeTooltips();
@@ -61,6 +62,8 @@ class Tooltip {
       tooltip.addEventListener('animationend', () => {
         tooltip.remove();
       }, { once: true });
+
+      container.classList.remove('focused-tooltip');
 
       window.removeEventListener('resize', handler);
       document.body.removeEventListener('click', handler);

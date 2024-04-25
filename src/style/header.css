@@ -195,6 +195,52 @@ body .header .fake-title {
   pointer-events: none;
 }
 
+@media screen and (min-width: 1330px) {
+  body .header .description {
+    position: relative;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    overflow: hidden;
+    transition: 0.4s border-color;
+  }
+
+  body .header .description.focused-tooltip {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  body .header .description::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent 30%, #3b4553, transparent 83%);
+    animation: 1s moveBg forwards;
+  }
+
+  body .header .description:not(.focused-tooltip)::before {
+    animation-play-state: paused;
+  }
+
+  @keyframes moveBg {
+    from {
+      opacity: 0;
+      transform: translateX(-50%);
+    }
+
+    50% {
+      opacity: 1;
+      transform: 0;
+    }
+
+    to {
+      opacity: 0;
+      transform: translateX(50%);
+    }
+  }
+}
+
 body .header .description .tabs {
   display: flex;
   align-items: center;
