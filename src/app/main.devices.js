@@ -1,23 +1,27 @@
-class DevicesManager {
-  isAndroid() {
-    return navigator.userAgent && /android/.test(navigator.userAgent);
-  }
-
-  isiPhone() {
-    return navigator.userAgent && /iPhone/.test(navigator.userAgent);
-  }
-
-  isiPad() {
-    return navigator.userAgent && /iPad/.test(navigator.userAgent);
-  }
-
-  isMac() {
-    return navigator.userAgent && /mac/.test(navigator.userAgent);
-  }
-
-  isAnAppleDevice() {
-    return this.isiPad() || this.isiPhone() || this.isMac();
-  }
+function isAndroid() {
+  return navigator.userAgent && /android/.test(navigator.userAgent);
 }
 
-const devicesManager = new DevicesManager();
+function isiPhone() {
+  return navigator.userAgent && /iPhone/.test(navigator.userAgent);
+}
+
+function isiPad() {
+  return navigator.userAgent && /iPad/.test(navigator.userAgent);
+}
+
+function isMac() {
+  return navigator.userAgent && /mac/.test(navigator.userAgent);
+}
+
+function isAnAppleDevice() {
+  return isiPad() || isiPhone() || isMac();
+}
+
+export {
+  isAndroid,
+  isiPhone,
+  isiPad,
+  isMac,
+  isAnAppleDevice
+};

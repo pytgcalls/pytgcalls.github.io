@@ -1,3 +1,7 @@
+import * as config from "./main.config.js";
+import * as devicesManager from "./main.devices.js";
+import * as homePage from "./main.home.js";
+
 window.addEventListener('load', () => {
   const splashScreen = document.querySelector('body .splash');
   if (splashScreen) {

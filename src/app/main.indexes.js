@@ -1,93 +1,96 @@
-class IndexesManager {
-  #hasIndexed = false;
-  #isCurrentlyIndexing = false;
-  #indexes = {};
-  #indexes_caching = {};
+import * as config from "./main.config.js";
+import * as requestsManager from "./main.requests.js";
+import * as sourceParser from "./main.parser.js";
+import * as debug from "./main.debug.js";
 
-  initFull(callback) {
-    if (this.#hasIndexed) {
-      return Promise.resolve();
-    } else if (this.#isCurrentlyIndexing) {
-      return Promise.reject();
-    }
+let hasIndexed = false;
+let isCurrentlyIndexing = false;
+let indexes = {};
+let indexes_caching = {};
 
-    const hasCallback = typeof callback === 'function';
+function initFull(callback) {
+  if (hasIndexed) {
+    return Promise.resolve();
+  } else if (isCurrentlyIndexing) {
+    return Promise.reject();
+  }
 
-    return new Promise((resolve) => {
-      this.#isCurrentlyIndexing = true;
-      hasCallback && callback(0, 0);
+  const hasCallback = typeof callback === 'function';
 
-      let i = 0;
+  return new Promise((resolve) => {
+    isCurrentlyIndexing = true;
+    hasCallback && callback(0, 0);
 
-      config.getAllFilesListFiles().then((files) => {
-        hasCallback && callback(0, files.length);
+    let i = 0;
 
-        const handleIndexingWithResponse = (i, file, response, status) => {
-          hasCallback && callback(i, files.length);
+    config.getAllFilesListFiles().then((files) => {
+      hasCallback && callback(0, files.length);
 
-          if (status === 200) {
-            this.#indexes[file] = sourceParser.handleSearchIndexByText(response);
-            this.#indexes_caching[file] = response;
-          }
+      const handleIndexingWithResponse = (i, file, response, status) => {
+        hasCallback && callback(i, files.length);
 
-          if (i === files.length) {
-            this.#isCurrentlyIndexing = false;
-            this.#hasIndexed = true;
-            resolve();
-          }
-        };
+        if (status === 200) {
+          indexes[file] = sourceParser.handleSearchIndexByText(response);
+          indexes_caching[file] = response;
+        }
 
-        // TODO: wait for animationend event
-        setTimeout(() => {
-          for (const file of files) {
-            if (this.#indexes_caching[file]) {
+        if (i === files.length) {
+          isCurrentlyIndexing = false;
+          hasIndexed = true;
+          resolve();
+        }
+      };
+
+      // TODO: wait for animationend event
+      setTimeout(() => {
+        for (const file of files) {
+          if (indexes_caching[file]) {
+            i++;
+            handleIndexingWithResponse(i, file, indexes_caching[file], 200);
+          } else {
+            requestsManager.initRequest(file).then((data) => {
               i++;
-              handleIndexingWithResponse(i, file, this.#indexes_caching[file], 200);
-            } else {
-              requestsManager.initRequest(file).then((data) => {
-                i++;
-                handleIndexingWithResponse(i, file, data, 200);
-              }).catch(() => {
-                i++;
-                handleIndexingWithResponse(i, file, data, 500);
-              });
-            }
+              handleIndexingWithResponse(i, file, data, 200);
+            }).catch(() => {
+              i++;
+              handleIndexingWithResponse(i, file, undefined, 500);
+            });
           }
-        }, 700);
-      });
+        }
+      }, 700);
     });
-  }
-
-  clearFullFromDebug() {
-    if (!debug.isSafeToUseDebugItems()) {
-      return;
-    }
-
-    this.#hasIndexed = false;
-    this.#isCurrentlyIndexing = false;
-    this.#indexes = {};
-    this.#indexes_caching = {};
-  }
-
-  hasIndexed() {
-    return this.#hasIndexed;
-  }
-
-  isCurrentlyIndexing() {
-    return this.#isCurrentlyIndexing;
-  }
-
-  getIndexedValue(file) {
-    return this.#indexes[file];
-  }
-
-  getFullIndexedValue(file) {
-    return this.#indexes_caching[file];
-  }
-
-  saveAsFullIndexedValue(file, data) {
-    this.#indexes_caching[file] = data;
-  }
+  });
 }
 
-const indexesManager = new IndexesManager();
+function clearFullFromDebug() {
+  if (!debug.isSafeToUseDebugItems()) {
+    return;
+  }
+
+  hasIndexed = false;
+  isCurrentlyIndexing = false;
+  indexes = {};
+  indexes_caching = {};
+}
+
+function getIndexedValue(file) {
+  return indexes[file];
+}
+
+function getFullIndexedValue(file) {
+  return indexes_caching[file];
+}
+
+function saveAsFullIndexedValue(file, data) {
+  indexes_caching[file] = data;
+}
+
+export {
+  hasIndexed,
+  isCurrentlyIndexing,
+  initFull,
+  clearFullFromDebug,
+  getIndexedValue,
+  getFullIndexedValue,
+  saveAsFullIndexedValue,
+}

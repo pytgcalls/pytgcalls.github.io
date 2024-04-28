@@ -1,229 +1,238 @@
-class HomePage {
-  onChangeFavoriteSyntaxTab;
-  onChangeFavoriteSyntaxTabAnimationState;
+import * as sidebarInstance from "./main.sidebar.js";
+import * as contentInstance from "./main.content.js";
+import * as introductionInstance from "./main.introduction.js";
+import * as headerInstance from "./main.header.js";
+import * as config from "./main.config.js";
+import * as utils from "./main.utils.js";
+import * as debug from "./main.debug.js";
+import ListenerManagerInstance from "./main.listener.js";
 
-  #headerInstance;
-  #sidebarInstance;
-  #contentInstance;
-  #introductionInstance;
+const onChangeFavoriteSyntaxTab = new ListenerManagerInstance();
+const onChangeFavoriteSyntaxTabAnimationState = new ListenerManagerInstance();
 
-  init(pathName) {
-    this.onChangeFavoriteSyntaxTab = new ListenerManagerInstance();
-    this.onChangeFavoriteSyntaxTabAnimationState = new ListenerManagerInstance();
+function init(pathName) {
+  resetChildrenData();
 
-    const syntaxTabData = localStorage.getItem('currentTabDataIndexes');
-    let baseParsedSyntaxTab = {};
-    if (syntaxTabData != null) {
-      try {
-        baseParsedSyntaxTab = JSON.parse(syntaxTabData);
-      } catch (_) { }
-    }
-
-    this.onChangeFavoriteSyntaxTab.callAllListeners(baseParsedSyntaxTab);
-    this.onChangeFavoriteSyntaxTabAnimationState.callAllListeners(false);
-
-    this.#headerInstance = new Header();
-    this.#sidebarInstance = new Sidebar();
-    this.#contentInstance = new Content();
-    this.#introductionInstance = new Introduction();
-
-    document.body.innerHTML = '';
-
-    const pageContainer = document.createElement('div');
-    pageContainer.classList.add('page-container');
-    pageContainer.appendChild(this.#sidebarInstance.getElement());
-    pageContainer.appendChild(this.#contentInstance.getElement());
-    pageContainer.appendChild(this.#introductionInstance.getElement());
-
-    document.body.appendChild(this.#headerInstance.getElement());
-    document.body.appendChild(pageContainer);
-
-    requestAnimationFrame(() => {
-      if (typeof pathName === 'string' && pathName.length) {
-        this.#chooseRightTab(pathName, window.location.hash).then((found) => {
-          if (found) {
-            this.#headerInstance.highlightTabsForSelection();
-          }
-        });
-      } else {
-        this.#introductionInstance.show();
-      }
-    });
-
-    this.#introductionInstance.onVisibilityUpdateListenerInstance.addListener({
-      callback: (state) => {
-        document.body.classList.toggle('as-home', state);
-        document.body.classList.remove('expanded');
-
-        if (state) {
-          this.#headerInstance.highlightTabsForIntroduction();
-        }
-      }
-    });
-
-    this.#headerInstance.onTabsVisibilityUpdateListenerInstance.addListener({
-      callback: (state) => {
-        if (state) {
-          this.#headerInstance.updateSidebarMobileVisibilityState(false);
-          this.#headerInstance.updateCompassExpandedState(false);
-          this.#sidebarInstance.updateMobileVisibilityState(false);
-          this.#contentInstance.updateMobileSectionsVisibilityState(false);
-        }
-      }
-    });
-
-    this.#headerInstance.onChangeListenerInstance.addListener({
-      callback: (id) => {
-        this.#introductionInstance.hide();
-        const promise = this.#sidebarInstance.loadSidebar(id);
-        this.#sidebarInstance.focusOnSidebar();
-        this.#headerInstance.updateCompassVisibilityState(false);
-        this.#headerInstance.updateCompassExpandedState(false);
-        this.#headerInstance.updateTabsMobileVisibility(false);
-        this.#contentInstance.clearBoard();
-
-        config.getFilesListDefaultFileById(id).then((file) => {
-          if (typeof file == 'string') {
-            this.#updateLoadedFile(file, null, promise);
-          }
-        });
-      }
-    });
-
-    this.#headerInstance.onSidebarUpdateListenerInstance.addListener({
-      callback: (isMobile) => {
-        if (isMobile) {
-          const state = this.#sidebarInstance.updateMobileVisibilityState();
-          this.#headerInstance.updateSidebarMobileVisibilityState(state);
-          this.#headerInstance.updateCompassExpandedState(false);
-          this.#headerInstance.updateTabsMobileVisibility(false);
-          this.#contentInstance.updateMobileSectionsVisibilityState(false);
-        } else {
-          this.#sidebarInstance.updateDesktopCollapsedState(false);
-          this.#headerInstance.updateSidebarDesktopExpandedState(false);
-        }
-      }
-    });
-
-    this.#headerInstance.onCompassUpdateListenerInstance.addListener({
-      callback: () => {
-        const state = this.#contentInstance.updateMobileSectionsVisibilityState();
-        this.#headerInstance.updateCompassExpandedState(state);
-        this.#sidebarInstance.updateMobileVisibilityState(false);
-        this.#headerInstance.updateSidebarMobileVisibilityState(false);
-        this.#headerInstance.updateTabsMobileVisibility(false);
-      }
-    });
-
-    this.#sidebarInstance.onCollapsedListenerInstance.addListener({
-      callback: (isCollapsed) => {
-        this.#headerInstance.updateSidebarDesktopExpandedState(isCollapsed);
-      }
-    });
-
-    this.#sidebarInstance.onChangeListenerInstance.addListener({
-      callback: (file) => {
-        this.#headerInstance.updateSidebarMobileVisibilityState(false);
-        this.#headerInstance.updateCompassVisibilityState(true);
-        this.#headerInstance.updateCompassExpandedState(false);
-        this.#sidebarInstance.updateMobileVisibilityState(false);
-        this.#contentInstance.loadFile(file);
-      }
-    });
-
-    this.#contentInstance.onSelectedSectionListenerInstance.addListener({
-      callback: () => {
-        this.#headerInstance.updateCompassExpandedState(false);
-        this.#contentInstance.updateMobileSectionsVisibilityState(false);
-      }
-    });
+  const syntaxTabData = localStorage.getItem('currentTabDataIndexes');
+  let baseParsedSyntaxTab = {};
+  if (syntaxTabData != null) {
+    try {
+      baseParsedSyntaxTab = JSON.parse(syntaxTabData);
+    } catch (_) { }
   }
 
-  handleAsRedirect(pathName) {
-    if (typeof pathName === 'string') {
-      if (!pathName.startsWith('/')) {
-        pathName = '/' + pathName;
-      }
+  onChangeFavoriteSyntaxTab.callAllListeners(baseParsedSyntaxTab);
+  onChangeFavoriteSyntaxTabAnimationState.callAllListeners(false);
 
-      let hash;
-      if (pathName.indexOf('#') !== -1) {
-        hash = '#' + pathName.split('#')[1];
-        pathName = pathName.split('#')[0];
-      }
-      this.#chooseRightTab(pathName, hash);
-    }
-  }
+  document.body.innerHTML = '';
 
-  #chooseRightTab(pathName, hash) {
-    return new Promise((resolve) => {
-      config.getAvailableCategories().then((ids) => {
-        let found = false;
+  const pageContainer = document.createElement('div');
+  pageContainer.classList.add('page-container');
+  pageContainer.appendChild(sidebarInstance.getElement());
+  pageContainer.appendChild(contentInstance.getElement());
+  pageContainer.appendChild(introductionInstance.getElement());
 
-        for (const id of ids) {
-          if (decodeURI(pathName).startsWith(utils.parseCategoryUrl(id))) {
-            found = true;
+  document.body.appendChild(headerInstance.getElement());
+  document.body.appendChild(pageContainer);
 
-            this.#headerInstance.updateActiveTab(id);
-            const promise = this.#sidebarInstance.loadSidebar(id);
-
-            this.#tryToIndexFilePathFromId(id, pathName, hash, promise);
-          }
+  requestAnimationFrame(() => {
+    if (typeof pathName === 'string' && pathName.length) {
+      chooseRightTab(pathName, window.location.hash).then((found) => {
+        if (found) {
+          headerInstance.highlightTabsForSelection();
         }
-
-        if (!found) {
-          window.history.pushState('', '', '/');
-          this.#introductionInstance.show();
-          this.#headerInstance.onChangeListenerInstance.callInternalListeners("Documentation");
-        }
-
-        resolve(found);
       });
-    });
-  }
+    } else {
+      introductionInstance.show();
+    }
+  });
 
-  #tryToIndexFilePathFromId(id, pathName, hash, updateActiveFilePromise) {
-    config.getAllFilesListFilesById(id).then((files) => {
+  introductionInstance.onVisibilityUpdateListenerInstance.addListener({
+    callback: (state) => {
+      document.body.classList.toggle('as-home', state);
+      document.body.classList.remove('expanded');
+
+      if (state) {
+        headerInstance.highlightTabsForIntroduction();
+      }
+    }
+  });
+
+  headerInstance.onTabsVisibilityUpdateListenerInstance.addListener({
+    callback: (state) => {
+      if (state) {
+        headerInstance.updateSidebarMobileVisibilityState(false);
+        headerInstance.updateCompassExpandedState(false);
+        sidebarInstance.updateMobileVisibilityState(false);
+        contentInstance.updateMobileSectionsVisibilityState(false);
+      }
+    }
+  });
+
+  headerInstance.onChangeListenerInstance.addListener({
+    callback: (id) => {
+      introductionInstance.hide();
+      const promise = sidebarInstance.loadSidebar(id);
+      sidebarInstance.focusOnSidebar();
+      headerInstance.updateCompassVisibilityState(false);
+      headerInstance.updateCompassExpandedState(false);
+      headerInstance.updateTabsMobileVisibility(false);
+      contentInstance.clearBoard();
+
+      config.getFilesListDefaultFileById(id).then((file) => {
+        if (typeof file == 'string') {
+          updateLoadedFile(file, null, promise);
+        }
+      });
+    }
+  });
+
+  headerInstance.onSidebarUpdateListenerInstance.addListener({
+    callback: (isMobile) => {
+      if (isMobile) {
+        const state = sidebarInstance.updateMobileVisibilityState();
+        headerInstance.updateSidebarMobileVisibilityState(state);
+        headerInstance.updateCompassExpandedState(false);
+        headerInstance.updateTabsMobileVisibility(false);
+        contentInstance.updateMobileSectionsVisibilityState(false);
+      } else {
+        sidebarInstance.updateDesktopCollapsedState(false);
+        headerInstance.updateSidebarDesktopExpandedState(false);
+      }
+    }
+  });
+
+  headerInstance.onCompassUpdateListenerInstance.addListener({
+    callback: () => {
+      const state = contentInstance.updateMobileSectionsVisibilityState();
+      headerInstance.updateCompassExpandedState(state);
+      sidebarInstance.updateMobileVisibilityState(false);
+      headerInstance.updateSidebarMobileVisibilityState(false);
+      headerInstance.updateTabsMobileVisibility(false);
+    }
+  });
+
+  sidebarInstance.onCollapsedListenerInstance.addListener({
+    callback: (isCollapsed) => {
+      headerInstance.updateSidebarDesktopExpandedState(isCollapsed);
+    }
+  });
+
+  sidebarInstance.onChangeListenerInstance.addListener({
+    callback: (file) => {
+      headerInstance.updateSidebarMobileVisibilityState(false);
+      headerInstance.updateCompassVisibilityState(true);
+      headerInstance.updateCompassExpandedState(false);
+      sidebarInstance.updateMobileVisibilityState(false);
+      contentInstance.loadFile(file);
+    }
+  });
+
+  contentInstance.onSelectedSectionListenerInstance.addListener({
+    callback: () => {
+      headerInstance.updateCompassExpandedState(false);
+      contentInstance.updateMobileSectionsVisibilityState(false);
+    }
+  });
+}
+
+function handleAsRedirect(pathName) {
+  if (typeof pathName === 'string') {
+    if (!pathName.startsWith('/')) {
+      pathName = '/' + pathName;
+    }
+
+    let hash;
+    if (pathName.indexOf('#') !== -1) {
+      hash = '#' + pathName.split('#')[1];
+      pathName = pathName.split('#')[0];
+    }
+    chooseRightTab(pathName, hash);
+  }
+}
+
+function chooseRightTab(pathName, hash) {
+  return new Promise((resolve) => {
+    config.getAvailableCategories().then((ids) => {
       let found = false;
 
-      for (const file of files) {
-        if (utils.parseCategoryUrl(file) === decodeURI(pathName)) {
+      for (const id of ids) {
+        if (decodeURI(pathName).startsWith(utils.parseCategoryUrl(id))) {
           found = true;
-          this.#updateLoadedFile(file, hash, updateActiveFilePromise);
-          break;
+
+          headerInstance.updateActiveTab(id);
+          const promise = sidebarInstance.loadSidebar(id);
+
+          tryToIndexFilePathFromId(id, pathName, hash, promise);
         }
       }
 
       if (!found) {
-        config.getFilesListDefaultFileById(id).then((file) => {
-          if (typeof file == 'string') {
-            this.#updateLoadedFile(file, null, updateActiveFilePromise);
-          }
-        });
+        window.history.pushState('', '', '/');
+        introductionInstance.show();
+        headerInstance.onChangeListenerInstance.callInternalListeners("Documentation");
       }
+
+      resolve(found);
     });
-  }
-
-  #updateLoadedFile(file, hash, updateActiveFilePromise) {
-    updateActiveFilePromise.then(() => {
-      requestAnimationFrame(() => {
-        this.#sidebarInstance.updateActiveFile(file);
-      });
-    });
-
-    this.#headerInstance.updateCompassVisibilityState(true);
-    this.#headerInstance.updateCompassExpandedState(false);
-    this.#headerInstance.updateTabsMobileVisibility(false);
-    this.#sidebarInstance.updateMobileVisibilityState(false);
-    this.#contentInstance.loadFile(file, hash);
-  }
-
-  handleCustomCodeInsert(data) {
-    if (!debug.isSafeToUseDebugItems()) {
-      return;
-    }
-
-    this.#contentInstance.handleCustomCodeInsert(data);
-  }
+  });
 }
 
-const homePage = new HomePage();
+function tryToIndexFilePathFromId(id, pathName, hash, updateActiveFilePromise) {
+  config.getAllFilesListFilesById(id).then((files) => {
+    let found = false;
+
+    for (const file of files) {
+      if (utils.parseCategoryUrl(file) === decodeURI(pathName)) {
+        found = true;
+        updateLoadedFile(file, hash, updateActiveFilePromise);
+        break;
+      }
+    }
+
+    if (!found) {
+      config.getFilesListDefaultFileById(id).then((file) => {
+        if (typeof file == 'string') {
+          updateLoadedFile(file, null, updateActiveFilePromise);
+        }
+      });
+    }
+  });
+}
+
+function updateLoadedFile(file, hash, updateActiveFilePromise) {
+  updateActiveFilePromise.then(() => {
+    requestAnimationFrame(() => {
+      sidebarInstance.updateActiveFile(file);
+    });
+  });
+
+  headerInstance.updateCompassVisibilityState(true);
+  headerInstance.updateCompassExpandedState(false);
+  headerInstance.updateTabsMobileVisibility(false);
+  sidebarInstance.updateMobileVisibilityState(false);
+  contentInstance.loadFile(file, hash);
+}
+
+function handleCustomCodeInsert(data) {
+  if (!debug.isSafeToUseDebugItems()) {
+    return;
+  }
+
+  contentInstance.handleCustomCodeInsert(data);
+}
+
+function resetChildrenData() {
+  sidebarInstance.resetData();
+  contentInstance.resetData();
+  introductionInstance.resetData();
+  headerInstance.resetData();
+}
+
+export {
+  init,
+  handleAsRedirect,
+  handleCustomCodeInsert,
+  onChangeFavoriteSyntaxTab,
+  onChangeFavoriteSyntaxTabAnimationState,
+};

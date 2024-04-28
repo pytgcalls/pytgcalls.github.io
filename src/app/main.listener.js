@@ -58,3 +58,5 @@ class ListenerManagerInstance {
     this.#callbacks = reparsedCallbacks;
   }
 }
+
+export default ListenerManagerInstance;

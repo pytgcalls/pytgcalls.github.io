@@ -1,430 +1,453 @@
-class Sidebar {
-  onChangeListenerInstance;
-  onCollapsedListenerInstance;
+import * as utils from "./main.utils.js";
+import ListenerManagerInstance from "./main.listener.js";
+import * as iconsManager from "./main.icons.js";
+import * as config from "./main.config.js";
+import * as indexesManager from "./main.indexes.js";
+import * as debug from "./main.debug.js";
 
-  #leftContainer;
-  #leftSidebar;
-  #sidebarSticky;
+const onChangeListenerInstance = new ListenerManagerInstance();
+const onCollapsedListenerInstance = new ListenerManagerInstance();
 
-  #searchResults;
-  #searchInputText;
+let leftContainer;
+let leftSidebar;
+let sidebarSticky;
 
-  #currentLoadedSidebarId;
-  #hasLoaded = false;
+let searchResults;
+let searchInputText;
 
-  constructor() {
-    this.onChangeListenerInstance = new ListenerManagerInstance();
-    this.onCollapsedListenerInstance = new ListenerManagerInstance();
-  }
+let currentLoadedSidebarId;
+let hasLoaded = false;
 
-  getElement() {
-    const { searchInput, searchResults } = this.#createSearchBar();
-    const leftSidebar = document.createElement('div');
-    leftSidebar.classList.add('left-sidebar', 'expanded');
-    this.#leftSidebar = leftSidebar;
+function getElement() {
+  const { searchInput, searchResults } = createSearchBar();
+  const leftSidebarElement = document.createElement('div');
+  leftSidebarElement.classList.add('left-sidebar', 'expanded');
+  leftSidebar = leftSidebarElement;
 
-    const exploreString = document.createElement('span');
-    exploreString.textContent = 'Explore';
-    const exploreTitle = document.createElement('div');
-    exploreTitle.classList.add('explore');
-    exploreTitle.appendChild(exploreString);
+  const exploreString = document.createElement('span');
+  exploreString.textContent = 'Explore';
+  const exploreTitle = document.createElement('div');
+  exploreTitle.classList.add('explore');
+  exploreTitle.appendChild(exploreString);
 
-    const sidebarSticky = document.createElement('div');
-    sidebarSticky.classList.add('sidebar-sticky');
-    sidebarSticky.appendChild(exploreTitle);
-    sidebarSticky.appendChild(searchInput);
-    this.#sidebarSticky = sidebarSticky;
+  const sidebarStickyElement = document.createElement('div');
+  sidebarStickyElement.classList.add('sidebar-sticky');
+  sidebarStickyElement.appendChild(exploreTitle);
+  sidebarStickyElement.appendChild(searchInput);
+  sidebarSticky = sidebarStickyElement;
 
-    leftSidebar.addEventListener('scroll', () => {
-      sidebarSticky.classList.toggle('use-mini-title', searchResults.classList.contains('expanded') || leftSidebar.scrollTop > 0);
-    });
+  leftSidebarElement.addEventListener('scroll', () => {
+    sidebarSticky.classList.toggle('use-mini-title', searchResults.classList.contains('expanded') || leftSidebar.scrollTop > 0);
+  });
 
-    const leftContainer = document.createElement('div');
-    leftContainer.classList.add('left-container');
-    leftContainer.appendChild(sidebarSticky);
-    leftContainer.appendChild(searchResults);
-    leftContainer.appendChild(leftSidebar);
-    this.#leftContainer = leftContainer;
+  const leftContainerElement = document.createElement('div');
+  leftContainerElement.classList.add('left-container');
+  leftContainerElement.appendChild(sidebarStickyElement);
+  leftContainerElement.appendChild(searchResults);
+  leftContainerElement.appendChild(leftSidebarElement);
+  leftContainer = leftContainerElement;
 
-    return leftContainer;
-  }
+  return leftContainerElement;
+}
 
-  focusOnSidebar() {
-    this.#leftContainer.classList.remove('collapsed');
-    this.onCollapsedListenerInstance.callAllListeners(false);
-    this.killSearch();
-  }
+function focusOnSidebar() {
+  leftContainer.classList.remove('collapsed');
+  onCollapsedListenerInstance.callAllListeners(false);
+  killSearch();
+}
 
-  killSearch() {
-    this.#searchResults.classList.remove('expanded');
-    this.#leftSidebar.classList.add('expanded');
-    this.#searchResults.textContent = '';
-    this.#searchInputText.value = '';
-    this.#searchInputText.classList.add('is-empty');
-    this.#sidebarSticky.classList.toggle('use-mini-title', this.#leftSidebar.scrollTop > 0);
-  }
+function killSearch() {
+  searchResults.classList.remove('expanded');
+  leftSidebar.classList.add('expanded');
+  searchResults.textContent = '';
+  searchInputText.value = '';
+  searchInputText.classList.add('is-empty');
+  sidebarSticky.classList.toggle('use-mini-title', leftSidebar.scrollTop > 0);
+}
 
-  updateMobileVisibilityState(forcedState) {
-    this.focusOnSidebar();
-    return this.#leftContainer.classList.toggle('show', forcedState);
-  }
+function updateMobileVisibilityState(forcedState) {
+  focusOnSidebar();
+  return leftContainer.classList.toggle('show', forcedState);
+}
 
-  updateDesktopCollapsedState(isCollapsed) {
-    return this.#leftContainer.classList.toggle('collapsed', isCollapsed);
-  }
+function updateDesktopCollapsedState(isCollapsed) {
+  return leftContainer.classList.toggle('collapsed', isCollapsed);
+}
 
-  #createSearchBar() {
-    const searchText = document.createElement('input');
-    searchText.classList.add('is-empty');
-    searchText.placeholder = 'Search...';
-    this.#searchInputText = searchText;
-    const searchCancelIcon = iconsManager.get('main', 'circleXMark');
-    searchCancelIcon.classList.add('cancel');
-    const searchInput = document.createElement('div');
-    searchInput.classList.add('search-input');
-    searchInput.appendChild(iconsManager.get('main', 'magnifyingGlass'));
-    searchInput.appendChild(searchText);
-    searchInput.appendChild(searchCancelIcon);
+function createSearchBar() {
+  const searchText = document.createElement('input');
+  searchText.classList.add('is-empty');
+  searchText.placeholder = 'Search...';
+  searchInputText = searchText;
+  const searchCancelIcon = iconsManager.get('main', 'circleXMark');
+  searchCancelIcon.classList.add('cancel');
+  const searchInput = document.createElement('div');
+  searchInput.classList.add('search-input');
+  searchInput.appendChild(iconsManager.get('main', 'magnifyingGlass'));
+  searchInput.appendChild(searchText);
+  searchInput.appendChild(searchCancelIcon);
 
-    const searchResults = document.createElement('div');
-    searchResults.classList.add('search-results');
-    this.#searchResults = searchResults;
+  const searchResultsContainer = document.createElement('div');
+  searchResultsContainer.classList.add('search-results');
+  searchResults = searchResultsContainer;
 
-    searchCancelIcon.addEventListener('click', () => this.killSearch());
+  searchCancelIcon.addEventListener('click', () => killSearch());
 
-    let wasExpanded = false;
-    searchInput.addEventListener('input', () => {
-      const expandSearchBar = !!searchText.value.trim().length;
+  let wasExpanded = false;
+  searchInput.addEventListener('input', () => {
+    const expandSearchBar = !!searchText.value.trim().length;
 
-      searchText.classList.toggle('is-empty', !expandSearchBar);
-      searchResults.classList.toggle('expanded', expandSearchBar);
-      this.#sidebarSticky.classList.toggle('use-mini-title', expandSearchBar);
-      this.#leftSidebar.classList.toggle('expanded', !expandSearchBar);
+    searchText.classList.toggle('is-empty', !expandSearchBar);
+    searchResultsContainer.classList.toggle('expanded', expandSearchBar);
+    sidebarSticky.classList.toggle('use-mini-title', expandSearchBar);
+    leftSidebar.classList.toggle('expanded', !expandSearchBar);
 
-      if (expandSearchBar && !wasExpanded) {
-        searchResults.scrollTo(0, 0);
-      }
-
-      if (!expandSearchBar) {
-        this.#sidebarSticky.classList.toggle('use-mini-title', this.#leftSidebar.scrollTop > 0);
-      }
-
-      wasExpanded = expandSearchBar;
-      this.#handleSearchValue(searchText, searchResults);
-    });
-
-    return {
-      searchInput,
-      searchResults
-    };
-  }
-
-  #handleSearchValue(input, results) {
-    config.loadConfig().then(() => {
-      const onSearchReady = (text) => {
-        if (!text.length) {
-          results.textContent = '';
-          results.classList.remove('is-loading');
-          return;
-        }
-
-        let promise;
-        if (typeof this.#currentLoadedSidebarId == 'undefined') {
-          promise = config.getAllFilesListFiles();
-        } else {
-          promise = config.getAllFilesListFilesById(this.#currentLoadedSidebarId);
-        }
-
-        const resultsFragment = document.createDocumentFragment();
-        promise.then((files) => {
-          let hasResults = false;
-
-          for (const file of files) {
-            const fileDataKeys = indexesManager.getIndexedValue(file);
-
-            if (typeof fileDataKeys != 'undefined') {
-              const foundInName = file.toLowerCase().indexOf(text.toLowerCase()) !== -1;
-              const foundInKeys = fileDataKeys.toLowerCase().indexOf(text.toLowerCase()) !== -1;
-
-              if (foundInName || foundInKeys) {
-                hasResults = true;
-                resultsFragment.append(this.#createSingleSearchResult(file, fileDataKeys, foundInName, text));
-              }
-            }
-          }
-
-          if (!hasResults) {
-            const errorText = document.createElement('div');
-            errorText.textContent = 'No results found.';
-            const error = document.createElement('div');
-            error.classList.add('error');
-            error.appendChild(iconsManager.get('main', 'heartCrack'));
-            error.appendChild(errorText);
-            resultsFragment.append(error);
-          }
-
-          results.textContent = '';
-          results.classList.toggle('is-loading', !hasResults);
-          results.appendChild(resultsFragment);
-        });
-      };
-
-      if (!indexesManager.isCurrentlyIndexing()) {
-        if (!indexesManager.hasIndexed()) {
-          this.#searchResults.classList.add('is-loading');
-          this.#searchResults.textContent = '';
-          this.#searchResults.appendChild(utils.createLoadingItem(50));
-
-          indexesManager.initFull(() => { }).then(() => {
-            onSearchReady(input.value.trim());
-          });
-        } else {
-          onSearchReady(input.value.trim());
-        }
-      }
-    });
-  }
-
-  #createSingleSearchResult(file, fileDataKeys, foundInName, text) {
-    const fileDataTitle = document.createElement('div');
-    fileDataTitle.classList.add('file-data-title');
-    fileDataTitle.textContent = utils.parseCategoryName(file.replaceAll('/', ' > '));
-    const fileData = document.createElement('div');
-    fileData.classList.add('file-data');
-    fileData.addEventListener('click', () => {
-      this.#globalUpdateActiveFile(file);
-    });
-    fileData.appendChild(fileDataTitle);
-
-    if (!foundInName) {
-      const splitting = fileDataKeys.toLowerCase().split(text.toLowerCase());
-      const beforeSplitting = utils.splitSearchResult(splitting[0], true);
-      const afterSplitting = utils.splitSearchResult(splitting[1], false);
-
-      const highlightedWord = document.createElement('span');
-      highlightedWord.classList.add('highlighted');
-      highlightedWord.textContent = text;
-      const fileDataDescription = document.createElement('div');
-      fileDataDescription.classList.add('file-data-description');
-      fileDataDescription.appendChild(document.createTextNode(beforeSplitting));
-      fileDataDescription.appendChild(highlightedWord);
-      fileDataDescription.appendChild(document.createTextNode(afterSplitting));
-      fileData.appendChild(fileDataDescription);
+    if (expandSearchBar && !wasExpanded) {
+      searchResultsContainer.scrollTo(0, 0);
     }
 
-    const elementIcon = iconsManager.get('main', 'chevronDown');
-    elementIcon.classList.add('right-icon');
-    fileData.appendChild(elementIcon);
+    if (!expandSearchBar) {
+      sidebarSticky.classList.toggle('use-mini-title', leftSidebar.scrollTop > 0);
+    }
 
-    return fileData;
+    wasExpanded = expandSearchBar;
+    handleSearchValue(searchText, searchResultsContainer);
+  });
+
+  return {
+    searchInput,
+    searchResults: searchResultsContainer,
   };
+}
 
-  loadSidebar(id) {
-    if (this.#currentLoadedSidebarId === id) {
-      return Promise.resolve();
-    }
-
-    const promise = this.#getPromiseBeforeLoadSidebar();
-
-    promise.then(() => {
-      this.#hasLoaded = true;
-
-      const content = this.#leftSidebar;
-      content.textContent = '';
-
-      if (debug.isSafeToUseDebugItems()) {
-        content.appendChild(this.#composeDebugProperties());
+function handleSearchValue(input, results) {
+  config.loadConfig().then(() => {
+    const onSearchReady = (text) => {
+      if (!text.length) {
+        results.textContent = '';
+        results.classList.remove('is-loading');
+        return;
       }
 
-      this.#currentLoadedSidebarId = id;
+      let promise;
+      if (typeof currentLoadedSidebarId == 'undefined') {
+        promise = config.getAllFilesListFiles();
+      } else {
+        promise = config.getAllFilesListFilesById(currentLoadedSidebarId);
+      }
 
-      config.getFilesListInstanceById(id).then((child) => {
-        const fragment = document.createDocumentFragment();
-        const basePathForMainFiles = child.getAttribute('basepath');
+      const resultsFragment = document.createDocumentFragment();
+      promise.then((files) => {
+        let hasResults = false;
 
-        let i = 0;
-        for (const file of child.childNodes) {
-          if (file instanceof Element) {
-            i++;
+        for (const file of files) {
+          const fileDataKeys = indexesManager.getIndexedValue(file);
 
-            switch (file.tagName.toUpperCase()) {
-              case 'FILE':
-                if (file.textContent !== '.xml' && file.textContent.endsWith('.xml')) {
-                  fragment.append(this.#handleSidebarFile(file, i, basePathForMainFiles));
-                }
-                break;
-              case 'MICROTAG':
-                if (file.textContent.length) {
-                  fragment.append(this.#handleSidebarMicrotag(file, i));
-                }
-                break;
-              case 'GROUP':
-                const groupFilesList = file.querySelectorAll('file');
-                if (groupFilesList.length) {
-                  const basePathForGroupFiles = file.getAttribute('basepath');
+          if (typeof fileDataKeys != 'undefined') {
+            const foundInName = file.toLowerCase().indexOf(text.toLowerCase()) !== -1;
+            const foundInKeys = fileDataKeys.toLowerCase().indexOf(text.toLowerCase()) !== -1;
 
-                  if (!basePathForGroupFiles) {
-                    throw new Error("group elements require a basepath");
-                  } else {
-                    fragment.append(this.#handleSidebarGroup(i, basePathForMainFiles, basePathForGroupFiles, groupFilesList));
-                  }
-                }
-                break;
+            if (foundInName || foundInKeys) {
+              hasResults = true;
+              resultsFragment.append(createSingleSearchResult(file, fileDataKeys, foundInName, text));
             }
           }
         }
 
-        content.appendChild(fragment);
-      });
-    });
+        if (!hasResults) {
+          const errorText = document.createElement('div');
+          errorText.textContent = 'No results found.';
+          const error = document.createElement('div');
+          error.classList.add('error');
+          error.appendChild(iconsManager.get('main', 'heartCrack'));
+          error.appendChild(errorText);
+          resultsFragment.append(error);
+        }
 
-    return promise;
-  }
-
-  #getPromiseBeforeLoadSidebar() {
-    if (!this.#hasLoaded) {
-      return Promise.resolve();
-    } else {
-      return new Promise((resolve) => {
-        this.#leftSidebar.classList.add('faster');
-        this.#leftSidebar.classList.add('disappear');
-        this.#leftSidebar.lastChild.addEventListener('animationend', () => {
-          this.#leftSidebar.classList.remove('disappear');
-          resolve();
-        }, { once: true });
+        results.textContent = '';
+        results.classList.toggle('is-loading', !hasResults);
+        results.appendChild(resultsFragment);
       });
+    };
+
+    if (!indexesManager.isCurrentlyIndexing) {
+      if (!indexesManager.hasIndexed) {
+        searchResults.classList.add('is-loading');
+        searchResults.textContent = '';
+        searchResults.appendChild(utils.createLoadingItem(50));
+
+        indexesManager.initFull(() => { }).then(() => {
+          onSearchReady(input.value.trim());
+        });
+      } else {
+        onSearchReady(input.value.trim());
+      }
     }
+  });
+}
+
+function createSingleSearchResult(file, fileDataKeys, foundInName, text) {
+  const fileDataTitle = document.createElement('div');
+  fileDataTitle.classList.add('file-data-title');
+  fileDataTitle.textContent = utils.parseCategoryName(file.replaceAll('/', ' > '));
+  const fileData = document.createElement('div');
+  fileData.classList.add('file-data');
+  fileData.addEventListener('click', () => {
+    globalUpdateActiveFile(file);
+  });
+  fileData.appendChild(fileDataTitle);
+
+  if (!foundInName) {
+    const splitting = fileDataKeys.toLowerCase().split(text.toLowerCase());
+    const beforeSplitting = utils.splitSearchResult(splitting[0], true);
+    const afterSplitting = utils.splitSearchResult(splitting[1], false);
+
+    const highlightedWord = document.createElement('span');
+    highlightedWord.classList.add('highlighted');
+    highlightedWord.textContent = text;
+    const fileDataDescription = document.createElement('div');
+    fileDataDescription.classList.add('file-data-description');
+    fileDataDescription.appendChild(document.createTextNode(beforeSplitting));
+    fileDataDescription.appendChild(highlightedWord);
+    fileDataDescription.appendChild(document.createTextNode(afterSplitting));
+    fileData.appendChild(fileDataDescription);
   }
 
-  #handleSidebarFile(file, i, basePathForMainFiles) {
-    const fullPath = basePathForMainFiles ? (basePathForMainFiles + file.textContent) : undefined;
+  const elementIcon = iconsManager.get('main', 'chevronDown');
+  elementIcon.classList.add('right-icon');
+  fileData.appendChild(elementIcon);
 
-    const element = this.#createSidebarFileElement(
+  return fileData;
+}
+
+function loadSidebar(id) {
+  if (currentLoadedSidebarId === id) {
+    return Promise.resolve();
+  }
+
+  const promise = getPromiseBeforeLoadSidebar();
+
+  promise.then(() => {
+    hasLoaded = true;
+
+    const content = leftSidebar;
+    content.textContent = '';
+
+    if (debug.isSafeToUseDebugItems()) {
+      content.appendChild(composeDebugProperties());
+    }
+
+    currentLoadedSidebarId = id;
+
+    config.getFilesListInstanceById(id).then((child) => {
+      const fragment = document.createDocumentFragment();
+      const basePathForMainFiles = child.getAttribute('basepath');
+
+      let i = 0;
+      for (const file of child.childNodes) {
+        if (file instanceof Element) {
+          i++;
+
+          switch (file.tagName.toUpperCase()) {
+            case 'FILE':
+              if (file.textContent !== '.xml' && file.textContent.endsWith('.xml')) {
+                fragment.append(handleSidebarFile(file, i, basePathForMainFiles));
+              }
+              break;
+            case 'MICROTAG':
+              if (file.textContent.length) {
+                fragment.append(handleSidebarMicrotag(file, i));
+              }
+              break;
+            case 'GROUP':
+              const groupFilesList = file.querySelectorAll('file');
+              if (groupFilesList.length) {
+                const basePathForGroupFiles = file.getAttribute('basepath');
+
+                if (!basePathForGroupFiles) {
+                  throw new Error("group elements require a basepath");
+                } else {
+                  fragment.append(handleSidebarGroup(i, basePathForMainFiles, basePathForGroupFiles, groupFilesList));
+                }
+              }
+              break;
+          }
+        }
+      }
+
+      content.appendChild(fragment);
+    });
+  });
+
+  return promise;
+}
+
+function getPromiseBeforeLoadSidebar() {
+  if (!hasLoaded) {
+    return Promise.resolve();
+  } else {
+    return new Promise((resolve) => {
+      leftSidebar.classList.add('faster');
+      leftSidebar.classList.add('disappear');
+      leftSidebar.lastChild.addEventListener('animationend', () => {
+        leftSidebar.classList.remove('disappear');
+        resolve();
+      }, { once: true });
+    });
+  }
+}
+
+function handleSidebarFile(file, i, basePathForMainFiles) {
+  const fullPath = basePathForMainFiles ? (basePathForMainFiles + file.textContent) : undefined;
+
+  return createSidebarFileElement(
       i.toString(),
       utils.parseCategoryName(file.textContent).replace(basePathForMainFiles ?? '', ''),
       fullPath
-    );
-
-    return element;
-  }
-
-  #handleSidebarMicrotag(file, i) {
-    const element = document.createElement('div');
-    element.classList.add('microtag');
-    element.style.setProperty('--id', i.toString());
-    element.textContent = file.textContent;
-
-    return element;
-  }
-
-  #handleSidebarGroup(i, basePathForMainFiles, basePathForGroupFiles, groupFilesList) {
-    const elementText = document.createElement('div');
-    elementText.classList.add('text');
-    elementText.textContent = utils.parseCategoryName(basePathForGroupFiles).replace(basePathForMainFiles ?? '', '');
-    const element = document.createElement('div');
-    element.classList.add('element');
-    element.appendChild(elementText);
-    element.appendChild(iconsManager.get('main', 'chevronDown'));
-
-    const elementsGroup = document.createElement('div');
-    elementsGroup.classList.add('elements');
-    elementsGroup.style.setProperty('--id', i.toString());
-    elementsGroup.appendChild(element);
-
-    for (const file of groupFilesList) {
-      let fullPath = basePathForGroupFiles + file.textContent;
-
-      const element = this.#createSidebarFileElement(
-        i.toString(),
-        utils.parseCategoryName(file.textContent).replace(basePathForGroupFiles ?? '', ''),
-        fullPath,
-      );
-      elementsGroup.append(element);
-    }
-
-    elementsGroup.style.setProperty('--items', elementsGroup.childNodes.length.toString());
-    element.addEventListener('click', () => elementsGroup.classList.toggle('expanded'));
-
-    return elementsGroup;
-  }
-
-  #createSidebarFileElement(id, textContent, contentUri = textContent) {
-    const element = document.createElement('div');
-    element.classList.add('element');
-    element.addEventListener('click', () => {
-      this.#globalUpdateActiveFile(contentUri);
-    });
-    element.style.setProperty('--id', id);
-    element.textContent = textContent;
-
-    this.onChangeListenerInstance.addListener({
-      callback: (activePath) => {
-        element.classList.toggle('active', contentUri === activePath);
-      },
-      isInternal: true,
-      ref: element
-    });
-
-    return element;
-  }
-
-  #composeDebugProperties() {
-    if (!debug.isSafeToUseDebugItems()) {
-      return document.createDocumentFragment();
-    }
-
-    const elementText = document.createElement('div');
-    elementText.classList.add('text');
-    elementText.textContent = 'Internal debug options';
-    const element = document.createElement('div');
-    element.classList.add('element');
-    element.appendChild(elementText);
-    element.appendChild(iconsManager.get('main', 'chevronDown'));
-
-    const elementsGroup = document.createElement('div');
-    elementsGroup.classList.add('elements');
-    elementsGroup.style.setProperty('--id', 0);
-    elementsGroup.appendChild(element);
-
-    const customCodeElement = document.createElement('div');
-    customCodeElement.classList.add('element');
-    customCodeElement.addEventListener('click', () => debug.tryCustomPageCode(false));
-    customCodeElement.style.setProperty('--id', 1);
-    customCodeElement.textContent = 'Try custom page code';
-    elementsGroup.append(customCodeElement);
-
-    const customConfigElement = document.createElement('div');
-    customConfigElement.classList.add('element');
-    customConfigElement.addEventListener('click', () => debug.tryCustomPageCode(true));
-    customConfigElement.style.setProperty('--id', 2);
-    customConfigElement.textContent = 'Try custom config code';
-    elementsGroup.append(customConfigElement);
-
-    const customDataDocsServer = document.createElement('div');
-    customDataDocsServer.classList.add('element');
-    customDataDocsServer.addEventListener('click', () => debug.tryCustomServer());
-    customDataDocsServer.style.setProperty('--id', 3);
-    customDataDocsServer.textContent = 'Try custom server';
-    elementsGroup.append(customDataDocsServer);
-
-    const reloadPage = document.createElement('div');
-    reloadPage.classList.add('element');
-    reloadPage.addEventListener('click', () => debug.reloadPageData());
-    reloadPage.style.setProperty('--id', 4);
-    reloadPage.textContent = 'Reload page data';
-    elementsGroup.append(reloadPage);
-
-    elementsGroup.style.setProperty('--items', '5');
-    element.addEventListener('click', () => elementsGroup.classList.toggle('expanded'));
-
-    return elementsGroup;
-  }
-
-  updateActiveFile(file) {
-    this.onChangeListenerInstance.callInternalListeners(file);
-  }
-
-  #globalUpdateActiveFile(file) {
-    this.onChangeListenerInstance.callAllListeners(file);
-  }
+  );
 }
+
+function handleSidebarMicrotag(file, i) {
+  const element = document.createElement('div');
+  element.classList.add('microtag');
+  element.style.setProperty('--id', i.toString());
+  element.textContent = file.textContent;
+
+  return element;
+}
+
+function handleSidebarGroup(i, basePathForMainFiles, basePathForGroupFiles, groupFilesList) {
+  const elementText = document.createElement('div');
+  elementText.classList.add('text');
+  elementText.textContent = utils.parseCategoryName(basePathForGroupFiles).replace(basePathForMainFiles ?? '', '');
+  const element = document.createElement('div');
+  element.classList.add('element');
+  element.appendChild(elementText);
+  element.appendChild(iconsManager.get('main', 'chevronDown'));
+
+  const elementsGroup = document.createElement('div');
+  elementsGroup.classList.add('elements');
+  elementsGroup.style.setProperty('--id', i.toString());
+  elementsGroup.appendChild(element);
+
+  for (const file of groupFilesList) {
+    let fullPath = basePathForGroupFiles + file.textContent;
+
+    const element = createSidebarFileElement(
+      i.toString(),
+      utils.parseCategoryName(file.textContent).replace(basePathForGroupFiles ?? '', ''),
+      fullPath,
+    );
+    elementsGroup.append(element);
+  }
+
+  elementsGroup.style.setProperty('--items', elementsGroup.childNodes.length.toString());
+  element.addEventListener('click', () => elementsGroup.classList.toggle('expanded'));
+
+  return elementsGroup;
+}
+
+function createSidebarFileElement(id, textContent, contentUri = textContent) {
+  const element = document.createElement('div');
+  element.classList.add('element');
+  element.addEventListener('click', () => {
+    globalUpdateActiveFile(contentUri);
+  });
+  element.style.setProperty('--id', id);
+  element.textContent = textContent;
+
+  onChangeListenerInstance.addListener({
+    callback: (activePath) => {
+      element.classList.toggle('active', contentUri === activePath);
+    },
+    isInternal: true,
+    ref: element
+  });
+
+  return element;
+}
+
+function composeDebugProperties() {
+  if (!debug.isSafeToUseDebugItems()) {
+    return document.createDocumentFragment();
+  }
+
+  const elementText = document.createElement('div');
+  elementText.classList.add('text');
+  elementText.textContent = 'Internal debug options';
+  const element = document.createElement('div');
+  element.classList.add('element');
+  element.appendChild(elementText);
+  element.appendChild(iconsManager.get('main', 'chevronDown'));
+
+  const elementsGroup = document.createElement('div');
+  elementsGroup.classList.add('elements');
+  elementsGroup.style.setProperty('--id', '0');
+  elementsGroup.appendChild(element);
+
+  const customCodeElement = document.createElement('div');
+  customCodeElement.classList.add('element');
+  customCodeElement.addEventListener('click', () => debug.tryCustomPageCode(false));
+  customCodeElement.style.setProperty('--id', '1');
+  customCodeElement.textContent = 'Try custom page code';
+  elementsGroup.append(customCodeElement);
+
+  const customConfigElement = document.createElement('div');
+  customConfigElement.classList.add('element');
+  customConfigElement.addEventListener('click', () => debug.tryCustomPageCode(true));
+  customConfigElement.style.setProperty('--id', '2');
+  customConfigElement.textContent = 'Try custom config code';
+  elementsGroup.append(customConfigElement);
+
+  const customDataDocsServer = document.createElement('div');
+  customDataDocsServer.classList.add('element');
+  customDataDocsServer.addEventListener('click', () => debug.tryCustomServer());
+  customDataDocsServer.style.setProperty('--id', '3');
+  customDataDocsServer.textContent = 'Try custom server';
+  elementsGroup.append(customDataDocsServer);
+
+  const reloadPage = document.createElement('div');
+  reloadPage.classList.add('element');
+  reloadPage.addEventListener('click', () => debug.reloadPageData());
+  reloadPage.style.setProperty('--id', '4');
+  reloadPage.textContent = 'Reload page data';
+  elementsGroup.append(reloadPage);
+
+  elementsGroup.style.setProperty('--items', '5');
+  element.addEventListener('click', () => elementsGroup.classList.toggle('expanded'));
+
+  return elementsGroup;
+}
+
+function updateActiveFile(file) {
+  onChangeListenerInstance.callInternalListeners(file);
+}
+
+function globalUpdateActiveFile(file) {
+  onChangeListenerInstance.callAllListeners(file);
+}
+
+function resetData() {
+  leftContainer = undefined;
+  leftSidebar = undefined;
+  sidebarSticky = undefined;
+
+  searchResults = undefined;
+  searchInputText;
+
+  currentLoadedSidebarId = undefined;
+  hasLoaded = false;
+}
+
+export {
+  getElement,
+  focusOnSidebar,
+  killSearch,
+  updateMobileVisibilityState,
+  updateDesktopCollapsedState,
+  loadSidebar,
+  updateActiveFile,
+  resetData,
+  onChangeListenerInstance,
+  onCollapsedListenerInstance
+};
