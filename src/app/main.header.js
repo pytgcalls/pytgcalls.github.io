@@ -122,7 +122,6 @@ function createSingleTab(id, ignoreOnChange) {
   const tab = document.createElement('div');
   tab.classList.add('tab');
   tab.addEventListener('click', () => {
-    window.history.pushState('', '', '/' + id);
     globalUpdateActiveTab(id);
   });
   tab.textContent = id;

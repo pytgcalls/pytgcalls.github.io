@@ -29,20 +29,26 @@ function getElement() {
   return fragment;
 }
 
-function loadFile(fileName, hash = '') {
+function loadFile(fileName, hash = '', avoidPushingState = false) {
   const { content, pageSections } = replaceWithValidElements();
 
   const pathFileName = utils.parseCategoryUrl(fileName);
   const indexedCache = indexesManager.getFullIndexedValue(fileName);
 
   if (typeof indexedCache != 'undefined') {
-    window.history.pushState('', '', pathFileName + (hash ?? ''));
+    if (!avoidPushingState) {
+      window.history.pushState('', '', pathFileName + (hash ?? ''));
+    }
+
     handleResponse(fileName, content, pageSections, indexedCache, hash).then(() => {
       handlePathPNManager(content, fileName);
     });
   } else {
     const handleData = (response) => {
-      window.history.pushState('', '', pathFileName + (hash ?? ''));
+      if (!avoidPushingState) {
+        window.history.pushState('', '', pathFileName + (hash ?? ''));
+      }
+
       indexesManager.saveAsFullIndexedValue(fileName, response);
       handleResponse(fileName, content, pageSections, response, hash).then(() => {
         handlePathPNManager(content, fileName);

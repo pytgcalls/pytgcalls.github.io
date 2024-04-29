@@ -39,6 +39,10 @@ window.addEventListener('load', () => {
   }
 });
 
+window.addEventListener('popstate', () => {
+  homePage.handleAsRedirect(window.location.pathname, true);
+});
+
 function reloadScreenData() {
   document.body.style.setProperty('--wd', window.innerWidth.toString());
 }

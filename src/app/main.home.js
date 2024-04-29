@@ -40,6 +40,8 @@ function init(pathName) {
       chooseRightTab(pathName, window.location.hash).then((found) => {
         if (found) {
           headerInstance.highlightTabsForSelection();
+        } else {
+          forceSwitchToHome();
         }
       });
     } else {
@@ -136,7 +138,7 @@ function init(pathName) {
   });
 }
 
-function handleAsRedirect(pathName) {
+function handleAsRedirect(pathName, avoidPushingState = false) {
   if (typeof pathName === 'string') {
     if (!pathName.startsWith('/')) {
       pathName = '/' + pathName;
@@ -147,11 +149,16 @@ function handleAsRedirect(pathName) {
       hash = '#' + pathName.split('#')[1];
       pathName = pathName.split('#')[0];
     }
-    chooseRightTab(pathName, hash);
+
+    chooseRightTab(pathName, hash, avoidPushingState).then((found) => {
+      if (!found) {
+        forceSwitchToHome();
+      }
+    });
   }
 }
 
-function chooseRightTab(pathName, hash) {
+function chooseRightTab(pathName, hash, avoidPushingState = false) {
   return new Promise((resolve) => {
     config.getAvailableCategories().then((ids) => {
       let found = false;
@@ -163,14 +170,8 @@ function chooseRightTab(pathName, hash) {
           headerInstance.updateActiveTab(id);
           const promise = sidebarInstance.loadSidebar(id);
 
-          tryToIndexFilePathFromId(id, pathName, hash, promise);
+          tryToIndexFilePathFromId(id, pathName, hash, promise, avoidPushingState);
         }
-      }
-
-      if (!found) {
-        window.history.pushState('', '', '/');
-        introductionInstance.show();
-        headerInstance.onChangeListenerInstance.callInternalListeners("Documentation");
       }
 
       resolve(found);
@@ -178,14 +179,20 @@ function chooseRightTab(pathName, hash) {
   });
 }
 
-function tryToIndexFilePathFromId(id, pathName, hash, updateActiveFilePromise) {
+function forceSwitchToHome() {
+  window.history.pushState('', '', '/');
+  introductionInstance.show();
+  headerInstance.onChangeListenerInstance.callInternalListeners("Documentation");
+}
+
+function tryToIndexFilePathFromId(id, pathName, hash, updateActiveFilePromise, avoidPushingState = false) {
   config.getAllFilesListFilesById(id).then((files) => {
     let found = false;
 
     for (const file of files) {
       if (utils.parseCategoryUrl(file) === decodeURI(pathName)) {
         found = true;
-        updateLoadedFile(file, hash, updateActiveFilePromise);
+        updateLoadedFile(file, hash, updateActiveFilePromise, avoidPushingState);
         break;
       }
     }
@@ -193,14 +200,14 @@ function tryToIndexFilePathFromId(id, pathName, hash, updateActiveFilePromise) {
     if (!found) {
       config.getFilesListDefaultFileById(id).then((file) => {
         if (typeof file == 'string') {
-          updateLoadedFile(file, null, updateActiveFilePromise);
+          updateLoadedFile(file, null, updateActiveFilePromise, avoidPushingState);
         }
       });
     }
   });
 }
 
-function updateLoadedFile(file, hash, updateActiveFilePromise) {
+function updateLoadedFile(file, hash, updateActiveFilePromise, avoidPushingState = false) {
   updateActiveFilePromise.then(() => {
     requestAnimationFrame(() => {
       sidebarInstance.updateActiveFile(file);
@@ -211,7 +218,7 @@ function updateLoadedFile(file, hash, updateActiveFilePromise) {
   headerInstance.updateCompassExpandedState(false);
   headerInstance.updateTabsMobileVisibility(false);
   sidebarInstance.updateMobileVisibilityState(false);
-  contentInstance.loadFile(file, hash);
+  contentInstance.loadFile(file, hash, avoidPushingState);
 }
 
 function handleCustomCodeInsert(data) {
