@@ -152,7 +152,7 @@ function handleAsRedirect(pathName, avoidPushingState = false) {
 
     chooseRightTab(pathName, hash, avoidPushingState).then((found) => {
       if (!found) {
-        forceSwitchToHome();
+        forceSwitchToHome(avoidPushingState);
       }
     });
   }
@@ -179,10 +179,13 @@ function chooseRightTab(pathName, hash, avoidPushingState = false) {
   });
 }
 
-function forceSwitchToHome() {
-  window.history.pushState('', '', '/');
+function forceSwitchToHome(avoidPushingState = false) {
   introductionInstance.show();
-  headerInstance.onChangeListenerInstance.callInternalListeners("Documentation");
+
+  if (!avoidPushingState) {
+    window.history.pushState('', '', '/');
+    headerInstance.onChangeListenerInstance.callInternalListeners("Documentation");
+  }
 }
 
 function tryToIndexFilePathFromId(id, pathName, hash, updateActiveFilePromise, avoidPushingState = false) {
