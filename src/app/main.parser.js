@@ -909,30 +909,26 @@ function handleGithubRef(element) {
   const githubCacheKey = 'githubData_' + element.getAttribute('user') + '_' + element.getAttribute('reponame');
 
   const isValidCacheContent = (cacheContent, checkingFromCache = false) => {
-    try {
-      let isValidContent = (
-          typeof cacheContent['full_name'] == 'string' && cacheContent['full_name'].trim()
-          && (typeof cacheContent['description'] == 'string' || cacheContent['description'] == null)
-          && typeof cacheContent['html_url'] == 'string' && cacheContent['html_url'].trim()
-          && typeof cacheContent['owner'] == 'object'
-          && typeof cacheContent['owner']['avatar_url'] == 'string' && cacheContent['owner']['avatar_url'].trim()
-          && typeof cacheContent['language'] == 'string' && cacheContent['language'].trim()
-          && typeof cacheContent['forks'] == 'number'
-          && typeof cacheContent['stargazers_count'] == 'number'
+    let isValidContent = (
+        typeof cacheContent['full_name'] == 'string' && cacheContent['full_name'].trim()
+        && (typeof cacheContent['description'] == 'string' || cacheContent['description'] == null)
+        && typeof cacheContent['html_url'] == 'string' && cacheContent['html_url'].trim()
+        && typeof cacheContent['owner'] == 'object'
+        && typeof cacheContent['owner']['avatar_url'] == 'string' && cacheContent['owner']['avatar_url'].trim()
+        && typeof cacheContent['language'] == 'string' && cacheContent['language'].trim()
+        && typeof cacheContent['forks'] == 'number'
+        && typeof cacheContent['stargazers_count'] == 'number'
+    );
+
+    if (checkingFromCache && isValidContent) {
+      isValidContent = (
+          typeof cacheContent['svd_time'] == 'number'
+          && (new Date().getTime() - cacheContent['svd_time']) < 86400 * 1000
+          // max cache 1d
       );
+    }
 
-      if (checkingFromCache && isValidContent) {
-        isValidContent = (
-            typeof cacheContent['svd_time'] == 'number'
-            && (new Date().getTime() - cacheContent['svd_time']) < 86400 * 1000
-            // max cache 1d
-        );
-      }
-
-      return isValidContent;
-    } catch (e) {}
-
-    return false;
+    return isValidContent;
   };
 
   const filterResponse = (cacheContent) => {
