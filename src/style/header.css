@@ -69,11 +69,11 @@ body .header .menu div:first-child {
 }
 
 body .header .menu div:nth-child(2) {
-  top: calc(50% - 2.5px);
+  top: calc(50% - 3px);
 }
 
 body .header .menu div:nth-child(3) {
-  top: calc(100% - 5px);
+  top: calc(100% - 6px);
 }
 
 body .header .menu.show div:first-child,

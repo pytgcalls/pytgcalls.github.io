@@ -1,11 +1,11 @@
 body .page-container .content {
   box-sizing: border-box;
-  overflow-y: scroll;
   width: 60vw;
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
   overflow-wrap: anywhere;
+  padding: 30px;
 }
 
 body.as-home .page-container .content {
@@ -67,8 +67,6 @@ body .page-container .content.disappear {
 }
 
 body .page-container .content:not(.is-loading) {
-  box-sizing: border-box;
-  padding: 30px;
   color: #FFFFFF;
 }
 
@@ -494,7 +492,7 @@ body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-con
   transition: 0.4s opacity;
 }
 
-body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag.success .icon-containr:not(.success) {
+body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag.success .icon-container:not(.success) {
   opacity: 0;
 }
 
@@ -827,8 +825,7 @@ body .page-container .content:not(.is-loading) .page .alert[data-type="p2p"]>.al
 body .page-container .content:not(.is-loading) .page .alert[data-type="p2p"] .alert-content {
   max-width: 80%;
   margin-inline: auto;
-  padding: 0;
-  padding-bottom: 20px;
+  padding: 0 0 20px;
   color: rgba(255, 255, 255, 0.7);
 }
 

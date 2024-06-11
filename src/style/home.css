@@ -139,17 +139,15 @@ body .page-container .home-container .introduction .background div {
 
 @media screen and (max-width: 1279px) {
   body .page-container .home-container .introduction .background .background-image {
-    background: url(/src/assets/hero-background.jpg) no-repeat center;
+    background: url(/src/assets/hero-background.jpg) no-repeat 50% 75%;
     background-size: 140%;
-    background-position: 50% 75%;
   }
 }
 
 @media screen and (min-width: 1280px) {
   body .page-container .home-container .introduction .background .background-image {
-    background: url(/src/assets/hero-background-lg.webp) no-repeat center;
+    background: url(/src/assets/hero-background-lg.webp) no-repeat 50% 75%;
     background-size: 140%;
-    background-position: 50% 75%;
   }
 }
 
@@ -1000,8 +998,7 @@ body .page-container .home-container .footer .links-container {
 
 @media screen and (max-width: 850px) {
   body .page-container .home-container .footer .links-container {
-    padding: 0;
-    padding-bottom: 30px;
+    padding: 0 0 30px;
     align-items: flex-start;
     justify-content: center;
     flex-direction: column;
