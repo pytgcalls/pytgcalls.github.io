@@ -70,6 +70,7 @@ function handleCustomCodeInsert(data) {
   }
 
   const { content, pageSections } = replaceWithValidElements();
+  // noinspection JSIgnoredPromiseFromCall
   handleResponse("", content, pageSections, data, "");
 }
 
@@ -208,9 +209,9 @@ function handleHash(data, hash) {
   }
 }
 
-function iterPageSectionsData(container, currentDom, childsLimit = Infinity) {
+function iterPageSectionsData(container, currentDom, childrenLimit = Infinity) {
   for (const [id, element] of container.childNodes.entries()) {
-    if (id > childsLimit) {
+    if (id > childrenLimit) {
       break;
     }
 

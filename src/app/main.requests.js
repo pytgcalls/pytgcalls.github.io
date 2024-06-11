@@ -15,7 +15,7 @@ function initRequest(fileName, repoName = 'pytgcalls/docsdata') {
       doesLoadViaUserContentWork = false;
 
       if (isUsingAnAlternative) {
-        alert("Connection to your custom datadocs server failed! We're using GitHub as fallback. Check your port.");
+        alert("Connection to your custom docsdata server failed! We're using GitHub as fallback. Check your port.");
       }
 
       tryToLoadWithApi(repoName, fileName).then(resolve).catch(reject);
@@ -34,7 +34,7 @@ function setAsDebugAlternative(original, alternative) {
 
 function tryToLoadWithUserContent(repoName, fileName) {
   if (!doesLoadViaUserContentWork) {
-    return Promise.reject('Ignoring githubusercontent as it isnt available');
+    return Promise.reject('Ignoring githubusercontent as it isn\'t available');
   } else {
     return new Promise((resolve, reject) => {
       let completeUrl = 'https://raw.githubusercontent.com/' + repoName + '/master/' + fileName;
@@ -90,7 +90,7 @@ function retrievePackageData() {
     pypiDataPromise = new Promise((resolve, reject) => {
       const packageName = config.getOptionValueByIdSync('PYPI_PACKAGE');
       if (!packageName) {
-        throw new Error('PYPI_PACKAGE isnt\'t a valid config option');
+        throw new Error('PYPI_PACKAGE isn\'t a valid config option');
       }
 
       const XML = new XMLHttpRequest();

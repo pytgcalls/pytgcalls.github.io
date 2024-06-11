@@ -326,7 +326,7 @@ function checkAndManageElement(element, newElement, elementDom) {
     newElement.target = '_blank';
 
     if (!element.hasAttribute('reponame') || !element.hasAttribute('user')) {
-      throw new Error('invalid reponame/user for github-ref');
+      throw new Error('invalid repository name/user for github-ref');
     }
 
     newElement.setAttribute('reponame', element.getAttribute('reponame'));
@@ -588,18 +588,18 @@ function handleSyntaxHighlight(element, newElement, hideTags = false, customText
     const copyTag = document.createElement('div');
     copyTag.classList.add('tag', 'is-clickable');
     copyTag.addEventListener('click', () => {
-      utils.copyToClipboard(element.textContent).then((state) => {
-        if (state) {
-          if (successTimeout) {
-            clearTimeout(successTimeout);
-          }
-
-          copyTag.classList.add('success');
-          successTimeout = setTimeout(() => {
-            copyTag.classList.remove('success');
-            successTimeout = undefined;
-          }, 3000);
+      utils.copyToClipboard(element.textContent).then(() => {
+        if (successTimeout) {
+          clearTimeout(successTimeout);
         }
+
+        copyTag.classList.add('success');
+        successTimeout = setTimeout(() => {
+          copyTag.classList.remove('success');
+          successTimeout = undefined;
+        }, 3000);
+      }).catch(() => {
+
       });
     });
     copyTag.appendChild(copyTagSuccess);
@@ -634,28 +634,6 @@ function handleTabsWithSpacer(code) {
   }
 
   return code;
-}
-
-function getRowStartSpaces(row, firstRow) {
-  let spacesCount = 0;
-  for (let i = 0; i < row.length; i++) {
-    if (row[i] === ' ') {
-      spacesCount++;
-    } else {
-      break;
-    }
-  }
-
-  let firstRowSpaces = 0;
-  for (let i = 0; i < firstRow.length; i++) {
-    if (firstRow[i] === ' ') {
-      firstRowSpaces++;
-    } else {
-      break;
-    }
-  }
-
-  return firstRowSpaces > spacesCount ? 0 : spacesCount - firstRowSpaces;
 }
 
 function handleMultiSyntax(element, newElement) {
@@ -981,11 +959,11 @@ function handleGithubRef(element) {
 function handleSearchIndexByText(text) {
   const domHelper = new DOMParser();
   const dom = domHelper.parseFromString(text, 'application/xml');
-  const childs = dom.querySelectorAll('h1, h2, h3, text, subtext, category-title');
+  const children = dom.querySelectorAll('h1, h2, h3, text, subtext, category-title');
 
   let finalText = '';
 
-  for (const child of childs) {
+  for (const child of children) {
     tryToReduceTags(child);
     finalText += ' ' + child.textContent;
   }

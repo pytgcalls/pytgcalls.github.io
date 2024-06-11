@@ -433,7 +433,7 @@ function resetData() {
   sidebarSticky = undefined;
 
   searchResults = undefined;
-  searchInputText;
+  searchInputText = undefined;
 
   currentLoadedSidebarId = undefined;
   hasLoaded = false;

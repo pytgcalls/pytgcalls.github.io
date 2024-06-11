@@ -50,8 +50,8 @@ function parse(textElement) {
 }
 
 function unifiedToNative(unified) {
-  const unicodes = unified.split('-');
-  const codePoints = unicodes.map((i) => parseInt(i, 16));
+  const unicode = unified.split('-');
+  const codePoints = unicode.map((i) => parseInt(i, 16));
   return String.fromCodePoint(...codePoints);
 }
 
@@ -80,7 +80,7 @@ function nativeToUnified(emoji) {
         pairs.push(emoji.charCodeAt(i));
       }
     }
-    code = pairs.map((x) => x.toString(16).padStart(4, '0')).join('-');
+    code = pairs.map((x) => x.toString().padStart(4, '0')).join('-');
   }
 
   return code;

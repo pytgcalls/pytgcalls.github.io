@@ -195,7 +195,7 @@ function getTheNextFileAfter(fileName) {
       }
 
       if (typeof detectedId == 'undefined') {
-        reject('dcid not found');
+        reject('detected id not found');
       } else {
         const filesListElements = detectedId.querySelectorAll('file');
 

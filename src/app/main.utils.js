@@ -91,7 +91,11 @@ function escapeHTML(text) {
 }
 
 function copyToClipboard(text) {
-  if (!navigator.clipboard) {
+  if (navigator.clipboard) {
+    return navigator.clipboard.writeText(text);
+  }
+
+  if (document.execCommand) {
     const textarea = document.createElement('textarea');
     textarea.style.top = "0";
     textarea.style.left = "0";
@@ -102,12 +106,12 @@ function copyToClipboard(text) {
     textarea.select();
 
     const successful = document.execCommand("copy");
-    return Promise.resolve(successful);
-  } else {
-    return new Promise((resolve) => {
-      navigator.clipboard.writeText(text).then(() => resolve(true)).catch(() => resolve(false));
-    });
+    if (successful) {
+      return Promise.resolve();
+    }
   }
+
+  return Promise.reject();
 }
 
 export {
