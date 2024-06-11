@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2020-2024.
+ *
+ *  The code in this file is part of the PyTgCalls project.
+ *  Please refer to official links:
+ *  * Repo: https://github.com/pytgcalls
+ *  * News: https://t.me/pytgcallsnews
+ *  * Chat: https://t.me/pytgcallschat
+ *  * Documentation: https://pytgcalls.github.io
+ *
+ *  We consider these above sources to be the only official
+ *  sources for news related to this source code.
+ *  With <3 by @kuogi (and the fox!)
+ */
+
 function createLoadingItem(size = 100) {
   const circleItem = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
   circleItem.setAttributeNS(null, 'cx', '50%');
