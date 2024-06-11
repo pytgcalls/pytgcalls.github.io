@@ -906,7 +906,115 @@ function handleGithubRef(element) {
   element.classList.add('is-loading');
   element.appendChild(loader);
 
+  const githubCacheKey = 'githubData_' + element.getAttribute('user') + '_' + element.getAttribute('reponame');
+
+  const isValidCacheContent = (cacheContent, checkingFromCache = false) => {
+    try {
+      let isValidContent = (
+          typeof cacheContent['full_name'] == 'string' && cacheContent['full_name'].trim()
+          && (typeof cacheContent['description'] == 'string' || cacheContent['description'] == null)
+          && typeof cacheContent['html_url'] == 'string' && cacheContent['html_url'].trim()
+          && typeof cacheContent['owner'] == 'object'
+          && typeof cacheContent['owner']['avatar_url'] == 'string' && cacheContent['owner']['avatar_url'].trim()
+          && typeof cacheContent['language'] == 'string' && cacheContent['language'].trim()
+          && typeof cacheContent['forks'] == 'number'
+          && typeof cacheContent['stargazers_count'] == 'number'
+      );
+
+      if (checkingFromCache && isValidContent) {
+        isValidContent = (
+            typeof cacheContent['svd_time'] == 'number'
+            && (new Date().getTime() - cacheContent['svd_time']) < 86400 * 1000
+            // max cache 1d
+        );
+      }
+
+      return isValidContent;
+    } catch (e) {}
+
+    return false;
+  };
+
+  const filterResponse = (cacheContent) => {
+    return {
+      full_name: cacheContent['full_name'],
+      description: cacheContent['description'],
+      html_url: cacheContent['html_url'],
+      owner: {
+        avatar_url: cacheContent['owner']['avatar_url']
+      },
+      language: cacheContent['language'],
+      forks: cacheContent['forks'],
+      stargazers_count: cacheContent['stargazers_count'],
+      svd_time: cacheContent['svd_time']
+    };
+  }
+
+  const handleElementUpdate = (response) => {
+    requestAnimationFrame(() => {
+      const recommendedIcon = iconsManager.get('main', 'star');
+      const recommendedBadge = document.createElement('div');
+      recommendedBadge.classList.add('recommended-badge');
+      recommendedBadge.appendChild(recommendedIcon);
+      recommendedBadge.appendChild(document.createTextNode('Recommended by our staff'));
+
+      const repoTitle = document.createElement('div');
+      repoTitle.classList.add('repo-title');
+      repoTitle.textContent = response['full_name'];
+      const repoDescription = document.createElement('div');
+      repoDescription.classList.add('repo-description');
+      repoDescription.textContent = response['description'];
+      const repoDetails = document.createElement('div');
+      repoDetails.classList.add('repo-details');
+      repoDetails.appendChild(repoTitle);
+      repoDetails.appendChild(repoDescription);
+
+      const repoOwnerImage = document.createElement('img');
+      repoOwnerImage.src = response['owner']['avatar_url'];
+      const repoPresentation = document.createElement('div');
+      repoPresentation.classList.add('repo-presentation');
+      repoPresentation.appendChild(repoDetails);
+      repoPresentation.appendChild(repoOwnerImage);
+
+      const repoLanguage = document.createElement('div');
+      repoLanguage.classList.add('value', 'repo-language');
+      repoLanguage.style.setProperty('--color', getLanguageColorByName(response['language']));
+      repoLanguage.textContent = response['language'];
+      const repoStars = document.createElement('div');
+      repoStars.classList.add('value', 'repo-stars');
+      repoStars.appendChild(iconsManager.get('main', 'star'));
+      repoStars.appendChild(document.createTextNode(response['stargazers_count']));
+      const repoForks = document.createElement('div');
+      repoForks.classList.add('value', 'repo-forks');
+      repoForks.appendChild(iconsManager.get('main', 'codeFork'));
+      repoForks.appendChild(document.createTextNode(response['forks']));
+      const repoValues = document.createElement('div');
+      repoValues.classList.add('repo-values');
+      repoValues.appendChild(repoLanguage);
+      repoValues.appendChild(repoStars);
+      repoValues.appendChild(repoForks);
+
+      element.classList.remove('is-loading');
+      element.textContent = '';
+      element.setAttribute('href', response['html_url']);
+      element.appendChild(recommendedBadge);
+      element.appendChild(repoPresentation);
+      element.appendChild(repoValues);
+    });
+  };
+
   requestAnimationFrame(() => {
+    const dataFromCache = localStorage.getItem(githubCacheKey);
+    if (dataFromCache) {
+      try {
+        const parsedData = JSON.parse(dataFromCache);
+        if (isValidCacheContent(parsedData, true)) {
+          handleElementUpdate(parsedData);
+          return;
+        }
+      } catch(e) {}
+    }
+
     const XML = new XMLHttpRequest();
     XML.open('GET', 'https://api.github.com/repos/' + element.getAttribute('user') + '/' + element.getAttribute('reponame'), true);
     XML.send();
@@ -917,54 +1025,12 @@ function handleGithubRef(element) {
         if (response['message']) {
           throw new Error('the repository is invalid');
         } else {
-          const recommendedIcon = iconsManager.get('main', 'star');
-          const recommendedBadge = document.createElement('div');
-          recommendedBadge.classList.add('recommended-badge');
-          recommendedBadge.appendChild(recommendedIcon);
-          recommendedBadge.appendChild(document.createTextNode('Recommended by our staff'));
+          if (isValidCacheContent(response)) {
+            handleElementUpdate(response);
 
-          const repoTitle = document.createElement('div');
-          repoTitle.classList.add('repo-title');
-          repoTitle.textContent = response['full_name'];
-          const repoDescription = document.createElement('div');
-          repoDescription.classList.add('repo-description');
-          repoDescription.textContent = response['description'];
-          const repoDetails = document.createElement('div');
-          repoDetails.classList.add('repo-details');
-          repoDetails.appendChild(repoTitle);
-          repoDetails.appendChild(repoDescription);
-
-          const repoOwnerImage = document.createElement('img');
-          repoOwnerImage.src = response['owner']['avatar_url'];
-          const repoPresentation = document.createElement('div');
-          repoPresentation.classList.add('repo-presentation');
-          repoPresentation.appendChild(repoDetails);
-          repoPresentation.appendChild(repoOwnerImage);
-
-          const repoLanguage = document.createElement('div');
-          repoLanguage.classList.add('value', 'repo-language');
-          repoLanguage.style.setProperty('--color', getLanguageColorByName(response['language']));
-          repoLanguage.textContent = response['language'];
-          const repoStars = document.createElement('div');
-          repoStars.classList.add('value', 'repo-stars');
-          repoStars.appendChild(iconsManager.get('main', 'star'));
-          repoStars.appendChild(document.createTextNode(response['stargazers_count']));
-          const repoForks = document.createElement('div');
-          repoForks.classList.add('value', 'repo-forks');
-          repoForks.appendChild(iconsManager.get('main', 'codeFork'));
-          repoForks.appendChild(document.createTextNode(response['forks']));
-          const repoValues = document.createElement('div');
-          repoValues.classList.add('repo-values');
-          repoValues.appendChild(repoLanguage);
-          repoValues.appendChild(repoStars);
-          repoValues.appendChild(repoForks);
-
-          element.classList.remove('is-loading');
-          element.textContent = '';
-          element.setAttribute('href', response['html_url']);
-          element.appendChild(recommendedBadge);
-          element.appendChild(repoPresentation);
-          element.appendChild(repoValues);
+            response['svd_time'] = new Date().getTime();
+            localStorage.setItem(githubCacheKey, JSON.stringify(filterResponse(response)));
+          }
         }
       }
     });
