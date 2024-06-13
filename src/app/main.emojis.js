@@ -95,7 +95,7 @@ function nativeToUnified(emoji) {
         pairs.push(emoji.charCodeAt(i));
       }
     }
-    code = pairs.map((x) => x.toString().padStart(4, '0')).join('-');
+    code = pairs.map((x) => x.toString(16).padStart(4, '0')).join('-');
   }
 
   return code;
