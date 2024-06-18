@@ -244,7 +244,7 @@ function checkAndManageElement(element, newElement, elementDom) {
       presentationTitle.textContent = element.getAttribute('presentationtitle') || 'PyTgCalls';
       const presentationDescription = document.createElement('div');
       presentationDescription.classList.add('pres-description');
-      presentationDescription.textContent = element.getAttribute('presentationdescription') || 'Async client API for the Telegram group calls';
+      presentationDescription.textContent = element.getAttribute('presentationdescription') || 'Async client API for the Telegram calls';
       const presentation = document.createElement('div');
       presentation.classList.add('lib-details');
       presentation.appendChild(presentationTitle);

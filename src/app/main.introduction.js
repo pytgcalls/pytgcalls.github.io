@@ -68,7 +68,7 @@ function composeContainer() {
 
   const bigTitle = document.createElement('div');
   bigTitle.classList.add('bigtitle');
-  bigTitle.innerHTML = 'A simplified implementation of<br/>Telegram Group Calls in a<br/>seamless way';
+  bigTitle.innerHTML = 'A simplified implementation of<br/>Telegram Calls in a<br/>seamless way';
   const buttonIcon = document.createElement('div');
   buttonIcon.classList.add('button-icon');
   buttonIcon.appendChild(document.createElement('div'));
