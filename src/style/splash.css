@@ -208,6 +208,13 @@ body .splash .audio-shader .shader .description {
   }
 }
 
+body .splash.faster {
+  transition: 0.4s opacity;
+}
+
+body .splash.faster:not(.show) {
+  opacity: 0;
+}
 
 body .splash.faster>svg {
   animation: 0.9s rotateSvg linear infinite;

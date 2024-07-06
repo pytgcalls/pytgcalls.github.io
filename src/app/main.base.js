@@ -22,6 +22,13 @@ window.addEventListener('load', () => {
   if (splashScreen) {
     let promisesList = [];
 
+    let splashTimeout;
+    if (splashScreen.classList.contains('faster')) {
+      splashTimeout = setTimeout(() => {
+        splashScreen.classList.add('show');
+      }, 300);
+    }
+
     promisesList.push(new Promise((resolve) => {
       if (splashScreen.classList.contains('faster')) {
         resolve();
@@ -37,6 +44,10 @@ window.addEventListener('load', () => {
     promisesList.push(config.loadConfig());
 
     Promise.all(promisesList).then(() => {
+      if (typeof splashTimeout != 'undefined') {
+        clearTimeout(splashTimeout);
+      }
+
       if (devicesManager.isAndroid()) {
         document.body.classList.add('disable-blur');
       }
