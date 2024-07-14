@@ -21,6 +21,7 @@ import {handleRecursive} from "./main.parser.js";
 import {globalUpdateActiveFile} from "./main.sidebar.js";
 import * as tooltip from "./main.tooltip.js";
 
+let isAnimating = 0;
 let lastStartByElement;
 let searchTextElement;
 let searchTextFullElement;
@@ -98,6 +99,7 @@ function openSearchContainer(startBy) {
     searchTextFullAnimation.addEventListener('animationend', () => {
         searchContainer.classList.remove('animate-appear');
         searchTextFullAnimation.remove();
+        isAnimating--;
 
         if (hasAlreadyText) {
             handleSearch();
@@ -117,6 +119,7 @@ function openSearchContainer(startBy) {
         }
     }
 
+    isAnimating++;
     updateSearchAnimationState(searchTextFullAnimation, startByRect, searchTextFull.getBoundingClientRect());
     searchContainer.classList.add('animate-appear');
     startBy.classList.add('opened');
@@ -314,50 +317,61 @@ function closeSearch() {
         return;
     }
 
-    if (searchContainerElement.querySelector('.animated') !== null) {
+    if (isAnimating !== 0 || searchContainerElement.querySelector('.animated') !== null) {
         return;
     }
 
-    const searchTextFullAnimation = searchTextFullElement.cloneNode(true);
-    searchTextFullAnimation.classList.add('animated');
+    const onClosedAdapter = () => {
+        const searchTextFullAnimation = searchTextFullElement.cloneNode(true);
+        searchTextFullAnimation.classList.add('animated');
 
-    if (searchTextFullAnimation.querySelector('.spinner') !== null) {
-        searchTextFullAnimation.querySelector('.spinner').remove();
-    }
-
-    searchContainerElement.prepend(searchTextFullAnimation);
-    updateSearchAnimationState(searchTextFullAnimation, searchTextFullElement.getBoundingClientRect(), lastStartByElement.getBoundingClientRect());
-    searchContainerElement.classList.add('animate-disappear');
-
-    let hasAlreadyText = false;
-    searchTextFullAnimation.addEventListener('animationend', () => {
-        searchContainerElement.remove();
-        lastStartByElement.classList.remove('opened');
-
-        if (hasAlreadyText && localStorage.getItem('searchEndTip') == null) {
-            localStorage.setItem('searchEndTip', 'true');
-
-            const miniText = document.createElement('div');
-            miniText.classList.add('mini-text');
-            miniText.textContent = 'You can resume the search whenever you want by pressing here.';
-
-            const selector = document.createElement('div');
-            selector.classList.add('selector');
-            selector.appendChild(miniText);
-
-            tooltip.init({
-                childElement: selector,
-                container: lastStartByElement
-            });
+        if (searchTextFullAnimation.querySelector('.spinner') !== null) {
+            searchTextFullAnimation.querySelector('.spinner').remove();
         }
 
-        resetData();
-    }, { once: true });
+        searchContainerElement.prepend(searchTextFullAnimation);
+        updateSearchAnimationState(searchTextFullAnimation, searchTextFullElement.getBoundingClientRect(), lastStartByElement.getBoundingClientRect());
+        searchContainerElement.classList.add('animate-disappear');
 
-    const inputByLastStartBy = getInputByLastStartBy();
-    if (inputByLastStartBy !== null) {
-        inputByLastStartBy.value = searchTextElement.value;
-        hasAlreadyText = !!searchTextElement.value.trim();
+        let hasAlreadyText = false;
+        searchTextFullAnimation.addEventListener('animationend', () => {
+            searchContainerElement.remove();
+            lastStartByElement.classList.remove('opened');
+
+            if (hasAlreadyText && localStorage.getItem('searchEndTip') == null) {
+                localStorage.setItem('searchEndTip', 'true');
+
+                const miniText = document.createElement('div');
+                miniText.classList.add('mini-text');
+                miniText.textContent = 'You can resume the search whenever you want by pressing here.';
+
+                const selector = document.createElement('div');
+                selector.classList.add('selector');
+                selector.appendChild(miniText);
+
+                tooltip.init({
+                    childElement: selector,
+                    container: lastStartByElement
+                });
+            }
+
+            resetData();
+        }, { once: true });
+
+        const inputByLastStartBy = getInputByLastStartBy();
+        if (inputByLastStartBy !== null) {
+            inputByLastStartBy.value = searchTextElement.value;
+            hasAlreadyText = !!searchTextElement.value.trim();
+        }
+    };
+
+    isAnimating++;
+
+    if (searchContainerElement.classList.contains('text-is-empty')) {
+        onClosedAdapter();
+    } else {
+        searchContainerElement.classList.add('text-is-empty');
+        searchListAdapterElement.addEventListener('transitionend', onClosedAdapter, { once: true });
     }
 }
 
@@ -397,6 +411,7 @@ function recomposeCodePath(pathName) {
 }
 
 function resetData() {
+    isAnimating = 0;
     lastStartByElement = undefined;
     searchTextElement = undefined;
     searchTextFullElement = undefined;

@@ -169,7 +169,7 @@ body .search-container .search-results {
 
 body .search-container.animate-appear .search-results,
 body .search-container.animate-disappear .search-results {
-    visibility: hidden;
+    opacity: 0;
 }
 
 body .search-container .search-results::before {
