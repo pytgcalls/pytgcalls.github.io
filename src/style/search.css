@@ -357,7 +357,7 @@ body .search-container .search-results .list-adapter .row .page-container::befor
     left: 0;
     width: 100%;
     height: 100%;
-    transition: 0.4s transform;
+    transition: 0.4s transform, 0.4s filter;
 }
 
 body .search-container .search-results .list-adapter .row .page-container::before {
@@ -382,7 +382,7 @@ body .search-container .search-results .list-adapter .row .page-container::befor
 
 body .search-container .search-results .list-adapter .row .page-container:not(.is-loading)::before {
     animation-play-state: paused;
-    transform: scale(0);
+    filter: opacity(0);
 }
 
 body .search-container .search-results .list-adapter .row .page-container .ids {

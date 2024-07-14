@@ -70,9 +70,13 @@ function openSearchContainer(startBy) {
     const searchContainer = document.createElement('div');
     searchContainer.classList.add('search-container', 'text-is-empty');
     searchContainer.addEventListener('click', (e) => {
-       if (e.target !== searchResultsFull && !searchResultsFull.contains(e.target)) {
-           closeSearch();
-       }
+        let isOutside = e.target !== searchResultsFull && !searchResultsFull.contains(e.target);
+
+        if (searchContainer.classList.contains('text-is-empty') && (e.target === searchResultsFull || searchResultsFull.contains(e.target)) && e.target !== searchTextFull && !searchTextFull.contains(e.target)) {
+            isOutside = true;
+        }
+
+        isOutside && closeSearch();
     });
     searchContainer.appendChild(searchTextFullAnimation);
     searchContainer.appendChild(searchResultsFull);
@@ -99,13 +103,10 @@ function openSearchContainer(startBy) {
     searchTextFullAnimation.addEventListener('animationend', () => {
         searchContainer.classList.remove('animate-appear');
         searchTextFullAnimation.remove();
+        searchText.focus();
         isAnimating--;
 
-        if (hasAlreadyText) {
-            handleSearch();
-        } else {
-            searchText.focus();
-        }
+        hasAlreadyText && handleSearch();
     }, { once: true });
 
     const inputByLastStartBy = getInputByLastStartBy();
@@ -219,7 +220,7 @@ function expandContainer(fullResultsList) {
 }
 
 function scheduleSearch(onSearchReady) {
-    if (typeof currentSearchTimeout != 'undefined') {
+    if (currentSearchTimeout !== null) {
         clearTimeout(currentSearchTimeout);
         currentSearchTimeout = undefined;
     }
@@ -411,6 +412,10 @@ function recomposeCodePath(pathName) {
 }
 
 function resetData() {
+    if (currentSearchTimeout !== null) {
+        clearTimeout(currentSearchTimeout);
+    }
+
     isAnimating = 0;
     lastStartByElement = undefined;
     searchTextElement = undefined;
