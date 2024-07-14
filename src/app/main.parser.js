@@ -21,6 +21,7 @@ import * as config from "./main.config.js";
 import * as homePage from "./main.home.js";
 import patienceDiff from "../lib/patiencediff.js";
 import Prism from "../lib/prism.js";
+import {getCollapseLongCodeStatus} from "./main.settings.js";
 
 const AVAILABLE_ELEMENTS = [
   'H1', 'H2', 'H3', 'H4', 'SEPARATOR',
@@ -83,7 +84,7 @@ function handleRecursive(currentDom, elementDom) {
           throw new Error("Syntax highlight can't contain other tags");
         }
 
-        handleSyntaxHighlight(element, newElement);
+        newElement = handleSyntaxHighlight(element, newElement, false, '', element.tagName.toUpperCase() == 'SHI');
         elementDom.appendChild(newElement);
       } else if (element.tagName.toUpperCase() === 'GITHUB-REF') {
         handleGithubRef(newElement);
@@ -546,7 +547,7 @@ function handlePostQueryElement(element, newElement) {
   return newElement;
 }
 
-function handleSyntaxHighlight(element, newElement, hideTags = false, customTextContent = '') {
+function handleSyntaxHighlight(element, newElement, hideTags = false, customTextContent = '', forceDisableCollapse = false) {
   let code = customTextContent || element.textContent;
   code = Prism.highlight(code, detectLanguageByElement(element).prism, 'html');
   code = code.replaceAll('\n', '<br/>');
@@ -555,9 +556,11 @@ function handleSyntaxHighlight(element, newElement, hideTags = false, customText
     code = code.slice(5);
   }
 
+  const rows = code.split('<br/>').length;
+
   code = handleTabsWithSpacer(code);
   newElement.innerHTML = code;
-  newElement.style.setProperty('--length', String(code.split('<br/>').length - 1));
+  newElement.style.setProperty('--length', String(rows - 1));
 
   const updateMark = (startAt, endAt) => {
     newElement.style.setProperty('--start-mark', startAt);
@@ -627,6 +630,26 @@ function handleSyntaxHighlight(element, newElement, hideTags = false, customText
     tagsContainer.appendChild(copyTag);
     newElement.appendChild(tagsContainer);
   }
+
+  return forceDisableCollapse ? newElement : updateSyntaxHighlightWithCollapsable(newElement, rows);
+}
+
+function updateSyntaxHighlightWithCollapsable(element, rows) {
+  const isExpandable = rows > 9 && getCollapseLongCodeStatus();
+
+  const expandableView = document.createElement('div');
+  expandableView.classList.add('expandable');
+  expandableView.addEventListener('click', () => externalContainer.classList.add('expanded', 'with-animation'));
+  expandableView.textContent = 'Click to expand';
+  expandableView.prepend(iconsManager.get('main', 'chevronDown').firstChild);
+
+  const externalContainer = document.createElement('div');
+  externalContainer.classList.add('external-sh');
+  externalContainer.classList.toggle('expanded', !isExpandable);
+  externalContainer.appendChild(element);
+  isExpandable && externalContainer.appendChild(expandableView);
+
+  return externalContainer;
 }
 
 function handleTabsWithSpacer(code) {
@@ -667,6 +690,7 @@ function handleMultiSyntax(element, newElement) {
   }
 
   if (exportAsBlame && element.querySelectorAll('syntax-highlight').length !== 2) {
+    console.log(element, element.parentElement);
     throw new Error('multisyntax must contains 2 elements to enable as-blame-mode');
   }
 
@@ -731,7 +755,7 @@ function handleMultiSyntax(element, newElement) {
       newElement.classList.remove('multisyntax');
       newElement.classList.add('syntax-highlight');
       newElement.classList.add('has-blame');
-      handleSyntaxHighlight(fakeResyntaxElement, newElement, true, finalCode);
+      newElement = handleSyntaxHighlight(fakeResyntaxElement, newElement, true, finalCode);
 
       for (const addedRow of addedRows) {
         const tempMark = document.createElement('div');
@@ -825,7 +849,8 @@ function handleMultiSyntax(element, newElement) {
       throw new Error("Syntax highlight can't contain other tags");
     }
 
-    handleSyntaxHighlight(syntax, syntaxElement, true);
+    syntaxElement = handleSyntaxHighlight(syntax, syntaxElement, true);
+
     syntaxHighlightContainer.appendChild(syntaxElement);
 
     homePage.onChangeFavoriteSyntaxTab.addListener({
@@ -1033,26 +1058,11 @@ function handleGithubRef(element) {
   });
 }
 
-function handleSearchIndexByText(text) {
-  const domHelper = new DOMParser();
-  const dom = domHelper.parseFromString(text, 'application/xml');
-  const children = dom.querySelectorAll('h1, h2, h3, text, subtext, category-title');
-
-  let finalText = '';
-
-  for (const child of children) {
-    tryToReduceTags(child);
-    finalText += ' ' + child.textContent;
-  }
-
-  return finalText;
-}
-
 function handleHomepageSyntaxHighlightElement(element) {
   let newElement = document.createElement('div');
   tryToReduceTags(element);
   newElement = checkAndManageElement(element, newElement, document.createElement('div'));
-  handleSyntaxHighlight(element, newElement, true);
+  newElement = handleSyntaxHighlight(element, newElement, true, '', true);
   return newElement;
 }
 
@@ -1060,6 +1070,7 @@ export {
   getContentByData,
   detectLanguageByElement,
   getLanguageColorByName,
-  handleSearchIndexByText,
   handleHomepageSyntaxHighlightElement,
+  tryToReduceTags,
+  handleRecursive,
 };

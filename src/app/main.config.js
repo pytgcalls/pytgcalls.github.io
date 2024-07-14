@@ -160,14 +160,7 @@ function getAvailableCategories() {
       const dom = domHelper.parseFromString(config, 'application/xml');
       const filesListElements = dom.querySelectorAll('config > files-list');
 
-      let finalList = [];
-      for (const element of filesListElements) {
-        if (element.hasAttribute('id')) {
-          finalList.push(element.getAttribute('id'));
-        }
-      }
-
-      resolve(finalList);
+      resolve([...filesListElements].filter((x) => x.hasAttribute('id') && x.hasAttribute('description')));
     });
   });
 }

@@ -34,31 +34,12 @@ let currentLoadedSidebarId;
 let hasLoaded = false;
 
 function getElement() {
-  const { searchInput, searchResults } = createSearchBar();
   const leftSidebarElement = document.createElement('div');
   leftSidebarElement.classList.add('left-sidebar', 'expanded');
   leftSidebar = leftSidebarElement;
 
-  const exploreString = document.createElement('span');
-  exploreString.textContent = 'Explore';
-  const exploreTitle = document.createElement('div');
-  exploreTitle.classList.add('explore');
-  exploreTitle.appendChild(exploreString);
-
-  const sidebarStickyElement = document.createElement('div');
-  sidebarStickyElement.classList.add('sidebar-sticky');
-  sidebarStickyElement.appendChild(exploreTitle);
-  sidebarStickyElement.appendChild(searchInput);
-  sidebarSticky = sidebarStickyElement;
-
-  leftSidebarElement.addEventListener('scroll', () => {
-    sidebarSticky.classList.toggle('use-mini-title', searchResults.classList.contains('expanded') || leftSidebar.scrollTop > 0);
-  });
-
   const leftContainerElement = document.createElement('div');
   leftContainerElement.classList.add('left-container');
-  leftContainerElement.appendChild(sidebarStickyElement);
-  leftContainerElement.appendChild(searchResults);
   leftContainerElement.appendChild(leftSidebarElement);
   leftContainer = leftContainerElement;
 
@@ -68,16 +49,6 @@ function getElement() {
 function focusOnSidebar() {
   leftContainer.classList.remove('collapsed');
   onCollapsedListenerInstance.callAllListeners(false);
-  killSearch();
-}
-
-function killSearch() {
-  searchResults.classList.remove('expanded');
-  leftSidebar.classList.add('expanded');
-  searchResults.textContent = '';
-  searchInputText.value = '';
-  searchInputText.classList.add('is-empty');
-  sidebarSticky.classList.toggle('use-mini-title', leftSidebar.scrollTop > 0);
 }
 
 function updateMobileVisibilityState(forcedState) {
@@ -87,152 +58,6 @@ function updateMobileVisibilityState(forcedState) {
 
 function updateDesktopCollapsedState(isCollapsed) {
   return leftContainer.classList.toggle('collapsed', isCollapsed);
-}
-
-function createSearchBar() {
-  const searchText = document.createElement('input');
-  searchText.classList.add('is-empty');
-  searchText.placeholder = 'Search...';
-  searchInputText = searchText;
-  const searchCancelIcon = iconsManager.get('main', 'circleXMark');
-  searchCancelIcon.classList.add('cancel');
-  const searchInput = document.createElement('div');
-  searchInput.classList.add('search-input');
-  searchInput.appendChild(iconsManager.get('main', 'magnifyingGlass'));
-  searchInput.appendChild(searchText);
-  searchInput.appendChild(searchCancelIcon);
-
-  const searchResultsContainer = document.createElement('div');
-  searchResultsContainer.classList.add('search-results');
-  searchResults = searchResultsContainer;
-
-  searchCancelIcon.addEventListener('click', () => killSearch());
-
-  let wasExpanded = false;
-  searchInput.addEventListener('input', () => {
-    const expandSearchBar = !!searchText.value.trim().length;
-
-    searchText.classList.toggle('is-empty', !expandSearchBar);
-    searchResultsContainer.classList.toggle('expanded', expandSearchBar);
-    sidebarSticky.classList.toggle('use-mini-title', expandSearchBar);
-    leftSidebar.classList.toggle('expanded', !expandSearchBar);
-
-    if (expandSearchBar && !wasExpanded) {
-      searchResultsContainer.scrollTo(0, 0);
-    }
-
-    if (!expandSearchBar) {
-      sidebarSticky.classList.toggle('use-mini-title', leftSidebar.scrollTop > 0);
-    }
-
-    wasExpanded = expandSearchBar;
-    handleSearchValue(searchText, searchResultsContainer);
-  });
-
-  return {
-    searchInput,
-    searchResults: searchResultsContainer,
-  };
-}
-
-function handleSearchValue(input, results) {
-  config.loadConfig().then(() => {
-    const onSearchReady = (text) => {
-      if (!text.length) {
-        results.textContent = '';
-        results.classList.remove('is-loading');
-        return;
-      }
-
-      let promise;
-      if (typeof currentLoadedSidebarId == 'undefined') {
-        promise = config.getAllFilesListFiles();
-      } else {
-        promise = config.getAllFilesListFilesById(currentLoadedSidebarId);
-      }
-
-      const resultsFragment = document.createDocumentFragment();
-      promise.then((files) => {
-        let hasResults = false;
-
-        for (const file of files) {
-          const fileDataKeys = indexesManager.getIndexedValue(file);
-
-          if (typeof fileDataKeys != 'undefined') {
-            const foundInName = file.toLowerCase().indexOf(text.toLowerCase()) !== -1;
-            const foundInKeys = fileDataKeys.toLowerCase().indexOf(text.toLowerCase()) !== -1;
-
-            if (foundInName || foundInKeys) {
-              hasResults = true;
-              resultsFragment.append(createSingleSearchResult(file, fileDataKeys, foundInName, text));
-            }
-          }
-        }
-
-        if (!hasResults) {
-          const errorText = document.createElement('div');
-          errorText.textContent = 'No results found.';
-          const error = document.createElement('div');
-          error.classList.add('error');
-          error.appendChild(iconsManager.get('main', 'heartCrack'));
-          error.appendChild(errorText);
-          resultsFragment.append(error);
-        }
-
-        results.textContent = '';
-        results.classList.toggle('is-loading', !hasResults);
-        results.appendChild(resultsFragment);
-      });
-    };
-
-    if (!indexesManager.isCurrentlyIndexing) {
-      if (!indexesManager.hasIndexed) {
-        searchResults.classList.add('is-loading');
-        searchResults.textContent = '';
-        searchResults.appendChild(utils.createLoadingItem(50));
-
-        indexesManager.initFull(() => { }).then(() => {
-          onSearchReady(input.value.trim());
-        });
-      } else {
-        onSearchReady(input.value.trim());
-      }
-    }
-  });
-}
-
-function createSingleSearchResult(file, fileDataKeys, foundInName, text) {
-  const fileDataTitle = document.createElement('div');
-  fileDataTitle.classList.add('file-data-title');
-  fileDataTitle.textContent = utils.parseCategoryName(file.replaceAll('/', ' > '));
-  const fileData = document.createElement('div');
-  fileData.classList.add('file-data');
-  fileData.addEventListener('click', () => {
-    globalUpdateActiveFile(file);
-  });
-  fileData.appendChild(fileDataTitle);
-
-  if (!foundInName) {
-    const splitting = fileDataKeys.toLowerCase().split(text.toLowerCase());
-    const beforeSplitting = utils.splitSearchResult(splitting[0], true);
-    const afterSplitting = utils.splitSearchResult(splitting[1], false);
-
-    const highlightedWord = document.createElement('span');
-    highlightedWord.classList.add('highlighted');
-    highlightedWord.textContent = text;
-    const fileDataDescription = document.createElement('div');
-    fileDataDescription.classList.add('file-data-description');
-    fileDataDescription.appendChild(document.createTextNode(beforeSplitting));
-    fileDataDescription.appendChild(highlightedWord);
-    fileDataDescription.appendChild(document.createTextNode(afterSplitting));
-    fileData.appendChild(fileDataDescription);
-  }
-
-  const elementIcon = iconsManager.get('main', 'chevronDown');
-  elementIcon.classList.add('right-icon');
-  fileData.appendChild(elementIcon);
-
-  return fileData;
 }
 
 function loadSidebar(id) {
@@ -457,12 +282,12 @@ function resetData() {
 export {
   getElement,
   focusOnSidebar,
-  killSearch,
   updateMobileVisibilityState,
   updateDesktopCollapsedState,
   loadSidebar,
   updateActiveFile,
   resetData,
+  globalUpdateActiveFile,
   onChangeListenerInstance,
   onCollapsedListenerInstance
 };

@@ -17,6 +17,8 @@ import ListenerManagerInstance from "./main.listener.js";
 import * as config from "./main.config.js";
 import * as tooltip from "./main.tooltip.js";
 import * as iconsManager from "./main.icons.js";
+import * as settingsManager from "./main.settings.js";
+import {openSearchContainer} from "./main.search.js";
 
 const onChangeListenerInstance = new ListenerManagerInstance();
 const onSidebarUpdateListenerInstance = new ListenerManagerInstance();
@@ -28,9 +30,10 @@ let headerMenuElement;
 let headerExpandedElement;
 let headerCompassElement;
 let headerDescriptionElement;
-let headerProjectNameElement;
-let headerTitleElement;
-let fakeHeaderTitleElement;
+let headerLibraryElement;
+let headerSettingsElement;
+let headerLibraryValueElement;
+let fakeHeaderLibraryValueElement;
 
 let hasSelectedTab = false;
 
@@ -57,31 +60,66 @@ function getElement() {
 
   const headerProjectName = document.createElement('div');
   headerProjectName.classList.add('project-name');
-  headerProjectNameElement = headerProjectName;
+  headerProjectName.textContent = 'Documentation';
   const headerTitle = document.createElement('div');
   headerTitle.classList.add('title');
-  headerTitle.addEventListener('click', () => {
-    const state = header.classList.toggle('tabs-expanded');
-    onTabsVisibilityUpdateListenerInstance.callAllListeners(state);
-  });
-  headerTitle.appendChild(headerProjectName);
   headerTitle.appendChild(headerIcon);
-  headerTitleElement = headerTitle;
-  const fakeHeaderTitle = document.createElement('div');
-  fakeHeaderTitle.classList.add('fake-title');
-  fakeHeaderTitleElement = fakeHeaderTitle;
+  headerTitle.appendChild(headerProjectName);
+
+  const headerSeparator = document.createElement('div');
+  headerSeparator.classList.add('separator');
+
+  const headerLibraryTitle = document.createElement('span');
+  headerLibraryTitle.textContent = 'Library:';
+  const headerLibraryValue = document.createElement('span');
+  headerLibraryValue.classList.add('value');
+  headerLibraryValueElement = headerLibraryValue;
+  const headerLibraryIcon = iconsManager.get('main', 'chevronDown');
+  const headerLibrary = document.createElement('div');
+  headerLibrary.classList.add('library');
+  headerLibrary.addEventListener('click', () => expandLibrarySelectorTooltip());
+  headerLibrary.appendChild(headerLibraryTitle);
+  headerLibrary.appendChild(headerLibraryValue);
+  headerLibrary.appendChild(headerLibraryIcon);
+  headerLibraryElement = headerLibrary;
+
+  const headerTitleContainer = document.createElement('div');
+  headerTitleContainer.classList.add('title-container');
+  headerTitleContainer.appendChild(headerTitle);
+  headerTitleContainer.appendChild(headerSeparator);
+  headerTitleContainer.appendChild(headerLibrary);
+
+  const fakeHeaderLibraryValue = document.createElement('div');
+  fakeHeaderLibraryValue.classList.add('fake-title');
+  fakeHeaderLibraryValueElement = fakeHeaderLibraryValue;
+
+  const searchText = document.createElement('input');
+  searchText.placeholder = 'Search Docs';
+  const headerSearch = document.createElement('div');
+  headerSearch.classList.add('search-input');
+  headerSearch.addEventListener('click', () => openSearchContainer(headerSearch));
+  headerSearch.appendChild(iconsManager.get('main', 'magnifyingGlass').firstChild);
+  headerSearch.appendChild(searchText);
 
   const headerCompass = document.createElement('div');
-  headerCompass.classList.add('header-compass');
+  headerCompass.classList.add('header-icon', 'header-compass');
   headerCompass.addEventListener('click', () => {
     onCompassUpdateListenerInstance.callAllListeners();
   });
-  headerCompass.appendChild(iconsManager.get('main', 'compass'));
+  headerCompass.appendChild(iconsManager.get('main', 'compass').firstChild);
   headerCompassElement = headerCompass;
 
-  const headerDescription = document.createElement('div');
-  headerDescription.classList.add('description');
-  headerDescriptionElement = headerDescription;
+  const headerSettings = document.createElement('div');
+  headerSettings.classList.add('header-icon', 'header-settings', 'visible');
+  headerSettings.addEventListener('click', () => expandSettingsTooltip());
+  headerSettings.appendChild(iconsManager.get('special', 'settings').firstChild);
+  headerSettingsElement = headerSettings;
+
+  const headerIcons = document.createElement('div');
+  headerIcons.classList.add('header-icons');
+  headerIcons.appendChild(headerSearch);
+  headerIcons.appendChild(headerCompass);
+  headerIcons.appendChild(headerSettings);
 
   const header = document.createElement('div');
   header.classList.add('header');
@@ -89,69 +127,14 @@ function getElement() {
     document.body.classList.toggle('disable-blur');
   });
   header.appendChild(headerMenu);
-  header.appendChild(headerTitle);
-  header.appendChild(fakeHeaderTitle);
-  header.appendChild(headerCompass);
-  header.appendChild(headerDescription);
+  header.appendChild(headerTitleContainer);
+  header.appendChild(fakeHeaderLibraryValue);
+  header.appendChild(headerIcons);
   headerElement = header;
 
-  createTabsByConfig();
   appendTitleUpdateOnActiveTabUpdate();
 
   return header;
-}
-
-function createTabsByConfig() {
-  config.getAvailableCategories().then((ids) => {
-    const tabsContainer = generateTabsContainer(ids);
-
-    headerDescriptionElement.textContent = '';
-    headerDescriptionElement.appendChild(tabsContainer);
-  });
-}
-
-function generateTabsContainer(ids, ignoreOnChange = false) {
-  const tabsContainer = document.createElement('div');
-  tabsContainer.classList.add('tabs');
-
-  for (const id of ids) {
-    tabsContainer.appendChild(createSingleTab(id, ignoreOnChange));
-  }
-
-  if (!ignoreOnChange) {
-    onChangeListenerInstance.addListener({
-      callback: (id) => {
-        if (ids.indexOf(id) !== -1) {
-          hasSelectedTab = true;
-        }
-      },
-      isInternal: true,
-      ref: tabsContainer
-    });
-  }
-
-  return tabsContainer;
-}
-
-function createSingleTab(id, ignoreOnChange) {
-  const tab = document.createElement('div');
-  tab.classList.add('tab');
-  tab.addEventListener('click', () => {
-    globalUpdateActiveTab(id);
-  });
-  tab.textContent = id;
-
-  if (!ignoreOnChange) {
-    onChangeListenerInstance.addListener({
-      callback: (activeId) => {
-        tab.classList.toggle('active', activeId === id);
-      },
-      isInternal: true,
-      ref: tab
-    });
-  }
-
-  return tab;
 }
 
 function updateActiveTab(id) {
@@ -185,7 +168,7 @@ function updateTabsMobileVisibility(state) {
 function appendTitleUpdateOnActiveTabUpdate() {
   onChangeListenerInstance.addListener({
     callback: (id) => {
-      if (headerProjectNameElement.textContent === id) {
+      if (headerLibraryValueElement.textContent === id) {
         return;
       }
 
@@ -193,51 +176,132 @@ function appendTitleUpdateOnActiveTabUpdate() {
       if (id !== 'Documentation') {
         document.title += ' Documentation';
       }
-
-      if (headerProjectNameElement.textContent === "") {
-        headerProjectNameElement.textContent = id;
+      if (headerLibraryValueElement.textContent === "") {
+        headerLibraryValueElement.textContent = id;
         return;
       }
 
-      fakeHeaderTitleElement.textContent = id;
-      const rect = fakeHeaderTitleElement.getBoundingClientRect();
-      headerProjectNameElement.style.setProperty('--width', rect.width.toString() + 'px');
+      fakeHeaderLibraryValueElement.textContent = id;
+      const rect = fakeHeaderLibraryValueElement.getBoundingClientRect();
+      headerLibraryValueElement.style.setProperty('--width', rect.width.toString() + 'px');
 
-      headerProjectNameElement.classList.add('updating');
-      headerProjectNameElement.addEventListener('transitionend', () => {
-        headerProjectNameElement.classList.remove('updating');
-        headerProjectNameElement.textContent = id;
+      headerLibraryValueElement.classList.add('updating');
+      headerLibraryValueElement.addEventListener('transitionend', () => {
+        headerLibraryValueElement.classList.remove('updating');
+        headerLibraryValueElement.textContent = id;
       }, { once: true });
     },
     isInternal: true
   });
 }
 
-function highlightTabsForSelection() {
-  setTimeout(() => {
-    tooltip.init({
-      title: 'Select your language',
-      text: 'You can choose the programming language by pressing here.',
-      container: detectContainerForTooltips()
+function expandLibrarySelectorTooltip() {
+  requestAnimationFrame(() => {
+    config.getAvailableCategories().then((ids) => {
+      const selector = document.createElement('div');
+      selector.classList.add('selector');
+  
+      for (const id of ids) {
+        const singleLibraryTitle = document.createElement('div');
+        singleLibraryTitle.classList.add('title');
+        singleLibraryTitle.textContent = id.getAttribute('id').trim();
+  
+        const singleLibraryDescription = document.createElement('div');
+        singleLibraryDescription.classList.add('description');
+        singleLibraryDescription.textContent = id.getAttribute('description').trim();
+
+        const copyTagSuccess = iconsManager.get('main', 'check');
+        copyTagSuccess.classList.add('success');
+  
+        const singleLibrary = document.createElement('div');
+        singleLibrary.classList.add('library');
+        singleLibrary.classList.toggle('selected', (onChangeListenerInstance.ultimateDataCall || onChangeListenerInstance.ultimateDataCallInternal) === id.getAttribute('id').trim());
+        singleLibrary.addEventListener('click', () => {
+          singleLibrary.classList.add('selected');
+          globalUpdateActiveTab(id.getAttribute('id').trim());
+        });
+        singleLibrary.appendChild(singleLibraryTitle);
+        singleLibrary.appendChild(singleLibraryDescription);
+        singleLibrary.appendChild(copyTagSuccess);
+  
+        selector.appendChild(singleLibrary);
+      }
+    
+      tooltip.init({
+        childElement: selector,
+        container: headerLibraryElement
+      });
     });
-  }, 800);
+  });
 }
 
-function highlightTabsForIntroduction() {
-  setTimeout(() => {
+function expandSettingsTooltip() {
+  requestAnimationFrame(() => {
+    const selector = document.createElement('div');
+    selector.classList.add('selector');
+
+    const mainTitle = document.createElement('div');
+    mainTitle.classList.add('main-title');
+    mainTitle.textContent = 'Settings';
+    selector.appendChild(mainTitle);
+
+    selector.appendChild(createSettingsRow(
+        'Collapse Long Code',
+        null,
+        settingsManager.getCollapseLongCodeStatus(),
+        (status) => settingsManager.updateCollapseLongCode(status)
+    ));
+    selector.appendChild(createSettingsRow(
+        'Force Github API',
+        'Use api.github.com instead of raw.githubusercontent.com',
+        settingsManager.getForceGithubAPIStatus(),
+        (status) => settingsManager.updateForceGithubAPI(status)
+    ));
+    selector.appendChild(createSettingsRow(
+        'Desktop Mode',
+        null,
+        settingsManager.getForceDesktopModeStatus(),
+        (status) => settingsManager.updateDesktopMode(status)
+    ));
+
     tooltip.init({
-      title: 'Select your library',
-      text: 'When you are ready, you can go to the library documentation of your favorite language by selecting it above.',
-      container: detectContainerForTooltips()
+      childElement: selector,
+      container: headerSettingsElement,
+      closeOnClick: false,
+      moreSpace: true
     });
-  }, 800);
+  });
 }
 
-function detectContainerForTooltips() {
-  return (
-    window.matchMedia('screen and (max-width: 1330px)').matches
-      ? headerTitleElement : headerDescriptionElement
-  );
+function createSettingsRow(title, description, status, callback) {
+
+  const settingRowTitle = document.createElement('div');
+  settingRowTitle.classList.add('title');
+  settingRowTitle.textContent = title;
+
+  const settingRowSwitch = document.createElement('div');
+  settingRowSwitch.classList.add('switch');
+  settingRowSwitch.classList.toggle('selected', status);
+
+  const settingRowTitleRow = document.createElement('div');
+  settingRowTitleRow.classList.add('title-row');
+  settingRowTitleRow.appendChild(settingRowTitle);
+  settingRowTitleRow.appendChild(settingRowSwitch);
+
+  const settingRowDescription = document.createElement('div');
+  settingRowDescription.classList.add('description');
+  settingRowDescription.textContent = description;
+
+  const settingRow = document.createElement('div');
+  settingRow.classList.add('library', 'has-switch');
+  settingRow.addEventListener('click', () => {
+    const newStatus = settingRowSwitch.classList.toggle('selected');
+    callback(newStatus);
+  });
+  settingRow.appendChild(settingRowTitleRow);
+  description && settingRow.appendChild(settingRowDescription);
+
+  return settingRow;
 }
 
 function resetData() {
@@ -246,9 +310,8 @@ function resetData() {
   headerExpandedElement = undefined;
   headerCompassElement = undefined;
   headerDescriptionElement = undefined;
-  headerProjectNameElement = undefined;
-  headerTitleElement = undefined;
-  fakeHeaderTitleElement = undefined;
+  headerLibraryValueElement = undefined;
+  fakeHeaderLibraryValueElement = undefined;
 
   hasSelectedTab = false;
 }
@@ -261,8 +324,6 @@ export {
   updateCompassVisibilityState,
   updateCompassExpandedState,
   updateTabsMobileVisibility,
-  highlightTabsForSelection,
-  highlightTabsForIntroduction,
   resetData,
   onChangeListenerInstance,
   onSidebarUpdateListenerInstance,

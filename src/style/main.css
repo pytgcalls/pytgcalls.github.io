@@ -3,6 +3,7 @@
 @import url("home.css");
 @import url("leftsidebar.css");
 @import url("popups.css");
+@import url("search.css");
 @import url("sections.css");
 @import url("splash.css");
 
@@ -20,9 +21,6 @@ body {
   margin: 0;
   overscroll-behavior: none;
   user-select: none;
-  -ms-user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -70,21 +68,27 @@ body .tooltip {
   position: fixed;
   top: calc(var(--center-y) + 49px);
   left: var(--center-x);
-  color: black;
-  background: linear-gradient(45deg, #535f70, #2f3744);
-  padding: 15px;
-  max-width: min(360px, 80vw);
+  background: #161A20;
+  max-width: min(272px, 80vw);
   box-sizing: border-box;
   border-radius: 10px;
-  border: 1px solid #000000;
-  box-shadow: 0 0 17px 5px black;
+  border: 1px solid rgba(93, 106, 129, 0.2);
+  box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.15);
   opacity: 0;
   z-index: 4;
 }
 
+body .tooltip.more-space {
+  max-width: min(350px, 80vw);
+}
+
 body .tooltip.visible {
   opacity: 1;
-  animation: 0.8s appearTooltip cubic-bezier(0.42, 0, 0, 0.98);
+  animation: 0.3s appearTooltip cubic-bezier(0.42, 0, 0, 0.98);
+}
+
+body .tooltip.visible.out-of-space {
+  transform-origin: var(--origin-x) var(--origin-y);
 }
 
 body .tooltip .title-element {
@@ -132,19 +136,145 @@ body .tooltip.remove {
   }
 }
 
-body .tooltip .triangle {
+body .tooltip > .icon-container {
   position: absolute;
   left: 50%;
-  width: 10px;
-  height: 10px;
-  background: #3c4654;
-  top: -5px;
-  border-top-left-radius: 3px;
-  transform: translateX(-50%) rotate(45deg);
+  top: -17px;
+  transform: translateX(-50%);
 }
 
-body .tooltip.has-tabs .triangle {
-  background: #000000;
+body .tooltip.out-of-space > .icon-container {
+  left: 25%;
+  transform: none;
+}
+
+body .tooltip > .icon-container svg {
+  height: 20px;
+}
+
+body .tooltip .selector {
+  padding: 10px;
+}
+
+body .tooltip .selector .main-title {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 25px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+body .tooltip .selector .library {
+  background: rgba(93, 106, 129, 0.08);
+  padding: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 10px;
+  position: relative;
+  transition: 0.4s transform;
+}
+
+body .tooltip .selector .library:hover {
+  transform: scale(0.95);
+}
+
+body .tooltip .selector .library:active {
+  transform: scale(0.85);
+}
+
+body .tooltip .selector .library:not(:last-child) {
+  margin-bottom: 5px;
+}
+
+body .tooltip .selector .library .title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+body .tooltip .selector .library .title-row .switch {
+  width: 42px;
+  height: 24px;
+  background: rgb(81, 81, 84);
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
+  transition: 0.4s background;
+}
+
+body .tooltip .selector .library .title-row .switch.selected {
+  background: #0076fe;
+}
+
+body .tooltip .selector .library .title-row .switch::after {
+  content: "";
+  position: absolute;
+  height: 22px;
+  width: 22px;
+  background: #b3b3b3;
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 1px;
+  transition: 0.4s left;
+}
+
+body .tooltip .selector .library .title-row .switch.selected::after {
+  left: calc(100% - 22px - 1px);
+}
+
+body .tooltip .selector .library .title {
+  font-size: 15px;
+  color: #FFFFFF;
+  transition: 0.4s opacity;
+}
+
+body .tooltip .selector .library .description {
+  font-size: 11px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.4);
+  transition: 0.4s opacity;
+}
+
+body .tooltip .selector .library.has-switch .description {
+  padding-right: 43px;
+}
+
+body .tooltip .selector .library.selected {
+  pointer-events: none;
+}
+
+body .tooltip .selector .library.selected .title,
+body .tooltip .selector .library.selected .description {
+  opacity: 0.4;
+}
+
+body .tooltip .selector .library .icon-container.success {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  pointer-events: none;
+  opacity: 0;
+  transition: 0.4s opacity;
+}
+
+body .tooltip .selector .library.selected .icon-container.success {
+  animation: 0.5s showSuccessIcon 0.2s forwards;
+}
+
+@keyframes showSuccessIcon {
+  from {
+    opacity: 1;
+    clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
+  }
+  to {
+    opacity: 1;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
+body .tooltip .selector .library .icon-container.success svg {
+  fill: #FFFFFF;
 }
 
 body .fs-code-preview {
@@ -348,4 +478,31 @@ body .fs-code-preview .code-preview.is-loading svg circle {
   stroke-linecap: round;
   stroke-dasharray: 10, 10;
   animation: 1.5s animateStroke linear infinite;
+}
+
+@keyframes rotateSvg {
+  from {
+    transform: rotate(0deg) scale(var(--scale, 1.0));
+  }
+
+  to {
+    transform: rotate(360deg) scale(var(--scale, 1.0));
+  }
+}
+
+@keyframes animateStroke {
+  from {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+
+  50% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -35;
+  }
+
+  to {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -124;
+  }
 }

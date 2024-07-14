@@ -16,6 +16,7 @@
 import * as config from "./main.config.js";
 import * as devicesManager from "./main.devices.js";
 import * as homePage from "./main.home.js";
+import {handleSettings} from "./main.settings.js";
 
 window.addEventListener('load', () => {
   const splashScreen = document.querySelector('body .splash');
@@ -54,6 +55,8 @@ window.addEventListener('load', () => {
 
       reloadScreenData();
       splashScreen.remove();
+      handleSettings();
+
       config.getRedirectDataForPath(window.location.pathname).then((data) => {
         if (data && (data.startsWith('https://') || data.startsWith('http://'))) {
           window.location.href = data;

@@ -53,9 +53,7 @@ function init(pathName) {
   requestAnimationFrame(() => {
     if (typeof pathName === 'string' && pathName.length) {
       chooseRightTab(pathName, window.location.hash).then((found) => {
-        if (found) {
-          headerInstance.highlightTabsForSelection();
-        } else {
+        if (!found) {
           forceSwitchToHome();
         }
       });
@@ -68,10 +66,6 @@ function init(pathName) {
     callback: (state) => {
       document.body.classList.toggle('as-home', state);
       document.body.classList.remove('expanded');
-
-      if (state) {
-        headerInstance.highlightTabsForIntroduction();
-      }
     }
   });
 
@@ -178,7 +172,9 @@ function chooseRightTab(pathName, hash, avoidPushingState = false) {
     config.getAvailableCategories().then((ids) => {
       let found = false;
 
-      for (const id of ids) {
+      for (const category of ids) {
+        const id = category.getAttribute('id').trim();
+        
         if (decodeURI(pathName).startsWith(utils.parseCategoryUrl(id))) {
           found = true;
 

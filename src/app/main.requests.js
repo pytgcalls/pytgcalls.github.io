@@ -15,8 +15,10 @@
 
 import * as debug from "./main.debug.js";
 import * as config from "./main.config.js";
+import {getForceGithubAPIStatus} from "./main.settings.js";
 
 let doesLoadViaUserContentWork = true;
+let isRequestFailed = false;
 
 let pypiDataPromise;
 let pypiDataResult;
@@ -26,8 +28,25 @@ let alternativesList = {};
 function initRequest(fileName, repoName = 'pytgcalls/docsdata') {
   return new Promise((resolve, reject) => {
     const isUsingAnAlternative = !!alternativesList[repoName];
+
+    let forcedFromSettings = false;
+    if (!isUsingAnAlternative) {
+      if (getForceGithubAPIStatus() && doesLoadViaUserContentWork) {
+        doesLoadViaUserContentWork = false;
+        isRequestFailed = false;
+        forcedFromSettings = true;
+      } else if (!getForceGithubAPIStatus() && !doesLoadViaUserContentWork && !isRequestFailed) {
+        doesLoadViaUserContentWork = true;
+        isRequestFailed = false;
+      }
+    }
+
     tryToLoadWithUserContent(repoName, fileName).then(resolve).catch(() => {
       doesLoadViaUserContentWork = false;
+
+      if (!forcedFromSettings) {
+        isRequestFailed = true;
+      }
 
       if (isUsingAnAlternative) {
         alert("Connection to your custom docsdata server failed! We're using GitHub as fallback. Check your port.");

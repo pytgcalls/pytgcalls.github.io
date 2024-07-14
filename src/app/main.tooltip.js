@@ -13,6 +13,8 @@
  *  With <3 by @kuogi (and the fox!)
  */
 
+import * as iconsManager from "./main.icons.js";
+
 let closeCallbacksList = [];
 
 function init({
@@ -20,20 +22,22 @@ function init({
   title,
   text,
   container,
-  hasTabs = false
+  hasTabs = false,
+  closeOnClick = true,
+  moreSpace = false
 }) {
   closeTooltips();
 
   const elementRect = container.getBoundingClientRect();
 
-  const tooltipTriangle = document.createElement('div');
-  tooltipTriangle.classList.add('triangle');
+  const tooltipArrow = iconsManager.get('special', 'tooltip');
   const tooltip = document.createElement('div');
   tooltip.classList.add('tooltip');
   tooltip.classList.toggle('has-tabs', hasTabs);
+  tooltip.classList.toggle('more-space', moreSpace);
   tooltip.style.setProperty('--center-x', '0px');
   tooltip.style.setProperty('--center-y', elementRect.top + 'px');
-  tooltip.appendChild(tooltipTriangle);
+  tooltip.appendChild(tooltipArrow);
 
   if (childElement instanceof Element) {
     tooltip.appendChild(childElement);
@@ -56,20 +60,35 @@ function init({
   document.body.appendChild(tooltip);
 
   const tooltipRect = tooltip.getBoundingClientRect();
+
   let newLeftPosition = elementRect.left;
   newLeftPosition += elementRect.width / 2;
   newLeftPosition -= tooltipRect.width / 2;
+
+  if (newLeftPosition + tooltipRect.width >= window.innerWidth) {
+    newLeftPosition = window.innerWidth - tooltipRect.width - 7.5;
+    tooltip.classList.add('out-of-space');
+    tooltip.style.setProperty('--origin-x', elementRect.left + elementRect.width / 2 - newLeftPosition + 'px');
+    tooltip.style.setProperty('--origin-y', (tooltipRect.top * 2 + 40) + 'px');
+  }
 
   tooltip.style.setProperty('--center-x', newLeftPosition + 'px');
   tooltip.classList.add('visible');
   container.classList.add('focused-tooltip');
 
-  const handler = () => {
-    closeTooltips();
-  };
+  const resizeHandler = () => closeTooltips();
+  let clickHandler = resizeHandler;
 
-  window.addEventListener('resize', handler);
-  document.body.addEventListener('click', handler);
+  if (!closeOnClick) {
+    clickHandler = (e) => {
+      if (e.target !== tooltip && !tooltip.contains(e.target)) {
+        closeTooltips();
+      }
+    };
+  }
+
+  window.addEventListener('resize', resizeHandler);
+  document.body.addEventListener('click', clickHandler);
 
   closeCallbacksList.push(() => {
     tooltip.classList.add('remove');
@@ -79,8 +98,8 @@ function init({
 
     container.classList.remove('focused-tooltip');
 
-    window.removeEventListener('resize', handler);
-    document.body.removeEventListener('click', handler);
+    window.removeEventListener('resize', resizeHandler);
+    document.body.removeEventListener('click', clickHandler);
   });
 }
 

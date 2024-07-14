@@ -100,7 +100,7 @@ body>.popup-container .popup-element .custom-editor textarea {
   position: absolute;
   height: calc(100% - 30px);
   width: calc(100% - 30px);
-  font-family: 'Poppins', serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 1em;
   tab-size: 4;
   resize: none;
