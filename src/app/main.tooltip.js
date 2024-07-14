@@ -38,25 +38,7 @@ function init({
   tooltip.style.setProperty('--center-x', '0px');
   tooltip.style.setProperty('--center-y', elementRect.top + 'px');
   tooltip.appendChild(tooltipArrow);
-
-  if (childElement instanceof Element) {
-    tooltip.appendChild(childElement);
-  } else {
-    if (typeof title == 'string') {
-      const titleElement = document.createElement('div');
-      titleElement.classList.add('title-element');
-      titleElement.textContent = title;
-      tooltip.appendChild(titleElement);
-    }
-
-    if (typeof text == 'string') {
-      const textElement = document.createElement('div');
-      textElement.classList.add('text-element');
-      textElement.textContent = text;
-      tooltip.appendChild(textElement);
-    }
-  }
-
+  tooltip.appendChild(childElement);
   document.body.appendChild(tooltip);
 
   const tooltipRect = tooltip.getBoundingClientRect();

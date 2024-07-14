@@ -19,7 +19,9 @@ import {createLoadingItem} from "./main.utils.js";
 import {loadConfig} from "./main.config.js";
 import {handleRecursive} from "./main.parser.js";
 import {globalUpdateActiveFile} from "./main.sidebar.js";
+import * as tooltip from "./main.tooltip.js";
 
+let lastStartByElement;
 let searchTextElement;
 let searchTextFullElement;
 let searchContainerElement;
@@ -29,6 +31,8 @@ let searchResultsFullElement;
 let currentSearchTimeout;
 
 function openSearchContainer(startBy) {
+    lastStartByElement = startBy;
+
     const startByRect = startBy.getBoundingClientRect();
 
     const searchText = document.createElement('input');
@@ -64,6 +68,11 @@ function openSearchContainer(startBy) {
 
     const searchContainer = document.createElement('div');
     searchContainer.classList.add('search-container', 'text-is-empty');
+    searchContainer.addEventListener('click', (e) => {
+       if (e.target !== searchResultsFull && !searchResultsFull.contains(e.target)) {
+           closeSearch();
+       }
+    });
     searchContainer.appendChild(searchTextFullAnimation);
     searchContainer.appendChild(searchResultsFull);
     document.body.appendChild(searchContainer);
@@ -84,26 +93,33 @@ function openSearchContainer(startBy) {
        handleSearch();
     });
 
+    let hasAlreadyText = false;
+
     searchTextFullAnimation.addEventListener('animationend', () => {
         searchContainer.classList.remove('animate-appear');
         searchTextFullAnimation.remove();
-        searchText.focus();
+
+        if (hasAlreadyText) {
+            handleSearch();
+        } else {
+            searchText.focus();
+        }
     }, { once: true });
+
+    const inputByLastStartBy = getInputByLastStartBy();
+    if (inputByLastStartBy !== null) {
+        searchText.value = inputByLastStartBy.value;
+        hasAlreadyText = !!inputByLastStartBy.value.trim();
+
+        const animationInput = searchTextFullAnimation.querySelector('input');
+        if (animationInput !== null) {
+            animationInput.value = inputByLastStartBy.value;
+        }
+    }
 
     updateSearchAnimationState(searchTextFullAnimation, startByRect, searchTextFull.getBoundingClientRect());
     searchContainer.classList.add('animate-appear');
-}
-
-function updateSearchAnimationState(animatedSearchText, startByRect, endByRect) {
-    animatedSearchText.style.setProperty('--start-x', startByRect.left+'px');
-    animatedSearchText.style.setProperty('--start-y', startByRect.top+'px');
-    animatedSearchText.style.setProperty('--start-width', startByRect.width+'px');
-    animatedSearchText.style.setProperty('--start-height', startByRect.height+'px');
-
-    animatedSearchText.style.setProperty('--end-x', endByRect.left+'px');
-    animatedSearchText.style.setProperty('--end-y', endByRect.top+'px');
-    animatedSearchText.style.setProperty('--end-width', endByRect.width+'px');
-    animatedSearchText.style.setProperty('--end-height', endByRect.height+'px');
+    startBy.classList.add('opened');
 }
 
 function handleSearch() {
@@ -197,7 +213,6 @@ function handleSearch() {
 }
 
 function expandContainer(fullResultsList) {
-
 }
 
 function scheduleSearch(onSearchReady) {
@@ -232,7 +247,10 @@ function createReference(type, name, pathName, chunks, searchText) {
 
     const row = document.createElement('div');
     row.classList.add('row');
-    row.addEventListener('click', () => globalUpdateActiveFile(pathName));
+    row.addEventListener('click', () => {
+        closeSearch();
+        globalUpdateActiveFile(pathName);
+    });
     row.appendChild(leftSide);
 
     if (name != null) {
@@ -290,6 +308,75 @@ function createReference(type, name, pathName, chunks, searchText) {
     return row;
 }
 
+function closeSearch() {
+    if (lastStartByElement == null) {
+        searchContainerElement.remove();
+        return;
+    }
+
+    if (searchContainerElement.querySelector('.animated') !== null) {
+        return;
+    }
+
+    const searchTextFullAnimation = searchTextFullElement.cloneNode(true);
+    searchTextFullAnimation.classList.add('animated');
+
+    if (searchTextFullAnimation.querySelector('.spinner') !== null) {
+        searchTextFullAnimation.querySelector('.spinner').remove();
+    }
+
+    searchContainerElement.prepend(searchTextFullAnimation);
+    updateSearchAnimationState(searchTextFullAnimation, searchTextFullElement.getBoundingClientRect(), lastStartByElement.getBoundingClientRect());
+    searchContainerElement.classList.add('animate-disappear');
+
+    let hasAlreadyText = false;
+    searchTextFullAnimation.addEventListener('animationend', () => {
+        searchContainerElement.remove();
+        lastStartByElement.classList.remove('opened');
+
+        if (hasAlreadyText && localStorage.getItem('searchEndTip') == null) {
+            localStorage.setItem('searchEndTip', 'true');
+
+            const miniText = document.createElement('div');
+            miniText.classList.add('mini-text');
+            miniText.textContent = 'You can resume the search whenever you want by pressing here.';
+
+            const selector = document.createElement('div');
+            selector.classList.add('selector');
+            selector.appendChild(miniText);
+
+            tooltip.init({
+                childElement: selector,
+                container: lastStartByElement
+            });
+        }
+
+        resetData();
+    }, { once: true });
+
+    const inputByLastStartBy = getInputByLastStartBy();
+    if (inputByLastStartBy !== null) {
+        inputByLastStartBy.value = searchTextElement.value;
+        hasAlreadyText = !!searchTextElement.value.trim();
+    }
+}
+
+function getInputByLastStartBy() {
+    return lastStartByElement.tagName.toUpperCase() === 'INPUT' ? lastStartByElement : lastStartByElement.querySelector('input');
+}
+
+function updateSearchAnimationState(animatedSearchText, startByRect, endByRect) {
+    animatedSearchText.style.setProperty('--start-x', startByRect.left+'px');
+    animatedSearchText.style.setProperty('--start-y', startByRect.top+'px');
+    animatedSearchText.style.setProperty('--start-width', startByRect.width+'px');
+    animatedSearchText.style.setProperty('--start-height', startByRect.height+'px');
+
+    animatedSearchText.style.setProperty('--end-x', endByRect.left+'px');
+    animatedSearchText.style.setProperty('--end-y', endByRect.top+'px');
+    animatedSearchText.style.setProperty('--end-width', endByRect.width+'px');
+    animatedSearchText.style.setProperty('--end-height', endByRect.height+'px');
+}
+
 function recomposeCodePath(pathName) {
     const fragment = document.createDocumentFragment();
 
@@ -309,6 +396,18 @@ function recomposeCodePath(pathName) {
     return fragment;
 }
 
+function resetData() {
+    lastStartByElement = undefined;
+    searchTextElement = undefined;
+    searchTextFullElement = undefined;
+    searchContainerElement = undefined;
+    searchSpinnerContainerElement = undefined;
+    searchListAdapterElement = undefined;
+    searchResultsFullElement = undefined;
+    currentSearchTimeout = undefined;
+}
+
 export {
-    openSearchContainer
+    openSearchContainer,
+    resetData
 };

@@ -11,7 +11,7 @@ body .search-container {
     transition: 0.4s background;
 }
 
-body .search-container:not(.animate-appear) > .search-input.animated {
+body .search-container:not(.animate-appear):not(.animate-disappear) > .search-input.animated {
     display: none;
 }
 
@@ -24,7 +24,20 @@ body .search-container.animate-appear {
         background: transparent;
     }
     to {
-        background: rgba(0, 0, 0, 0.3);
+        background: rgba(0, 0, 0, 0.7);
+    }
+}
+
+body .search-container.animate-disappear {
+    animation: 0.2s animateDisappearSearchContainer forwards;
+}
+
+@keyframes animateDisappearSearchContainer {
+    from {
+        background: rgba(0, 0, 0, 0.7);
+    }
+    to {
+        background: transparent;
     }
 }
 
@@ -69,6 +82,7 @@ body .search-container .search-input .spinner {
     transition: 0.2s transform, 0.2s opacity;
 }
 
+body .search-container .search-input.animated svg.cancel,
 body .search-container.text-is-empty .search-input svg.cancel,
 body .search-container .search-input:not(.is-loading) .spinner {
     opacity: 0;
@@ -79,6 +93,7 @@ body .search-container .search-input:not(.is-loading) .spinner {
     transform: translateY(-50%) scale(1.2);
 }
 
+body .search-container.text-is-empty .search-input.animated svg.cancel,
 body .search-container.text-is-empty .search-input svg.cancel {
     transform: scale(1.2);
 }
@@ -112,9 +127,17 @@ body .search-container .search-input input {
     color: #FFFFFF;
 }
 
-body .search-container.animate-appear > .search-input.animated {
+body .search-container.animate-appear > .search-input.animated,
+body .search-container.animate-disappear > .search-input.animated {
     position: absolute;
+    --start-background: rgb(22, 26, 32);
+    --end-background: rgb(16, 18, 22);
     animation: 0.2s animateAppearSearchInput forwards cubic-bezier(0.42, 0, 0, 0.96);
+}
+
+body .search-container.animate-disappear > .search-input.animated {
+    --start-background: rgb(16, 18, 22);
+    --end-background: rgb(22, 26, 32);
 }
 
 @keyframes animateAppearSearchInput {
@@ -123,14 +146,14 @@ body .search-container.animate-appear > .search-input.animated {
         left: var(--start-x);
         width: var(--start-width);
         height: var(--start-height);
-        background: rgb(22, 26, 32);
+        background: var(--start-background);
     }
     to {
         top: var(--end-y);
         left: var(--end-x);
         width: var(--end-width);
         height: var(--end-height);
-        background: rgb(16, 18, 22);
+        background: var(--end-background);
     }
 }
 
@@ -144,7 +167,8 @@ body .search-container .search-results {
     flex-direction: column;
 }
 
-body .search-container.animate-appear .search-results {
+body .search-container.animate-appear .search-results,
+body .search-container.animate-disappear .search-results {
     visibility: hidden;
 }
 
@@ -159,13 +183,14 @@ body .search-container .search-results::before {
     z-index: -1;
     border-radius: 20px;
     border: 2px solid rgb(36, 42, 51);
-    transition: 0.2s height, 0.2s background, 0.2s border-color;
+    transition: 0.2s all;
 }
 
 body .search-container.text-is-empty .search-results::before {
-    height: 44px;
-    background: transparent;
-    border-color: transparent;
+    height: 34px;
+    top: 10px;
+    left: 10px;
+    width: calc(100% - 4px - 20px);
 }
 
 body .search-container .search-results .list-adapter {

@@ -20,6 +20,7 @@ import * as headerInstance from "./main.header.js";
 import * as config from "./main.config.js";
 import * as utils from "./main.utils.js";
 import * as debug from "./main.debug.js";
+import * as searchManager from "./main.search.js";
 import ListenerManagerInstance from "./main.listener.js";
 
 const onChangeFavoriteSyntaxTab = new ListenerManagerInstance();
@@ -248,6 +249,7 @@ function resetChildrenData() {
   contentInstance.resetData();
   introductionInstance.resetData();
   headerInstance.resetData();
+  searchManager.resetData();
 }
 
 export {

@@ -1,0 +1,218 @@
+body .tooltip {
+    position: fixed;
+    top: calc(var(--center-y) + 49px);
+    left: var(--center-x);
+    background: #161A20;
+    max-width: min(272px, 80vw);
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 1px solid rgba(93, 106, 129, 0.2);
+    box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    z-index: 4;
+}
+
+body .tooltip.more-space {
+    max-width: min(350px, 80vw);
+}
+
+body .tooltip.visible {
+    opacity: 1;
+    animation: 0.3s appearTooltip cubic-bezier(0.42, 0, 0, 0.98);
+}
+
+body .tooltip.visible.out-of-space {
+    transform-origin: var(--origin-x) var(--origin-y);
+}
+
+body .tooltip .title-element {
+    font-size: 24px;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin-bottom: 7px;
+}
+
+body .tooltip .text-element {
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+}
+
+@media screen and (max-width: 500px) {
+    body .tooltip .title-element {
+        font-size: 20px;
+    }
+
+    body .tooltip .text-element {
+        font-size: 14px;
+    }
+}
+
+body .tooltip.has-tabs {
+    width: auto;
+    padding: 8px;
+    background: black;
+}
+
+body .tooltip.remove {
+    animation: 0.4s removeTooltip cubic-bezier(0.42, 0, 0, 0.98) forwards;
+}
+
+@keyframes appearTooltip {
+    from {
+        opacity: 0;
+        transform: translateY(-50%) scale(0.4);
+    }
+}
+
+@keyframes removeTooltip {
+    to {
+        opacity: 0;
+    }
+}
+
+body .tooltip > .icon-container {
+    position: absolute;
+    left: 50%;
+    top: -17px;
+    transform: translateX(-50%);
+}
+
+body .tooltip.out-of-space > .icon-container {
+    left: 25%;
+    transform: none;
+}
+
+body .tooltip > .icon-container svg {
+    height: 20px;
+}
+
+body .tooltip .selector {
+    padding: 10px;
+}
+
+body .tooltip .selector .main-title {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 25px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+body .tooltip .selector .mini-text {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 13px;
+    text-align: center;
+}
+
+body .tooltip .selector .library {
+    background: rgba(93, 106, 129, 0.08);
+    padding: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 10px;
+    position: relative;
+    transition: 0.4s transform;
+}
+
+body .tooltip .selector .library:hover {
+    transform: scale(0.95);
+}
+
+body .tooltip .selector .library:active {
+    transform: scale(0.85);
+}
+
+body .tooltip .selector .library:not(:last-child) {
+    margin-bottom: 5px;
+}
+
+body .tooltip .selector .library .title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+body .tooltip .selector .library .title-row .switch {
+    width: 42px;
+    height: 24px;
+    background: rgb(81, 81, 84);
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+    transition: 0.4s background;
+}
+
+body .tooltip .selector .library .title-row .switch.selected {
+    background: #0076fe;
+}
+
+body .tooltip .selector .library .title-row .switch::after {
+    content: "";
+    position: absolute;
+    height: 22px;
+    width: 22px;
+    background: #b3b3b3;
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 1px;
+    transition: 0.4s left;
+}
+
+body .tooltip .selector .library .title-row .switch.selected::after {
+    left: calc(100% - 22px - 1px);
+}
+
+body .tooltip .selector .library .title {
+    font-size: 15px;
+    color: #FFFFFF;
+    transition: 0.4s opacity;
+}
+
+body .tooltip .selector .library .description {
+    font-size: 11px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.4);
+    transition: 0.4s opacity;
+}
+
+body .tooltip .selector .library.has-switch .description {
+    padding-right: 43px;
+}
+
+body .tooltip .selector .library.selected {
+    pointer-events: none;
+}
+
+body .tooltip .selector .library.selected .title,
+body .tooltip .selector .library.selected .description {
+    opacity: 0.4;
+}
+
+body .tooltip .selector .library .icon-container.success {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    pointer-events: none;
+    opacity: 0;
+    transition: 0.4s opacity;
+}
+
+body .tooltip .selector .library.selected .icon-container.success {
+    animation: 0.5s showSuccessIcon 0.2s forwards;
+}
+
+@keyframes showSuccessIcon {
+    from {
+        opacity: 1;
+        clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
+    }
+    to {
+        opacity: 1;
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+}
+
+body .tooltip .selector .library .icon-container.success svg {
+    fill: #FFFFFF;
+}
