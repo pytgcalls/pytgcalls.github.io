@@ -78,7 +78,7 @@ body .tooltip > .icon-container {
 }
 
 body .tooltip.out-of-space > .icon-container {
-    left: 25%;
+    left: 42%;
     transform: none;
 }
 
@@ -114,11 +114,11 @@ body .tooltip .selector .library {
 }
 
 body .tooltip .selector .library:hover {
-    transform: scale(0.95);
+    transform: scale(0.99);
 }
 
 body .tooltip .selector .library:active {
-    transform: scale(0.85);
+    transform: scale(0.95);
 }
 
 body .tooltip .selector .library:not(:last-child) {

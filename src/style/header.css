@@ -110,17 +110,10 @@ body .header .header-icons .search-input {
   padding-inline: 15px;
   min-width: 280px;
   cursor: pointer;
-  transition: 0.3s opacity;
 }
 
 body .header .header-icons .search-input.opened {
-  animation: 0.4s hideSearchInput forwards;
-}
-
-@keyframes hideSearchInput {
-  to {
-    opacity: 0;
-  }
+  opacity: 0;
 }
 
 body .header .header-icons .search-input svg {
@@ -181,6 +174,16 @@ body .header .header-icons .header-icon svg {
   height: 18px;
   fill: rgba(255, 255, 255, 0.4);
   vertical-align: middle;
+}
+
+body .header .header-icons .header-icon.focused-tooltip svg {
+  animation: 0.4s rotateForTooltip forwards;
+}
+
+@keyframes rotateForTooltip {
+  to {
+    transform: rotate(180deg);
+  }
 }
 
 body .header .title-container {

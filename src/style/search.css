@@ -29,16 +29,35 @@ body .search-container.animate-appear {
 }
 
 body .search-container.animate-disappear {
-    animation: 0.2s animateDisappearSearchContainer forwards;
+    animation: 0.2s animateAppearSearchContainer reverse forwards;
 }
 
-@keyframes animateDisappearSearchContainer {
+body .search-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(15px);
+    z-index: -1;
+}
+
+body .search-container.animate-appear::before {
+    animation: 0.2s animateAppearBlur forwards;
+}
+
+@keyframes animateAppearBlur {
     from {
-        background: rgba(0, 0, 0, 0.7);
+        opacity: 0;
     }
     to {
-        background: transparent;
+        opacity: 1;
     }
+}
+
+body .search-container.animate-disappear::before {
+    animation: 0.2s animateAppearBlur reverse forwards;
 }
 
 body .search-container .search-input {
