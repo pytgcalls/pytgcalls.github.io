@@ -15,6 +15,7 @@
 
 function handleSettings() {
     handleDesktopMode();
+    handleReduceBlur();
 }
 
 function getForceGithubAPIStatus() {
@@ -34,7 +35,6 @@ function getCollapseLongCodeStatus() {
 function updateCollapseLongCode(status) {
     localStorage.setItem('collapseLongCode', String(status));
 }
-
 function getForceDesktopModeStatus() {
     const storageData = localStorage.getItem('desktopMode');
     return storageData === 'true';
@@ -56,6 +56,24 @@ function handleDesktopMode() {
         document.head.appendChild(metaViewPortTag);
     }
 }
+function getReduceBlurStatus() {
+    const storageData = localStorage.getItem('reduceBlur');
+
+    if (storageData === null && window.innerWidth < 800) {
+        return true;
+    }
+
+    return storageData === 'true';
+}
+
+function updateReduceBlur(status) {
+    localStorage.setItem('reduceBlur', String(status));
+    handleReduceBlur();
+}
+
+function handleReduceBlur() {
+    document.body.classList.toggle('reduce-blur', getReduceBlurStatus());
+}
 
 export {
     handleSettings,
@@ -64,5 +82,7 @@ export {
     getCollapseLongCodeStatus,
     updateCollapseLongCode,
     getForceDesktopModeStatus,
-    updateDesktopMode
+    updateDesktopMode,
+    getReduceBlurStatus,
+    updateReduceBlur,
 };

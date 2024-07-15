@@ -44,7 +44,14 @@ body .search-container::before {
     width: 100%;
     height: 100%;
     backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     z-index: -1;
+}
+
+body.reduce-blur .search-container::before {
+    display: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
 }
 
 body .search-container.animate-appear::before {

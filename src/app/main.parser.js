@@ -690,7 +690,6 @@ function handleMultiSyntax(element, newElement) {
   }
 
   if (exportAsBlame && element.querySelectorAll('syntax-highlight').length !== 2) {
-    console.log(element, element.parentElement);
     throw new Error('multisyntax must contains 2 elements to enable as-blame-mode');
   }
 
@@ -804,7 +803,6 @@ function handleMultiSyntax(element, newElement) {
     homePage.onChangeFavoriteSyntaxTab.addListener({
       callback: (data) => {
         const currentData = data[element.getAttribute('id')];
-        console.log('updated - '+data[element.getAttribute('id')], tabIds);
         if (currentData && tabIds.includes(currentData)) {
           tabElement.classList.toggle('active', tab.getAttribute('id') === currentData);
           if (tab.getAttribute('id') === currentData) {

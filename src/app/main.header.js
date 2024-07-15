@@ -258,11 +258,20 @@ function expandSettingsTooltip() {
         (status) => settingsManager.updateForceGithubAPI(status)
     ));
     selector.appendChild(createSettingsRow(
-        'Desktop Mode',
-        null,
-        settingsManager.getForceDesktopModeStatus(),
-        (status) => settingsManager.updateDesktopMode(status)
+        'Reduce Blur Effects',
+        'Avoid using blur effects, useful on slower devices',
+        settingsManager.getReduceBlurStatus(),
+        (status) => settingsManager.updateReduceBlur(status)
     ));
+
+    if (window.innerWidth < 1000) {
+      selector.appendChild(createSettingsRow(
+          'Desktop Mode',
+          'Force desktop mode even on mobile devices',
+          settingsManager.getForceDesktopModeStatus(),
+          (status) => settingsManager.updateDesktopMode(status)
+      ));
+    }
 
     tooltip.init({
       childElement: selector,

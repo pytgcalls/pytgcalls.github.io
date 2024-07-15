@@ -115,6 +115,7 @@ body .header .header-icons .search-input {
 
 body .header .header-icons .search-input.opened {
   opacity: 0;
+  transform: scale(1) !important;
 }
 
 body .header .header-icons .search-input svg {
