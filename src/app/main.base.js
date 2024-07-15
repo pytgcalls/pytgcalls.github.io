@@ -58,7 +58,7 @@ window.addEventListener('load', () => {
       handleSettings();
 
       config.getRedirectDataForPath(window.location.pathname).then((data) => {
-        if (data && (data.startsWith('https://') || data.startsWith('http://'))) {
+        if (data instanceof String && (data.startsWith('https://') || data.startsWith('http://'))) {
           window.location.href = data;
         } else {
           homePage.init(data || window.location.pathname);

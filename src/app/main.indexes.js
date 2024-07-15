@@ -44,6 +44,10 @@ function initFull() {
   return new Promise((resolve) => {
     config.loadConfig().then(() => {
       requestsManager.initRequest('/map.json').then((data) => {
+        if (!(data instanceof String)) {
+          return;
+        }
+
         try {
           const parsed = JSON.parse(data);
 
@@ -61,55 +65,6 @@ function initFull() {
       });
     });
   });
-
-  /*
-
-  return new Promise((resolve) => {
-    isCurrentlyIndexing = true;
-    hasCallback && callback(0, 0);
-
-    let i = 0;
-    let timeoutI = 0;
-
-    config.getAllFilesListFiles().then((files) => {
-      hasCallback && callback(0, files.length);
-
-      const handleIndexingWithResponse = (i, file, response, status) => {
-        hasCallback && callback(i, files.length);
-
-        if (status === 200) {
-          indexes[file] = parseFile(response);
-          indexes_caching[file] = response;
-        }
-
-        if (i === files.length) {
-          isCurrentlyIndexing = false;
-          hasIndexed = true;
-          resolve();
-        }
-      };
-
-      setTimeout(() => {
-        for (const file of files) {
-          timeoutI++;
-          if (indexes_caching[file]) {
-            i++;
-            handleIndexingWithResponse(i, file, indexes_caching[file], 200);
-          } else {
-            setTimeout(() => {
-              requestsManager.initRequest(file).then((data) => {
-                i++;
-                handleIndexingWithResponse(i, file, data, 200);
-              }).catch(() => {
-                i++;
-                handleIndexingWithResponse(i, file, undefined, 500);
-              });
-            }, timeoutI * 10);
-          }
-        }
-      }, 700);
-    });
-  });*/
 }
 
 function clearFullFromDebug() {

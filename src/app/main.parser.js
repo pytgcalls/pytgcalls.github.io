@@ -84,7 +84,7 @@ function handleRecursive(currentDom, elementDom) {
           throw new Error("Syntax highlight can't contain other tags");
         }
 
-        newElement = handleSyntaxHighlight(element, newElement, false, '', element.tagName.toUpperCase() == 'SHI');
+        newElement = handleSyntaxHighlight(element, newElement, false, '', element.tagName.toUpperCase() === 'SHI');
         elementDom.appendChild(newElement);
       } else if (element.tagName.toUpperCase() === 'GITHUB-REF') {
         handleGithubRef(newElement);
@@ -458,6 +458,10 @@ function handlePostQueryElement(element, newElement) {
 
       fullscreenCodePreview.addEventListener('animationend', () => {
         requestsManager.initRequest(element.getAttribute('url'), 'pytgcalls/pytgcalls').then((response) => {
+          if (!(response instanceof String) && response != null) {
+            return;
+          }
+
           codePreview.textContent = '';
           codePreview.classList.remove('is-loading');
 

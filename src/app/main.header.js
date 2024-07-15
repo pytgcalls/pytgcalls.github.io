@@ -19,6 +19,7 @@ import * as tooltip from "./main.tooltip.js";
 import * as iconsManager from "./main.icons.js";
 import * as settingsManager from "./main.settings.js";
 import {openSearchContainer} from "./main.search.js";
+import * as debug from "./main.debug.js";
 
 const onChangeListenerInstance = new ListenerManagerInstance();
 const onSidebarUpdateListenerInstance = new ListenerManagerInstance();
@@ -273,6 +274,18 @@ function expandSettingsTooltip() {
       ));
     }
 
+    if (debug.isSafeToUseDebugItems()) {
+      const debugTitle = document.createElement('div');
+      debugTitle.classList.add('mini-text', 'has-margin', 'align-left');
+      debugTitle.textContent = 'DEBUG';
+      selector.appendChild(debugTitle);
+
+      selector.appendChild(createDebugRow('Try custom page code',() => debug.tryCustomPageCode(false)));
+      selector.appendChild(createDebugRow('Try custom config code',() => debug.tryCustomPageCode(true)));
+      selector.appendChild(createDebugRow('Try custom server', () => debug.tryCustomServer()));
+      selector.appendChild(createDebugRow('Reload page data',  () => debug.reloadPageData()));
+    }
+
     tooltip.init({
       childElement: selector,
       container: headerSettingsElement,
@@ -282,7 +295,14 @@ function expandSettingsTooltip() {
   });
 }
 
-function createSettingsRow(title, description, status, callback) {
+function createDebugRow(title, callback) {
+  return createSettingsRow(title, null, false, () => {
+    tooltip.closeTooltips();
+    callback();
+  }, false);
+}
+
+function createSettingsRow(title, description, status, callback, hasSwitch = true) {
 
   const settingRowTitle = document.createElement('div');
   settingRowTitle.classList.add('title');
@@ -294,8 +314,8 @@ function createSettingsRow(title, description, status, callback) {
 
   const settingRowTitleRow = document.createElement('div');
   settingRowTitleRow.classList.add('title-row');
-  settingRowTitleRow.appendChild(settingRowTitle);
-  settingRowTitleRow.appendChild(settingRowSwitch);
+  hasSwitch && settingRowTitleRow.appendChild(settingRowTitle);
+  hasSwitch && settingRowTitleRow.appendChild(settingRowSwitch);
 
   const settingRowDescription = document.createElement('div');
   settingRowDescription.classList.add('description');
@@ -304,10 +324,16 @@ function createSettingsRow(title, description, status, callback) {
   const settingRow = document.createElement('div');
   settingRow.classList.add('library', 'has-switch');
   settingRow.addEventListener('click', () => {
+    if (!hasSwitch) {
+      callback();
+      return;
+    }
+
     const newStatus = settingRowSwitch.classList.toggle('selected');
     callback(newStatus);
   });
-  settingRow.appendChild(settingRowTitleRow);
+  hasSwitch && settingRow.appendChild(settingRowTitleRow);
+  !hasSwitch && settingRow.appendChild(settingRowTitle);
   description && settingRow.appendChild(settingRowDescription);
 
   return settingRow;

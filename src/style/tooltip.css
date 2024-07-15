@@ -100,7 +100,14 @@ body .tooltip .selector .main-title {
 body .tooltip .selector .mini-text {
     color: rgba(255, 255, 255, 0.6);
     font-size: 13px;
+}
+
+body .tooltip .selector .mini-text:not(.align-left) {
     text-align: center;
+}
+
+body .tooltip .selector .mini-text.has-margin {
+    margin-top: 15px;
 }
 
 body .tooltip .selector .library {

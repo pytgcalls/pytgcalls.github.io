@@ -19,8 +19,6 @@ let closeCallbacksList = [];
 
 function init({
   childElement,
-  title,
-  text,
   container,
   hasTabs = false,
   closeOnClick = true,

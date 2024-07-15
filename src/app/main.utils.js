@@ -79,26 +79,6 @@ function parseCategoryUrl(fileName) {
   return fileName;
 }
 
-function splitSearchResult(text, isZeroSplit = false) {
-  if (isZeroSplit) {
-    let newText = text.split("").reverse().join("");
-
-    if (newText.length > 30) {
-      newText = '...' + newText.slice(0, 30);
-    }
-
-    newText = newText.split("").reverse().join("");
-
-    return newText;
-  } else {
-    if (text.length > 30) {
-      text = text.slice(0, 30) + '...';
-    }
-
-    return text;
-  }
-}
-
 function escapeHTML(text) {
   return text.replace(/[\x26\x0A\<>'"]/g, function (r) {
     return "&#" + r.charCodeAt(0) + ";";
@@ -135,7 +115,6 @@ export {
   parseCategoryName,
   getCategoryFileName,
   parseCategoryUrl,
-  splitSearchResult,
   escapeHTML,
   copyToClipboard
 };

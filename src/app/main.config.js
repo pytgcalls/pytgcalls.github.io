@@ -165,23 +165,6 @@ function getAvailableCategories() {
   });
 }
 
-function getAllFilesListFiles() {
-  return new Promise((resolve) => {
-    loadConfig().then((config) => {
-      const domHelper = new DOMParser();
-      const dom = domHelper.parseFromString(config, 'application/xml');
-      const filesListElements = dom.querySelectorAll('config > files-list file');
-
-      let finalList = [];
-      for (const element of filesListElements) {
-        finalList.push(getFullPathByFileElement(element));
-      }
-
-      resolve(finalList);
-    });
-  });
-}
-
 function getTheNextFileAfter(fileName) {
   return new Promise((resolve, reject) => {
     loadConfig().then((config) => {
@@ -354,7 +337,6 @@ export {
     getFooterContributionLink,
     getFooterDescription,
     getAvailableCategories,
-    getAllFilesListFiles,
     getTheNextFileAfter,
     getAllFilesListFilesById,
     getFilesListDefaultFileById,

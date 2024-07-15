@@ -17,8 +17,6 @@ import * as utils from "./main.utils.js";
 import ListenerManagerInstance from "./main.listener.js";
 import * as iconsManager from "./main.icons.js";
 import * as config from "./main.config.js";
-import * as indexesManager from "./main.indexes.js";
-import * as debug from "./main.debug.js";
 
 const onChangeListenerInstance = new ListenerManagerInstance();
 const onCollapsedListenerInstance = new ListenerManagerInstance();
@@ -72,10 +70,6 @@ function loadSidebar(id) {
 
     const content = leftSidebar;
     content.textContent = '';
-
-    if (debug.isSafeToUseDebugItems()) {
-      content.appendChild(composeDebugProperties());
-    }
 
     currentLoadedSidebarId = id;
 
@@ -205,58 +199,6 @@ function createSidebarFileElement(id, textContent, contentUri = textContent) {
   });
 
   return element;
-}
-
-function composeDebugProperties() {
-  if (!debug.isSafeToUseDebugItems()) {
-    return document.createDocumentFragment();
-  }
-
-  const elementText = document.createElement('div');
-  elementText.classList.add('text');
-  elementText.textContent = 'Internal debug options';
-  const element = document.createElement('div');
-  element.classList.add('element');
-  element.appendChild(elementText);
-  element.appendChild(iconsManager.get('main', 'chevronDown'));
-
-  const elementsGroup = document.createElement('div');
-  elementsGroup.classList.add('elements');
-  elementsGroup.style.setProperty('--id', '0');
-  elementsGroup.appendChild(element);
-
-  const customCodeElement = document.createElement('div');
-  customCodeElement.classList.add('element');
-  customCodeElement.addEventListener('click', () => debug.tryCustomPageCode(false));
-  customCodeElement.style.setProperty('--id', '1');
-  customCodeElement.textContent = 'Try custom page code';
-  elementsGroup.append(customCodeElement);
-
-  const customConfigElement = document.createElement('div');
-  customConfigElement.classList.add('element');
-  customConfigElement.addEventListener('click', () => debug.tryCustomPageCode(true));
-  customConfigElement.style.setProperty('--id', '2');
-  customConfigElement.textContent = 'Try custom config code';
-  elementsGroup.append(customConfigElement);
-
-  const customDataDocsServer = document.createElement('div');
-  customDataDocsServer.classList.add('element');
-  customDataDocsServer.addEventListener('click', () => debug.tryCustomServer());
-  customDataDocsServer.style.setProperty('--id', '3');
-  customDataDocsServer.textContent = 'Try custom server';
-  elementsGroup.append(customDataDocsServer);
-
-  const reloadPage = document.createElement('div');
-  reloadPage.classList.add('element');
-  reloadPage.addEventListener('click', () => debug.reloadPageData());
-  reloadPage.style.setProperty('--id', '4');
-  reloadPage.textContent = 'Reload page data';
-  elementsGroup.append(reloadPage);
-
-  elementsGroup.style.setProperty('--items', '5');
-  element.addEventListener('click', () => elementsGroup.classList.toggle('expanded'));
-
-  return elementsGroup;
 }
 
 function updateActiveFile(file) {
