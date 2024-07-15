@@ -8,7 +8,11 @@ body .search-container {
     display: flex;
     justify-content: center;
     background: rgba(0, 0, 0, 0.7);
-    transition: 0.4s background;
+    --animation-speed: 0.2s;
+}
+
+body .search-container.faster {
+    --animation-speed: 0.1s;
 }
 
 body .search-container:not(.animate-appear):not(.animate-disappear) > .search-input.animated {
@@ -16,7 +20,7 @@ body .search-container:not(.animate-appear):not(.animate-disappear) > .search-in
 }
 
 body .search-container.animate-appear {
-    animation: 0.2s animateAppearSearchContainer forwards;
+    animation: var(--animation-speed) animateAppearSearchContainer forwards;
 }
 
 @keyframes animateAppearSearchContainer {
@@ -29,7 +33,7 @@ body .search-container.animate-appear {
 }
 
 body .search-container.animate-disappear {
-    animation: 0.2s animateAppearSearchContainer reverse forwards;
+    animation: var(--animation-speed) animateAppearSearchContainer reverse forwards;
 }
 
 body .search-container::before {
@@ -44,7 +48,7 @@ body .search-container::before {
 }
 
 body .search-container.animate-appear::before {
-    animation: 0.2s animateAppearBlur forwards;
+    animation: var(--animation-speed) animateAppearBlur forwards;
 }
 
 @keyframes animateAppearBlur {
@@ -57,7 +61,7 @@ body .search-container.animate-appear::before {
 }
 
 body .search-container.animate-disappear::before {
-    animation: 0.2s animateAppearBlur reverse forwards;
+    animation: var(--animation-speed) animateAppearBlur reverse forwards;
 }
 
 body .search-container .search-input {
@@ -87,7 +91,7 @@ body .search-container .search-input > svg:not(.spinner) {
 
 body .search-container .search-input > svg.cancel {
     cursor: pointer;
-    transition: 0.2s transform, 0.2s opacity;
+    transition: var(--animation-speed) transform, var(--animation-speed) opacity;
 }
 
 body .search-container .search-input .spinner {
@@ -98,7 +102,7 @@ body .search-container .search-input .spinner {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: 0.2s transform, 0.2s opacity;
+    transition: var(--animation-speed) transform, var(--animation-speed) opacity;
 }
 
 body .search-container .search-input.animated svg.cancel,
@@ -151,7 +155,7 @@ body .search-container.animate-disappear > .search-input.animated {
     position: absolute;
     --start-background: rgb(22, 26, 32);
     --end-background: rgb(16, 18, 22);
-    animation: 0.2s animateAppearSearchInput forwards cubic-bezier(0.42, 0, 0, 0.96);
+    animation: var(--animation-speed) animateAppearSearchInput forwards cubic-bezier(0.42, 0, 0, 0.96);
 }
 
 body .search-container.animate-disappear > .search-input.animated {
@@ -202,7 +206,7 @@ body .search-container .search-results::before {
     z-index: -1;
     border-radius: 20px;
     border: 2px solid rgb(36, 42, 51);
-    transition: 0.2s all;
+    transition: var(--animation-speed) all;
 }
 
 body .search-container.text-is-empty .search-results::before {
@@ -221,7 +225,7 @@ body .search-container .search-results .list-adapter {
     overflow-x: hidden;
     overflow-y: auto;
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-    transition: 0.2s clip-path;
+    transition: var(--animation-speed) clip-path;
 }
 
 @supports (overflow-y: overlay) {

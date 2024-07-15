@@ -106,7 +106,10 @@ function openSearchContainer(startBy) {
         searchText.focus();
         isAnimating--;
 
-        hasAlreadyText && handleSearch();
+        if (hasAlreadyText) {
+            handleSearch();
+            searchListAdapter.addEventListener('transitionend', () => searchContainer.classList.remove('faster'), { once: true });
+        }
     }, { once: true });
 
     const inputByLastStartBy = getInputByLastStartBy();
@@ -123,6 +126,7 @@ function openSearchContainer(startBy) {
     isAnimating++;
     updateSearchAnimationState(searchTextFullAnimation, startByRect, searchTextFull.getBoundingClientRect());
     searchContainer.classList.add('animate-appear');
+    searchContainer.classList.toggle('faster', hasAlreadyText);
     startBy.classList.add('opened');
 }
 
@@ -371,7 +375,7 @@ function closeSearch() {
     if (searchContainerElement.classList.contains('text-is-empty')) {
         onClosedAdapter();
     } else {
-        searchContainerElement.classList.add('text-is-empty');
+        searchContainerElement.classList.add('text-is-empty', 'faster');
         searchListAdapterElement.addEventListener('transitionend', onClosedAdapter, { once: true });
     }
 }

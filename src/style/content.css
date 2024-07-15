@@ -306,6 +306,12 @@ body .page-container .content:not(.is-loading) .page .external-sh {
   border-radius: 10px;
 }
 
+body .page-container .content:not(.is-loading) .page .multisyntax .external-sh {
+  background: initial;
+  border: none;
+  margin: 0;
+}
+
 body .page-container .content:not(.is-loading) .page .multisyntax,
 body .page-container .content:not(.is-loading) .page .external-sh .syntax-highlight,
 body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-code-high .syntax-highlight {
@@ -398,7 +404,7 @@ body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container 
   position: relative;
 }
 
-body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container>.syntax-highlight {
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container>.external-sh {
   background: none;
   border: none;
 }
@@ -408,11 +414,11 @@ body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.
   overflow: hidden;
 }
 
-body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container:not(.preparing-animation):not(.animating)>.syntax-highlight:not(.active) {
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container:not(.preparing-animation):not(.animating)>.external-sh:not(.active) {
   display: none;
 }
 
-body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.preparing-animation>.syntax-highlight:not(.active) {
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.preparing-animation>.external-sh:not(.active) {
   visibility: hidden;
 }
 
@@ -431,13 +437,13 @@ body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.
   }
 }
 
-body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating .syntax-highlight.disappearing,
-body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating .syntax-highlight.appearing {
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating .external-sh.disappearing,
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating .external-sh.appearing {
   position: absolute;
   top: 0;
 }
 
-body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating.animating-asback .syntax-highlight.disappearing {
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating.animating-asback .external-sh.disappearing {
   animation: 0.4s disappearSy forwards cubic-bezier(1, -0.02, 0, 0.97);
 }
 
@@ -448,7 +454,7 @@ body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.
   }
 }
 
-body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating.animating-asback .syntax-highlight.appearing {
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating.animating-asback .external-sh.appearing {
   animation: 0.4s appearSy forwards cubic-bezier(1, -0.02, 0, 0.97);
 }
 
@@ -459,7 +465,7 @@ body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.
   }
 }
 
-body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating:not(.animating-asback) .syntax-highlight.disappearing {
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating:not(.animating-asback) .external-sh.disappearing {
   animation: 0.4s disappearSyRev forwards cubic-bezier(1, -0.02, 0, 0.97);
 }
 
@@ -470,7 +476,7 @@ body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.
   }
 }
 
-body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating:not(.animating-asback) .syntax-highlight.appearing {
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating:not(.animating-asback) .external-sh.appearing {
   animation: 0.4s appearSyRev forwards cubic-bezier(1, -0.02, 0, 0.97);
 }
 

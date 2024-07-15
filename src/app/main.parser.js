@@ -804,6 +804,7 @@ function handleMultiSyntax(element, newElement) {
     homePage.onChangeFavoriteSyntaxTab.addListener({
       callback: (data) => {
         const currentData = data[element.getAttribute('id')];
+        console.log('updated - '+data[element.getAttribute('id')], tabIds);
         if (currentData && tabIds.includes(currentData)) {
           tabElement.classList.toggle('active', tab.getAttribute('id') === currentData);
           if (tab.getAttribute('id') === currentData) {
@@ -850,7 +851,6 @@ function handleMultiSyntax(element, newElement) {
     }
 
     syntaxElement = handleSyntaxHighlight(syntax, syntaxElement, true);
-
     syntaxHighlightContainer.appendChild(syntaxElement);
 
     homePage.onChangeFavoriteSyntaxTab.addListener({
@@ -874,11 +874,11 @@ function handleMultiSyntax(element, newElement) {
               const asBack = childNodes.indexOf(activeItem) > childNodes.indexOf(syntaxElement);
 
               const activeItemRect = activeItem.getBoundingClientRect();
-              syntaxHighlightContainer.style.setProperty('--height', (activeItemRect.height + 10) + 'px');
+              syntaxHighlightContainer.style.setProperty('--height', activeItemRect.height + 'px');
               syntaxHighlightContainer.classList.add('preparing-animation');
 
               const currentItemRect = syntaxElement.getBoundingClientRect();
-              syntaxHighlightContainer.style.setProperty('--to-height', (currentItemRect.height + 10) + 'px');
+              syntaxHighlightContainer.style.setProperty('--to-height', currentItemRect.height + 'px');
               activeItem.classList.add('disappearing');
               syntaxHighlightContainer.classList.add('animating');
               syntaxHighlightContainer.classList.toggle('animating-asback', asBack);

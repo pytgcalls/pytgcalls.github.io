@@ -110,6 +110,7 @@ body .header .header-icons .search-input {
   padding-inline: 15px;
   min-width: 280px;
   cursor: pointer;
+  transition: 0.4s transform;
 }
 
 body .header .header-icons .search-input.opened {
@@ -146,10 +147,12 @@ body .header .header-icons .header-icon {
   transition: 0.4s filter, 0.4s transform, 0.4s opacity;
 }
 
+body .header .header-icons .search-input:hover,
 body .header .header-icons .header-icon.visible:hover {
   transform: scale(0.95);
 }
 
+body .header .header-icons .search-input:active,
 body .header .header-icons .header-icon.visible:active {
   transform: scale(0.85);
 }
