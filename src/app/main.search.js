@@ -30,6 +30,7 @@ let searchSpinnerContainerElement;
 let searchListAdapterElement;
 let searchResultsFullElement;
 let currentSearchTimeout;
+let windowKeyDownEventListener;
 
 function openSearchContainer(startBy) {
     lastStartByElement = startBy;
@@ -122,6 +123,9 @@ function openSearchContainer(startBy) {
             animationInput.value = inputByLastStartBy.value;
         }
     }
+
+    windowKeyDownEventListener = (e) => e.key === 'Escape' && !e.shiftKey && !e.altKey && closeSearch();
+    window.addEventListener('keydown', windowKeyDownEventListener);
 
     isAnimating++;
     updateSearchAnimationState(searchTextFullAnimation, startByRect, searchTextFull.getBoundingClientRect());
@@ -420,6 +424,10 @@ function resetData() {
         clearTimeout(currentSearchTimeout);
     }
 
+    if (windowKeyDownEventListener !== null) {
+        window.removeEventListener('keydown', windowKeyDownEventListener);
+    }
+
     isAnimating = 0;
     lastStartByElement = undefined;
     searchTextElement = undefined;
@@ -429,6 +437,7 @@ function resetData() {
     searchListAdapterElement = undefined;
     searchResultsFullElement = undefined;
     currentSearchTimeout = undefined;
+    windowKeyDownEventListener = undefined;
 }
 
 export {
