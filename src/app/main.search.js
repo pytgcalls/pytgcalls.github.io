@@ -264,6 +264,10 @@ function createShowMoreLessAnimator(callback) {
 }
 
 function expandContainer(fullResultsList, isDocsRef = false) {
+    if (isAnimating !== 0) {
+        return;
+    }
+
     const mainContainer = isDocsRef ? searchDocsRefContainerElement : searchCodeRefContainerElement;
     const oppositeContainer = isDocsRef ? searchCodeRefContainerElement : searchDocsRefContainerElement;
 
@@ -282,6 +286,8 @@ function expandContainer(fullResultsList, isDocsRef = false) {
         collapseContainer(fullResultsList, mainContainer, oppositeContainer);
         return;
     }
+
+    isAnimating++;
 
     const onReadyToExpand = () => {
         const fragment = document.createDocumentFragment();
@@ -305,6 +311,8 @@ function expandContainer(fullResultsList, isDocsRef = false) {
 
             child.classList.remove('hidden');
         }
+
+        isAnimating--;
     };
 
     if (oppositeContainer === null) {
@@ -322,6 +330,10 @@ function expandContainer(fullResultsList, isDocsRef = false) {
 }
 
 function collapseContainer(fullResultsList, mainContainer, oppositeContainer) {
+    if (isAnimating !== 0) {
+        return;
+    }
+
     let promisesList = [];
     let visibleChildren = [];
 
@@ -344,6 +356,7 @@ function collapseContainer(fullResultsList, mainContainer, oppositeContainer) {
         }
     }
 
+    isAnimating++;
     Promise.all(promisesList).then(() => {
         for (const child of visibleChildren) {
             child.remove();
@@ -354,6 +367,8 @@ function collapseContainer(fullResultsList, mainContainer, oppositeContainer) {
             oppositeContainer.classList.add('animate-appear');
             oppositeContainer.addEventListener('animationend', () => oppositeContainer.classList.remove('animate-appear'), { once: true });
         }
+
+        isAnimating--;
     });
 }
 
