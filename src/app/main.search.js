@@ -321,6 +321,7 @@ function expandContainer(fullResultsList, isDocsRef = false) {
         const oppositeContainerRect = oppositeContainer.getBoundingClientRect();
         oppositeContainer.style.setProperty('--initial-height', oppositeContainerRect.height + 'px');
         oppositeContainer.classList.remove('animate-appear');
+        oppositeContainer.offsetHeight;
         oppositeContainer.classList.add('animate-disappear');
         oppositeContainer.addEventListener('animationend', () => {
             //oppositeContainer.style.removeProperty('--initial-height');
@@ -364,6 +365,7 @@ function collapseContainer(fullResultsList, mainContainer, oppositeContainer) {
 
         if (oppositeContainer !== null) {
             oppositeContainer.classList.remove('animate-disappear');
+            oppositeContainer.offsetHeight;
             oppositeContainer.classList.add('animate-appear');
             oppositeContainer.addEventListener('animationend', () => oppositeContainer.classList.remove('animate-appear'), { once: true });
         }

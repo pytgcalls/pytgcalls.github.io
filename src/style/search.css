@@ -259,6 +259,7 @@ body .search-container .search-results .list-adapter .ref-container.animate-disa
 }
 
 body .search-container .search-results .list-adapter .ref-container.animate-appear {
+    overflow: hidden;
     animation: 0.2s animateSecondEffectRef forwards;
 }
 
