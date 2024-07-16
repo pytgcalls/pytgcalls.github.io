@@ -12,7 +12,7 @@ body .header {
   transition: 0.4s border-bottom, 0.4s background cubic-bezier(0.97, -0.02, 0, 0.98);
 }
 
-body.as-home.expanded:not(.disable-blur) .header {
+body.as-home.expanded:not(.reduce-blur) .header {
   background: rgba(0, 0, 26, 0.5);
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);

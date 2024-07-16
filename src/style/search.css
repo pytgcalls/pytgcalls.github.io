@@ -246,36 +246,89 @@ body .search-container.text-is-empty .search-results .list-adapter {
     clip-path: polygon(0 0, 99% 0, 100% 0, 0 0);
 }
 
-body .search-container .search-results .list-adapter .row-title {
+body .search-container .search-results .list-adapter .ref-container.animate-disappear {
+    height: var(--initial-height);
+    overflow: hidden;
+    animation: 0.2s animateFirstEffectRef forwards;
+}
+
+@keyframes animateFirstEffectRef {
+    to {
+        height: 0;
+    }
+}
+
+body .search-container .search-results .list-adapter .ref-container.animate-appear {
+    animation: 0.2s animateSecondEffectRef forwards;
+}
+
+@keyframes animateSecondEffectRef {
+    from {
+        height: 0;
+    }
+    to {
+        height: var(--initial-height);
+    }
+}
+
+body .search-container .search-results .list-adapter .ref-container .row-title {
     color: rgba(255, 255, 255, 0.5);
     font-size: 14px;
     margin-top: 5px;
     margin-bottom: 5px;
 }
 
-body .search-container .search-results .list-adapter .row-title:not(:first-child) {
+body .search-container .search-results .list-adapter .ref-container .row-title:not(:first-child) {
     margin-top: 15px;
 }
 
-body .search-container .search-results .list-adapter .row-title:has(.show-more) {
+body .search-container .search-results .list-adapter .ref-container .row-title:has(.show-more) {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-body .search-container .search-results .list-adapter .row-title .show-more {
+body .search-container .search-results .list-adapter .ref-container .row-title .show-more {
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
+    position: relative;
 }
 
-body .search-container .search-results .list-adapter .row-title .show-more svg {
+body .search-container .search-results .list-adapter .ref-container .row-title .show-more span {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    width: max-content;
+    transition: 0.2s opacity, 0.2s transform;
+}
+
+body .search-container .search-results .list-adapter .ref-container .row-title .show-more.expanded span.more,
+body .search-container .search-results .list-adapter .ref-container .row-title .show-more:not(.expanded) span.less {
+    opacity: 0;
+}
+
+body .search-container .search-results .list-adapter .ref-container .row-title .show-more.expanded span.more {
+    transform: translateY(-80%);
+}
+
+body .search-container .search-results .list-adapter .ref-container .row-title .show-more:not(.expanded) span.less {
+    transform: translateY(80%);
+}
+
+body .search-container .search-results .list-adapter .ref-container .row-title .show-more svg {
     fill: rgba(255, 255, 255, 0.5);
+    transition: 0.2s transform;
 }
 
-body .search-container .search-results .list-adapter .row {
+body .search-container .search-results .list-adapter .ref-container .row-title .show-more.expanded svg {
+    transform: rotate(180deg);
+}
+
+body .search-container .search-results .list-adapter .ref-container .row {
     display: flex;
     justify-content: space-between;
     padding: 8px;
@@ -284,35 +337,63 @@ body .search-container .search-results .list-adapter .row {
     transition: 0.4s background;
 }
 
-body .search-container .search-results .list-adapter .row:hover {
+body .search-container .search-results .list-adapter .ref-container .row:hover {
     background: rgba(255, 255, 255, 0.05);
 }
 
-body .search-container .search-results .list-adapter .row:active {
+body .search-container .search-results .list-adapter .ref-container .row:active {
     background: rgba(255, 255, 255, 0.15);
 }
 
-body .search-container .search-results .list-adapter .row.has-docs-preview {
+body .search-container .search-results .list-adapter .ref-container .row.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+body .search-container .search-results .list-adapter .ref-container .row.animate-appear {
+    opacity: 0;
+    transform: scale(0.95);
+    animation: 0.2s appearRow forwards calc(var(--id) * 0.05s);
+}
+
+body .search-container .search-results .list-adapter .ref-container .row.animate-disappear {
+    opacity: 1;
+    transform: scale(1);
+    animation: 0.2s appearRow reverse forwards calc(var(--id) * 0.05s);
+}
+
+@keyframes appearRow {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+body .search-container .search-results .list-adapter .ref-container .row.has-docs-preview {
     padding-bottom: 110px;
     position: relative;
 }
 
-body .search-container .search-results .list-adapter .row .left-side {
+body .search-container .search-results .list-adapter .ref-container .row .left-side {
     display: flex;
     justify-content: center;
     gap: 10px;
 }
 
-body .search-container .search-results .list-adapter .row:not(:last-child) {
+body .search-container .search-results .list-adapter .ref-container .row:not(:last-child) {
     margin-bottom: 5px;
 }
 
-body .search-container .search-results .list-adapter .row .left-side .code-details .cd-name {
+body .search-container .search-results .list-adapter .ref-container .row .left-side .code-details .cd-name {
     font-size: 15px;
     color: #FFFFFF;
 }
 
-body .search-container .search-results .list-adapter .row .left-side .code-details .cd-name .cd-type {
+body .search-container .search-results .list-adapter .ref-container .row .left-side .code-details .cd-name .cd-type {
     display: inline;
     font-size: 11px;
     padding: 2px 7px;
@@ -321,33 +402,33 @@ body .search-container .search-results .list-adapter .row .left-side .code-detai
     margin-right: 6px;
 }
 
-body .search-container .search-results .list-adapter .row .left-side .code-details .cd-name .cd-type[data-type="class"] {
+body .search-container .search-results .list-adapter .ref-container .row .left-side .code-details .cd-name .cd-type[data-type="class"] {
     background: rgba(121, 192, 255, 0.1);
     color: rgb(121, 192, 255);
 }
 
-body .search-container .search-results .list-adapter .row .left-side .code-details .cd-name .cd-type[data-type="method"] {
+body .search-container .search-results .list-adapter .ref-container .row .left-side .code-details .cd-name .cd-type[data-type="method"] {
     background: rgba(210, 168, 255, 0.1);
     color: rgb(210, 168, 255);
 }
 
-body .search-container .search-results .list-adapter .row .left-side .code-details .cd-name .cd-type[data-type="enum"] {
+body .search-container .search-results .list-adapter .ref-container .row .left-side .code-details .cd-name .cd-type[data-type="enum"] {
     background: rgba(255, 166, 87, 0.1);
     color: rgb(255, 166, 87, 1);
 }
 
-body .search-container .search-results .list-adapter .row .left-side .code-details .cd-path {
+body .search-container .search-results .list-adapter .ref-container .row .left-side .code-details .cd-path {
     color: rgba(255, 255, 255, 0.6);
     font-size: 13px;
     margin-top: 3px;
 }
 
-body .search-container .search-results .list-adapter .row > span {
+body .search-container .search-results .list-adapter .ref-container .row > span {
     font-size: 14px;
     color: rgba(255, 255, 255, 0.6);
 }
 
-body .search-container .search-results .list-adapter .row .page-container {
+body .search-container .search-results .list-adapter .ref-container .row .page-container {
     height: calc(110px - 20px);
     position: absolute;
     bottom: 10px;
@@ -361,7 +442,7 @@ body .search-container .search-results .list-adapter .row .page-container {
     transition: none !important;
 }
 
-body .search-container .search-results .list-adapter .row .page-container::before {
+body .search-container .search-results .list-adapter .ref-container .row .page-container::before {
     content: "";
     position: absolute;
     top: 0;
@@ -371,7 +452,7 @@ body .search-container .search-results .list-adapter .row .page-container::befor
     transition: 0.4s transform, 0.4s filter;
 }
 
-body .search-container .search-results .list-adapter .row .page-container::before {
+body .search-container .search-results .list-adapter .ref-container .row .page-container::before {
     background: linear-gradient(90deg, #0e1114 50%, rgba(255, 255, 255, 0.05), #0e1114 75%);
     animation: 1s animateBackground forwards infinite linear;
 }
@@ -391,16 +472,16 @@ body .search-container .search-results .list-adapter .row .page-container::befor
     }
 }
 
-body .search-container .search-results .list-adapter .row .page-container:not(.is-loading)::before {
+body .search-container .search-results .list-adapter .ref-container .row .page-container:not(.is-loading)::before {
     animation-play-state: paused;
     filter: opacity(0);
 }
 
-body .search-container .search-results .list-adapter .row .page-container .ids {
+body .search-container .search-results .list-adapter .ref-container .row .page-container .ids {
     background: rgba(255, 255, 255, 0.2);
 }
 
-body .search-container .search-results .list-adapter .row .page-container .page {
+body .search-container .search-results .list-adapter .ref-container .row .page-container .page {
     transform: scale(0.6);
     transform-origin: 0 0;
 }

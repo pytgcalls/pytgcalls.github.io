@@ -50,7 +50,7 @@ window.addEventListener('load', () => {
       }
 
       if (devicesManager.isAndroid()) {
-        document.body.classList.add('disable-blur');
+        document.body.classList.add('reduce-blur');
       }
 
       reloadScreenData();

@@ -124,9 +124,6 @@ function getElement() {
 
   const header = document.createElement('div');
   header.classList.add('header');
-  header.addEventListener('dblclick', () => {
-    document.body.classList.toggle('disable-blur');
-  });
   header.appendChild(headerMenu);
   header.appendChild(headerTitleContainer);
   header.appendChild(fakeHeaderLibraryValue);

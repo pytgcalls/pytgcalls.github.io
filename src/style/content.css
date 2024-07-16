@@ -269,7 +269,7 @@ body .page-container .content:not(.is-loading) .page .code {
   user-select: all;
 }
 
-body.disable-blur .page-container .content:not(.is-loading) .code {
+body.reduce-blur .page-container .content:not(.is-loading) .code {
   border: none;
 }
 
@@ -709,8 +709,8 @@ body .page-container .content:not(.is-loading) .page .multisyntax .tabs>.tab:not
   color: rgba(255, 255, 255, 0.5);
 }
 
-body.disable-blur .page-container .content:not(.is-loading) .syntax-highlight,
-body.as-home.disable-blur .page-container .home-container .final-pres .pres-item .syntax-highlight {
+body.reduce-blur .page-container .content:not(.is-loading) .syntax-highlight,
+body.as-home.reduce-blur .page-container .home-container .final-pres .pres-item .syntax-highlight {
   border: none;
 }
 
@@ -755,7 +755,7 @@ body .page-container .content:not(.is-loading) table {
   margin-top: 20px;
 }
 
-body.disable-blur .page-container .content:not(.is-loading) table {
+body.reduce-blur .page-container .content:not(.is-loading) table {
   border: none;
 }
 

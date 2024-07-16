@@ -44,10 +44,6 @@ function initFull() {
   return new Promise((resolve) => {
     config.loadConfig().then(() => {
       requestsManager.initRequest('/map.json').then((data) => {
-        if (!(data instanceof String)) {
-          return;
-        }
-
         try {
           const parsed = JSON.parse(data);
 
@@ -62,7 +58,7 @@ function initFull() {
         } catch (e) {
           console.error(e);
         }
-      });
+      }).catch((e) => console.error('Search failed:', e));
     });
   });
 }

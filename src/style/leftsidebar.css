@@ -50,7 +50,7 @@ body .page-container .left-container .left-sidebar::-webkit-scrollbar {
   display: none;
 }
 
-body.disable-blur .page-container .left-container .left-sidebar {
+body.reduce-blur .page-container .left-container .left-sidebar {
   border: none;
 }
 

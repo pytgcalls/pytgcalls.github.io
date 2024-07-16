@@ -28,9 +28,12 @@ let searchTextFullElement;
 let searchContainerElement;
 let searchSpinnerContainerElement;
 let searchListAdapterElement;
+let searchCodeRefContainerElement;
+let searchDocsRefContainerElement;
 let searchResultsFullElement;
 let currentSearchTimeout;
 let windowKeyDownEventListener;
+let alreadyWaitingForIndexingStart = false;
 
 function openSearchContainer(startBy) {
     lastStartByElement = startBy;
@@ -138,16 +141,15 @@ function handleSearch() {
     loadConfig().then(() => {
         const onSearchReady = (text) => {
             searchContainerElement.classList.toggle('text-is-empty', !text.trim());
-
-            if (!text.length) {
+            if (!text.trim()) {
                 return;
             }
 
-            const codeRefResults = document.createDocumentFragment();
+            const codeRefResults = [];
             const codeRefResultsLimited = document.createDocumentFragment();
             let codeRefResultsCount = 0;
 
-            const docsRefResults = document.createDocumentFragment();
+            const docsRefResults = [];
             const docsRefResultsLimited = document.createDocumentFragment();
             let docsRefResultsCount = 0;
 
@@ -156,14 +158,23 @@ function handleSearch() {
                 for (const indexedValue of indexesManager.getIndexedValue(indexedFile)) {
                     if (indexedValue instanceof indexesManager.FileIndex) {
                         if (indexedValue.getName().toLowerCase().indexOf(text.toLowerCase().trim()) !== -1) {
-                            codeRefResultsCount++;
-                            (codeRefResultsCount > 3 ? codeRefResults : codeRefResultsLimited).append(createReference(indexedValue.getType(), indexedValue.getName(), indexedFile));
+                            const ref = createReference(indexedValue.getType(), indexedValue.getName(), indexedFile);
+                            if (codeRefResultsCount++ > 3) {
+                                codeRefResults.push(ref);
+                            } else {
+                                codeRefResultsLimited.append(ref);
+                            }
                         }
                     } else if (indexedValue instanceof indexesManager.ElementIndex && !addedDocsRefForFile) {
                         if (indexedValue.getMainElement().textContent.toLowerCase().indexOf(text.toLowerCase().trim()) !== -1) {
-                            docsRefResultsCount++;
                             addedDocsRefForFile = true;
-                            (docsRefResultsCount > 3 ? docsRefResults : docsRefResultsLimited).append(createReference(null, null, indexedFile, docsRefResultsCount > 3 ? undefined : indexedValue.getChunk(), text));
+
+                            const ref = createReference(null, null, indexedFile, docsRefResultsCount > 3 ? undefined : indexedValue.getChunk(), text);
+                            if (docsRefResultsCount++ > 3) {
+                                docsRefResults.push(ref);
+                            } else {
+                                docsRefResultsLimited.append(ref);
+                            }
                         }
                     }
                 }
@@ -176,55 +187,174 @@ function handleSearch() {
                 const codeRefTitle = document.createElement('div');
                 codeRefTitle.classList.add('row-title');
                 codeRefTitle.textContent = 'Code References';
-                searchListAdapterElement.appendChild(codeRefTitle);
-                searchListAdapterElement.appendChild(codeRefResultsLimited);
 
                 if (codeRefResultsCount > 3) {
-                    const codeRefShowMore = document.createElement('div');
-                    codeRefShowMore.classList.add('show-more');
-                    codeRefShowMore.addEventListener('click', () => expandContainer(codeRefResults));
-                    codeRefShowMore.textContent = 'Show more';
-                    codeRefShowMore.appendChild(iconsManager.get('main', 'arrowRight').firstChild);
-                    codeRefTitle.appendChild(codeRefShowMore);
+                    codeRefTitle.appendChild(createShowMoreLessAnimator(() => expandContainer(codeRefResults)));
                 }
+
+                const searchResultReferenceContainer = document.createElement('div');
+                searchResultReferenceContainer.classList.add('ref-container');
+                searchResultReferenceContainer.appendChild(codeRefTitle);
+                searchResultReferenceContainer.appendChild(codeRefResultsLimited);
+                searchListAdapterElement.appendChild(searchResultReferenceContainer);
+
+                searchCodeRefContainerElement = searchResultReferenceContainer;
+            } else {
+                searchCodeRefContainerElement = undefined;
             }
 
             if (docsRefResultsCount > 0) {
                 const docsRefTitle = document.createElement('div');
                 docsRefTitle.classList.add('row-title');
                 docsRefTitle.textContent = 'Docs References';
-                searchListAdapterElement.appendChild(docsRefTitle);
-                searchListAdapterElement.appendChild(docsRefResultsLimited);
 
                 if (docsRefResultsCount > 3) {
-                    const docsRefShowMore = document.createElement('div');
-                    docsRefShowMore.classList.add('show-more');
-                    docsRefShowMore.addEventListener('click', () => expandContainer(docsRefResults));
-                    docsRefShowMore.textContent = 'Show more';
-                    docsRefShowMore.appendChild(iconsManager.get('main', 'arrowRight').firstChild);
-                    docsRefTitle.appendChild(docsRefShowMore);
+                    docsRefTitle.appendChild(createShowMoreLessAnimator(() => expandContainer(docsRefResults, true)));
                 }
+
+                const searchResultReferenceContainer = document.createElement('div');
+                searchResultReferenceContainer.classList.add('ref-container');
+                searchResultReferenceContainer.appendChild(docsRefTitle);
+                searchResultReferenceContainer.appendChild(docsRefResultsLimited);
+                searchListAdapterElement.appendChild(searchResultReferenceContainer);
+
+                searchDocsRefContainerElement = searchResultReferenceContainer;
+            } else {
+                searchDocsRefContainerElement = undefined;
             }
         };
 
         if (!indexesManager.isCurrentlyIndexing) {
-            if (!indexesManager.hasIndexed) {
+            if (!indexesManager.hasIndexed && !alreadyWaitingForIndexingStart) {
                 searchTextFullElement.classList.add('is-loading');
+                alreadyWaitingForIndexingStart = true;
 
                 searchSpinnerContainerElement.addEventListener('transitionend', () => {
+                    alreadyWaitingForIndexingStart = false;
+
                     indexesManager.initFull().then(() => {
                         searchTextFullElement.classList.remove('is-loading');
                         scheduleSearch(onSearchReady);
                     });
                 }, { once: true });
-            } else {
+            } else if (!alreadyWaitingForIndexingStart) {
                 scheduleSearch(onSearchReady);
             }
         }
     });
 }
 
-function expandContainer(fullResultsList) {
+function createShowMoreLessAnimator(callback) {
+    const refShowMoreAnimator = document.createElement('span');
+    refShowMoreAnimator.classList.add('more');
+    refShowMoreAnimator.textContent = 'Show more';
+
+    const refShowLessAnimator = document.createElement('span');
+    refShowLessAnimator.classList.add('less');
+    refShowLessAnimator.textContent = 'Show less';
+
+    const refShowMoreLess = document.createElement('div');
+    refShowMoreLess.classList.add('show-more');
+    refShowMoreLess.addEventListener('click', callback);
+    refShowMoreLess.appendChild(refShowMoreAnimator);
+    refShowMoreLess.appendChild(refShowLessAnimator);
+    refShowMoreLess.appendChild(iconsManager.get('main', 'chevronDown').firstChild);
+
+    return refShowMoreLess;
+}
+
+function expandContainer(fullResultsList, isDocsRef = false) {
+    const mainContainer = isDocsRef ? searchDocsRefContainerElement : searchCodeRefContainerElement;
+    const oppositeContainer = isDocsRef ? searchCodeRefContainerElement : searchDocsRefContainerElement;
+
+    let mustExpand = true;
+    if (mainContainer.hasChildNodes()) {
+        const titleChild = mainContainer.firstChild;
+        if (titleChild.classList.contains('row-title')) {
+            const showMoreChild = titleChild.querySelector('.show-more');
+            if (showMoreChild !== null) {
+                mustExpand = showMoreChild.classList.toggle('expanded');
+            }
+        }
+    }
+
+    if (!mustExpand) {
+        collapseContainer(fullResultsList, mainContainer, oppositeContainer);
+        return;
+    }
+
+    const onReadyToExpand = () => {
+        const fragment = document.createDocumentFragment();
+        for (const child of fullResultsList) {
+            child.classList.add('hidden');
+            fragment.append(child);
+        }
+        mainContainer.appendChild(fragment);
+
+        let itemAnimatorID = -1;
+        const adapterRect = searchListAdapterElement.getBoundingClientRect();
+        for (const child of fullResultsList) {
+            const childRect = child.getBoundingClientRect();
+
+            if (childRect.top < adapterRect.top + adapterRect.height) {
+                itemAnimatorID++;
+                child.style.setProperty('--id', itemAnimatorID);
+                child.classList.remove('animate-disappear');
+                child.classList.add('animate-appear');
+            }
+
+            child.classList.remove('hidden');
+        }
+    };
+
+    if (oppositeContainer === null) {
+        onReadyToExpand();
+    } else {
+        const oppositeContainerRect = oppositeContainer.getBoundingClientRect();
+        oppositeContainer.style.setProperty('--initial-height', oppositeContainerRect.height + 'px');
+        oppositeContainer.classList.remove('animate-appear');
+        oppositeContainer.classList.add('animate-disappear');
+        oppositeContainer.addEventListener('animationend', () => {
+            //oppositeContainer.style.removeProperty('--initial-height');
+            onReadyToExpand();
+        }, { once: true });
+    }
+}
+
+function collapseContainer(fullResultsList, mainContainer, oppositeContainer) {
+    let promisesList = [];
+    let visibleChildren = [];
+
+    const adapterRect = searchListAdapterElement.getBoundingClientRect();
+    for (const child of fullResultsList) {
+        if (!mainContainer.contains(child)) {
+            continue;
+        }
+
+        const childRect = child.getBoundingClientRect();
+
+        if (childRect.top < adapterRect.top + adapterRect.height) {
+            child.classList.remove('animate-appear');
+            child.offsetHeight; // trigger redraw
+            child.classList.add('animate-disappear');
+            visibleChildren.push(child);
+            promisesList.push(new Promise((resolve) => child.addEventListener('animationend', resolve, { once: true })));
+        } else {
+            child.remove();
+        }
+    }
+
+    Promise.all(promisesList).then(() => {
+        for (const child of visibleChildren) {
+            child.remove();
+        }
+
+        if (oppositeContainer !== null) {
+            oppositeContainer.classList.remove('animate-disappear');
+            oppositeContainer.classList.add('animate-appear');
+            oppositeContainer.addEventListener('animationend', () => oppositeContainer.classList.remove('animate-appear'), { once: true });
+        }
+    });
 }
 
 function scheduleSearch(onSearchReady) {
@@ -233,7 +363,7 @@ function scheduleSearch(onSearchReady) {
         currentSearchTimeout = undefined;
     }
 
-    if (searchListAdapterElement.textContent.trim() === '') {
+    if (!searchListAdapterElement.hasChildNodes()) {
         onSearchReady(searchTextElement.value.trim());
         return;
     }
@@ -435,9 +565,12 @@ function resetData() {
     searchContainerElement = undefined;
     searchSpinnerContainerElement = undefined;
     searchListAdapterElement = undefined;
+    searchCodeRefContainerElement = undefined;
+    searchDocsRefContainerElement = undefined;
     searchResultsFullElement = undefined;
     currentSearchTimeout = undefined;
     windowKeyDownEventListener = undefined;
+    alreadyWaitingForIndexingStart = false;
 }
 
 export {
