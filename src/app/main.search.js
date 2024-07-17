@@ -145,9 +145,7 @@ function handleSearch() {
                 return;
             }
 
-            const codeRefResults = [];
-            const codeRefResultsLimited = document.createDocumentFragment();
-            let codeRefResultsCount = 0;
+            let allFileIndexResults = [];
 
             const docsRefResults = [];
             const docsRefResultsLimited = document.createDocumentFragment();
@@ -157,19 +155,14 @@ function handleSearch() {
                 let addedDocsRefForFile = false;
                 for (const indexedValue of indexesManager.getIndexedValue(indexedFile)) {
                     if (indexedValue instanceof indexesManager.FileIndex) {
-                        if (indexedValue.getName().toLowerCase().indexOf(text.toLowerCase().trim()) !== -1) {
-                            const ref = createReference(indexedValue.getType(), indexedValue.getName(), indexedFile);
-                            if (codeRefResultsCount++ > 3) {
-                                codeRefResults.push(ref);
-                            } else {
-                                codeRefResultsLimited.append(ref);
-                            }
+                        if (indexedValue.name.toLowerCase().indexOf(text.toLowerCase().trim()) !== -1) {
+                            allFileIndexResults.push(indexedValue);
                         }
                     } else if (indexedValue instanceof indexesManager.ElementIndex && !addedDocsRefForFile) {
-                        if (indexedValue.getMainElement().textContent.toLowerCase().indexOf(text.toLowerCase().trim()) !== -1) {
+                        if (indexedValue.mainElement.textContent.toLowerCase().indexOf(text.toLowerCase().trim()) !== -1) {
                             addedDocsRefForFile = true;
 
-                            const ref = createReference(null, null, indexedFile, docsRefResultsCount > 3 ? undefined : indexedValue.getChunk(), text);
+                            const ref = createReference(null, null, indexedFile, docsRefResultsCount > 3 ? undefined : indexedValue.chunk, text);
                             if (docsRefResultsCount++ > 3) {
                                 docsRefResults.push(ref);
                             } else {
@@ -177,6 +170,20 @@ function handleSearch() {
                             }
                         }
                     }
+                }
+            }
+
+            const codeRefResults = [];
+            const codeRefResultsLimited = document.createDocumentFragment();
+            let codeRefResultsCount = 0;
+
+            allFileIndexResults.sort((a, b) => b.type.length - a.type.length);
+            for (const indexedValue of allFileIndexResults) {
+                const ref = createReference(indexedValue.type, indexedValue.name, indexedValue.filePath);
+                if (codeRefResultsCount++ > 3) {
+                    codeRefResults.push(ref);
+                } else {
+                    codeRefResultsLimited.append(ref);
                 }
             }
 

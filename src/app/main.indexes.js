@@ -48,7 +48,7 @@ function initFull() {
           const parsed = JSON.parse(data);
 
           for (const file in parsed) {
-            indexes[file] = parseFile(parsed[file]);
+            indexes[file] = parseFile(file, parsed[file]);
             indexes_caching[file] = parsed[file];
           }
 
@@ -83,11 +83,11 @@ function getFullIndexedValue(file) {
 }
 
 function saveAsFullIndexedValue(file, data) {
-  indexes[file] = parseFile(data);
+  indexes[file] = parseFile(file, data);
   indexes_caching[file] = data;
 }
 
-function parseFile(fileContent) {
+function parseFile(filePath, fileContent) {
   let fileIndexes = [];
 
   try {
@@ -100,7 +100,7 @@ function parseFile(fileContent) {
         const elementType = element.getAttribute('src');
         if (AVAILABLE_TYPES.includes(elementType)) {
           tryToReduceTags(element);
-          fileIndexes.push(new FileIndex(elementType, element.textContent));
+          fileIndexes.push(new FileIndex(elementType, element.textContent, filePath));
         }
       }
 
@@ -144,8 +144,12 @@ class ElementIndex {
     this.#main = element;
   }
 
-  getMainElement() {
+  get mainElement() {
     return this.#main;
+  }
+
+  get chunk() {
+    return this.#chunk;
   }
 
   addToChunk(element) {
@@ -158,27 +162,29 @@ class ElementIndex {
         ...this.#chunk
     ];
   }
-
-  getChunk() {
-    return this.#chunk;
-  }
 }
 
 class FileIndex {
   #type;
   #name;
+  #filePath;
 
-  constructor(type, name) {
+  constructor(type, name, filePath) {
     this.#type = type;
     this.#name = name;
+    this.#filePath = filePath;
   }
 
-  getType() {
+  get type() {
     return this.#type;
   }
 
-  getName() {
+  get name() {
     return this.#name;
+  }
+
+  get filePath() {
+    return this.#filePath;
   }
 }
 
