@@ -234,12 +234,20 @@ body .header .title-container .separator {
 body .header .title-container .library {
   cursor: pointer;
   display: flex;
-  gap: 5px;
 }
 
 body .header .title-container .library span {
   color: #FFFFFF;
   font-size: 16px;
+  transition: 0.2s opacity;
+}
+
+body .header .title-container .library.is-empty span:not(.point):not(.value) {
+  opacity: 0.6;
+}
+
+body .header .title-container .library.is-empty span.point {
+  opacity: 0;
 }
 
 body .header .title-container .library span:not(.value) {
@@ -250,7 +258,12 @@ body .header .title-container .library span.value {
   width: var(--width);
   font-weight: 500;
   opacity: 0.4;
-  transition: 0.2s width, 0.2s opacity, 0.2s transform;
+  margin-inline: 5px;
+  transition: 0.2s width, 0.2s opacity, 0.2s transform, 0.2s margin-inline;
+}
+
+body .header .title-container .library.is-empty span.value {
+  margin-inline: 1px;
 }
 
 body .header .title-container .library span.value.updating {

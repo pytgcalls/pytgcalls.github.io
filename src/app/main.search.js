@@ -117,12 +117,12 @@ function openSearchContainer(startBy) {
     }, { once: true });
 
     const inputByLastStartBy = getInputByLastStartBy();
-    if (inputByLastStartBy !== null) {
+    if (inputByLastStartBy != null) {
         searchText.value = inputByLastStartBy.value;
         hasAlreadyText = !!inputByLastStartBy.value.trim();
 
         const animationInput = searchTextFullAnimation.querySelector('input');
-        if (animationInput !== null) {
+        if (animationInput != null) {
             animationInput.value = inputByLastStartBy.value;
         }
     }
@@ -276,7 +276,7 @@ function expandContainer(fullResultsList, isDocsRef = false) {
         const titleChild = mainContainer.firstChild;
         if (titleChild.classList.contains('row-title')) {
             const showMoreChild = titleChild.querySelector('.show-more');
-            if (showMoreChild !== null) {
+            if (showMoreChild != null) {
                 mustExpand = showMoreChild.classList.toggle('expanded');
             }
         }
@@ -315,7 +315,7 @@ function expandContainer(fullResultsList, isDocsRef = false) {
         isAnimating--;
     };
 
-    if (oppositeContainer === null) {
+    if (oppositeContainer == null) {
         onReadyToExpand();
     } else {
         const oppositeContainerRect = oppositeContainer.getBoundingClientRect();
@@ -363,7 +363,7 @@ function collapseContainer(fullResultsList, mainContainer, oppositeContainer) {
             child.remove();
         }
 
-        if (oppositeContainer !== null) {
+        if (oppositeContainer != null) {
             oppositeContainer.classList.remove('animate-disappear');
             oppositeContainer.offsetHeight;
             oppositeContainer.classList.add('animate-appear');
@@ -375,7 +375,7 @@ function collapseContainer(fullResultsList, mainContainer, oppositeContainer) {
 }
 
 function scheduleSearch(onSearchReady) {
-    if (currentSearchTimeout !== null) {
+    if (currentSearchTimeout != null) {
         clearTimeout(currentSearchTimeout);
         currentSearchTimeout = undefined;
     }
@@ -473,7 +473,7 @@ function closeSearch() {
         return;
     }
 
-    if (isAnimating !== 0 || searchContainerElement.querySelector('.animated') !== null) {
+    if (isAnimating !== 0 || searchContainerElement.querySelector('.animated') != null) {
         return;
     }
 
@@ -481,7 +481,7 @@ function closeSearch() {
         const searchTextFullAnimation = searchTextFullElement.cloneNode(true);
         searchTextFullAnimation.classList.add('animated');
 
-        if (searchTextFullAnimation.querySelector('.spinner') !== null) {
+        if (searchTextFullAnimation.querySelector('.spinner') != null) {
             searchTextFullAnimation.querySelector('.spinner').remove();
         }
 
@@ -515,7 +515,7 @@ function closeSearch() {
         }, { once: true });
 
         const inputByLastStartBy = getInputByLastStartBy();
-        if (inputByLastStartBy !== null) {
+        if (inputByLastStartBy != null) {
             inputByLastStartBy.value = searchTextElement.value;
             hasAlreadyText = !!searchTextElement.value.trim();
         }
@@ -550,6 +550,10 @@ function updateSearchAnimationState(animatedSearchText, startByRect, endByRect) 
 function recomposeCodePath(pathName) {
     const fragment = document.createDocumentFragment();
 
+    if (pathName.startsWith('/')) {
+        pathName = pathName.slice(1);
+    }
+
     const splitted = pathName.split('/');
     for (let [i, part] of splitted.entries()) {
         if (i === splitted.length - 1 && part.endsWith('.xml')) {
@@ -567,11 +571,11 @@ function recomposeCodePath(pathName) {
 }
 
 function resetData() {
-    if (currentSearchTimeout !== null) {
+    if (currentSearchTimeout != null) {
         clearTimeout(currentSearchTimeout);
     }
 
-    if (windowKeyDownEventListener !== null) {
+    if (windowKeyDownEventListener != null) {
         window.removeEventListener('keydown', windowKeyDownEventListener);
     }
 

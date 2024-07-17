@@ -45,6 +45,10 @@ function show() {
   composeContainer();
 }
 
+function isVisible() {
+  return containerElement != null && containerElement.hasChildNodes();
+}
+
 function hide() {
   containerElement.textContent = '';
   onVisibilityUpdateListenerInstance.callAllListeners(false);
@@ -52,6 +56,8 @@ function hide() {
   if (typeof currentVscTimeout != 'undefined') {
     clearTimeout(currentVscTimeout);
   }
+
+  resetData();
 }
 
 function composeContainer() {
@@ -827,6 +833,7 @@ function resetData() {
 export {
   getElement,
   show,
+  isVisible,
   hide,
   resetData,
   onVisibilityUpdateListenerInstance

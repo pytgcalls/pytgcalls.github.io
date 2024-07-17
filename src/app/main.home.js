@@ -83,7 +83,8 @@ function init(pathName) {
 
   headerInstance.onChangeListenerInstance.addListener({
     callback: (id) => {
-      introductionInstance.hide();
+      introductionInstance.isVisible() && introductionInstance.hide();
+
       const promise = sidebarInstance.loadSidebar(id);
       sidebarInstance.focusOnSidebar();
       headerInstance.updateCompassVisibilityState(false);
@@ -131,12 +132,16 @@ function init(pathName) {
   });
 
   sidebarInstance.onChangeListenerInstance.addListener({
-    callback: (file) => {
-      headerInstance.updateSidebarMobileVisibilityState(false);
-      headerInstance.updateCompassVisibilityState(true);
-      headerInstance.updateCompassExpandedState(false);
-      sidebarInstance.updateMobileVisibilityState(false);
-      contentInstance.loadFile(file);
+    callback: (pathName) => {
+      if (!pathName.startsWith('/')) {
+        pathName = '/' + pathName;
+      }
+
+      chooseRightTab(pathName, '', false).then((found) => {
+        if (!found) {
+          forceSwitchToHome();
+        }
+      });
     }
   });
 
@@ -196,7 +201,7 @@ function forceSwitchToHome(avoidPushingState = false) {
 
   if (!avoidPushingState) {
     window.history.pushState('', '', '/');
-    headerInstance.onChangeListenerInstance.callInternalListeners("Documentation");
+    headerInstance.onChangeListenerInstance.callInternalListeners(null);
   }
 }
 
@@ -205,7 +210,7 @@ function tryToIndexFilePathFromId(id, pathName, hash, updateActiveFilePromise, a
     let found = false;
 
     for (const file of files) {
-      if (utils.parseCategoryUrl(file) === decodeURI(pathName)) {
+      if (utils.parseCategoryUrl(file) === utils.parseCategoryUrl(decodeURI(pathName))) {
         found = true;
         updateLoadedFile(file, hash, updateActiveFilePromise, avoidPushingState);
         break;
@@ -229,6 +234,7 @@ function updateLoadedFile(file, hash, updateActiveFilePromise, avoidPushingState
     });
   });
 
+  introductionInstance.isVisible() && introductionInstance.hide();
   headerInstance.updateCompassVisibilityState(true);
   headerInstance.updateCompassExpandedState(false);
   headerInstance.updateTabsMobileVisibility(false);

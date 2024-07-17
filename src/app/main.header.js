@@ -71,7 +71,10 @@ function getElement() {
   headerSeparator.classList.add('separator');
 
   const headerLibraryTitle = document.createElement('span');
-  headerLibraryTitle.textContent = 'Library:';
+  headerLibraryTitle.textContent = 'Library';
+  const headerLibraryTitlePoint = document.createElement('span');
+  headerLibraryTitlePoint.classList.add('point');
+  headerLibraryTitlePoint.textContent = ':';
   const headerLibraryValue = document.createElement('span');
   headerLibraryValue.classList.add('value');
   headerLibraryValueElement = headerLibraryValue;
@@ -80,6 +83,7 @@ function getElement() {
   headerLibrary.classList.add('library');
   headerLibrary.addEventListener('click', () => expandLibrarySelectorTooltip());
   headerLibrary.appendChild(headerLibraryTitle);
+  headerLibrary.appendChild(headerLibraryTitlePoint);
   headerLibrary.appendChild(headerLibraryValue);
   headerLibrary.appendChild(headerLibraryIcon);
   headerLibraryElement = headerLibrary;
@@ -170,13 +174,19 @@ function appendTitleUpdateOnActiveTabUpdate() {
         return;
       }
 
-      document.title = id;
-      if (id !== 'Documentation') {
-        document.title += ' Documentation';
-      }
-      if (headerLibraryValueElement.textContent === "") {
+      document.title = id == null ? 'Home' : id+' Docs';
+
+      const wasEmpty = headerLibraryElement.classList.contains('is-empty');
+      headerLibraryElement.classList.toggle('is-empty', id == null);
+
+      if (!headerLibraryValueElement.hasChildNodes() && !wasEmpty) {
         headerLibraryValueElement.textContent = id;
         return;
+      }
+
+      if (wasEmpty) {
+        headerLibraryValueElement.style.setProperty('--width', '0px');
+        headerLibraryValueElement.offsetHeight; // trigger redraw
       }
 
       fakeHeaderLibraryValueElement.textContent = id;
