@@ -189,7 +189,8 @@ body .search-container.animate-disappear > .search-input.animated {
 
 body .search-container .search-results {
     margin-top: 15px;
-    height: 80vh;
+    max-height: 80vh;
+    height: fit-content;
     width: 60vw;
     position: relative;
     overflow: hidden;
