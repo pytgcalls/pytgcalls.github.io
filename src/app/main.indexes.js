@@ -43,8 +43,13 @@ export async function initFull() {
   await loadConfig();
   let data = JSON.parse(await requestsManager.initRequest('/map.json'));
   for (const file in data) {
-    indexes[file] = parseFile(file, data[file]);
-    indexes_caching[file] = data[file];
+    let indexFileId = file;
+    if (file.startsWith('/')) {
+      indexFileId = file.slice(1);
+    }
+
+    indexes[indexFileId] = parseFile(file, data[file]);
+    indexes_caching[indexFileId] = data[file];
   }
   isCurrentlyIndexing = false;
   hasIndexed = true;
