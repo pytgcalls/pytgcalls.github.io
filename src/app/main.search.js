@@ -516,9 +516,25 @@ function createReference(type, name, pathName, chunks, searchText) {
             }
 
             if (searchText != null) {
-                const searchMask = new RegExp(searchText.toLowerCase(), "ig");
-                const replaceWith = "<span class='ids'>" + searchText.toLowerCase() + "</span>";
-                docsRefPage.innerHTML = docsRefPage.innerHTML.replaceAll(searchMask, replaceWith);
+                let newPageText = '';
+
+                for(const newTagOpen of docsRefPage.innerHTML.split('<')) {
+                    if (newTagOpen == null || newTagOpen === '') {
+                        continue;
+                    }
+
+                    const firstTagClose = newTagOpen.split('>')[0];
+                    newPageText += '<'+firstTagClose+'>';
+
+                    const beforeNextTag = newTagOpen.split(firstTagClose+'>')[1];
+                    if (beforeNextTag !== null) {
+                        const searchMask = new RegExp(searchText.toLowerCase(), "ig");
+                        const replaceWith = "<span class='ids'>" + searchText.toLowerCase() + "</span>";
+                        newPageText += beforeNextTag.replaceAll(searchMask, replaceWith);
+                    }
+                }
+
+                docsRefPage.innerHTML = newPageText;
 
                 const firstId = docsRefPage.querySelector('.ids');
                 if (firstId instanceof Element) {

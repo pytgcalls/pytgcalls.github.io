@@ -40,8 +40,7 @@ export async function initFull() {
   }
 
   isCurrentlyIndexing = true;
-  await loadConfig();
-  let data = JSON.parse(await requestsManager.initRequest('/map.json'));
+  const data = JSON.parse(await requestsManager.initRequest('map.json'));
   for (const file in data) {
     let indexFileId = file;
     if (file.startsWith('/')) {
