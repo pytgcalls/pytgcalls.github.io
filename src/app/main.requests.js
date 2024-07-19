@@ -25,7 +25,7 @@ let pypiDataResult;
 
 let alternativesList = {};
 
-async function initRequest(fileName, repoName = 'pytgcalls/docsdata') {
+export async function initRequest(fileName, repoName = 'pytgcalls/docsdata') {
   const isUsingAnAlternative = !!alternativesList[repoName];
 
   let forcedFromSettings = false;
@@ -55,7 +55,7 @@ async function initRequest(fileName, repoName = 'pytgcalls/docsdata') {
   }
 }
 
-function setAsDebugAlternative(original, alternative) {
+export function setAsDebugAlternative(original, alternative) {
   if (!debug.isSafeToUseDebugItems()) {
     return;
   }
@@ -64,7 +64,7 @@ function setAsDebugAlternative(original, alternative) {
   doesLoadViaUserContentWork = true;
 }
 
-function tryToLoadWithUserContent(repoName, fileName) {
+ function tryToLoadWithUserContent(repoName, fileName) {
   if (!doesLoadViaUserContentWork) {
     return Promise.reject('Ignoring githubusercontent as it isn\'t available');
   } else {
@@ -113,7 +113,7 @@ function tryToLoadWithApi(repoName, fileName) {
   });
 }
 
-function retrievePackageData() {
+export function retrievePackageData() {
   if (typeof pypiDataResult != 'undefined') {
     return Promise.resolve(pypiDataResult);
   } else if (typeof pypiDataPromise != 'undefined') {
@@ -148,9 +148,3 @@ function retrievePackageData() {
     return pypiDataPromise;
   }
 }
-
-export {
-  initRequest,
-  setAsDebugAlternative,
-  retrievePackageData
-};

@@ -23,10 +23,10 @@ import * as debug from "./main.debug.js";
 import * as searchManager from "./main.search.js";
 import ListenerManagerInstance from "./main.listener.js";
 
-const onChangeFavoriteSyntaxTab = new ListenerManagerInstance();
-const onChangeFavoriteSyntaxTabAnimationState = new ListenerManagerInstance();
+export const onChangeFavoriteSyntaxTab = new ListenerManagerInstance();
+export const onChangeFavoriteSyntaxTabAnimationState = new ListenerManagerInstance();
 
-function init(pathName) {
+export function init(pathName) {
   resetChildrenData();
 
   const syntaxTabData = localStorage.getItem('currentTabDataIndexes');
@@ -153,7 +153,7 @@ function init(pathName) {
   });
 }
 
-function handleAsRedirect(pathName, avoidPushingState = false) {
+export function handleAsRedirect(pathName, avoidPushingState = false) {
   if (typeof pathName === 'string') {
     if (!pathName.startsWith('/')) {
       pathName = '/' + pathName;
@@ -236,7 +236,7 @@ function updateLoadedFile(file, hash, updateActiveFilePromise, avoidPushingState
   contentInstance.loadFile(file, hash, avoidPushingState);
 }
 
-function handleCustomCodeInsert(data) {
+export function handleCustomCodeInsert(data) {
   if (!debug.isSafeToUseDebugItems()) {
     return;
   }
@@ -251,11 +251,3 @@ function resetChildrenData() {
   headerInstance.resetData();
   searchManager.resetData();
 }
-
-export {
-  init,
-  handleAsRedirect,
-  handleCustomCodeInsert,
-  onChangeFavoriteSyntaxTab,
-  onChangeFavoriteSyntaxTabAnimationState,
-};

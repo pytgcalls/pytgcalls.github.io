@@ -34,7 +34,7 @@ const AVAILABLE_ELEMENTS = [
   'CONFIG', 'BANNER', 'P2P-BANNER'
 ];
 
-function getContentByData(text) {
+export function getContentByData(text) {
   const currentElement = document.createElement('div');
   currentElement.classList.add('page');
 
@@ -49,7 +49,7 @@ function getContentByData(text) {
   return currentElement;
 }
 
-function handleRecursive(currentDom, elementDom) {
+export function handleRecursive(currentDom, elementDom) {
   for (const element of currentDom.childNodes) {
     if (element instanceof Text) {
       elementDom.appendChild(emojisParser.parse(element.textContent));
@@ -118,7 +118,7 @@ function handleRecursive(currentDom, elementDom) {
   }
 }
 
-function detectLanguageByElement(element) {
+export function detectLanguageByElement(element) {
   let language = {
     prism: Prism.languages.python,
     name: 'Python',
@@ -156,7 +156,7 @@ function detectLanguageByElement(element) {
   return language;
 }
 
-function getLanguageColorByName(name) {
+export function getLanguageColorByName(name) {
   // reference: https://raw.githubusercontent.com/github/linguist/master/lib/linguist/languages.yml
   switch (name) {
     case 'Python':
@@ -361,7 +361,7 @@ function checkAndManageElement(element, newElement, elementDom) {
   return newElement;
 }
 
-function tryToReduceTags(element) {
+export function tryToReduceTags(element) {
   const handleItem = (child) => {
     if (!(child instanceof Text) && child.tagName.toUpperCase() === 'CONFIG') {
       const currentOptionData = config.getOptionValueByIdSync(child.getAttribute('id'));
@@ -1060,19 +1060,10 @@ function handleGithubRef(element) {
   });
 }
 
-function handleHomepageSyntaxHighlightElement(element) {
+export function handleHomepageSyntaxHighlightElement(element) {
   let newElement = document.createElement('div');
   tryToReduceTags(element);
   newElement = checkAndManageElement(element, newElement, document.createElement('div'));
   newElement = handleSyntaxHighlight(element, newElement, true, '', true);
   return newElement;
 }
-
-export {
-  getContentByData,
-  detectLanguageByElement,
-  getLanguageColorByName,
-  handleHomepageSyntaxHighlightElement,
-  tryToReduceTags,
-  handleRecursive,
-};

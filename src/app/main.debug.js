@@ -20,7 +20,7 @@ import * as indexesManager from "./main.indexes.js";
 import * as homePage from "./main.home.js";
 import Prism from "../lib/prism.js";
 
-function reloadPageData(reloadConfig = true) {
+export function reloadPageData(reloadConfig = true) {
   if (!isSafeToUseDebugItems()) {
     return;
   }
@@ -50,7 +50,7 @@ function reloadPageData(reloadConfig = true) {
   }
 }
 
-function tryCustomPageCode(isConfig = false) {
+export function tryCustomPageCode(isConfig = false) {
   if (!isSafeToUseDebugItems()) {
     return;
   }
@@ -173,7 +173,7 @@ function composeCustomHighlightedEditor({ language, onConfirm }) {
   };
 }
 
-function tryCustomServer() {
+export function tryCustomServer() {
   if (!isSafeToUseDebugItems()) {
     return;
   }
@@ -230,13 +230,6 @@ function tryCustomServer() {
   handlePopupContainerHandlers(popupContainer, popupElement);
 }
 
-function isSafeToUseDebugItems() {
+export function isSafeToUseDebugItems() {
   return window.location.protocol === 'http:';
 }
-
-export {
-  reloadPageData,
-  tryCustomPageCode,
-  tryCustomServer,
-  isSafeToUseDebugItems,
-};

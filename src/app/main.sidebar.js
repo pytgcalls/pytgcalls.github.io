@@ -18,8 +18,8 @@ import ListenerManagerInstance from "./main.listener.js";
 import * as iconsManager from "./main.icons.js";
 import * as config from "./main.config.js";
 
-const onChangeListenerInstance = new ListenerManagerInstance();
-const onCollapsedListenerInstance = new ListenerManagerInstance();
+export const onChangeListenerInstance = new ListenerManagerInstance();
+export const onCollapsedListenerInstance = new ListenerManagerInstance();
 
 let leftContainer;
 let leftSidebar;
@@ -31,7 +31,7 @@ let searchInputText;
 let currentLoadedSidebarId;
 let hasLoaded = false;
 
-function getElement() {
+export function getElement() {
   const leftSidebarElement = document.createElement('div');
   leftSidebarElement.classList.add('left-sidebar', 'expanded');
   leftSidebar = leftSidebarElement;
@@ -44,21 +44,21 @@ function getElement() {
   return leftContainerElement;
 }
 
-function focusOnSidebar() {
+export function focusOnSidebar() {
   leftContainer.classList.remove('collapsed');
   onCollapsedListenerInstance.callAllListeners(false);
 }
 
-function updateMobileVisibilityState(forcedState) {
+export function updateMobileVisibilityState(forcedState) {
   focusOnSidebar();
   return leftContainer.classList.toggle('show', forcedState);
 }
 
-function updateDesktopCollapsedState(isCollapsed) {
+export function updateDesktopCollapsedState(isCollapsed) {
   return leftContainer.classList.toggle('collapsed', isCollapsed);
 }
 
-function loadSidebar(id) {
+export function loadSidebar(id) {
   if (currentLoadedSidebarId === id) {
     return Promise.resolve();
   }
@@ -201,15 +201,15 @@ function createSidebarFileElement(id, textContent, contentUri = textContent) {
   return element;
 }
 
-function updateActiveFile(file) {
+export function updateActiveFile(file) {
   onChangeListenerInstance.callInternalListeners(file);
 }
 
-function globalUpdateActiveFile(file) {
+export function globalUpdateActiveFile(file) {
   onChangeListenerInstance.callAllListeners(file);
 }
 
-function resetData() {
+export function resetData() {
   leftContainer = undefined;
   leftSidebar = undefined;
   sidebarSticky = undefined;
@@ -220,16 +220,3 @@ function resetData() {
   currentLoadedSidebarId = undefined;
   hasLoaded = false;
 }
-
-export {
-  getElement,
-  focusOnSidebar,
-  updateMobileVisibilityState,
-  updateDesktopCollapsedState,
-  loadSidebar,
-  updateActiveFile,
-  resetData,
-  globalUpdateActiveFile,
-  onChangeListenerInstance,
-  onCollapsedListenerInstance
-};

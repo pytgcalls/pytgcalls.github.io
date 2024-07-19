@@ -71,7 +71,7 @@ const ICONS_LIST = {
   }
 };
 
-function get(category, iconName) {
+export function get(category, iconName) {
   if (!ICONS_LIST[category][iconName]) {
     throw new Error('unknown icon');
   }
@@ -81,7 +81,3 @@ function get(category, iconName) {
   iconContainer.innerHTML = ICONS_LIST[category][iconName];
   return iconContainer;
 }
-
-export {
-  get
-};

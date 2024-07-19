@@ -23,12 +23,12 @@ import * as debug from "./main.debug.js";
 import * as sourceParser from "./main.parser.js";
 import * as homePage from "./main.home.js";
 
-const onSelectedSectionListenerInstance = new ListenerManagerInstance();
+export const onSelectedSectionListenerInstance = new ListenerManagerInstance();
 
 let currentContentElement;
 let currentSectionsElement;
 
-function getElement() {
+export function getElement() {
   const content = document.createElement('div');
   content.classList.add('content');
   currentContentElement = content;
@@ -44,7 +44,7 @@ function getElement() {
   return fragment;
 }
 
-async function loadFile(fileName, hash = '', avoidPushingState = false) {
+export async function loadFile(fileName, hash = '', avoidPushingState = false) {
   const { content, pageSections } = replaceWithValidElements();
 
   const pathFileName = utils.parseCategoryUrl(fileName);
@@ -75,7 +75,7 @@ async function loadFile(fileName, hash = '', avoidPushingState = false) {
   }
 }
 
-function handleCustomCodeInsert(data) {
+export function handleCustomCodeInsert(data) {
   if (!debug.isSafeToUseDebugItems()) {
     return;
   }
@@ -85,7 +85,7 @@ function handleCustomCodeInsert(data) {
   handleResponse("", content, pageSections, data, "");
 }
 
-function clearBoard() {
+export function clearBoard() {
   replaceWithValidElements(true);
 }
 
@@ -289,29 +289,18 @@ function iterPageSectionsData(container, currentDom, childrenLimit = Infinity) {
   }
 }
 
-function updateMobileSectionsVisibilityState(forcedState) {
+export function updateMobileSectionsVisibilityState(forcedState) {
   return currentSectionsElement.classList.toggle('show', forcedState);
 }
 
-function updateActiveSection(section) {
+export function updateActiveSection(section) {
   section.scrollIntoView({
     behavior: 'smooth'
   });
   onSelectedSectionListenerInstance.callAllListeners();
 }
 
-function resetData() {
+export function resetData() {
    currentContentElement = undefined;
    currentSectionsElement = undefined;
 }
-
-export {
-  getElement,
-  loadFile,
-  handleCustomCodeInsert,
-  clearBoard,
-  updateMobileSectionsVisibilityState,
-  updateActiveSection,
-  resetData,
-  onSelectedSectionListenerInstance
-};

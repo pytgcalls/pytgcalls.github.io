@@ -17,7 +17,7 @@ import * as iconsManager from "./main.icons.js";
 
 let closeCallbacksList = [];
 
-function init({
+export function init({
   childElement,
   container,
   hasTabs = false,
@@ -83,7 +83,7 @@ function init({
   });
 }
 
-function closeTooltips() {
+export function closeTooltips() {
   for (const callback of closeCallbacksList) {
     try {
       callback();
@@ -91,8 +91,3 @@ function closeTooltips() {
   }
   closeCallbacksList = [];
 }
-
-export {
-  init,
-  closeTooltips
-};

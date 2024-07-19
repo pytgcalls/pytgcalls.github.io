@@ -13,34 +13,34 @@
  *  With <3 by @kuogi (and the fox!)
  */
 
-function handleSettings() {
+export function handleSettings() {
     handleDesktopMode();
     handleReduceBlur();
 }
 
-function getForceGithubAPIStatus() {
+export function getForceGithubAPIStatus() {
     const storageData = localStorage.getItem('forceGithubAPI');
     return storageData === 'true';
 }
 
-function updateForceGithubAPI(status) {
+export function updateForceGithubAPI(status) {
     localStorage.setItem('forceGithubAPI', String(status));
 }
 
-function getCollapseLongCodeStatus() {
+export function getCollapseLongCodeStatus() {
     const storageData = localStorage.getItem('collapseLongCode');
     return storageData === 'true' || storageData == null;
 }
 
-function updateCollapseLongCode(status) {
+export function updateCollapseLongCode(status) {
     localStorage.setItem('collapseLongCode', String(status));
 }
-function getForceDesktopModeStatus() {
+export function getForceDesktopModeStatus() {
     const storageData = localStorage.getItem('desktopMode');
     return storageData === 'true';
 }
 
-function updateDesktopMode(status) {
+export function updateDesktopMode(status) {
     localStorage.setItem('desktopMode', String(status));
     handleDesktopMode();
 }
@@ -56,7 +56,8 @@ function handleDesktopMode() {
         document.head.appendChild(metaViewPortTag);
     }
 }
-function getReduceBlurStatus() {
+
+export function getReduceBlurStatus() {
     const storageData = localStorage.getItem('reduceBlur');
 
     if (storageData === null && window.innerWidth < 800) {
@@ -66,7 +67,7 @@ function getReduceBlurStatus() {
     return storageData === 'true';
 }
 
-function updateReduceBlur(status) {
+export function updateReduceBlur(status) {
     localStorage.setItem('reduceBlur', String(status));
     handleReduceBlur();
 }
@@ -74,15 +75,3 @@ function updateReduceBlur(status) {
 function handleReduceBlur() {
     document.body.classList.toggle('reduce-blur', getReduceBlurStatus());
 }
-
-export {
-    handleSettings,
-    getForceGithubAPIStatus,
-    updateForceGithubAPI,
-    getCollapseLongCodeStatus,
-    updateCollapseLongCode,
-    getForceDesktopModeStatus,
-    updateDesktopMode,
-    getReduceBlurStatus,
-    updateReduceBlur,
-};

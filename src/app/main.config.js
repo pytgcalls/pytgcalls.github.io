@@ -18,7 +18,7 @@ import * as debug from "./main.debug.js";
 
 let precachedConfig;
 
-async function loadConfig() {
+export async function loadConfig() {
   if (isConfigReady()) {
     return precachedConfig;
   } else {
@@ -33,7 +33,7 @@ async function loadConfig() {
   }
 }
 
-function setAsConfig(text) {
+export function setAsConfig(text) {
   if (!debug.isSafeToUseDebugItems()) {
     return;
   }
@@ -44,7 +44,7 @@ function setAsConfig(text) {
   );
 }
 
-function resetConfigByDebug() {
+export function resetConfigByDebug() {
   if (!debug.isSafeToUseDebugItems()) {
     return;
   }
@@ -52,49 +52,49 @@ function resetConfigByDebug() {
   precachedConfig = undefined;
 }
 
-function isConfigReady() {
-  return typeof precachedConfig != 'undefined';
+export function isConfigReady() {
+  return precachedConfig != null;
 }
 
-async function getTeamMembers() {
+export async function getTeamMembers() {
   return (await loadConfig()).querySelectorAll('team > member');
 }
 
-async function getOwnerData() {
+export async function getOwnerData() {
   return (await loadConfig()).querySelector('homepage-config > team > member[owner="true"]');
 }
 
-async function getOwnerCitation() {
+export async function getOwnerCitation() {
   return (await loadConfig()).querySelector('homepage-config > citation > value');
 }
 
-async function getNumericPresPoints() {
+export async function getNumericPresPoints() {
   return (await loadConfig()).querySelectorAll('homepage-config > numeric-pres-points > item');
 }
 
-async function getHomePagePresFiles() {
+export async function getHomePagePresFiles() {
   return (await loadConfig()).querySelectorAll('homepage-config > pres-items > file');
 }
 
-async function getFooterCategories() {
+export async function getFooterCategories() {
   return (await loadConfig()).querySelectorAll('homepage-config > footer-links > category');
 }
 
-async function getFooterContributionLink() {
+export async function getFooterContributionLink() {
   return (await loadConfig()).querySelector('homepage-config > footer-links > contribution-link');
 }
 
-async function getFooterDescription() {
+export async function getFooterDescription() {
   return (await loadConfig()).querySelector('homepage-config > footer-links > dsc');
 }
 
-async function getAvailableCategories() {
+export async function getAvailableCategories() {
   return [...(await loadConfig()).querySelectorAll('config > files-list')].filter(
       (x) => x.hasAttribute('id') && x.hasAttribute('description')
   );
 }
 
-async function getTheNextFileAfter(fileName) {
+export async function getTheNextFileAfter(fileName) {
   const filesListElementsGlobal = (await loadConfig()).querySelectorAll('config > files-list file');
 
   let detectedId;
@@ -149,7 +149,7 @@ async function getTheNextFileAfter(fileName) {
   }
 }
 
-async function getAllFilesListFilesById(id) {
+export async function getAllFilesListFilesById(id) {
   const filesListElements = (await loadConfig()).querySelectorAll('config > files-list[id="' + id + '"] file');
   let finalList = [];
   for (const element of filesListElements) {
@@ -163,7 +163,7 @@ async function getAllFilesListFilesById(id) {
   return finalList;
 }
 
-async function getFilesListDefaultFileById(id) {
+export async function getFilesListDefaultFileById(id) {
   const filesListElement = (await loadConfig()).querySelector('config > files-list[id="' + id + '"]');
 
   if (filesListElement && filesListElement.hasAttribute('defaultfile')) {
@@ -176,11 +176,11 @@ async function getFilesListDefaultFileById(id) {
   }
 }
 
-async function getFilesListInstanceById(id) {
+export async function getFilesListInstanceById(id) {
   return (await loadConfig()).querySelector('config > files-list[id="' + id + '"]');
 }
 
-function getOptionValueByIdSync(id) {
+export function getOptionValueByIdSync(id) {
   if (isConfigReady()) {
     return precachedConfig.querySelector('config > option[id="' + id + '"]');
   }
@@ -188,7 +188,7 @@ function getOptionValueByIdSync(id) {
   return null;
 }
 
-function isComplexOptionValueByIdSync(id) {
+export function isComplexOptionValueByIdSync(id) {
   if (isConfigReady()) {
     const child = getOptionValueByIdSync(id);
     if (child) {
@@ -199,7 +199,7 @@ function isComplexOptionValueByIdSync(id) {
   return false;
 }
 
-function getFullPathByFileElement(file) {
+export function getFullPathByFileElement(file) {
   let finalText = '';
   if (file.parentElement.hasAttribute('basepath')) {
     finalText = file.parentElement.getAttribute('basepath');
@@ -208,30 +208,7 @@ function getFullPathByFileElement(file) {
   return finalText;
 }
 
-async function getRedirectDataForPath(path) {
+export async function getRedirectDataForPath(path) {
   const redirectTo = (await loadConfig()).querySelector('config > redirects > redirect[path="' + path.toLowerCase() + '"]');
   return redirectTo && redirectTo.textContent;
 }
-
-export {
-    loadConfig,
-    setAsConfig,
-    resetConfigByDebug,
-    isConfigReady,
-    getTeamMembers,
-    getOwnerData,
-    getOwnerCitation,
-    getNumericPresPoints,
-    getHomePagePresFiles,
-    getFooterCategories,
-    getFooterContributionLink,
-    getFooterDescription,
-    getAvailableCategories,
-    getTheNextFileAfter,
-    getAllFilesListFilesById,
-    getFilesListDefaultFileById,
-    getFilesListInstanceById,
-    getOptionValueByIdSync,
-    isComplexOptionValueByIdSync,
-    getRedirectDataForPath
-};

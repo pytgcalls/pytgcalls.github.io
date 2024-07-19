@@ -35,7 +35,7 @@ let currentSearchTimeout;
 let windowKeyDownEventListener;
 let alreadyWaitingForIndexingStart = false;
 
-function openSearchContainer(startBy) {
+export function openSearchContainer(startBy) {
     lastStartByElement = startBy;
 
     const startByRect = startBy.getBoundingClientRect();
@@ -577,7 +577,7 @@ function recomposeCodePath(pathName) {
     return fragment;
 }
 
-function resetData() {
+export function resetData() {
     if (currentSearchTimeout != null) {
         clearTimeout(currentSearchTimeout);
     }
@@ -600,8 +600,3 @@ function resetData() {
     windowKeyDownEventListener = undefined;
     alreadyWaitingForIndexingStart = false;
 }
-
-export {
-    openSearchContainer,
-    resetData
-};

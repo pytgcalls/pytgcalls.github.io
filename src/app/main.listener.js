@@ -13,7 +13,7 @@
  *  With <3 by @kuogi (and the fox!)
  */
 
-class ListenerManagerInstance {
+export default class ListenerManagerInstance {
   ultimateDataCall;
   ultimateDataCallInternal;
 
@@ -73,5 +73,3 @@ class ListenerManagerInstance {
     this.#callbacks = reparsedCallbacks;
   }
 }
-
-export default ListenerManagerInstance;

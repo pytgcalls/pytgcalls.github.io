@@ -13,30 +13,22 @@
  *  With <3 by @kuogi (and the fox!)
  */
 
-function isAndroid() {
+export function isAndroid() {
   return navigator.userAgent && /android/.test(navigator.userAgent);
 }
 
-function isiPhone() {
+export function isiPhone() {
   return navigator.userAgent && /iPhone/.test(navigator.userAgent);
 }
 
-function isiPad() {
+export function isiPad() {
   return navigator.userAgent && /iPad/.test(navigator.userAgent);
 }
 
-function isMac() {
+export function isMac() {
   return navigator.userAgent && /mac/.test(navigator.userAgent);
 }
 
-function isAnAppleDevice() {
+export function isAnAppleDevice() {
   return isiPad() || isiPhone() || isMac();
 }
-
-export {
-  isAndroid,
-  isiPhone,
-  isiPad,
-  isMac,
-  isAnAppleDevice
-};

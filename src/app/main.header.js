@@ -21,10 +21,10 @@ import * as settingsManager from "./main.settings.js";
 import {openSearchContainer} from "./main.search.js";
 import * as debug from "./main.debug.js";
 
-const onChangeListenerInstance = new ListenerManagerInstance();
-const onSidebarUpdateListenerInstance = new ListenerManagerInstance();
-const onCompassUpdateListenerInstance = new ListenerManagerInstance();
-const onTabsVisibilityUpdateListenerInstance = new ListenerManagerInstance();
+export const onChangeListenerInstance = new ListenerManagerInstance();
+export const onSidebarUpdateListenerInstance = new ListenerManagerInstance();
+export const onCompassUpdateListenerInstance = new ListenerManagerInstance();
+export const onTabsVisibilityUpdateListenerInstance = new ListenerManagerInstance();
 
 let headerElement;
 let headerMenuElement;
@@ -38,7 +38,7 @@ let fakeHeaderLibraryValueElement;
 
 let hasSelectedTab = false;
 
-function getElement() {
+export function getElement() {
   const headerMenu = document.createElement('div');
   headerMenu.classList.add('menu');
   headerMenu.addEventListener('click', () => {
@@ -139,7 +139,7 @@ function getElement() {
   return header;
 }
 
-function updateActiveTab(id) {
+export function updateActiveTab(id) {
   onChangeListenerInstance.callInternalListeners(id);
 }
 
@@ -147,23 +147,23 @@ function globalUpdateActiveTab(id) {
   onChangeListenerInstance.callAllListeners(id);
 }
 
-function updateSidebarMobileVisibilityState(state) {
+export function updateSidebarMobileVisibilityState(state) {
   headerMenuElement.classList.toggle('show', state);
 }
 
-function updateSidebarDesktopExpandedState(state) {
+export function updateSidebarDesktopExpandedState(state) {
   headerExpandedElement.classList.toggle('show', state);
 }
 
-function updateCompassVisibilityState(state) {
+export function updateCompassVisibilityState(state) {
   headerCompassElement.classList.toggle('visible', state);
 }
 
-function updateCompassExpandedState(state) {
+export function updateCompassExpandedState(state) {
   headerCompassElement.classList.toggle('show', state);
 }
 
-function updateTabsMobileVisibility(state) {
+export function updateTabsMobileVisibility(state) {
   headerElement.classList.toggle('tabs-expanded', state);
 }
 
@@ -346,7 +346,7 @@ function createSettingsRow(title, description, status, callback, hasSwitch = tru
   return settingRow;
 }
 
-function resetData() {
+export function resetData() {
   headerElement = undefined;
   headerMenuElement = undefined;
   headerExpandedElement = undefined;
@@ -357,18 +357,3 @@ function resetData() {
 
   hasSelectedTab = false;
 }
-
-export {
-  getElement,
-  updateActiveTab,
-  updateSidebarMobileVisibilityState,
-  updateSidebarDesktopExpandedState,
-  updateCompassVisibilityState,
-  updateCompassExpandedState,
-  updateTabsMobileVisibility,
-  resetData,
-  onChangeListenerInstance,
-  onSidebarUpdateListenerInstance,
-  onCompassUpdateListenerInstance,
-  onTabsVisibilityUpdateListenerInstance
-};

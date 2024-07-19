@@ -27,12 +27,12 @@ const SUPPORTED_ELEMENTS = [
     'CATEGORY-TITLE', 'SUBTITLE', 'SUBTEXT'
 ];
 
-let hasIndexed = false;
-let isCurrentlyIndexing = false;
+export let hasIndexed = false;
+export let isCurrentlyIndexing = false;
 let indexes = {};
 let indexes_caching = {};
 
-async function initFull() {
+export async function initFull() {
   if (hasIndexed) {
     return Promise.resolve();
   } else if (isCurrentlyIndexing) {
@@ -51,7 +51,7 @@ async function initFull() {
   return Promise.resolve();
 }
 
-function clearFullFromDebug() {
+export function clearFullFromDebug() {
   if (!debug.isSafeToUseDebugItems()) {
     return;
   }
@@ -62,15 +62,15 @@ function clearFullFromDebug() {
   indexes_caching = {};
 }
 
-function getIndexedValue(file) {
+export function getIndexedValue(file) {
   return indexes[file];
 }
 
-function getFullIndexedValue(file) {
+export function getFullIndexedValue(file) {
   return indexes_caching[file];
 }
 
-function saveAsFullIndexedValue(file, data) {
+export function saveAsFullIndexedValue(file, data) {
   indexes[file] = parseFile(file, data);
   indexes_caching[file] = data;
 }
@@ -119,11 +119,11 @@ function parseFile(filePath, fileContent) {
   return fileIndexes;
 }
 
-function getAllIndexedFiles() {
+export function getAllIndexedFiles() {
   return Object.keys(indexes);
 }
 
-class ElementIndex {
+export class ElementIndex {
   #chunk;
   #main;
 
@@ -152,7 +152,7 @@ class ElementIndex {
   }
 }
 
-class FileIndex {
+export class FileIndex {
   #type;
   #name;
   #filePath;
@@ -174,17 +174,4 @@ class FileIndex {
   get filePath() {
     return this.#filePath;
   }
-}
-
-export {
-  hasIndexed,
-  isCurrentlyIndexing,
-  initFull,
-  clearFullFromDebug,
-  getIndexedValue,
-  getFullIndexedValue,
-  saveAsFullIndexedValue,
-  getAllIndexedFiles,
-  FileIndex,
-  ElementIndex,
 }
