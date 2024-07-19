@@ -34,11 +34,15 @@ body .page-container {
   overflow: hidden;
   position: absolute;
   padding-left: 0;
-  transition: 0.4s width cubic-bezier(0.42, 0, 0, 0.97), 0.4s padding-left cubic-bezier(0.42, 0, 0, 0.97);
+  transition: 0.4s width cubic-bezier(0.42, 0, 0, 0.97), 0.4s padding-left cubic-bezier(0.42, 0, 0, 0.97), 0.2s transform;
 }
 
 body.as-home .page-container {
   height: 100%;
+}
+
+body.focused-by-search:not(.reduce-blur) > .page-container {
+  transform: scale(1.08);
 }
 
 ::-webkit-scrollbar {

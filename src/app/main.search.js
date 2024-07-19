@@ -21,7 +21,16 @@ import {handleRecursive} from "./main.parser.js";
 import {globalUpdateActiveFile} from "./main.sidebar.js";
 import * as tooltip from "./main.tooltip.js";
 
+class ExpandedRefsState {
+    static NONE = 0;
+    static CODE_REF = 1;
+    static DOCS_REF = 2;
+}
+
+const ROW_MARGIN_BOTTOM = 5;
+
 let isAnimating = 0;
+let expandedRefsState = ExpandedRefsState.NONE;
 let lastStartByElement;
 let searchTextElement;
 let searchTextFullElement;
@@ -37,6 +46,8 @@ let alreadyWaitingForIndexingStart = false;
 
 export function openSearchContainer(startBy) {
     lastStartByElement = startBy;
+
+    document.body.classList.add('focused-by-search');
 
     const startByRect = startBy.getBoundingClientRect();
 
@@ -196,7 +207,7 @@ function handleSearch() {
                 codeRefTitle.textContent = 'Code References';
 
                 if (codeRefResultsCount > 3) {
-                    codeRefTitle.appendChild(createShowMoreLessAnimator(() => expandContainer(codeRefResults)));
+                    codeRefTitle.appendChild(createShowMoreLessAnimator(() => expandContainer(codeRefResults), expandedRefsState === ExpandedRefsState.CODE_REF));
                 }
 
                 const searchResultReferenceContainer = document.createElement('div');
@@ -216,7 +227,7 @@ function handleSearch() {
                 docsRefTitle.textContent = 'Docs References';
 
                 if (docsRefResultsCount > 3) {
-                    docsRefTitle.appendChild(createShowMoreLessAnimator(() => expandContainer(docsRefResults, true)));
+                    docsRefTitle.appendChild(createShowMoreLessAnimator(() => expandContainer(docsRefResults, true), expandedRefsState === ExpandedRefsState.DOCS_REF));
                 }
 
                 const searchResultReferenceContainer = document.createElement('div');
@@ -251,7 +262,7 @@ function handleSearch() {
     });
 }
 
-function createShowMoreLessAnimator(callback) {
+function createShowMoreLessAnimator(callback, isAlreadyExpanded = false) {
     const refShowMoreAnimator = document.createElement('span');
     refShowMoreAnimator.classList.add('more');
     refShowMoreAnimator.textContent = 'Show more';
@@ -262,6 +273,7 @@ function createShowMoreLessAnimator(callback) {
 
     const refShowMoreLess = document.createElement('div');
     refShowMoreLess.classList.add('show-more');
+    refShowMoreLess.classList.toggle('expanded', isAlreadyExpanded);
     refShowMoreLess.addEventListener('click', callback);
     refShowMoreLess.appendChild(refShowMoreAnimator);
     refShowMoreLess.appendChild(refShowLessAnimator);
@@ -294,9 +306,18 @@ function expandContainer(fullResultsList, isDocsRef = false) {
         return;
     }
 
+    if (expandedRefsState !== ExpandedRefsState.NONE) {
+        return;
+    }
+
+    expandedRefsState = isDocsRef ? ExpandedRefsState.DOCS_REF : ExpandedRefsState.CODE_REF;
+
     isAnimating++;
 
     const onReadyToExpand = () => {
+        purifyChild(mainContainer, false);
+        mainContainer.style.removeProperty('--animate-ref');
+
         const fragment = document.createDocumentFragment();
         for (const child of fullResultsList) {
             child.classList.add('hidden');
@@ -322,30 +343,42 @@ function expandContainer(fullResultsList, isDocsRef = false) {
         isAnimating--;
     };
 
-    if (oppositeContainer == null) {
-        onReadyToExpand();
-    } else {
+    let promisesList = [];
+
+    const singleRowHeight = mainContainer.lastChild.getBoundingClientRect().height + (isDocsRef ? -110+8 : 0);
+    mainContainer.style.setProperty('--animate-ref', (singleRowHeight * fullResultsList.length + ROW_MARGIN_BOTTOM * (fullResultsList.length - 1)) + 'px');
+    purifyChild(mainContainer);
+    mainContainer.classList.add('animate-appear');
+    promisesList.push(new Promise((resolve) => mainContainer.addEventListener('animationend', resolve, { once: true })));
+
+    if (oppositeContainer != null) {
         const oppositeContainerRect = oppositeContainer.getBoundingClientRect();
         oppositeContainer.style.setProperty('--initial-height', oppositeContainerRect.height + 'px');
-        oppositeContainer.classList.remove('animate-appear');
-        oppositeContainer.offsetHeight;
-        oppositeContainer.classList.add('animate-disappear');
-        oppositeContainer.addEventListener('animationend', () => {
-            //oppositeContainer.style.removeProperty('--initial-height');
-            onReadyToExpand();
-        }, { once: true });
+        purifyChild(oppositeContainer, true);
+        oppositeContainer.classList.add('animate-disappear-as-opposite');
+        promisesList.push(new Promise((resolve) => oppositeContainer.addEventListener('animationend', resolve, { once: true })));
     }
+
+    Promise.all(promisesList).then(onReadyToExpand);
 }
 
 function collapseContainer(fullResultsList, mainContainer, oppositeContainer) {
-    if (isAnimating !== 0) {
+    if (isAnimating !== 0 || expandedRefsState === ExpandedRefsState.NONE) {
         return;
     }
+
+    isAnimating++;
+
+    const singleRowHeight = mainContainer.lastChild.getBoundingClientRect().height;
+
+    expandedRefsState = ExpandedRefsState.NONE;
 
     let promisesList = [];
     let visibleChildren = [];
 
     const adapterRect = searchListAdapterElement.getBoundingClientRect();
+    let removedChildren = 0;
+
     for (const child of fullResultsList) {
         if (!mainContainer.contains(child)) {
             continue;
@@ -354,31 +387,57 @@ function collapseContainer(fullResultsList, mainContainer, oppositeContainer) {
         const childRect = child.getBoundingClientRect();
 
         if (childRect.top < adapterRect.top + adapterRect.height) {
-            child.classList.remove('animate-appear');
-            child.offsetHeight; // trigger redraw
+            purifyChild(child);
             child.classList.add('animate-disappear');
             visibleChildren.push(child);
-            promisesList.push(new Promise((resolve) => child.addEventListener('animationend', resolve, { once: true })));
+            promisesList.push(new Promise((resolve) => child.addEventListener('animationend', (e) => {
+                e.stopPropagation();
+                resolve();
+            }, { once: true })));
         } else {
+            removedChildren++;
             child.remove();
         }
     }
 
-    isAnimating++;
+    mainContainer.style.setProperty('--animate-ref', (singleRowHeight * removedChildren + ROW_MARGIN_BOTTOM * (removedChildren - 1)) + 'px');
+    mainContainer.classList.add('preparing-for-remove');
+
     Promise.all(promisesList).then(() => {
         for (const child of visibleChildren) {
             child.remove();
         }
 
-        if (oppositeContainer != null) {
-            oppositeContainer.classList.remove('animate-disappear');
-            oppositeContainer.offsetHeight;
-            oppositeContainer.classList.add('animate-appear');
-            oppositeContainer.addEventListener('animationend', () => oppositeContainer.classList.remove('animate-appear'), { once: true });
-        }
+        let promisesList = [];
 
-        isAnimating--;
+        mainContainer.style.setProperty('--animate-ref', (singleRowHeight * fullResultsList.length + ROW_MARGIN_BOTTOM * (fullResultsList.length - 1)) + 'px');
+        purifyChild(mainContainer);
+        mainContainer.classList.add('animate-disappear');
+        promisesList.push(new Promise((resolve) => mainContainer.addEventListener('animationend', resolve, { once: true })));
+
+        purifyChild(oppositeContainer);
+        oppositeContainer.classList.add('animate-appear-as-opposite');
+        promisesList.push(new Promise((resolve) => oppositeContainer.addEventListener('animationend', resolve, { once: true })));
+
+        Promise.all(promisesList).then(() => {
+            purifyChild(mainContainer, false);
+            purifyChild(oppositeContainer, false);
+            mainContainer.style.removeProperty('--animate-ref');
+            isAnimating--;
+        });
     });
+}
+
+function purifyChild(child, redraw = true) {
+    if (!(child instanceof Element)) {
+        return;
+    }
+
+    child.classList.remove('preparing-for-remove', 'animate-disappear', 'animate-disappear-as-opposite', 'animate-appear', 'animate-appear-as-opposite');
+
+    if (redraw) {
+        child.offsetHeight;
+    }
 }
 
 function scheduleSearch(onSearchReady) {
@@ -496,6 +555,8 @@ function closeSearch() {
         updateSearchAnimationState(searchTextFullAnimation, searchTextFullElement.getBoundingClientRect(), lastStartByElement.getBoundingClientRect());
         searchContainerElement.classList.add('animate-disappear');
 
+        document.body.classList.remove('focused-by-search');
+
         let hasAlreadyText = false;
         searchTextFullAnimation.addEventListener('animationend', () => {
             searchContainerElement.remove();
@@ -587,6 +648,7 @@ export function resetData() {
     }
 
     isAnimating = 0;
+    expandedRefsState = ExpandedRefsState.NONE;
     lastStartByElement = undefined;
     searchTextElement = undefined;
     searchTextFullElement = undefined;
@@ -599,4 +661,6 @@ export function resetData() {
     currentSearchTimeout = undefined;
     windowKeyDownEventListener = undefined;
     alreadyWaitingForIndexingStart = false;
+
+    document.body.classList.remove('focused-by-search');
 }

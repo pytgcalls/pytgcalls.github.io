@@ -246,13 +246,29 @@ body .search-container.text-is-empty .search-results .list-adapter {
     clip-path: polygon(0 0, 99% 0, 100% 0, 0 0);
 }
 
-body .search-container .search-results .list-adapter .ref-container.animate-disappear {
-    height: var(--initial-height);
-    overflow: hidden;
-    animation: 0.2s animateFirstEffectRef forwards;
+body .search-container .search-results .list-adapter .ref-container.preparing-for-remove {
+    padding-bottom: var(--animate-ref);
 }
 
-@keyframes animateFirstEffectRef {
+body .search-container .search-results .list-adapter .ref-container.animate-disappear {
+    padding-bottom: var(--animate-ref);
+    overflow: hidden;
+    animation: 0.2s animateDisappear forwards;
+}
+
+@keyframes animateDisappear {
+    to {
+        padding-bottom: 0;
+    }
+}
+
+body .search-container .search-results .list-adapter .ref-container.animate-disappear-as-opposite {
+    height: var(--initial-height);
+    overflow: hidden;
+    animation: 0.2s animateDisappearAsOpposite forwards;
+}
+
+@keyframes animateDisappearAsOpposite {
     to {
         height: 0;
     }
@@ -260,10 +276,24 @@ body .search-container .search-results .list-adapter .ref-container.animate-disa
 
 body .search-container .search-results .list-adapter .ref-container.animate-appear {
     overflow: hidden;
-    animation: 0.2s animateSecondEffectRef forwards;
+    animation: 0.2s animateAppear forwards;
 }
 
-@keyframes animateSecondEffectRef {
+@keyframes animateAppear {
+    from {
+        padding-bottom: 0;
+    }
+    to {
+        padding-bottom: var(--animate-ref);
+    }
+}
+
+body .search-container .search-results .list-adapter .ref-container.animate-appear-as-opposite {
+    overflow: hidden;
+    animation: 0.2s animateAppearAsOpposite forwards;
+}
+
+@keyframes animateAppearAsOpposite {
     from {
         height: 0;
     }

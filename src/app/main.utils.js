@@ -101,6 +101,9 @@ export function copyToClipboard(text) {
     textarea.select();
 
     const successful = document.execCommand("copy");
+
+    requestAnimationFrame(() => textarea.remove());
+
     if (successful) {
       return Promise.resolve();
     }
