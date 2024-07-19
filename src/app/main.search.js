@@ -345,7 +345,7 @@ function expandContainer(fullResultsList, isDocsRef = false) {
 
     let promisesList = [];
 
-    const singleRowHeight = mainContainer.lastChild.getBoundingClientRect().height + (isDocsRef ? -110+8 : 0);
+    const singleRowHeight = mainContainer.firstChild.getBoundingClientRect().height + (isDocsRef ? -110+8 : 0);
     mainContainer.style.setProperty('--animate-ref', (singleRowHeight * fullResultsList.length + ROW_MARGIN_BOTTOM * (fullResultsList.length - 1)) + 'px');
     purifyChild(mainContainer);
     mainContainer.classList.add('animate-appear');
