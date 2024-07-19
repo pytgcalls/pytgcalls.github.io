@@ -13,10 +13,10 @@
  *  With <3 by @kuogi (and the fox!)
  */
 
-import * as config from "./main.config.js";
 import * as requestsManager from "./main.requests.js";
 import * as debug from "./main.debug.js";
 import {tryToReduceTags} from "./main.parser.js";
+import {loadConfig} from "./main.config.js";
 
 const AVAILABLE_TYPES = [
   'method', 'class', 'enum', 'type'
@@ -32,7 +32,7 @@ let isCurrentlyIndexing = false;
 let indexes = {};
 let indexes_caching = {};
 
-function initFull() {
+async function initFull() {
   if (hasIndexed) {
     return Promise.resolve();
   } else if (isCurrentlyIndexing) {
@@ -40,27 +40,15 @@ function initFull() {
   }
 
   isCurrentlyIndexing = true;
-
-  return new Promise((resolve) => {
-    config.loadConfig().then(() => {
-      requestsManager.initRequest('/map.json').then((data) => {
-        try {
-          const parsed = JSON.parse(data);
-
-          for (const file in parsed) {
-            indexes[file] = parseFile(file, parsed[file]);
-            indexes_caching[file] = parsed[file];
-          }
-
-          isCurrentlyIndexing = false;
-          hasIndexed = true;
-          resolve();
-        } catch (e) {
-          console.error(e);
-        }
-      }).catch((e) => console.error('Search failed:', e));
-    });
-  });
+  await loadConfig();
+  let data = JSON.parse(await requestsManager.initRequest('/map.json'));
+  for (const file in data) {
+    indexes[file] = parseFile(file, data[file]);
+    indexes_caching[file] = data[file];
+  }
+  isCurrentlyIndexing = false;
+  hasIndexed = true;
+  return Promise.resolve();
 }
 
 function clearFullFromDebug() {

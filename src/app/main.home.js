@@ -173,27 +173,21 @@ function handleAsRedirect(pathName, avoidPushingState = false) {
   }
 }
 
-function chooseRightTab(pathName, hash, avoidPushingState = false) {
-  return new Promise((resolve) => {
-    config.getAvailableCategories().then((ids) => {
-      let found = false;
+async function chooseRightTab(pathName, hash, avoidPushingState = false) {
+  let ids = await config.getAvailableCategories();
+  let found = false;
+  for (const category of ids) {
+    const id = category.getAttribute('id').trim();
+    if (decodeURI(pathName).startsWith(utils.parseCategoryUrl(id))) {
+      found = true;
 
-      for (const category of ids) {
-        const id = category.getAttribute('id').trim();
-        
-        if (decodeURI(pathName).startsWith(utils.parseCategoryUrl(id))) {
-          found = true;
+      headerInstance.updateActiveTab(id);
+      const promise = sidebarInstance.loadSidebar(id);
 
-          headerInstance.updateActiveTab(id);
-          const promise = sidebarInstance.loadSidebar(id);
-
-          tryToIndexFilePathFromId(id, pathName, hash, promise, avoidPushingState);
-        }
-      }
-
-      resolve(found);
-    });
-  });
+      tryToIndexFilePathFromId(id, pathName, hash, promise, avoidPushingState);
+    }
+  }
+  return found;
 }
 
 function forceSwitchToHome(avoidPushingState = false) {

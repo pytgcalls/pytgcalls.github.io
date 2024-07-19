@@ -44,7 +44,7 @@ function getElement() {
   return fragment;
 }
 
-function loadFile(fileName, hash = '', avoidPushingState = false) {
+async function loadFile(fileName, hash = '', avoidPushingState = false) {
   const { content, pageSections } = replaceWithValidElements();
 
   const pathFileName = utils.parseCategoryUrl(fileName);
@@ -55,27 +55,23 @@ function loadFile(fileName, hash = '', avoidPushingState = false) {
       window.history.pushState('', '', pathFileName + (hash ?? ''));
     }
 
-    handleResponse(fileName, content, pageSections, indexedCache, hash).then(() => {
-      handlePathPNManager(content, fileName);
-    });
+    await handleResponse(fileName, content, pageSections, indexedCache, hash);
+    handlePathPNManager(content, fileName);
   } else {
-    const handleData = (response) => {
+    try {
+      let response = await requestsManager.initRequest(fileName);
       if (!avoidPushingState) {
         window.history.pushState('', '', pathFileName + (hash ?? ''));
       }
-
       indexesManager.saveAsFullIndexedValue(fileName, response);
-      handleResponse(fileName, content, pageSections, response, hash).then(() => {
-        handlePathPNManager(content, fileName);
-      });
-    };
-
-    requestsManager.initRequest(fileName).then(handleData).catch(() => {
+      await handleResponse(fileName, content, pageSections, response, hash);
+      handlePathPNManager(content, fileName);
+    } catch (ignored) {
       content.classList.add('is-loading');
       content.textContent = 'Request failed';
       pageSections.classList.add('is-loading');
       pageSections.textContent = '';
-    });
+    }
   }
 }
 
@@ -109,38 +105,34 @@ function replaceWithValidElements(isEmpty = false) {
 }
 
 function handleResponse(fileName, content, pageSections, response, hash) {
-  return new Promise((resolve) => {
-    const data = sourceParser.getContentByData(response);
-    content.classList.remove('is-loading');
-    content.textContent = '';
-    content.appendChild(data);
+  const data = sourceParser.getContentByData(response);
+  content.classList.remove('is-loading');
+  content.textContent = '';
+  content.appendChild(data);
 
-    const sectionsContainer = document.createElement('div');
-    sectionsContainer.classList.add('sections-recap');
-    iterPageSectionsData(data, sectionsContainer);
+  const sectionsContainer = document.createElement('div');
+  sectionsContainer.classList.add('sections-recap');
+  iterPageSectionsData(data, sectionsContainer);
 
-    pageSections.classList.remove('is-loading');
-    pageSections.textContent = '';
-    pageSections.appendChild(sectionsContainer);
+  pageSections.classList.remove('is-loading');
+  pageSections.textContent = '';
+  pageSections.appendChild(sectionsContainer);
 
-    if (fileName !== "") {
-      const contributeToEdit = document.createElement('a');
-      contributeToEdit.classList.add('h2');
-      contributeToEdit.href = 'https://github.com/pytgcalls/docsdata/edit/master/' + fileName;
-      contributeToEdit.target = '_blank';
-      contributeToEdit.textContent = 'Contribute to this page';
-      const contributionsContainer = document.createElement('div');
-      contributionsContainer.classList.add('contributions');
-      contributionsContainer.appendChild(contributeToEdit);
-      pageSections.appendChild(contributionsContainer);
-    }
+  if (fileName !== "") {
+    const contributeToEdit = document.createElement('a');
+    contributeToEdit.classList.add('h2');
+    contributeToEdit.href = 'https://github.com/pytgcalls/docsdata/edit/master/' + fileName;
+    contributeToEdit.target = '_blank';
+    contributeToEdit.textContent = 'Contribute to this page';
+    const contributionsContainer = document.createElement('div');
+    contributionsContainer.classList.add('contributions');
+    contributionsContainer.appendChild(contributeToEdit);
+    pageSections.appendChild(contributionsContainer);
+  }
 
-    try {
-      handleHash(data, hash);
-    } catch (e) { }
-
-    resolve();
-  });
+  try {
+    handleHash(data, hash);
+  } catch (ignored) { }
 }
 
 function handlePathPNManager(content, fileName) {

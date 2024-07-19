@@ -18,22 +18,18 @@ import * as debug from "./main.debug.js";
 
 let precachedConfig;
 
-function loadConfig() {
+async function loadConfig() {
   if (isConfigReady()) {
-    return Promise.resolve(precachedConfig);
+    return precachedConfig;
   } else {
-    return new Promise((resolve) => {
-      const configPromise = requestsManager.initRequest('config.xml');
-
-      configPromise.then((response) => {
-        precachedConfig = response;
-        resolve(response);
-      });
-
-      configPromise.catch(() => {
-        alert("This documentation isn't available in your country");
-      });
-    });
+    try {
+      return precachedConfig = new DOMParser().parseFromString(
+          await requestsManager.initRequest('config.xml'),
+          'application/xml'
+      );
+    } catch (e) {
+      alert("This documentation isn't available in your country");
+    }
   }
 }
 
@@ -42,7 +38,10 @@ function setAsConfig(text) {
     return;
   }
 
-  precachedConfig = text;
+  precachedConfig = new DOMParser().parseFromString(
+      text,
+      'application/xml'
+  );
 }
 
 function resetConfigByDebug() {
@@ -57,235 +56,133 @@ function isConfigReady() {
   return typeof precachedConfig != 'undefined';
 }
 
-function getTeamMembers() {
-  return new Promise((resolve) => {
-    loadConfig().then((config) => {
-      const domHelper = new DOMParser();
-      const dom = domHelper.parseFromString(config, 'application/xml');
-      const teamMembers = dom.querySelectorAll('team > member');
-
-      resolve(teamMembers);
-    });
-  });
+async function getTeamMembers() {
+  return (await loadConfig()).querySelectorAll('team > member');
 }
 
-function getOwnerData() {
-  return new Promise((resolve) => {
-    loadConfig().then((config) => {
-      const domHelper = new DOMParser();
-      const dom = domHelper.parseFromString(config, 'application/xml');
-      const teamMember = dom.querySelector('homepage-config > team > member[owner="true"]');
-
-      resolve(teamMember);
-    });
-  });
+async function getOwnerData() {
+  return (await loadConfig()).querySelector('homepage-config > team > member[owner="true"]');
 }
 
-function getOwnerCitation() {
-  return new Promise((resolve) => {
-    loadConfig().then((config) => {
-      const domHelper = new DOMParser();
-      const dom = domHelper.parseFromString(config, 'application/xml');
-      const citationValue = dom.querySelector('homepage-config > citation > value');
-
-      resolve(citationValue);
-    });
-  });
+async function getOwnerCitation() {
+  return (await loadConfig()).querySelector('homepage-config > citation > value');
 }
 
-function getNumericPresPoints() {
-  return new Promise((resolve) => {
-    loadConfig().then((config) => {
-      const domHelper = new DOMParser();
-      const dom = domHelper.parseFromString(config, 'application/xml');
-      const presentationPoints = dom.querySelectorAll('homepage-config > numeric-pres-points > item');
-
-      resolve(presentationPoints);
-    });
-  });
+async function getNumericPresPoints() {
+  return (await loadConfig()).querySelectorAll('homepage-config > numeric-pres-points > item');
 }
 
-function getHomePagePresFiles() {
-  return new Promise((resolve) => {
-    loadConfig().then((config) => {
-      const domHelper = new DOMParser();
-      const dom = domHelper.parseFromString(config, 'application/xml');
-      const presFiles = dom.querySelectorAll('homepage-config > pres-items > file');
-
-      resolve(presFiles);
-    });
-  });
+async function getHomePagePresFiles() {
+  return (await loadConfig()).querySelectorAll('homepage-config > pres-items > file');
 }
 
-function getFooterCategories() {
-  return new Promise((resolve) => {
-    loadConfig().then((config) => {
-      const domHelper = new DOMParser();
-      const dom = domHelper.parseFromString(config, 'application/xml');
-      const presFiles = dom.querySelectorAll('homepage-config > footer-links > category');
-
-      resolve(presFiles);
-    });
-  });
+async function getFooterCategories() {
+  return (await loadConfig()).querySelectorAll('homepage-config > footer-links > category');
 }
 
-function getFooterContributionLink() {
-  return new Promise((resolve) => {
-    loadConfig().then((config) => {
-      const domHelper = new DOMParser();
-      const dom = domHelper.parseFromString(config, 'application/xml');
-      const presFiles = dom.querySelector('homepage-config > footer-links > contribution-link');
-
-      resolve(presFiles);
-    });
-  });
+async function getFooterContributionLink() {
+  return (await loadConfig()).querySelector('homepage-config > footer-links > contribution-link');
 }
 
-function getFooterDescription() {
-  return new Promise((resolve) => {
-    loadConfig().then((config) => {
-      const domHelper = new DOMParser();
-      const dom = domHelper.parseFromString(config, 'application/xml');
-      const presFiles = dom.querySelector('homepage-config > footer-links > dsc');
-
-      resolve(presFiles);
-    });
-  });
+async function getFooterDescription() {
+  return (await loadConfig()).querySelector('homepage-config > footer-links > dsc');
 }
 
-function getAvailableCategories() {
-  return new Promise((resolve) => {
-    loadConfig().then((config) => {
-      const domHelper = new DOMParser();
-      const dom = domHelper.parseFromString(config, 'application/xml');
-      const filesListElements = dom.querySelectorAll('config > files-list');
-
-      resolve([...filesListElements].filter((x) => x.hasAttribute('id') && x.hasAttribute('description')));
-    });
-  });
+async function getAvailableCategories() {
+  return [...(await loadConfig()).querySelectorAll('config > files-list')].filter(
+      (x) => x.hasAttribute('id') && x.hasAttribute('description')
+  );
 }
 
-function getTheNextFileAfter(fileName) {
-  return new Promise((resolve, reject) => {
-    loadConfig().then((config) => {
-      const domHelper = new DOMParser();
-      const dom = domHelper.parseFromString(config, 'application/xml');
-      const filesListElementsGlobal = dom.querySelectorAll('config > files-list file');
+async function getTheNextFileAfter(fileName) {
+  const filesListElementsGlobal = (await loadConfig()).querySelectorAll('config > files-list file');
 
-      let detectedId;
-      for (const file of filesListElementsGlobal) {
-        if (getFullPathByFileElement(file) === fileName) {
-          detectedId = file.parentElement;
+  let detectedId;
+  for (const file of filesListElementsGlobal) {
+    if (getFullPathByFileElement(file) === fileName) {
+      detectedId = file.parentElement;
 
-          if (detectedId.tagName.toUpperCase() === 'GROUP') {
-            detectedId = detectedId.parentElement;
-          }
+      if (detectedId.tagName.toUpperCase() === 'GROUP') {
+        detectedId = detectedId.parentElement;
+      }
 
-          break;
+      break;
+    }
+  }
+
+  if (typeof detectedId == 'undefined') {
+    return Promise.reject('detected id not found');
+  } else {
+    const filesListElements = detectedId.querySelectorAll('file');
+
+    let nextFile, previousFile, previousStateFile;
+    let found = false;
+    for (const file of filesListElements) {
+      const finalText = getFullPathByFileElement(file);
+
+      if (typeof nextFile == 'undefined') {
+        if (found) {
+          nextFile = finalText;
+        } else if (finalText === fileName) {
+          found = true;
         }
       }
 
-      if (typeof detectedId == 'undefined') {
-        reject('detected id not found');
-      } else {
-        const filesListElements = detectedId.querySelectorAll('file');
-
-        let nextFile, previousFile, previousStateFile;
-        let found = false;
-        for (const file of filesListElements) {
-          const finalText = getFullPathByFileElement(file);
-
-          if (typeof nextFile == 'undefined') {
-            if (found) {
-              nextFile = finalText;
-            } else if (finalText === fileName) {
-              found = true;
-            }
-          }
-
-          if (typeof previousFile == 'undefined') {
-            if (finalText === fileName && typeof previousStateFile != 'undefined') {
-              previousFile = previousStateFile;
-            } else {
-              previousStateFile = finalText;
-            }
-          }
-        }
-
-        if (typeof nextFile == 'undefined' && typeof previousFile == 'undefined') {
-          reject('path not found');
+      if (typeof previousFile == 'undefined') {
+        if (finalText === fileName && typeof previousStateFile != 'undefined') {
+          previousFile = previousStateFile;
         } else {
-          resolve({
-            previousFile,
-            nextFile,
-            basePath: detectedId.hasAttribute('basepath') ? detectedId.getAttribute('basepath') : ''
-          });
+          previousStateFile = finalText;
         }
       }
-    });
-  });
+    }
+
+    if (typeof nextFile == 'undefined' && typeof previousFile == 'undefined') {
+      return Promise.reject('path not found');
+    } else {
+      return {
+        previousFile,
+        nextFile,
+        basePath: detectedId.hasAttribute('basepath') ? detectedId.getAttribute('basepath') : ''
+      };
+    }
+  }
 }
 
-function getAllFilesListFilesById(id) {
-  return new Promise((resolve) => {
-    loadConfig().then((config) => {
-      const domHelper = new DOMParser();
-      const dom = domHelper.parseFromString(config, 'application/xml');
-      const filesListElements = dom.querySelectorAll('config > files-list[id="' + id + '"] file');
-
-      let finalList = [];
-      for (const element of filesListElements) {
-        let finalText = '';
-        if (element.parentElement.hasAttribute('basepath')) {
-          finalText = element.parentElement.getAttribute('basepath');
-        }
-        finalText += element.textContent;
-        finalList.push(finalText);
-      }
-
-      resolve(finalList);
-    });
-  });
+async function getAllFilesListFilesById(id) {
+  const filesListElements = (await loadConfig()).querySelectorAll('config > files-list[id="' + id + '"] file');
+  let finalList = [];
+  for (const element of filesListElements) {
+    let finalText = '';
+    if (element.parentElement.hasAttribute('basepath')) {
+      finalText = element.parentElement.getAttribute('basepath');
+    }
+    finalText += element.textContent;
+    finalList.push(finalText);
+  }
+  return finalList;
 }
 
-function getFilesListDefaultFileById(id) {
-  return new Promise((resolve) => {
-    loadConfig().then((config) => {
-      const domHelper = new DOMParser();
-      const dom = domHelper.parseFromString(config, 'application/xml');
-      const filesListElement = dom.querySelector('config > files-list[id="' + id + '"]');
+async function getFilesListDefaultFileById(id) {
+  const filesListElement = (await loadConfig()).querySelector('config > files-list[id="' + id + '"]');
 
-      if (filesListElement && filesListElement.hasAttribute('defaultfile')) {
-        let fullPath = filesListElement.getAttribute('defaultfile');
-        if (filesListElement.hasAttribute('basepath')) {
-          fullPath = filesListElement.getAttribute('basepath') + fullPath;
-        }
+  if (filesListElement && filesListElement.hasAttribute('defaultfile')) {
+    let fullPath = filesListElement.getAttribute('defaultfile');
+    if (filesListElement.hasAttribute('basepath')) {
+      fullPath = filesListElement.getAttribute('basepath') + fullPath;
+    }
 
-        resolve(fullPath);
-      } else {
-        resolve();
-      }
-    });
-  });
+    return fullPath;
+  }
 }
 
-function getFilesListInstanceById(id) {
-  return new Promise((resolve) => {
-    loadConfig().then((config) => {
-      const domHelper = new DOMParser();
-      const dom = domHelper.parseFromString(config, 'application/xml');
-      const filesListElements = dom.querySelector('config > files-list[id="' + id + '"]');
-
-      resolve(filesListElements);
-    });
-  });
+async function getFilesListInstanceById(id) {
+  return (await loadConfig()).querySelector('config > files-list[id="' + id + '"]');
 }
 
 function getOptionValueByIdSync(id) {
   if (isConfigReady()) {
-    const domHelper = new DOMParser();
-    const dom = domHelper.parseFromString(precachedConfig, 'application/xml');
-    return dom.querySelector('config > option[id="' + id + '"]');
+    return precachedConfig.querySelector('config > option[id="' + id + '"]');
   }
 
   return null;
@@ -311,16 +208,9 @@ function getFullPathByFileElement(file) {
   return finalText;
 }
 
-function getRedirectDataForPath(path) {
-  return new Promise((resolve) => {
-    loadConfig().then((config) => {
-      const domHelper = new DOMParser();
-      const dom = domHelper.parseFromString(config, 'application/xml');
-      const redirectTo = dom.querySelector('config > redirects > redirect[path="' + path.toLowerCase() + '"]');
-
-      resolve(redirectTo && redirectTo.textContent);
-    });
-  });
+async function getRedirectDataForPath(path) {
+  const redirectTo = (await loadConfig()).querySelector('config > redirects > redirect[path="' + path.toLowerCase() + '"]');
+  return redirectTo && redirectTo.textContent;
 }
 
 export {
