@@ -556,7 +556,7 @@ function filterSearchText(searchText) {
     let newSearchText = '';
 
     for (const char of searchText) {
-        if (REGEX_ALLOWED_CHARS.includes(char.toLowerCase())) {
+        if (char === ' ' || REGEX_ALLOWED_CHARS.includes(char.toLowerCase())) {
             newSearchText += char.toLowerCase();
         }
     }
