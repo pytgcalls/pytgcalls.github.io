@@ -20,6 +20,7 @@ import {loadConfig} from "./main.config.js";
 import {handleRecursive} from "./main.parser.js";
 import {globalUpdateActiveFile} from "./main.sidebar.js";
 import * as tooltip from "./main.tooltip.js";
+import * as searchEngine from "./main.search_engine.js";
 
 class ExpandedRefsState {
     static NONE = 0;
@@ -150,7 +151,23 @@ export function openSearchContainer(startBy) {
 }
 
 function handleSearch() {
-    loadConfig().then(() => {
+    // Example usage of the search engine
+    const query = searchTextElement.value.trim();
+    if (!indexesManager.isCurrentlyIndexing) {
+        searchTextFullElement.classList.add('is-loading');
+        searchEngine.search(query).then((results) => {
+            searchSpinnerContainerElement.addEventListener('transitionend', () => {
+                searchTextFullElement.classList.remove('is-loading');
+                searchContainerElement.classList.toggle('text-is-empty', !query);
+                if (!query) {
+                    return;
+                }
+
+                console.log(results);
+            }, { once: true });
+        });
+    }
+    /*loadConfig().then(() => {
         const onSearchReady = (text) => {
             searchContainerElement.classList.toggle('text-is-empty', !text.trim());
             if (!text.trim()) {
@@ -260,7 +277,7 @@ function handleSearch() {
                 scheduleSearch(onSearchReady);
             }
         }
-    });
+    });*/
 }
 
 function createShowMoreLessAnimator(callback, isAlreadyExpanded = false) {
