@@ -44,7 +44,19 @@ async function search(query) {
             }
             return results;
         }, [])
-        .sort((a, b) => b.accuracy - a.accuracy)
+        .sort((a, b) => b.data.accuracy - a.data.accuracy)
+        .reduce((results, result) => {
+            if (result.data.element instanceof indexesManager.FileIndex) {
+                if (results.filter((r) => r.data.element instanceof indexesManager.FileIndex).length < MAX_RESULTS) {
+                    results.push(result);
+                }
+            } else {
+                if (results.filter((r) => r.data.element instanceof indexesManager.ElementIndex).length < MAX_RESULTS) {
+                    results.push(result);
+                }
+            }
+            return results;
+        }, [])
         .map((result) => {
             if (result.data.element instanceof indexesManager.FileIndex) {
                 return {
@@ -52,38 +64,15 @@ async function search(query) {
                     element: result.data.element,
                 }
             } else {
-                let element = result.data.element;
-                let newElement = new indexesManager.ElementIndex(
-                    applyHighlight(result.data.element.mainElement, result.data.offset, result.data.sentence.length)
-                );
-                let foundMainElement = false;
-                for (let child of element.chunk) {
-                    if (child === result.data.element.mainElement) {
-                        foundMainElement = true;
-                    } else if (foundMainElement) {
-                        newElement.addToChunk(child);
-                    } else {
-                        newElement.prependToChunk(child);
-                    }
-                }
                 return {
                     file: result.file,
-                    element: newElement,
+                    element: indexesManager.ElementIndex.cloneFrom(
+                        applyHighlight(result.data.element.mainElement, result.data.offset, result.data.sentence.length),
+                        result.data.element,
+                    ),
                 }
             }
-        })
-        .reduce((results, result) => {
-            if (result.element instanceof indexesManager.FileIndex) {
-                if (results.filter((r) => r.element instanceof indexesManager.FileIndex).length < MAX_RESULTS) {
-                    results.push(result);
-                }
-            } else {
-                if (results.filter((r) => r.element instanceof indexesManager.ElementIndex).length < MAX_RESULTS) {
-                    results.push(result);
-                }
-            }
-            return results;
-        }, []);
+        });
 }
 
 function applyHighlight(htmlElement, offset, length) {
