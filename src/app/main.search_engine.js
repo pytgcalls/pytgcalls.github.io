@@ -16,6 +16,9 @@ import * as indexesManager from "./main.indexes.js";
 import {initFull} from "./main.indexes.js";
 
 const MAX_RESULTS = 10;
+const UNSUPPORTED_HIGHLIGHT_ELEMENTS = [
+    'SYNTAX-HIGHLIGHT', 'SHI', 'MULTISYNTAX'
+];
 
 async function search(query) {
     await initFull();
@@ -94,7 +97,11 @@ function applyHighlight(htmlElement, offset, length) {
         if (offset >= currentOffset && offset < currentOffset + childLength) {
             const consumeSpace = consumeLength - offsetBox;
             if (child.childNodes.length > 0) {
-                newElement.appendChild(applyHighlight(child, 0, consumeLength));
+                if (UNSUPPORTED_HIGHLIGHT_ELEMENTS.includes(child.nodeName.toUpperCase())) {
+                    newElement.appendChild(newChild);
+                } else {
+                    newElement.appendChild(applyHighlight(child, offsetBox, consumeSpace));
+                }
             } else {
                 newElement.appendChild(newChild);
                 const range = document.createRange();
