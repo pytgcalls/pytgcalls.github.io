@@ -27,6 +27,7 @@ class ExpandedRefsState {
     static DOCS_REF = 2;
 }
 
+const REGEX_ALLOWED_CHARS = [...'qwertyuiopasdfghjklzxcvbnm,.-1234567890()'];
 const ROW_MARGIN_BOTTOM = 5;
 
 let isAnimating = 0;
@@ -518,6 +519,9 @@ function createReference(type, name, pathName, chunks, searchText) {
             if (searchText != null) {
                 let newPageText = '';
 
+                const reparsedString = filterSearchText(searchText).replaceAll("(", "\\(").replaceAll(")", "\\)");
+                const searchMask = new RegExp("("+reparsedString+")", "ig");
+
                 for(const newTagOpen of docsRefPage.innerHTML.split('<')) {
                     if (newTagOpen == null || newTagOpen === '') {
                         continue;
@@ -528,8 +532,7 @@ function createReference(type, name, pathName, chunks, searchText) {
 
                     const beforeNextTag = newTagOpen.split(firstTagClose+'>')[1];
                     if (beforeNextTag !== null) {
-                        const searchMask = new RegExp(searchText.toLowerCase(), "ig");
-                        const replaceWith = "<span class='ids'>" + searchText.toLowerCase() + "</span>";
+                        const replaceWith = "<span class='ids'>$1</span>";
                         newPageText += beforeNextTag.replaceAll(searchMask, replaceWith);
                     }
                 }
@@ -547,6 +550,18 @@ function createReference(type, name, pathName, chunks, searchText) {
     }
 
     return row;
+}
+
+function filterSearchText(searchText) {
+    let newSearchText = '';
+
+    for (const char of searchText) {
+        if (REGEX_ALLOWED_CHARS.includes(char.toLowerCase())) {
+            newSearchText += char.toLowerCase();
+        }
+    }
+
+    return newSearchText;
 }
 
 function closeSearch() {
