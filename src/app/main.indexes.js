@@ -16,7 +16,6 @@
 import * as requestsManager from "./main.requests.js";
 import * as debug from "./main.debug.js";
 import {tryToReduceTags} from "./main.parser.js";
-import {loadConfig} from "./main.config.js";
 
 const AVAILABLE_TYPES = [
   'method', 'class', 'enum', 'type'
@@ -134,6 +133,25 @@ export class ElementIndex {
   constructor(element) {
     this.#chunk = [element];
     this.#main = element;
+  }
+
+  static cloneFrom(mainElement, target) {
+    if (!target instanceof ElementIndex) {
+      throw new Error('ElementIndex.cloneFrom: elementToClone is not an instance of ElementIndex');
+    }
+    const newElement = new ElementIndex(mainElement);
+
+    let foundMainElement = false;
+    for (let child of target.chunk) {
+      if (child === target.mainElement) {
+        foundMainElement = true;
+      } else if (foundMainElement) {
+        newElement.addToChunk(child.cloneNode(true));
+      } else {
+        newElement.prependToChunk(child.cloneNode(true));
+      }
+    }
+    return newElement;
   }
 
   get mainElement() {
