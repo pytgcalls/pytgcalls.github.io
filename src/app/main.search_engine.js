@@ -16,13 +16,15 @@ import * as indexesManager from "./main.indexes.js";
 import {initFull} from "./main.indexes.js";
 
 const MAX_RESULTS = 10;
+export let isSearching = false;
 const UNSUPPORTED_HIGHLIGHT_ELEMENTS = [
     'SYNTAX-HIGHLIGHT', 'SHI', 'MULTISYNTAX'
 ];
 
 async function search(query) {
+    isSearching = true;
     await initFull();
-    return indexesManager.getAllIndexedFiles()
+    let results = indexesManager.getAllIndexedFiles()
         .reduce((results, indexedFile) => {
             const result = matchPage(indexedFile, query);
             if (result) {
@@ -73,6 +75,8 @@ async function search(query) {
                 }
             }
         });
+    isSearching = false;
+    return results;
 }
 
 function applyHighlight(htmlElement, offset, length) {
