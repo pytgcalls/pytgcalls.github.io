@@ -55,15 +55,15 @@ function applyHighlight(htmlElement, offset, length) {
     let newElement = htmlElement.cloneNode();
     for (let child of htmlElement.childNodes) {
         const newChild = child.cloneNode(true);
-        newElement.appendChild(newChild);
         const childLength = newChild.textContent.length;
         const offsetBox = offset - currentOffset;
         const consumeLength = Math.min(offsetBox + length, childLength);
         if (offset >= currentOffset && offset < currentOffset + childLength) {
             const consumeSpace = consumeLength - offsetBox;
             if (child.childNodes.length > 0) {
-                newElement.replaceChild(applyHighlight(child, 0, consumeLength), newChild);
+                newElement.appendChild(applyHighlight(child, 0, consumeLength));
             } else {
+                newElement.appendChild(newChild);
                 const range = document.createRange();
                 range.setStart(newChild, offsetBox);
                 range.setEnd(newChild, consumeLength);
@@ -119,7 +119,6 @@ function matchPage(file, query) {
 }
 
 function approxMatch(query, text) {
-    //text = text.trim();
     const foundMatches = [...text.matchAll(/[\w-_]+/g)]
         .map((word, index) => {
             return {
