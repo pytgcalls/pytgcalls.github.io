@@ -31,7 +31,7 @@ const AVAILABLE_ELEMENTS = [
   'LIST', 'ITEM', 'MULTISYNTAX',
   'TABLE', 'DEFINITIONS', 'COLUMN', 'ITEM',
   'DOCS-REF', 'GITHUB-REF', 'REF-SHI',
-  'CONFIG', 'BANNER', 'P2P-BANNER'
+  'CONFIG', 'BANNER', 'P2P-BANNER', 'MARK'
 ];
 
 export function getContentByData(text) {
@@ -104,6 +104,11 @@ export function handleRecursive(currentDom, elementDom) {
         }
 
         elementDom.appendChild(handlePostQueryElement(element, newElement));
+      } else if (element.tagName.toUpperCase() === 'MARK') {
+        const markElement = document.createElement('span');
+        markElement.classList.add('ids');
+        markElement.innerHTML = element.innerHTML;
+        elementDom.appendChild(markElement);
       } else {
         if (containsCustomTags) {
           handleRecursive(element, newElement);

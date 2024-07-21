@@ -16,7 +16,6 @@
 import * as iconsManager from "./main.icons.js";
 import * as indexesManager from "./main.indexes.js";
 import {createLoadingItem} from "./main.utils.js";
-import {loadConfig} from "./main.config.js";
 import {handleRecursive} from "./main.parser.js";
 import {globalUpdateActiveFile} from "./main.sidebar.js";
 import * as tooltip from "./main.tooltip.js";
@@ -28,7 +27,6 @@ class ExpandedRefsState {
     static DOCS_REF = 2;
 }
 
-const REGEX_ALLOWED_CHARS = [...'qwertyuiopasdfghjklzxcvbnm,.-1234567890()'];
 const ROW_MARGIN_BOTTOM = 5;
 
 let isAnimating = 0;
@@ -151,80 +149,45 @@ export function openSearchContainer(startBy) {
 }
 
 function handleSearch() {
-    // Example usage of the search engine
-    const query = searchTextElement.value.trim();
-    if (!indexesManager.isCurrentlyIndexing) {
-        searchTextFullElement.classList.add('is-loading');
+    const onSearchReady = (query) => {
         searchEngine.search(query).then((results) => {
-            searchSpinnerContainerElement.addEventListener('transitionend', () => {
-                searchTextFullElement.classList.remove('is-loading');
-                searchContainerElement.classList.toggle('text-is-empty', !query);
-                if (!query) {
-                    return;
-                }
-
-                console.log(results);
-            }, { once: true });
-        });
-    }
-    /*loadConfig().then(() => {
-        const onSearchReady = (text) => {
-            searchContainerElement.classList.toggle('text-is-empty', !text.trim());
-            if (!text.trim()) {
+            searchTextFullElement.classList.remove('is-loading');
+            searchContainerElement.classList.toggle('text-is-empty', !query);
+            if (!query) {
                 return;
             }
-
-            let allFileIndexResults = [];
-
-            const docsRefResults = [];
-            const docsRefResultsLimited = document.createDocumentFragment();
-            let docsRefResultsCount = 0;
-
-            for (const indexedFile of indexesManager.getAllIndexedFiles()) {
-                let addedDocsRefForFile = false;
-                for (const indexedValue of indexesManager.getIndexedValue(indexedFile)) {
-                    if (indexedValue instanceof indexesManager.FileIndex) {
-                        if (indexedValue.name.toLowerCase().indexOf(text.toLowerCase().trim()) !== -1) {
-                            allFileIndexResults.push(indexedValue);
-                        }
-                    } else if (indexedValue instanceof indexesManager.ElementIndex && !addedDocsRefForFile) {
-                        if (indexedValue.mainElement.textContent.toLowerCase().indexOf(text.toLowerCase().trim()) !== -1) {
-                            addedDocsRefForFile = true;
-
-                            const ref = createReference(null, null, indexedFile, docsRefResultsCount > 3 ? undefined : indexedValue.chunk, text);
-                            if (docsRefResultsCount++ > 3) {
-                                docsRefResults.push(ref);
-                            } else {
-                                docsRefResultsLimited.append(ref);
-                            }
-                        }
-                    }
-                }
-            }
-
             const codeRefResults = [];
+            const docsRefResults = [];
             const codeRefResultsLimited = document.createDocumentFragment();
-            let codeRefResultsCount = 0;
+            const docsRefResultsLimited = document.createDocumentFragment();
 
-            allFileIndexResults.sort((a, b) => b.type.length - a.type.length);
-            for (const indexedValue of allFileIndexResults) {
-                const ref = createReference(indexedValue.type, indexedValue.name, indexedValue.filePath);
-                if (codeRefResultsCount++ > 3) {
-                    codeRefResults.push(ref);
-                } else {
-                    codeRefResultsLimited.append(ref);
+            for (const result of results) {
+                if (result.element instanceof indexesManager.FileIndex) {
+                    const ref = createReference(result.element.type, result.element.name, result.file);
+                    if (codeRefResultsLimited.childNodes.length >= 3) {
+                        codeRefResults.push(ref);
+                    } else {
+                        codeRefResultsLimited.append(ref);
+                    }
+                } else if (result.element instanceof indexesManager.ElementIndex) {
+                    const ref = createReference(null, null, result.file, docsRefResultsLimited.childNodes.length >= 3 ? undefined : result.element.chunk, "");
+                    if (docsRefResultsLimited.childNodes.length >= 3) {
+                        docsRefResults.push(ref);
+                    } else {
+                        docsRefResultsLimited.append(ref);
+                    }
                 }
             }
 
             searchListAdapterElement.textContent = '';
             searchListAdapterElement.scrollTo(0, 0);
 
-            if (codeRefResultsCount > 0) {
+            if (codeRefResultsLimited.childNodes.length > 0) {
                 const codeRefTitle = document.createElement('div');
                 codeRefTitle.classList.add('row-title');
                 codeRefTitle.textContent = 'Code References';
 
-                if (codeRefResultsCount > 3) {
+                if (codeRefResults.length > 3) {
                     codeRefTitle.appendChild(createShowMoreLessAnimator(() => expandContainer(codeRefResults), expandedRefsState === ExpandedRefsState.CODE_REF));
                 }
 
@@ -239,12 +202,12 @@ function handleSearch() {
                 searchCodeRefContainerElement = undefined;
             }
 
-            if (docsRefResultsCount > 0) {
+            if (docsRefResultsLimited.childNodes.length > 0) {
                 const docsRefTitle = document.createElement('div');
                 docsRefTitle.classList.add('row-title');
                 docsRefTitle.textContent = 'Docs References';
 
-                if (docsRefResultsCount > 3) {
+                if (docsRefResults.length > 3) {
                     docsRefTitle.appendChild(createShowMoreLessAnimator(() => expandContainer(docsRefResults, true), expandedRefsState === ExpandedRefsState.DOCS_REF));
                 }
 
@@ -255,29 +218,25 @@ function handleSearch() {
                 searchListAdapterElement.appendChild(searchResultReferenceContainer);
 
                 searchDocsRefContainerElement = searchResultReferenceContainer;
-            } else {
-                searchDocsRefContainerElement = undefined;
             }
-        };
-
-        if (!indexesManager.isCurrentlyIndexing) {
-            if (!indexesManager.hasIndexed && !alreadyWaitingForIndexingStart) {
-                searchTextFullElement.classList.add('is-loading');
-                alreadyWaitingForIndexingStart = true;
-
+        });
+    }
+    if (!searchEngine.isSearching) {
+        if (!indexesManager.hasIndexed && !alreadyWaitingForIndexingStart){
+            alreadyWaitingForIndexingStart = true;
+            searchTextFullElement.classList.add('is-loading');
+            const onIndexingReady = (query) => {
+                alreadyWaitingForIndexingStart = false;
                 searchSpinnerContainerElement.addEventListener('transitionend', () => {
-                    alreadyWaitingForIndexingStart = false;
-
-                    indexesManager.initFull().then(() => {
-                        searchTextFullElement.classList.remove('is-loading');
-                        scheduleSearch(onSearchReady);
-                    });
+                    searchTextFullElement.classList.remove('is-loading');
+                    onSearchReady(query);
                 }, { once: true });
-            } else if (!alreadyWaitingForIndexingStart) {
-                scheduleSearch(onSearchReady);
             }
+            scheduleSearch(onIndexingReady);
+        } else if (!alreadyWaitingForIndexingStart) {
+            scheduleSearch(onSearchReady);
         }
-    });*/
+    }
 }
 
 function createShowMoreLessAnimator(callback, isAlreadyExpanded = false) {
@@ -469,10 +428,10 @@ function scheduleSearch(onSearchReady) {
         return;
     }
 
-    currentSearchTimeout = setTimeout(() => onSearchReady(searchTextElement.value.trim()), 100);
+    currentSearchTimeout = setTimeout(() => onSearchReady(searchTextElement.value.trim()), 150);
 }
 
-function createReference(type, name, pathName, chunks, searchText) {
+function createReference(type, name, pathName, chunks) {
     const codeDetailsName = document.createElement('div');
     codeDetailsName.classList.add('cd-name');
     const codeDetailsPath = document.createElement('div');
@@ -526,42 +485,11 @@ function createReference(type, name, pathName, chunks, searchText) {
         setTimeout(() => {
             const fakeDom = document.createElement('div');
             fakeDom.append(...chunks);
-
             try {
                 handleRecursive(fakeDom, docsRefPage);
             } catch (e) {
                 console.log(e);
             }
-
-            if (searchText != null) {
-                let newPageText = '';
-
-                const reparsedString = filterSearchText(searchText).replaceAll("(", "\\(").replaceAll(")", "\\)");
-                const searchMask = new RegExp("("+reparsedString+")", "ig");
-
-                for(const newTagOpen of docsRefPage.innerHTML.split('<')) {
-                    if (newTagOpen == null || newTagOpen === '') {
-                        continue;
-                    }
-
-                    const firstTagClose = newTagOpen.split('>')[0];
-                    newPageText += '<'+firstTagClose+'>';
-
-                    const beforeNextTag = newTagOpen.split(firstTagClose+'>')[1];
-                    if (beforeNextTag !== null) {
-                        const replaceWith = "<span class='ids'>$1</span>";
-                        newPageText += beforeNextTag.replaceAll(searchMask, replaceWith);
-                    }
-                }
-
-                docsRefPage.innerHTML = newPageText;
-
-                const firstId = docsRefPage.querySelector('.ids');
-                if (firstId instanceof Element) {
-                    //firstId.scrollIntoViewIfNeeded();
-                }
-            }
-
             fakePageContainer.classList.remove('is-loading');
         }, 500);
     }
@@ -569,17 +497,6 @@ function createReference(type, name, pathName, chunks, searchText) {
     return row;
 }
 
-function filterSearchText(searchText) {
-    let newSearchText = '';
-
-    for (const char of searchText) {
-        if (char === ' ' || REGEX_ALLOWED_CHARS.includes(char.toLowerCase())) {
-            newSearchText += char.toLowerCase();
-        }
-    }
-
-    return newSearchText;
-}
 
 function closeSearch() {
     if (lastStartByElement == null) {

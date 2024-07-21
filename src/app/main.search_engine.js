@@ -66,15 +66,20 @@ async function search(query) {
                     element: result.data.element,
                 }
             } else {
-                return {
-                    file: result.file,
-                    element: indexesManager.ElementIndex.cloneFrom(
-                        applyHighlight(result.data.element.mainElement, result.data.offset, result.data.sentence.length),
-                        result.data.element,
-                    ),
+                try {
+                    return {
+                        file: result.file,
+                        element: indexesManager.ElementIndex.cloneFrom(
+                            applyHighlight(result.data.element.mainElement, result.data.offset, result.data.sentence.length),
+                            result.data.element,
+                        ),
+                    }
+                } catch (ignored) {
+                    return null;
                 }
             }
-        });
+        })
+        .filter((result) => result !== null);
     isSearching = false;
     return results;
 }
@@ -89,22 +94,24 @@ function applyHighlight(htmlElement, offset, length) {
         const consumeLength = Math.min(offsetBox + length, childLength);
         if (offset >= currentOffset && offset < currentOffset + childLength) {
             const consumeSpace = consumeLength - offsetBox;
-            if (child.childNodes.length > 0) {
-                if (UNSUPPORTED_HIGHLIGHT_ELEMENTS.includes(child.nodeName.toUpperCase())) {
-                    newElement.appendChild(newChild);
-                } else {
+            if (!UNSUPPORTED_HIGHLIGHT_ELEMENTS.includes(child.nodeName.toUpperCase())) {
+                if (child.childNodes.length > 0) {
                     newElement.appendChild(applyHighlight(child, offsetBox, consumeSpace));
+                } else {
+                    newElement.appendChild(newChild);
+                    const range = document.createRange();
+                    range.setStart(newChild, offsetBox);
+                    range.setEnd(newChild, consumeLength);
+                    // Style the highlighted text
+                    range.surroundContents(document.createElement('mark'));
                 }
             } else {
-                newElement.appendChild(newChild);
-                const range = document.createRange();
-                range.setStart(newChild, offsetBox);
-                range.setEnd(newChild, consumeLength);
-                // Style the highlighted text
-                range.surroundContents(document.createElement('mark'));
+                throw new Error('Unsupported highlight element');
             }
             offset += consumeSpace;
             length -= consumeSpace;
+        } else {
+            newElement.appendChild(newChild);
         }
         currentOffset += childLength;
     }
@@ -152,7 +159,7 @@ function matchPage(file, query) {
 }
 
 function approxMatch(query, text) {
-    const foundMatches = [...text.matchAll(/[\w-_]+/g)]
+    const foundMatches = [...text.matchAll(/[\w-_()><]+/g)]
         .map((word, index) => {
             return {
                 text: word[0],
