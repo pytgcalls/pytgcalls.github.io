@@ -168,10 +168,10 @@ function approxMatch(query, text) {
             };
         })
         .map((word) => {
-            return query.split(/\s+/).map((searchWord) => {
+            return [...query.matchAll(/[\w-_()><]+/g)].map((searchWord) => {
                 return {
                     sentence: word.text,
-                    accuracy: LevenshteinAccuracy(word.text.toLowerCase(), searchWord.toLowerCase()),
+                    accuracy: LevenshteinAccuracy(word.text.toLowerCase(), searchWord[0].toLowerCase()),
                     position: word.position,
                     offset: word.offset,
                 };
