@@ -39,6 +39,7 @@ let searchSpinnerContainerElement;
 let searchListAdapterElement;
 let searchCodeRefContainerElement;
 let searchDocsRefContainerElement;
+let searchDocsRefPreviewTimeouts = [];
 let searchResultsFullElement;
 let currentSearchTimeout;
 let windowKeyDownEventListener;
@@ -150,7 +151,10 @@ export function openSearchContainer(startBy) {
 
 function handleSearch() {
     const onSearchReady = async (query) => {
-        let results = await searchEngine.search(query);
+        clearLoadingPreviews();
+
+        const results = await searchEngine.search(query);
+
         searchTextFullElement.classList.remove('is-loading');
         searchContainerElement.classList.toggle('text-is-empty', !query);
         if (!query) {
@@ -195,8 +199,14 @@ function handleSearch() {
             searchResultReferenceContainer.classList.add('ref-container');
             searchResultReferenceContainer.appendChild(codeRefTitle);
             searchResultReferenceContainer.appendChild(codeRefResultsLimited);
-            searchListAdapterElement.appendChild(searchResultReferenceContainer);
 
+            if (expandedRefsState === ExpandedRefsState.CODE_REF) {
+                searchResultReferenceContainer.append(...codeRefResults);
+            } else if (expandedRefsState === ExpandedRefsState.DOCS_REF) {
+                searchResultReferenceContainer.classList.add('animate-disappear-as-opposite');
+            }
+
+            searchListAdapterElement.appendChild(searchResultReferenceContainer);
             searchCodeRefContainerElement = searchResultReferenceContainer;
         } else {
             searchCodeRefContainerElement = undefined;
@@ -215,8 +225,14 @@ function handleSearch() {
             searchResultReferenceContainer.classList.add('ref-container');
             searchResultReferenceContainer.appendChild(docsRefTitle);
             searchResultReferenceContainer.appendChild(docsRefResultsLimited);
-            searchListAdapterElement.appendChild(searchResultReferenceContainer);
 
+            if (expandedRefsState === ExpandedRefsState.DOCS_REF) {
+                searchResultReferenceContainer.append(...docsRefResults);
+            } else if (expandedRefsState === ExpandedRefsState.CODE_REF) {
+                searchResultReferenceContainer.classList.add('animate-disappear-as-opposite');
+            }
+
+            searchListAdapterElement.appendChild(searchResultReferenceContainer);
             searchDocsRefContainerElement = searchResultReferenceContainer;
         }
     }
@@ -224,14 +240,11 @@ function handleSearch() {
         if (!indexesManager.hasIndexed && !alreadyWaitingForIndexingStart){
             alreadyWaitingForIndexingStart = true;
             searchTextFullElement.classList.add('is-loading');
-            const onIndexingReady = (query) => {
-                searchSpinnerContainerElement.addEventListener('transitionend', async () => {
-                    alreadyWaitingForIndexingStart = false;
-                    searchTextFullElement.classList.remove('is-loading');
-                    await onSearchReady(query);
-                }, { once: true });
-            }
-            scheduleSearch(onIndexingReady);
+            searchSpinnerContainerElement.addEventListener('transitionend', async () => {
+                alreadyWaitingForIndexingStart = false;
+                searchTextFullElement.classList.remove('is-loading');
+                await onSearchReady(searchTextElement.value.trim());
+            }, { once: true });
         } else if (!alreadyWaitingForIndexingStart) {
             scheduleSearch(onSearchReady);
         }
@@ -449,6 +462,10 @@ function createReference(type, name, pathName, chunks) {
     const row = document.createElement('div');
     row.classList.add('row');
     row.addEventListener('click', () => {
+        if (isAnimating !== 0) {
+            return;
+        }
+
         closeSearch();
         globalUpdateActiveFile(pathName);
     });
@@ -481,7 +498,7 @@ function createReference(type, name, pathName, chunks) {
         row.appendChild(fakePageContainer);
         row.classList.add('has-docs-preview');
 
-        setTimeout(() => {
+        searchDocsRefPreviewTimeouts.push(setTimeout(() => {
             const fakeDom = document.createElement('div');
             fakeDom.append(...chunks);
             try {
@@ -490,12 +507,18 @@ function createReference(type, name, pathName, chunks) {
                 console.log(e);
             }
             fakePageContainer.classList.remove('is-loading');
-        }, 500);
+        }, 500));
     }
 
     return row;
 }
 
+function clearLoadingPreviews() {
+    for (const timeout of searchDocsRefPreviewTimeouts) {
+        clearTimeout(timeout);
+    }
+    searchDocsRefPreviewTimeouts = [];
+}
 
 function closeSearch() {
     if (lastStartByElement == null) {
@@ -611,6 +634,8 @@ export function resetData() {
         window.removeEventListener('keydown', windowKeyDownEventListener);
     }
 
+    clearLoadingPreviews();
+
     isAnimating = 0;
     expandedRefsState = ExpandedRefsState.NONE;
     lastStartByElement = undefined;
@@ -621,6 +646,7 @@ export function resetData() {
     searchListAdapterElement = undefined;
     searchCodeRefContainerElement = undefined;
     searchDocsRefContainerElement = undefined;
+    searchDocsRefPreviewTimeouts = [];
     searchResultsFullElement = undefined;
     currentSearchTimeout = undefined;
     windowKeyDownEventListener = undefined;

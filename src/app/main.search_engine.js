@@ -21,10 +21,10 @@ const UNSUPPORTED_HIGHLIGHT_ELEMENTS = [
     'SYNTAX-HIGHLIGHT', 'SHI', 'MULTISYNTAX'
 ];
 
-async function search(query) {
+export async function search(query) {
     isSearching = true;
     await initFull();
-    let results = indexesManager.getAllIndexedFiles()
+    const results = indexesManager.getAllIndexedFiles()
         .reduce((results, indexedFile) => {
             const result = matchPage(indexedFile, query);
             if (result) {
@@ -64,7 +64,7 @@ async function search(query) {
                 return {
                     file: result.file,
                     element: result.data.element,
-                }
+                };
             } else {
                 try {
                     return {
@@ -73,7 +73,7 @@ async function search(query) {
                             applyHighlight(result.data.element.mainElement, result.data.offset, result.data.sentence.length),
                             result.data.element,
                         ),
-                    }
+                    };
                 } catch (ignored) {
                     return null;
                 }
@@ -86,7 +86,7 @@ async function search(query) {
 
 function applyHighlight(htmlElement, offset, length) {
     let currentOffset = 0;
-    let newElement = htmlElement.cloneNode();
+    const newElement = htmlElement.cloneNode();
     for (let child of htmlElement.childNodes) {
         const newChild = child.cloneNode(true);
         const childLength = newChild.textContent.length;
@@ -203,7 +203,7 @@ function approxMatch(query, text) {
     if (foundMatches.length > 0) {
         return foundMatches.reduce((best, current) => {
             return current.accuracy >= best.accuracy ? current : best;
-        })
+        });
     }
     return null;
 }
@@ -216,17 +216,17 @@ function LevenshteinDistance(a, b) {
     const lenA = a.length;
     const lenB = b.length;
     if (lenA === 0) {
-        return lenB
+        return lenB;
     }
     if (lenB === 0) {
-        return lenA
+        return lenA;
     }
     const matrix = [];
     for (let i = 0; i <= lenA; i++) {
-        matrix[i] = [i]
+        matrix[i] = [i];
     }
     for (let j = 0; j <= lenB; j++) {
-        matrix[0][j] = j
+        matrix[0][j] = j;
     }
     for (let i = 1; i <= lenA; i++) {
         for (let j = 1; j <= lenB; j++) {
@@ -235,12 +235,8 @@ function LevenshteinDistance(a, b) {
                 matrix[i - 1][j] + 1,
                 matrix[i][j - 1] + 1,
                 matrix[i - 1][j - 1] + cost
-            )
+            );
         }
     }
     return matrix[lenA][lenB]
-}
-
-export {
-    search
 }

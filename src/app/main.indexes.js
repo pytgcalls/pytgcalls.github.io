@@ -78,13 +78,23 @@ export function saveAsFullIndexedValue(file, data) {
   indexes_caching[file] = data;
 }
 
+function composeOptimizedPageQuery() {
+  let pageQueryComponents = ['page [src]'];
+
+  for (const element of SUPPORTED_ELEMENTS) {
+    pageQueryComponents.push('page '+element.toLowerCase());
+  }
+
+  return pageQueryComponents.join(', ');
+}
+
 function parseFile(filePath, fileContent) {
   let fileIndexes = [];
 
   try {
     const domHelper = new DOMParser();
     const dom = domHelper.parseFromString(fileContent, 'application/xml');
-    const classyElements = dom.querySelectorAll('page *');
+    const classyElements = dom.querySelectorAll(composeOptimizedPageQuery());
 
     for (const element of classyElements) {
       if (element.hasAttribute('src')) {
