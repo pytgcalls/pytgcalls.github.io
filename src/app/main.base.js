@@ -45,7 +45,7 @@ window.addEventListener('load', () => {
     promisesList.push(config.loadConfig());
 
     Promise.all(promisesList).then(() => {
-      if (typeof splashTimeout != 'undefined') {
+      if (splashTimeout != null) {
         clearTimeout(splashTimeout);
       }
 

@@ -11,14 +11,6 @@ body .search-container {
     --animation-speed: 0.2s;
 }
 
-body .search-container.faster {
-    --animation-speed: 0.1s;
-}
-
-body .search-container:not(.animate-appear):not(.animate-disappear) > .search-input.animated {
-    display: none;
-}
-
 body .search-container.animate-appear {
     animation: var(--animation-speed) animateAppearSearchContainer forwards;
 }
@@ -36,39 +28,49 @@ body .search-container.animate-disappear {
     animation: var(--animation-speed) animateAppearSearchContainer reverse forwards;
 }
 
-body .search-container::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    z-index: -1;
+@media screen and (min-width: 1000px) {
+    body .search-container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        z-index: -1;
+    }
+
+    body.reduce-blur .search-container::before {
+        display: none;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+
+    body .search-container.animate-appear::before {
+        animation: var(--animation-speed) animateAppearBlur forwards;
+    }
+
+    @keyframes animateAppearBlur {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    body .search-container.animate-disappear::before {
+        animation: var(--animation-speed) animateAppearBlur reverse forwards;
+    }
 }
 
-body.reduce-blur .search-container::before {
+body .search-container.faster {
+    --animation-speed: 0.1s;
+}
+
+body .search-container:not(.animate-appear):not(.animate-disappear) > .search-input.animated {
     display: none;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-}
-
-body .search-container.animate-appear::before {
-    animation: var(--animation-speed) animateAppearBlur forwards;
-}
-
-@keyframes animateAppearBlur {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-body .search-container.animate-disappear::before {
-    animation: var(--animation-speed) animateAppearBlur reverse forwards;
 }
 
 body .search-container .search-input {
@@ -92,8 +94,8 @@ body .search-container .search-input:not(.animated) {
 
 body .search-container .search-input > svg:not(.spinner) {
     fill: rgba(255, 255, 255, 0.4);
-    height: 17px;
-    width: 17px;
+    min-height: 17px;
+    min-width: 17px;
 }
 
 body .search-container .search-input > svg.cancel {
@@ -153,8 +155,16 @@ body .search-container .search-input input {
     border: none;
     font-size: 19px;
     font-family: 'Poppins', sans-serif;
-    flex: 1;
     color: #FFFFFF;
+    min-width: 0;
+}
+
+body .search-container .search-input:not(.animated) input {
+    flex: 1;
+}
+
+body .search-container .search-input.animated input {
+    width: 100%;
 }
 
 body .search-container.animate-appear > .search-input.animated,
@@ -163,11 +173,6 @@ body .search-container.animate-disappear > .search-input.animated {
     --start-background: rgb(22, 26, 32);
     --end-background: rgb(16, 18, 22);
     animation: var(--animation-speed) animateAppearSearchInput forwards cubic-bezier(0.42, 0, 0, 0.96);
-}
-
-body .search-container.animate-disappear > .search-input.animated {
-    --start-background: rgb(16, 18, 22);
-    --end-background: rgb(22, 26, 32);
 }
 
 @keyframes animateAppearSearchInput {
@@ -187,6 +192,47 @@ body .search-container.animate-disappear > .search-input.animated {
     }
 }
 
+body .search-container.animate-disappear > .search-input.animated {
+    --start-background: rgb(16, 18, 22);
+    --end-background: rgb(22, 26, 32);
+}
+
+@media screen and (max-width: 1000px) {
+    body .search-container.animate-appear > .search-input.animated {
+        background: rgb(16, 18, 22);
+        width: var(--end-width);
+        height: var(--end-height);
+        top: var(--end-y);
+        left: var(--end-x);
+    }
+
+    body .search-container.animate-disappear > .search-input.animated {
+        width: var(--start-width);
+        height: var(--start-height);
+        top: var(--start-y);
+        left: var(--start-x);
+    }
+
+    body .search-container.animate-appear > .search-input.animated {
+        animation: 0.2s animateAppearSearchInputMobile forwards;
+    }
+
+    body .search-container.animate-disappear > .search-input.animated {
+        animation: 0.2s animateAppearSearchInputMobile reverse forwards;
+    }
+
+    @keyframes animateAppearSearchInputMobile {
+        from {
+            transform: translateY(40px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+}
+
 body .search-container .search-results {
     margin-top: 15px;
     max-height: 80vh;
@@ -196,6 +242,15 @@ body .search-container .search-results {
     overflow: hidden;
     display: flex;
     flex-direction: column;
+}
+
+@media screen and (max-width: 1000px) {
+    body .search-container .search-results {
+        max-height: none;
+        height: 100vh;
+        margin-top: 0;
+        width: 100vw;
+    }
 }
 
 body .search-container.animate-appear .search-results,

@@ -50,7 +50,7 @@ export async function loadFile(fileName, hash = '', avoidPushingState = false) {
   const pathFileName = utils.parseCategoryUrl(fileName);
   const indexedCache = indexesManager.getFullIndexedValue(fileName);
 
-  if (typeof indexedCache != 'undefined') {
+  if (indexedCache != null) {
     if (!avoidPushingState) {
       window.history.pushState('', '', pathFileName + (hash ?? ''));
     }
@@ -163,7 +163,7 @@ function handlePathPNManager(content, fileName) {
     goToContainer.classList.add('go-to-container');
     goToContainer.classList.toggle('has-only-next', !previousFile && !!nextFile);
 
-    if (typeof previousFile != 'undefined') {
+    if (previousFile != null) {
       goToPreviousMiniTitle.textContent = utils.getCategoryFileName(previousFile.replace(basePath, ''));
       goToPreviousContainer.addEventListener('click', () => {
         handleRedirectWithAnimation(content, previousFile);
@@ -171,7 +171,7 @@ function handlePathPNManager(content, fileName) {
       goToContainer.appendChild(goToPreviousContainer);
     }
 
-    if (typeof nextFile != 'undefined') {
+    if (nextFile != null) {
       goToNextMiniTitle.textContent = utils.getCategoryFileName(nextFile.replace(basePath, ''));
       goToNextContainer.addEventListener('click', () => {
         handleRedirectWithAnimation(content, nextFile);
@@ -191,7 +191,7 @@ function handleRedirectWithAnimation(content, url) {
 }
 
 function handleHash(data, hash) {
-  if (typeof hash != 'undefined' && hash.length) {
+  if (hash != null && hash.length) {
     if (hash.startsWith('#')) {
       hash = hash.slice(1);
     }

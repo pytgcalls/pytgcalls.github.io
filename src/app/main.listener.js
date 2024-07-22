@@ -28,13 +28,13 @@ export default class ListenerManagerInstance {
 
     if (recallWithCurrentData) {
       if (isInternal) {
-        if (typeof this.ultimateDataCallInternal != 'undefined') {
+        if (this.ultimateDataCallInternal != null) {
           callback(this.ultimateDataCallInternal);
         } else {
           onUnknownRecall && onUnknownRecall();
         }
       } else if (!isInternal) {
-        if (typeof this.ultimateDataCall != 'undefined') {
+        if (this.ultimateDataCall != null) {
           callback(this.ultimateDataCall);
         } else {
           onUnknownRecall && onUnknownRecall();

@@ -110,7 +110,7 @@ export async function getTheNextFileAfter(fileName) {
     }
   }
 
-  if (typeof detectedId == 'undefined') {
+  if (detectedId == null) {
     return Promise.reject('detected id not found');
   } else {
     const filesListElements = detectedId.querySelectorAll('file');
@@ -120,7 +120,7 @@ export async function getTheNextFileAfter(fileName) {
     for (const file of filesListElements) {
       const finalText = getFullPathByFileElement(file);
 
-      if (typeof nextFile == 'undefined') {
+      if (nextFile == null) {
         if (found) {
           nextFile = finalText;
         } else if (finalText === fileName) {
@@ -128,8 +128,8 @@ export async function getTheNextFileAfter(fileName) {
         }
       }
 
-      if (typeof previousFile == 'undefined') {
-        if (finalText === fileName && typeof previousStateFile != 'undefined') {
+      if (previousFile == null) {
+        if (finalText === fileName && previousStateFile != null) {
           previousFile = previousStateFile;
         } else {
           previousStateFile = finalText;
@@ -137,7 +137,7 @@ export async function getTheNextFileAfter(fileName) {
       }
     }
 
-    if (typeof nextFile == 'undefined' && typeof previousFile == 'undefined') {
+    if (nextFile == 'undefined' && typeof previousFile == null) {
       return Promise.reject('path not found');
     } else {
       return {

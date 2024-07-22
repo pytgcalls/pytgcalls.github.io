@@ -32,6 +32,7 @@ let headerExpandedElement;
 let headerCompassElement;
 let headerDescriptionElement;
 let headerLibraryElement;
+let headerMobileSearchElement;
 let headerSettingsElement;
 let headerLibraryValueElement;
 let fakeHeaderLibraryValueElement;
@@ -106,6 +107,12 @@ export function getElement() {
   headerSearch.appendChild(iconsManager.get('main', 'magnifyingGlass').firstChild);
   headerSearch.appendChild(searchText);
 
+  const headerMobileSearch = document.createElement('div');
+  headerMobileSearch.classList.add('header-icon', 'header-search', 'visible');
+  headerMobileSearch.addEventListener('click', () => openSearchContainer(headerMobileSearch));
+  headerMobileSearch.appendChild(iconsManager.get('main', 'magnifyingGlass').firstChild);
+  headerMobileSearchElement = headerMobileSearch;
+
   const headerCompass = document.createElement('div');
   headerCompass.classList.add('header-icon', 'header-compass');
   headerCompass.addEventListener('click', () => {
@@ -123,6 +130,7 @@ export function getElement() {
   const headerIcons = document.createElement('div');
   headerIcons.classList.add('header-icons');
   headerIcons.appendChild(headerSearch);
+  headerIcons.appendChild(headerMobileSearch);
   headerIcons.appendChild(headerCompass);
   headerIcons.appendChild(headerSettings);
 

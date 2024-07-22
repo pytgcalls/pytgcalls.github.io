@@ -114,9 +114,9 @@ function tryToLoadWithApi(repoName, fileName) {
 }
 
 export function retrievePackageData() {
-  if (typeof pypiDataResult != 'undefined') {
+  if (pypiDataResult != null) {
     return Promise.resolve(pypiDataResult);
-  } else if (typeof pypiDataPromise != 'undefined') {
+  } else if (pypiDataPromise != null) {
     return pypiDataPromise;
   } else {
     pypiDataPromise = new Promise((resolve, reject) => {

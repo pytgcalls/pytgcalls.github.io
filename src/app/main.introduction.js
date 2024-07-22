@@ -53,7 +53,7 @@ export function hide() {
   containerElement.textContent = '';
   onVisibilityUpdateListenerInstance.callAllListeners(false);
 
-  if (typeof currentVscTimeout != 'undefined') {
+  if (currentVscTimeout != null) {
     clearTimeout(currentVscTimeout);
   }
 
