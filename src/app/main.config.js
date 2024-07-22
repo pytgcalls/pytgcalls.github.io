@@ -137,7 +137,7 @@ export async function getTheNextFileAfter(fileName) {
       }
     }
 
-    if (nextFile == 'undefined' && typeof previousFile == null) {
+    if (nextFile == null && previousFile == null) {
       return Promise.reject('path not found');
     } else {
       return {
