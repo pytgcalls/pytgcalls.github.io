@@ -17,6 +17,7 @@ import {initFull} from "./main.indexes.js";
 
 const MAX_RESULTS = 10;
 export let isSearching = false;
+
 const UNSUPPORTED_HIGHLIGHT_ELEMENTS = [
     'SYNTAX-HIGHLIGHT', 'SHI', 'MULTISYNTAX'
 ];
@@ -79,7 +80,7 @@ export async function search(query) {
                 }
             }
         })
-        .filter((result) => result !== null);
+        .filter((result) => result);
     isSearching = false;
     return results;
 }
@@ -130,6 +131,7 @@ function matchIndex(file, query) {
                 };
             }
         })
+        .filter((match) => match)
         .sort((a, b) => b.accuracy - a.accuracy);
     if (results.length > 0) {
         return results[0];
@@ -151,6 +153,7 @@ function matchPage(file, query) {
                 };
             }
         })
+        .filter((match) => match)
         .sort((a, b) => b.accuracy - a.accuracy);
     if (results.length > 0) {
         return results[0];
