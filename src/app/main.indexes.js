@@ -94,31 +94,29 @@ function parseFile(filePath, fileContent) {
   try {
     const domHelper = new DOMParser();
     const dom = domHelper.parseFromString(fileContent, 'application/xml');
+
+    tryToReduceTags(dom.documentElement);
+
     const classyElements = dom.querySelectorAll(composeOptimizedPageQuery());
 
     for (const element of classyElements) {
       if (element.hasAttribute('src')) {
         const elementType = element.getAttribute('src');
         if (AVAILABLE_TYPES.includes(elementType)) {
-          tryToReduceTags(element);
           fileIndexes.push(new FileIndex(elementType, element.textContent, filePath));
         }
       }
 
       if (SUPPORTED_ELEMENTS.includes(element.tagName.toUpperCase())) {
-        tryToReduceTags(element);
-
         const elementIndex = new ElementIndex(element);
 
         if (element.previousElementSibling instanceof Element && SUPPORTED_ELEMENTS.includes(element.previousElementSibling.tagName.toUpperCase())) {
           const preChunk = element.previousElementSibling;
-          tryToReduceTags(preChunk);
           elementIndex.prependToChunk(preChunk);
         }
 
         if (element.nextElementSibling instanceof Element && SUPPORTED_ELEMENTS.includes(element.nextElementSibling.tagName.toUpperCase())) {
           const postChunk = element.nextElementSibling;
-          tryToReduceTags(postChunk);
           elementIndex.addToChunk(postChunk);
         }
 

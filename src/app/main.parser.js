@@ -50,6 +50,8 @@ export function getContentByData(text) {
 }
 
 export function handleRecursive(currentDom, elementDom) {
+  tryToReduceTags(currentDom);
+
   for (const element of currentDom.childNodes) {
     if (element instanceof Text) {
       elementDom.appendChild(emojisParser.parse(element.textContent));
@@ -58,7 +60,6 @@ export function handleRecursive(currentDom, elementDom) {
       throw new Error("An unknown element has been used " + element.tagName);
     } else {
       let newElement = document.createElement('div');
-      tryToReduceTags(element);
       newElement = checkAndManageElement(element, newElement, elementDom);
 
       let containsCustomTags = false;
@@ -368,28 +369,28 @@ function checkAndManageElement(element, newElement, elementDom) {
 
 export function tryToReduceTags(element) {
   const handleItem = (child) => {
-    if (!(child instanceof Text) && child.tagName.toUpperCase() === 'CONFIG') {
-      const currentOptionData = config.getOptionValueByIdSync(child.getAttribute('id'));
+    const currentOptionData = config.getOptionValueByIdSync(child.getAttribute('id'));
 
-      if (currentOptionData) {
-        const isComplex = config.isComplexOptionValueByIdSync(child.getAttribute('id'));
+    if (currentOptionData) {
+      const isComplex = config.isComplexOptionValueByIdSync(child.getAttribute('id'));
 
-        if (isComplex) {
-          const fragment = document.createDocumentFragment();
-          fragment.append(...currentOptionData.cloneNode(true).childNodes);
-          child.replaceWith(fragment);
-        } else {
-          child.replaceWith(document.createTextNode(currentOptionData.textContent));
-        }
+      if (isComplex) {
+        const fragment = document.createDocumentFragment();
+        fragment.append(...currentOptionData.cloneNode(true).childNodes);
+        child.replaceWith(fragment);
       } else {
-        throw new Error("A config key that doesn't exist has been requested " + child.getAttribute('id'));
+        child.replaceWith(document.createTextNode(currentOptionData.textContent));
       }
+    } else {
+      throw new Error("A config key that doesn't exist has been requested " + child.getAttribute('id'));
     }
   };
 
-  handleItem(element);
+  if (element.tagName.toUpperCase() === 'CONFIG') {
+    handleItem(element);
+  }
 
-  for (const child of element.childNodes) {
+  for (const child of element.querySelectorAll('config')) {
     handleItem(child);
   }
 }
