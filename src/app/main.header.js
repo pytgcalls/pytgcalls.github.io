@@ -24,7 +24,6 @@ import * as debug from "./main.debug.js";
 export const onChangeListenerInstance = new ListenerManagerInstance();
 export const onSidebarUpdateListenerInstance = new ListenerManagerInstance();
 export const onCompassUpdateListenerInstance = new ListenerManagerInstance();
-export const onTabsVisibilityUpdateListenerInstance = new ListenerManagerInstance();
 
 let headerElement;
 let headerMenuElement;
@@ -43,15 +42,7 @@ export function getElement() {
   const headerMenu = document.createElement('div');
   headerMenu.classList.add('menu');
   headerMenu.addEventListener('click', () => {
-    if (header.classList.contains('tabs-expanded')) {
-      header.classList.remove('tabs-expanded');
-      onTabsVisibilityUpdateListenerInstance.callAllListeners(false);
-    } else if (!hasSelectedTab) {
-      header.classList.add('tabs-expanded');
-      onTabsVisibilityUpdateListenerInstance.callAllListeners(true);
-    } else {
-      onSidebarUpdateListenerInstance.callAllListeners(true);
-    }
+    onSidebarUpdateListenerInstance.callAllListeners(true);
   });
   headerMenu.appendChild(document.createElement('div'));
   headerMenu.appendChild(document.createElement('div'));
@@ -169,10 +160,6 @@ export function updateCompassVisibilityState(state) {
 
 export function updateCompassExpandedState(state) {
   headerCompassElement.classList.toggle('show', state);
-}
-
-export function updateTabsMobileVisibility(state) {
-  headerElement.classList.toggle('tabs-expanded', state);
 }
 
 function appendTitleUpdateOnActiveTabUpdate() {

@@ -100,6 +100,7 @@ export function copyToClipboard(text) {
     textarea.focus();
     textarea.select();
 
+    // noinspection JSDeprecatedSymbols
     const successful = document.execCommand("copy");
 
     requestAnimationFrame(() => textarea.remove());

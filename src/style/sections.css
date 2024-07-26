@@ -15,15 +15,9 @@ body.as-home .page-container .sections {
     width: 100%;
     padding-inline: 20px;
     pointer-events: none;
-    background: #000000;
+    background: #0d1117;
     z-index: 4;
     transition: 0.4s transform cubic-bezier(0.97, -0.02, 0, 0.98);
-  }
-
-  body:not(.reduce-blur) .page-container .sections {
-    background: rgba(0, 0, 0, 0.9);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
   }
 
   body .page-container .sections.show {

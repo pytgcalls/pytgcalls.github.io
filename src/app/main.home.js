@@ -70,17 +70,6 @@ export function init(pathName) {
     }
   });
 
-  headerInstance.onTabsVisibilityUpdateListenerInstance.addListener({
-    callback: (state) => {
-      if (state) {
-        headerInstance.updateSidebarMobileVisibilityState(false);
-        headerInstance.updateCompassExpandedState(false);
-        sidebarInstance.updateMobileVisibilityState(false);
-        contentInstance.updateMobileSectionsVisibilityState(false);
-      }
-    }
-  });
-
   headerInstance.onChangeListenerInstance.addListener({
     callback: (id) => {
       introductionInstance.isVisible() && introductionInstance.hide();
@@ -89,7 +78,6 @@ export function init(pathName) {
       sidebarInstance.focusOnSidebar();
       headerInstance.updateCompassVisibilityState(false);
       headerInstance.updateCompassExpandedState(false);
-      headerInstance.updateTabsMobileVisibility(false);
       contentInstance.clearBoard();
 
       config.getFilesListDefaultFileById(id).then((file) => {
@@ -106,7 +94,6 @@ export function init(pathName) {
         const state = sidebarInstance.updateMobileVisibilityState();
         headerInstance.updateSidebarMobileVisibilityState(state);
         headerInstance.updateCompassExpandedState(false);
-        headerInstance.updateTabsMobileVisibility(false);
         contentInstance.updateMobileSectionsVisibilityState(false);
       } else {
         sidebarInstance.updateDesktopCollapsedState(false);
@@ -121,13 +108,17 @@ export function init(pathName) {
       headerInstance.updateCompassExpandedState(state);
       sidebarInstance.updateMobileVisibilityState(false);
       headerInstance.updateSidebarMobileVisibilityState(false);
-      headerInstance.updateTabsMobileVisibility(false);
     }
   });
 
-  sidebarInstance.onCollapsedListenerInstance.addListener({
-    callback: (isCollapsed) => {
-      headerInstance.updateSidebarDesktopExpandedState(isCollapsed);
+  searchManager.onSearchOpenListenerInstance.addListener({
+    callback: (opened) => {
+      if (opened) {
+        contentInstance.updateMobileSectionsVisibilityState(false);
+        headerInstance.updateCompassExpandedState(false);
+        sidebarInstance.updateMobileVisibilityState(false);
+        headerInstance.updateSidebarMobileVisibilityState(false);
+      }
     }
   });
 
@@ -231,8 +222,8 @@ function updateLoadedFile(file, hash, updateActiveFilePromise, avoidPushingState
   introductionInstance.isVisible() && introductionInstance.hide();
   headerInstance.updateCompassVisibilityState(true);
   headerInstance.updateCompassExpandedState(false);
-  headerInstance.updateTabsMobileVisibility(false);
   sidebarInstance.updateMobileVisibilityState(false);
+  // noinspection JSIgnoredPromiseFromCall
   contentInstance.loadFile(file, hash, avoidPushingState);
 }
 

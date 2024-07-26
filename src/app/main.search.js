@@ -16,10 +16,12 @@
 import * as iconsManager from "./main.icons.js";
 import * as indexesManager from "./main.indexes.js";
 import {createLoadingItem} from "./main.utils.js";
-import {handleRecursive} from "./main.parser.js";
 import {globalUpdateActiveFile} from "./main.sidebar.js";
 import * as tooltip from "./main.tooltip.js";
 import * as searchEngine from "./main.search_engine.js";
+import ListenerManagerInstance from "./main.listener.js";
+
+export const onSearchOpenListenerInstance = new ListenerManagerInstance();
 
 class ExpandedRefsState {
     static NONE = 0;
@@ -31,9 +33,11 @@ const ROW_MARGIN_BOTTOM = 5;
 
 let isAnimating = 0;
 let expandedRefsState = ExpandedRefsState.NONE;
+let isFirstEmptyContainerView = true;
 let lastStartByElement;
 let searchTextElement;
 let searchTextFullElement;
+let searchCloseMobileTextElement;
 let searchContainerElement;
 let searchSpinnerContainerElement;
 let searchListAdapterElement;
@@ -41,6 +45,7 @@ let searchCodeRefContainerElement;
 let searchDocsRefContainerElement;
 let searchDocsRefPreviewTimeouts = [];
 let searchResultsFullElement;
+let emptyContainerResultElement;
 let currentSearchTimeout;
 let windowKeyDownEventListener;
 let alreadyWaitingForIndexingStart = false;
@@ -49,6 +54,7 @@ export function openSearchContainer(startBy) {
     lastStartByElement = startBy;
 
     document.body.classList.add('focused-by-search');
+    onSearchOpenListenerInstance.callAllListeners(true);
 
     const startByRect = startBy.getBoundingClientRect();
 
@@ -64,8 +70,19 @@ export function openSearchContainer(startBy) {
     searchTextElement = searchText;
     searchTextFullElement = searchTextFull;
 
+    const searchCloseMobileText = document.createElement('div');
+    searchCloseMobileText.classList.add('close', 'animate-appear');
+    searchCloseMobileText.addEventListener('click', closeSearch);
+    searchCloseMobileText.textContent = 'Cancel';
+    const searchInputContainer = document.createElement('div');
+    searchInputContainer.classList.add('search-input-container');
+    searchInputContainer.appendChild(searchTextFull);
+    searchInputContainer.appendChild(searchCloseMobileText);
+    searchCloseMobileTextElement = searchCloseMobileText;
+
     const searchListAdapter = document.createElement('div');
-    searchListAdapter.classList.add('list-adapter');
+    searchListAdapter.classList.add('list-adapter', 'is-empty');
+    searchListAdapter.appendChild(getEmptySearchContainerResult(true));
     searchListAdapterElement = searchListAdapter;
 
     const searchTextFullAnimation = searchTextFull.cloneNode(true);
@@ -79,13 +96,17 @@ export function openSearchContainer(startBy) {
 
     const searchResultsFull = document.createElement('div');
     searchResultsFull.classList.add('search-results');
-    searchResultsFull.appendChild(searchTextFull);
+    searchResultsFull.appendChild(searchInputContainer);
     searchResultsFull.appendChild(searchListAdapter);
     searchResultsFullElement = searchResultsFull;
 
     const searchContainer = document.createElement('div');
     searchContainer.classList.add('search-container', 'text-is-empty');
     searchContainer.addEventListener('click', (e) => {
+        if (useMobileUI()) {
+            return;
+        }
+
         let isOutside = e.target !== searchResultsFull && !searchResultsFull.contains(e.target);
 
         if (searchContainer.classList.contains('text-is-empty') && (e.target === searchResultsFull || searchResultsFull.contains(e.target)) && e.target !== searchTextFull && !searchTextFull.contains(e.target)) {
@@ -101,16 +122,10 @@ export function openSearchContainer(startBy) {
 
     searchCancelIcon.addEventListener('click', () => {
         searchText.value = '';
-        searchContainer.classList.add('text-is-empty');
-        searchListAdapterElement.textContent = '';
+        handleSearch();
     })
 
     searchText.addEventListener('input', () => {
-       if (!searchText.value.trim()) {
-           searchContainer.classList.add('text-is-empty');
-           return;
-       }
-
        handleSearch();
     });
 
@@ -153,13 +168,18 @@ function handleSearch() {
     const onSearchReady = async (query) => {
         clearLoadingPreviews();
 
-        const results = await searchEngine.search(query);
+        const results = !query ? [] : await searchEngine.search(query);
 
         searchTextFullElement.classList.remove('is-loading');
         searchContainerElement.classList.toggle('text-is-empty', !query);
+        searchListAdapterElement.classList.toggle('is-empty', !results.length);
+
         if (!query) {
+            searchListAdapterElement.textContent = '';
+            searchListAdapterElement.appendChild(getEmptySearchContainerResult(true));
             return;
         }
+
         const codeRefResults = [];
         const docsRefResults = [];
         const codeRefResultsLimited = document.createDocumentFragment();
@@ -235,7 +255,14 @@ function handleSearch() {
             searchListAdapterElement.appendChild(searchResultReferenceContainer);
             searchDocsRefContainerElement = searchResultReferenceContainer;
         }
-    }
+
+        if (searchListAdapterElement.hasChildNodes()) {
+            emptyContainerResultElement = undefined;
+        } else {
+            searchListAdapterElement.appendChild(getEmptySearchContainerResult(false));
+        }
+    };
+
     if (!indexesManager.isCurrentlyIndexing) {
         if (!indexesManager.hasIndexed && !alreadyWaitingForIndexingStart){
             alreadyWaitingForIndexingStart = true;
@@ -487,11 +514,8 @@ function createReference(type, name, pathName, chunks) {
     }
 
     if (chunks != null) {
-        const docsRefPage = document.createElement('div');
-        docsRefPage.classList.add('page');
         const docsRefPreview = document.createElement('div');
         docsRefPreview.classList.add('content', 'docs-ref-preview');
-        docsRefPreview.appendChild(docsRefPage);
         const fakePageContainer = document.createElement('div');
         fakePageContainer.classList.add('page-container', 'is-preview', 'is-loading');
         fakePageContainer.appendChild(docsRefPreview);
@@ -499,13 +523,7 @@ function createReference(type, name, pathName, chunks) {
         row.classList.add('has-docs-preview');
 
         searchDocsRefPreviewTimeouts.push(setTimeout(() => {
-            const fakeDom = document.createElement('div');
-            fakeDom.append(...chunks);
-            try {
-                handleRecursive(fakeDom, docsRefPage);
-            } catch (e) {
-                console.log(e);
-            }
+            searchEngine.generateResultPreview(docsRefPreview, chunks);
             fakePageContainer.classList.remove('is-loading');
         }, 500));
     }
@@ -578,12 +596,58 @@ function closeSearch() {
 
     isAnimating++;
 
-    if (searchContainerElement.classList.contains('text-is-empty')) {
-        onClosedAdapter();
-    } else {
+    const promisesList = [];
+    const isMobile = useMobileUI();
+
+    if (!searchContainerElement.classList.contains('text-is-empty') && !isMobile) {
         searchContainerElement.classList.add('text-is-empty', 'faster');
-        searchListAdapterElement.addEventListener('transitionend', onClosedAdapter, { once: true });
+        promisesList.push(new Promise((resolve) => searchListAdapterElement.addEventListener('transitionend', resolve, { once: true })));
     }
+
+    if (isMobile) {
+        searchContainerElement.classList.add('faster');
+        searchCloseMobileTextElement.classList.remove('animate-appear');
+        searchCloseMobileTextElement.offsetHeight;
+        searchCloseMobileTextElement.classList.add('animate-disappear');
+        promisesList.push(new Promise((resolve) => searchCloseMobileTextElement.addEventListener('animationend', resolve, { once: true })));
+    }
+
+    if (emptyContainerResultElement != null && isMobile) {
+        searchContainerElement.classList.add('faster');
+        emptyContainerResultElement.classList.remove('is-first-view');
+        emptyContainerResultElement.offsetHeight;
+        emptyContainerResultElement.classList.add('animate-disappear');
+        promisesList.push(new Promise((resolve) => emptyContainerResultElement.addEventListener('animationend', resolve, { once: true })));
+    }
+
+    Promise.all(promisesList).then(onClosedAdapter);
+}
+
+function useMobileUI() {
+    return window.matchMedia('screen and (max-width: 1000px)').matches;
+}
+
+function getEmptySearchContainerResult(isFirstOpen = false) {
+    const emptyContainerText = document.createElement('div');
+    emptyContainerText.classList.add('empty-container-text');
+
+    const emptyContainerResult = document.createElement('div');
+    emptyContainerResult.classList.add('empty-container');
+    emptyContainerResult.classList.toggle('is-first-view', isFirstEmptyContainerView);
+    emptyContainerResult.classList.toggle('is-first-open', isFirstOpen);
+    emptyContainerResult.appendChild(iconsManager.get('main', isFirstOpen ? 'compass' : 'heartCrack').firstChild);
+    emptyContainerResult.appendChild(emptyContainerText);
+
+    if (isFirstOpen) {
+        emptyContainerText.textContent = 'Type to search...';
+    } else {
+        emptyContainerText.textContent = 'No results found';
+    }
+
+    isFirstEmptyContainerView = false;
+    emptyContainerResultElement = emptyContainerResult;
+
+    return emptyContainerResult;
 }
 
 function getInputByLastStartBy() {
@@ -635,12 +699,15 @@ export function resetData() {
     }
 
     clearLoadingPreviews();
+    onSearchOpenListenerInstance.callAllListeners(false);
 
     isAnimating = 0;
     expandedRefsState = ExpandedRefsState.NONE;
+    isFirstEmptyContainerView = true;
     lastStartByElement = undefined;
     searchTextElement = undefined;
     searchTextFullElement = undefined;
+    searchCloseMobileTextElement = undefined;
     searchContainerElement = undefined;
     searchSpinnerContainerElement = undefined;
     searchListAdapterElement = undefined;
@@ -648,6 +715,7 @@ export function resetData() {
     searchDocsRefContainerElement = undefined;
     searchDocsRefPreviewTimeouts = [];
     searchResultsFullElement = undefined;
+    emptyContainerResultElement = undefined;
     currentSearchTimeout = undefined;
     windowKeyDownEventListener = undefined;
     alreadyWaitingForIndexingStart = false;

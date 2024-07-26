@@ -103,7 +103,7 @@ function parseFile(filePath, fileContent) {
       if (element.hasAttribute('src')) {
         const elementType = element.getAttribute('src');
         if (AVAILABLE_TYPES.includes(elementType)) {
-          fileIndexes.push(new FileIndex(elementType, element.textContent, filePath));
+          fileIndexes.push(new FileIndex(elementType, element.textContent));
         }
       }
 
@@ -185,12 +185,10 @@ export class ElementIndex {
 export class FileIndex {
   #type;
   #name;
-  #filePath;
 
-  constructor(type, name, filePath) {
+  constructor(type, name) {
     this.#type = type;
     this.#name = name;
-    this.#filePath = filePath;
   }
 
   get type() {
@@ -199,9 +197,5 @@ export class FileIndex {
 
   get name() {
     return this.#name;
-  }
-
-  get filePath() {
-    return this.#filePath;
   }
 }

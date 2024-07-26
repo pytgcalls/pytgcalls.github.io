@@ -56,6 +56,7 @@ export function tryCustomPageCode(isConfig = false) {
   }
 
   const customCodeEditor = composeCustomHighlightedEditor({
+    // noinspection JSUnresolvedReference
     language: Prism.languages.html,
     onConfirm: () => {
       handlePopupContainerClose(popupContainer);
@@ -120,6 +121,7 @@ function composeCustomHighlightedEditor({ language, onConfirm }) {
   customEditor.appendChild(transparentTextarea);
   customEditor.appendChild(prismCode);
 
+  // noinspection JSUnresolvedReference
   Prism.hooks.add("before-highlight", (env) => {
     env.code = env.element.innerText;
   });
@@ -132,6 +134,7 @@ function composeCustomHighlightedEditor({ language, onConfirm }) {
     customEditor.classList.add('defined-height');
 
     let code = transparentTextarea.value;
+    // noinspection JSUnresolvedReference
     code = Prism.highlight(code, language, 'html');
     code = code.replaceAll('\n', '<br/>');
 

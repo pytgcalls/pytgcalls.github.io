@@ -152,6 +152,7 @@ export function detectLanguageByElement(element) {
         language.icon.name = 'cpp';
         break;
       case 'bash':
+        // noinspection JSUnresolvedReference
         language.prism = Prism.languages.bash;
         language.name = 'Bash';
         language.icon.name = '';
@@ -559,6 +560,7 @@ function handlePostQueryElement(element, newElement) {
 
 function handleSyntaxHighlight(element, newElement, hideTags = false, customTextContent = '', forceDisableCollapse = false) {
   let code = customTextContent || element.textContent;
+  // noinspection JSUnresolvedReference
   code = Prism.highlight(code, detectLanguageByElement(element).prism, 'html');
   code = code.replaceAll('\n', '<br/>');
 
@@ -719,6 +721,7 @@ function handleMultiSyntax(element, newElement) {
       throw new Error('multisyntax as-blame-mode doesn\'t support mark property');
     }
 
+    // noinspection JSUnresolvedReference
     requestAnimationFrame(() => {
       tryToReduceTags(firstElement);
       tryToReduceTags(secondElement);

@@ -19,7 +19,6 @@ import * as iconsManager from "./main.icons.js";
 import * as config from "./main.config.js";
 
 export const onChangeListenerInstance = new ListenerManagerInstance();
-export const onCollapsedListenerInstance = new ListenerManagerInstance();
 
 let leftContainer;
 let leftSidebar;
@@ -46,7 +45,6 @@ export function getElement() {
 
 export function focusOnSidebar() {
   leftContainer.classList.remove('collapsed');
-  onCollapsedListenerInstance.callAllListeners(false);
 }
 
 export function updateMobileVisibilityState(forcedState) {

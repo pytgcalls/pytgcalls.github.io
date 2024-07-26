@@ -14,6 +14,7 @@
  */
 import * as indexesManager from "./main.indexes.js";
 import {initFull} from "./main.indexes.js";
+import {handleRecursive} from "./main.parser.js";
 
 const MAX_RESULTS = 10;
 export let isSearching = false;
@@ -242,4 +243,26 @@ function LevenshteinDistance(a, b) {
         }
     }
     return matrix[lenA][lenB]
+}
+
+export function generateResultPreview(docsRefPreview, chunks) {
+    const docsRefPage = document.createElement('div');
+    docsRefPage.classList.add('page');
+    docsRefPreview.appendChild(docsRefPage);
+
+    const fakeDom = document.createElement('div');
+    fakeDom.append(...chunks);
+    handleRecursive(fakeDom, docsRefPage);
+
+    const firstIdsElement = docsRefPage.querySelector('.ids');
+    if (firstIdsElement != null) {
+        const selectedCoords = firstIdsElement.getBoundingClientRect();
+        const tempPreviewCoords = docsRefPreview.getBoundingClientRect();
+
+        const containerHeight = docsRefPreview.clientHeight;
+        const y = selectedCoords.top - tempPreviewCoords.top;
+        const yCenter = (y - containerHeight / 2 + selectedCoords.height / 2);
+
+        docsRefPage.style.setProperty('--try', '-'+yCenter+'px');
+    }
 }

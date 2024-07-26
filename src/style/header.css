@@ -76,18 +76,15 @@ body .header .menu div:nth-child(3) {
   top: calc(100% - 6px);
 }
 
-body .header .menu.show div:first-child,
-body .header.tabs-expanded .menu div:first-child {
+body .header .menu.show div:first-child {
   transform: rotate(45deg) translateX(3px) translateY(7px);
 }
 
-body .header .menu.show div:nth-child(2),
-body .header.tabs-expanded .menu div:nth-child(2) {
+body .header .menu.show div:nth-child(2) {
   transform: rotate(-45deg) translateX(-2px) translateY(-2px);
 }
 
-body .header .menu.show div:nth-child(3),
-body .header.header.tabs-expanded .menu div:nth-child(3) {
+body .header .menu.show div:nth-child(3) {
   transform: scale(0);
 }
 
@@ -168,6 +165,12 @@ body .header .header-icons .header-icon.focused-tooltip {
   pointer-events: none;
 }
 
+@media screen and (min-width: 1000px) {
+  body .header .header-icons .header-icon.header-search {
+    display: none;
+  }
+}
+
 body .header .header-icons .header-icon:not(.visible) {
   transform: scale(0.8);
   opacity: 0;
@@ -176,7 +179,6 @@ body .header .header-icons .header-icon:not(.visible) {
 
 body .header .header-icons .header-icon.show {
   opacity: 1;
-  transform: rotate(90deg);
 }
 
 body .header .header-icons .header-icon svg {
@@ -186,7 +188,9 @@ body .header .header-icons .header-icon svg {
   vertical-align: middle;
 }
 
-body .header .header-icons .header-icon.focused-tooltip svg {
+
+body .header .header-icons .header-icon.focused-tooltip svg,
+body .header .header-icons .header-icon.header-compass.show svg {
   animation: 0.4s rotateForTooltip forwards;
 }
 
@@ -313,7 +317,7 @@ body .header .title-container .library.focused-tooltip .icon-container svg {
   body.focused-by-search .header .menu,
   body.focused-by-search .header .title-container,
   body.focused-by-search .header .header-icons {
-    transform: translateY(-40px);
+    transform: translateX(-40px);
     opacity: 0;
   }
 }

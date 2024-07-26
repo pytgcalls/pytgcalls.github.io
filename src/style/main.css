@@ -41,8 +41,10 @@ body.as-home .page-container {
   height: 100%;
 }
 
-body.focused-by-search:not(.reduce-blur) > .page-container {
-  transform: scale(1.08);
+@media screen and (min-width: 1000px) {
+  body.focused-by-search:not(.reduce-blur) > .page-container {
+    transform: scale(1.08);
+  }
 }
 
 ::-webkit-scrollbar {
