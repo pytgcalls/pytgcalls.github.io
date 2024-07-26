@@ -190,9 +190,10 @@ body .page-container .content:not(.is-loading) .page .separator {
 }
 
 body .page-container .content:not(.is-loading) .page .h1 {
-  font-size: 40px;
+  font-size: calc(40px + var(--font-size, 0));
   font-weight: 700;
   position: relative;
+  transition: 0.2s font-size;
 }
 
 body .page-container .content:not(.is-loading) .page .h1:not(:first-child) {
@@ -200,29 +201,34 @@ body .page-container .content:not(.is-loading) .page .h1:not(:first-child) {
 }
 
 body .page-container .content:not(.is-loading) .page .h1 .emoji-parsed img {
-  height: 42px;
+  height: calc(42px + var(--font-size, 0));
+  transition: 0.2s height;
 }
 
 body .page-container .content:not(.is-loading) .page .h2 {
-  font-size: 30px;
+  font-size: calc(30px + var(--font-size, 0));
   margin-top: 36px;
   font-weight: 600;
   position: relative;
+  transition: 0.2s font-size;
 }
 
 body .page-container .content:not(.is-loading) .page .h2 .emoji-parsed img {
-  height: 34px;
+  height: calc(34px + var(--font-size, 0));
+  transition: 0.2s height;
 }
 
 body .page-container .content:not(.is-loading) .page .h3 {
-  font-size: 25px;
+  font-size: calc(25px + var(--font-size, 0));
   margin-top: 10px;
   font-weight: 600;
   position: relative;
+  transition: 0.2s font-size;
 }
 
 body .page-container .content:not(.is-loading) .page .h3 .emoji-parsed img {
-  height: 31px;
+  height: calc(31px + var(--font-size, 0));
+  transition: 0.2s height;
 }
 
 body .page-container .content:not(.is-loading) .page .h1.has-hashtag-ref,
@@ -233,10 +239,11 @@ body .page-container .content:not(.is-loading) .page .banner-container .bottom-c
 }
 
 body .page-container .content:not(.is-loading) .page .h4 {
-  font-size: 18px;
+  font-size: calc(18px + var(--font-size, 0));
   margin-top: 5px;
   font-weight: 600;
   position: relative;
+  transition: 0.2s font-size;
 }
 
 body .page-container .content:not(.is-loading) .page .h4 .emoji-parsed img {
@@ -246,12 +253,14 @@ body .page-container .content:not(.is-loading) .page .h4 .emoji-parsed img {
 body .page-container .content:not(.is-loading) .page .text,
 body .page-container .content:not(.is-loading) .page .pg-title {
   color: rgba(255, 255, 255, 0.8);
-  font-size: 17px;
+  font-size: calc(17px + var(--font-size, 0));
   margin-block: 5px;
+  transition: 0.2s font-size;
 }
 
 body .page-container .content:not(.is-loading) .page .text .emoji-parsed img {
-  height: 23px;
+  height: calc(23px + var(--font-size, 0));
+  transition: 0.2s height;
 }
 
 body .page-container .content:not(.is-loading) .page .pg-title {

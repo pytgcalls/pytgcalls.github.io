@@ -223,3 +223,50 @@ body .tooltip .selector .library.selected .icon-container.success {
 body .tooltip .selector .library .icon-container.success svg {
     fill: #FFFFFF;
 }
+
+body .tooltip .selector .font-size {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(93, 106, 129, 0.08);
+    margin-bottom: 5px;
+    border-radius: 10px;
+    color: #FFFFFF;
+    font-weight: 300;
+    overflow: hidden;
+}
+
+body .tooltip .selector .font-size-item {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-block: 7px;
+    cursor: pointer;
+    transition: 0.2s background;
+}
+
+body .tooltip .selector .font-size-item:hover {
+    background: rgba(255, 255, 255, 0.01);
+}
+
+body .tooltip .selector .font-size-item:active {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+body .tooltip .selector .font-size-item.disabled {
+    pointer-events: none;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+body .tooltip .selector .font-size-item.smaller {
+    font-size: 14px;
+}
+
+body .tooltip .selector .font-size-item.bigger {
+    font-size: 20px;
+}
+
+body .tooltip .selector .font-size-item:first-child {
+    border-right: 1px solid rgba(93, 106, 129, 0.2);
+}

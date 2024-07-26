@@ -248,6 +248,28 @@ function expandSettingsTooltip() {
     mainTitle.textContent = 'Settings';
     selector.appendChild(mainTitle);
 
+    const fontSizeLess = document.createElement('div');
+    fontSizeLess.classList.add('font-size-item', 'smaller');
+    fontSizeLess.addEventListener('click', () => {
+      settingsManager.decreaseFontSize();
+      fontSizeLess.classList.toggle('disabled', !settingsManager.canDecreaseFontSize());
+      fontSizeMore.classList.toggle('disabled', !settingsManager.canIncreaseFontSize());
+    });
+    fontSizeLess.textContent = 'A';
+    const fontSizeMore = document.createElement('div');
+    fontSizeMore.classList.add('font-size-item', 'bigger');
+    fontSizeMore.addEventListener('click', () => {
+      settingsManager.increaseFontSize();
+      fontSizeLess.classList.toggle('disabled', !settingsManager.canDecreaseFontSize());
+      fontSizeMore.classList.toggle('disabled', !settingsManager.canIncreaseFontSize());
+    });
+    fontSizeMore.textContent = 'A';
+    const fontSizeContainer = document.createElement('div');
+    fontSizeContainer.classList.add('font-size');
+    fontSizeContainer.appendChild(fontSizeLess);
+    fontSizeContainer.appendChild(fontSizeMore);
+    selector.appendChild(fontSizeContainer);
+
     selector.appendChild(createSettingsRow(
         'Collapse Long Code',
         null,

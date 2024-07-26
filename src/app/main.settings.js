@@ -16,6 +16,7 @@
 export function handleSettings() {
     handleDesktopMode();
     handleReduceBlur();
+    handlePageFontSize();
 }
 
 export function getForceGithubAPIStatus() {
@@ -74,4 +75,41 @@ export function updateReduceBlur(status) {
 
 function handleReduceBlur() {
     document.body.classList.toggle('reduce-blur', getReduceBlurStatus());
+}
+
+function handlePageFontSize() {
+    document.body.style.setProperty('--font-size', parseFontSizeFromDatabase()+'px');
+}
+
+export function increaseFontSize() {
+    localStorage.setItem('fontSize', parseFontSizeFromDatabase()+1+'px');
+    handlePageFontSize();
+}
+
+export function decreaseFontSize() {
+    localStorage.setItem('fontSize', parseFontSizeFromDatabase()-1+'px');
+    handlePageFontSize();
+}
+
+function parseFontSizeFromDatabase() {
+    const storageData = localStorage.getItem('fontSize');
+
+    let reparsedFontSize = 0;
+    if (!isNaN(parseInt(storageData))) {
+        const parsedStorageData = parseInt(storageData);
+
+        if (parsedStorageData > -10 && parsedStorageData < 10) {
+            reparsedFontSize = parsedStorageData;
+        }
+    }
+
+    return reparsedFontSize;
+}
+
+export function canIncreaseFontSize() {
+    return parseFontSizeFromDatabase() !== 9;
+}
+
+export function canDecreaseFontSize() {
+    return parseFontSizeFromDatabase() !== -9;
 }

@@ -211,6 +211,7 @@ body .search-container .search-input-container {
 body .search-container .search-input-container .search-input {
     flex: 1;
     margin: 0;
+    min-width: 0;
 }
 
 body .search-container .search-input-container .close {
