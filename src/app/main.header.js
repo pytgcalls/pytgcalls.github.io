@@ -248,28 +248,7 @@ function expandSettingsTooltip() {
     mainTitle.textContent = 'Settings';
     selector.appendChild(mainTitle);
 
-    const fontSizeLess = document.createElement('div');
-    fontSizeLess.classList.add('font-size-item', 'smaller');
-    fontSizeLess.addEventListener('click', () => {
-      settingsManager.decreaseFontSize();
-      fontSizeLess.classList.toggle('disabled', !settingsManager.canDecreaseFontSize());
-      fontSizeMore.classList.toggle('disabled', !settingsManager.canIncreaseFontSize());
-    });
-    fontSizeLess.textContent = 'A';
-    const fontSizeMore = document.createElement('div');
-    fontSizeMore.classList.add('font-size-item', 'bigger');
-    fontSizeMore.addEventListener('click', () => {
-      settingsManager.increaseFontSize();
-      fontSizeLess.classList.toggle('disabled', !settingsManager.canDecreaseFontSize());
-      fontSizeMore.classList.toggle('disabled', !settingsManager.canIncreaseFontSize());
-    });
-    fontSizeMore.textContent = 'A';
-    const fontSizeContainer = document.createElement('div');
-    fontSizeContainer.classList.add('font-size');
-    fontSizeContainer.appendChild(fontSizeLess);
-    fontSizeContainer.appendChild(fontSizeMore);
-    selector.appendChild(fontSizeContainer);
-
+    selector.appendChild(createFontSizeRow());
     selector.appendChild(createSettingsRow(
         'Collapse Long Code',
         null,
@@ -317,6 +296,61 @@ function expandSettingsTooltip() {
       moreSpace: true
     });
   });
+}
+
+function createFontSizeRow() {
+  const updateState = () => {
+    fontSizeLess.classList.toggle('disabled', !settingsManager.canDecreaseFontSize());
+    fontSizeMore.classList.toggle('disabled', !settingsManager.canIncreaseFontSize());
+  };
+
+  let longPressInterval;
+
+  const handleLongPress = (isIncrease) => {
+    longPressInterval = setInterval(() => {
+      const canUpdate = isIncrease ? settingsManager.canIncreaseFontSize() : settingsManager.canDecreaseFontSize();
+      if (canUpdate) {
+        isIncrease ? settingsManager.increaseFontSize() : settingsManager.decreaseFontSize();
+      } else {
+        stopLongPress();
+      }
+      updateState();
+    }, 200);
+  };
+
+  const stopLongPress = () => {
+    if (longPressInterval != null) {
+      clearInterval(longPressInterval);
+      longPressInterval = undefined;
+    }
+  };
+
+  const fontSizeLess = document.createElement('div');
+  fontSizeLess.classList.add('font-size-item', 'smaller');
+  fontSizeLess.addEventListener('mousedown', () => handleLongPress(false));
+  fontSizeLess.addEventListener('mouseup', stopLongPress);
+  fontSizeLess.addEventListener('click', () => {
+    settingsManager.decreaseFontSize();
+    updateState();
+  });
+  fontSizeLess.textContent = 'A';
+
+  const fontSizeMore = document.createElement('div');
+  fontSizeMore.classList.add('font-size-item', 'bigger');
+  fontSizeMore.addEventListener('mousedown', () => handleLongPress(true));
+  fontSizeMore.addEventListener('mouseup', stopLongPress);
+  fontSizeMore.addEventListener('click', () => {
+    settingsManager.increaseFontSize();
+    updateState();
+  });
+  fontSizeMore.textContent = 'A';
+
+  const fontSizeContainer = document.createElement('div');
+  fontSizeContainer.classList.add('font-size');
+  fontSizeContainer.appendChild(fontSizeLess);
+  fontSizeContainer.appendChild(fontSizeMore);
+
+  return fontSizeContainer;
 }
 
 function createDebugRow(title, callback) {
