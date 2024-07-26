@@ -306,16 +306,25 @@ function createFontSizeRow() {
 
   let longPressInterval;
 
-  const handleLongPress = (isIncrease) => {
+  const handleLongPress = (isIncrease, faster = false) => {
+    let pressIntN = 0;
+
     longPressInterval = setInterval(() => {
+      pressIntN++;
+
       const canUpdate = isIncrease ? settingsManager.canIncreaseFontSize() : settingsManager.canDecreaseFontSize();
       if (canUpdate) {
         isIncrease ? settingsManager.increaseFontSize() : settingsManager.decreaseFontSize();
+
+        if (pressIntN > 3 && !faster) {
+          stopLongPress();
+          handleLongPress(isIncrease, true);
+        }
       } else {
         stopLongPress();
       }
       updateState();
-    }, 200);
+    }, faster ? 200 : 500);
   };
 
   const stopLongPress = () => {

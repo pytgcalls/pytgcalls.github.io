@@ -61,7 +61,7 @@ function handleDesktopMode() {
 export function getReduceBlurStatus() {
     const storageData = localStorage.getItem('reduceBlur');
 
-    if (storageData === null && window.innerWidth < 800) {
+    if (storageData == null && window.innerWidth < 800) {
         return true;
     }
 
@@ -94,16 +94,16 @@ export function decreaseFontSize() {
 function parseFontSizeFromDatabase() {
     const storageData = localStorage.getItem('fontSize');
 
-    let reparsedFontSize = 0;
     if (!isNaN(parseInt(storageData))) {
         const parsedStorageData = parseInt(storageData);
 
         if (parsedStorageData > -10 && parsedStorageData < 10) {
-            reparsedFontSize = parsedStorageData;
+            return parsedStorageData;
         }
     }
 
-    return reparsedFontSize;
+    localStorage.removeItem('fontSize');
+    return 0;
 }
 
 export function canIncreaseFontSize() {
