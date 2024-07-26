@@ -82,12 +82,12 @@ function handlePageFontSize() {
 }
 
 export function increaseFontSize() {
-    localStorage.setItem('fontSize', parseFontSizeFromDatabase()+1+'px');
+    localStorage.setItem('fontSize', parseFontSizeFromDatabase()+1);
     handlePageFontSize();
 }
 
 export function decreaseFontSize() {
-    localStorage.setItem('fontSize', parseFontSizeFromDatabase()-1+'px');
+    localStorage.setItem('fontSize', parseFontSizeFromDatabase()-1);
     handlePageFontSize();
 }
 

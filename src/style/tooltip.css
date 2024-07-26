@@ -246,11 +246,11 @@ body .tooltip .selector .font-size-item {
     transition: 0.2s background;
 }
 
-body .tooltip .selector .font-size-item:hover {
+body .tooltip .selector .font-size-item:not(.disabled):hover {
     background: rgba(255, 255, 255, 0.01);
 }
 
-body .tooltip .selector .font-size-item:active {
+body .tooltip .selector .font-size-item:not(.disabled):active {
     background: rgba(255, 255, 255, 0.08);
 }
 
