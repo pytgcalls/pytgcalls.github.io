@@ -333,6 +333,12 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
   line-height: 25px;
 }
 
+body .page-container .content:not(.is-loading) .page .multisyntax,
+body .page-container .content:not(.is-loading) .page .external-sh .syntax-highlight {
+  font-size: calc(16px + var(--font-size, 0));
+  transition: 0.2s font-size;
+}
+
 body .page-container .content:not(.is-loading) .page .external-sh {
   max-height: 300px;
   overflow: hidden;
@@ -739,6 +745,8 @@ body .page-container .content:not(.is-loading) .page .category-title {
   border: 1px solid rgba(93, 106, 129, 0.2);
   padding: 9px;
   border-radius: 10px;
+  font-size: calc(16px + var(--font-size, 0));
+  transition: 0.2s font-size;
 }
 
 body .page-container .content:not(.is-loading) .page .category-title .spacer {
