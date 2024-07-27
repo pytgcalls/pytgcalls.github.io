@@ -225,9 +225,8 @@ body .tooltip .selector .library .icon-container.success svg {
 }
 
 body .tooltip .selector .font-size {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     background: rgba(93, 106, 129, 0.08);
     margin-bottom: 5px;
     border-radius: 10px;
@@ -237,7 +236,6 @@ body .tooltip .selector .font-size {
 }
 
 body .tooltip .selector .font-size-item {
-    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
