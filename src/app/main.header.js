@@ -283,8 +283,8 @@ function expandSettingsTooltip() {
       debugTitle.textContent = 'DEBUG';
       selector.appendChild(debugTitle);
 
-      selector.appendChild(createDebugRow('Try custom page code',() => debug.tryCustomPageCode(false)));
-      selector.appendChild(createDebugRow('Try custom config code',() => debug.tryCustomPageCode(true)));
+      selector.appendChild(createDebugRow('Try custom page code', () => debug.tryCustomPageCode()));
+      selector.appendChild(createDebugRow('Try custom config code', () => debug.tryCustomPageCode(true)));
       selector.appendChild(createDebugRow('Try custom server', () => debug.tryCustomServer()));
       selector.appendChild(createDebugRow('Reload page data',  () => debug.reloadPageData()));
     }
@@ -306,9 +306,11 @@ function createFontSizeRow() {
 
   let longPressInterval;
 
-  const handleLongPress = (isIncrease, faster = false) => {
+  const handleLongPress = (isIncrease = true, faster = false) => {
     let pressIntN = 0;
 
+    stopLongPress();
+    window.addEventListener('mouseup', stopLongPress, { once: true });
     longPressInterval = setInterval(() => {
       pressIntN++;
 
@@ -317,7 +319,6 @@ function createFontSizeRow() {
         isIncrease ? settingsManager.increaseFontSize() : settingsManager.decreaseFontSize();
 
         if (pressIntN > 3 && !faster) {
-          stopLongPress();
           handleLongPress(isIncrease, true);
         }
       } else {
@@ -332,12 +333,12 @@ function createFontSizeRow() {
       clearInterval(longPressInterval);
       longPressInterval = undefined;
     }
+    window.removeEventListener('mouseup', stopLongPress, { once: true });
   };
 
   const fontSizeLess = document.createElement('div');
   fontSizeLess.classList.add('font-size-item', 'smaller');
   fontSizeLess.addEventListener('mousedown', () => handleLongPress(false));
-  fontSizeLess.addEventListener('mouseup', stopLongPress);
   fontSizeLess.addEventListener('click', () => {
     settingsManager.decreaseFontSize();
     updateState();
@@ -346,8 +347,7 @@ function createFontSizeRow() {
 
   const fontSizeMore = document.createElement('div');
   fontSizeMore.classList.add('font-size-item', 'bigger');
-  fontSizeMore.addEventListener('mousedown', () => handleLongPress(true));
-  fontSizeMore.addEventListener('mouseup', stopLongPress);
+  fontSizeMore.addEventListener('mousedown', () => handleLongPress());
   fontSizeMore.addEventListener('click', () => {
     settingsManager.increaseFontSize();
     updateState();

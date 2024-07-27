@@ -324,19 +324,21 @@ body .page-container .content:not(.is-loading) .page .multisyntax .external-sh {
 body .page-container .content:not(.is-loading) .page .multisyntax,
 body .page-container .content:not(.is-loading) .page .external-sh .syntax-highlight,
 body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-code-high .syntax-highlight {
+  --line-height: 25px;
   padding: 10px;
   user-select: text;
   overflow-x: auto;
   overflow-y: hidden;
   position: relative;
   white-space: nowrap;
-  line-height: 25px;
+  line-height: var(--line-height);
 }
 
 body .page-container .content:not(.is-loading) .page .multisyntax,
 body .page-container .content:not(.is-loading) .page .external-sh .syntax-highlight {
+  --line-height: calc(25px + var(--font-size, 0));
   font-size: calc(16px + var(--font-size, 0));
-  transition: 0.2s font-size;
+  transition: 0.2s font-size, 0.2s line-height;
 }
 
 body .page-container .content:not(.is-loading) .page .external-sh {
@@ -624,16 +626,16 @@ body .page-container .content:not(.is-loading) .page .syntax-highlight.has-mark:
   left: -10px;
   width: calc(100% + 10px);
   background: rgba(13, 17, 23, 0.7);
-  transition: 0.4s transform;
+  transition: 0.4s transform, 0.2s height, 0.2s top;
 }
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight.has-mark::before {
   top: 0;
-  height: calc(10px + 25px * var(--start-mark) - 25px);
+  height: calc(10px + var(--line-height) * var(--start-mark) - var(--line-height));
 }
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight.has-mark::after {
-  --top: calc(10px + 25px * calc(var(--start-mark) + var(--offset-mark)));
+  --top: calc(10px + var(--line-height) * calc(var(--start-mark) + var(--offset-mark)));
   top: var(--top);
   height: calc(var(--length) * 25px - var(--top) + 20px);
 }
