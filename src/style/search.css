@@ -698,6 +698,6 @@ body .search-container .search-results .list-adapter .ref-container .row .page-c
 }
 
 body .search-container .search-results .list-adapter .ref-container .row .page-container .page {
-    transform: scale(0.8) translateY(var(--try, 0));
+    transform: translateY(var(--try, 0)) scale(0.8);
     transform-origin: 0 0;
 }
