@@ -1,5 +1,5 @@
 body .header {
-  height: 65px;
+  height: 60px;
   background: #0d1117;
   border-bottom: 1px solid rgba(93, 106, 129, 0.2);
   position: relative;
@@ -24,7 +24,7 @@ body.as-home .header {
 
 @media screen and (max-width: 1330px) {
   body .header {
-    padding-inline: 30px;
+    padding-inline: 16px;
   }
 
   body .header:has(.menu.show),
@@ -78,10 +78,12 @@ body .header .menu div:nth-child(3) {
 
 body .header .menu.show div:first-child {
   transform: rotate(45deg) translateX(3px) translateY(7px);
+  width: 24px;
 }
 
 body .header .menu.show div:nth-child(2) {
   transform: rotate(-45deg) translateX(-2px) translateY(-2px);
+  width: 24px;
 }
 
 body .header .menu.show div:nth-child(3) {
@@ -92,12 +94,13 @@ body .header .header-icons {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 5px;
 }
 
 body .header .header-icons .search-input {
   height: 37px;
   display: flex;
+  box-sizing: border-box;
   align-items: center;
   justify-content: center;
   gap: 10px;
@@ -138,11 +141,17 @@ body .header .header-icons .search-input input {
   color: #FFFFFF;
 }
 
+body .header .header-icons .search-input input::placeholder {
+  font-size: 17px;
+  transform:translate3d(0,-1px,0);
+}
+
 body .header .header-icons .header-icon {
   background: rgba(22, 26, 32);
   border: 1px solid rgb(36, 42, 51);
   height: 37px;
   width: 37px;
+  box-sizing: border-box;
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -213,7 +222,7 @@ body .header .title-container .title {
   justify-content: center;
   color: #FFFFFF;
   font-size: 17px;
-  gap: 15px;
+  gap: 5px;
   font-weight: 600;
 }
 
@@ -248,6 +257,10 @@ body .header .title-container .library {
 
 @media screen and (max-width: 1000px) {
   body .header .title-container .library {
+    display: none; /* tmp */
+  }
+
+  body .header .title-container .separator {
     display: none; /* tmp */
   }
 }

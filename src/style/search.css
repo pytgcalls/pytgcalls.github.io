@@ -185,6 +185,11 @@ body .search-container .search-input input {
     min-width: 0;
 }
 
+body .search-container .search-input input::placeholder {
+    font-size: 17px;
+    transform:translate3d(0,-1px,0);
+}
+
 body .search-container .search-input:not(.animated) input {
     flex: 1;
 }

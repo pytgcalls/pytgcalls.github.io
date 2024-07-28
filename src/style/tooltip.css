@@ -139,13 +139,15 @@ body .tooltip .selector .library .title-row {
 }
 
 body .tooltip .selector .library .title-row .switch {
-    width: 42px;
+    width: 40px;
     height: 24px;
     background: rgb(81, 81, 84);
     border-radius: 30px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    outline: 1px solid rgba(255, 255, 255, 0.05);
     position: relative;
     transition: 0.4s background;
+    overflow: hidden;
+    padding: 2px;
 }
 
 body .tooltip .selector .library .title-row .switch.selected {
@@ -157,16 +159,17 @@ body .tooltip .selector .library .title-row .switch::after {
     position: absolute;
     height: 22px;
     width: 22px;
-    background: #b3b3b3;
+    background: #fff;
     border-radius: 50%;
     top: 50%;
     transform: translateY(-50%);
-    left: 1px;
+    left: 2px;
     transition: 0.4s left;
+    filter: drop-shadow(0px 3px 1px rgba(0, 0, 0, 0.06)) drop-shadow(0px 3px 8px rgba(0, 0, 0, 0.15)) drop-shadow(0px 0px 0px rgba(0, 0, 0, 0.04));
 }
 
 body .tooltip .selector .library .title-row .switch.selected::after {
-    left: calc(100% - 22px - 1px);
+    left: calc(100% - 22px - 2px);
 }
 
 body .tooltip .selector .library .title {
