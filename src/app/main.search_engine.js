@@ -216,33 +216,101 @@ function LevenshteinAccuracy(a, b) {
     return 1 - LevenshteinDistance(a, b) / Math.max(a.length, b.length);
 }
 
-function LevenshteinDistance(a, b) {
-    const lenA = a.length;
-    const lenB = b.length;
-    if (lenA === 0) {
-        return lenB;
+function LevenshteinDistance(s, t) {
+    if (s === t) {
+        return 0;
     }
-    if (lenB === 0) {
-        return lenA;
+    const n = s.length, m = t.length;
+    if (n === 0 || m === 0) {
+        return n + m;
     }
-    const matrix = [];
-    for (let i = 0; i <= lenA; i++) {
-        matrix[i] = [i];
+    let x = 0, y, a, b, c, d, g, h;
+    const p = new Uint16Array(n);
+    const u = new Uint32Array(n);
+    for (y = 0; y < n;) {
+        u[y] = s.charCodeAt(y);
+        p[y] = ++y;
     }
-    for (let j = 0; j <= lenB; j++) {
-        matrix[0][j] = j;
-    }
-    for (let i = 1; i <= lenA; i++) {
-        for (let j = 1; j <= lenB; j++) {
-            const cost = a[i - 1] === b[j - 1] ? 0 : 1;
-            matrix[i][j] = Math.min(
-                matrix[i - 1][j] + 1,
-                matrix[i][j - 1] + 1,
-                matrix[i - 1][j - 1] + cost
-            );
+
+    for (; (x + 3) < m; x += 4) {
+        const e1 = t.charCodeAt(x);
+        const e2 = t.charCodeAt(x + 1);
+        const e3 = t.charCodeAt(x + 2);
+        const e4 = t.charCodeAt(x + 3);
+        c = x;
+        b = x + 1;
+        d = x + 2;
+        g = x + 3;
+        h = x + 4;
+        for (y = 0; y < n; y++) {
+            a = p[y];
+            if (a < c || b < c) {
+                c = (a > b ? b + 1 : a + 1);
+            }
+            else {
+                if (e1 !== u[y]) {
+                    c++;
+                }
+            }
+
+            if (c < b || d < b) {
+                b = (c > d ? d + 1 : c + 1);
+            }
+            else {
+                if (e2 !== u[y]) {
+                    b++;
+                }
+            }
+
+            if (b < d || g < d) {
+                d = (b > g ? g + 1 : b + 1);
+            }
+            else {
+                if (e3 !== u[y]) {
+                    d++;
+                }
+            }
+
+            if (d < g || h < g) {
+                g = (d > h ? h + 1 : d + 1);
+            }
+            else {
+                if (e4 !== u[y]) {
+                    g++;
+                }
+            }
+            p[y] = h = g;
+            g = d;
+            d = b;
+            b = c;
+            c = a;
         }
     }
-    return matrix[lenA][lenB]
+
+    for (; x < m;) {
+        const e = t.charCodeAt(x);
+        c = x;
+        d = ++x;
+        for (y = 0; y < n; y++) {
+            a = p[y];
+            if (a < c || d < c) {
+                d = (a > d ? d + 1 : a + 1);
+            }
+            else {
+                if (e !== u[y]) {
+                    d = c + 1;
+                }
+                else {
+                    d = c;
+                }
+            }
+            p[y] = d;
+            c = a;
+        }
+        h = d;
+    }
+
+    return h;
 }
 
 export function generateResultPreview(docsRefPreview, chunks) {
