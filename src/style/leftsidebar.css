@@ -50,10 +50,6 @@ body .page-container .left-container .left-sidebar::-webkit-scrollbar {
   display: none;
 }
 
-body.reduce-blur .page-container .left-container .left-sidebar {
-  border: none;
-}
-
 body .page-container .left-container .left-sidebar:not(.expanded) {
   position: absolute;
   height: 100%;

@@ -482,7 +482,7 @@ function createReference(type, name, pathName, chunks) {
 
     const leftSide = document.createElement('div');
     leftSide.classList.add('left-side');
-    leftSide.appendChild(iconsManager.get('special', type == DOCS_REF_TYPE ? 'docsRef' : 'dev').firstChild);
+    leftSide.appendChild(iconsManager.get('special', type === DOCS_REF_TYPE ? 'docsRef' : 'dev').firstChild);
     leftSide.appendChild(codeDetails);
 
     const row = document.createElement('div');
@@ -504,7 +504,7 @@ function createReference(type, name, pathName, chunks) {
         codeDetailsName.textContent = newName.endsWith('.xml') ? newName.slice(0, -4) : newName;
     }
 
-    if (type != null && type != DOCS_REF_TYPE) {
+    if (type != null && type !== DOCS_REF_TYPE) {
         const codeDetailsType = document.createElement('div');
         codeDetailsType.classList.add('cd-type');
         codeDetailsType.dataset.type = type.toLowerCase();

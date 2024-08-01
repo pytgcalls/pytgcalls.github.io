@@ -13,9 +13,7 @@ body .header {
 }
 
 body.as-home.expanded:not(.reduce-blur) .header {
-  background: rgba(0, 0, 26, 0.5);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
+  background: rgba(0, 0, 0, 0.8);
 }
 
 body.as-home .header {

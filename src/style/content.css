@@ -278,10 +278,6 @@ body .page-container .content:not(.is-loading) .page .code {
   user-select: all;
 }
 
-body.reduce-blur .page-container .content:not(.is-loading) .code {
-  border: none;
-}
-
 body .page-container .content:not(.is-loading) .page .sb {
   display: inline-block;
   font-weight: 600;
@@ -726,11 +722,6 @@ body .page-container .content:not(.is-loading) .page .multisyntax .tabs>.tab:not
   color: rgba(255, 255, 255, 0.5);
 }
 
-body.reduce-blur .page-container .content:not(.is-loading) .syntax-highlight,
-body.as-home.reduce-blur .page-container .home-container .final-pres .pres-item .syntax-highlight {
-  border: none;
-}
-
 body .page-container .content:not(.is-loading) .page .shi {
   display: inline-block;
 }
@@ -772,10 +763,6 @@ body .page-container .content:not(.is-loading) table {
   padding: 7px;
   border-radius: 20px;
   margin-top: 20px;
-}
-
-body.reduce-blur .page-container .content:not(.is-loading) table {
-  border: none;
 }
 
 body .page-container .content:not(.is-loading) table tr.as-definitions th {
