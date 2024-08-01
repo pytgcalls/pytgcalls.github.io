@@ -358,10 +358,13 @@ function checkAndManageElement(element, newElement, elementDom) {
   } else if (element.tagName.toUpperCase() === 'REF-SHI') {
     newElement = document.createElement('a');
     newElement.classList.add('ref-shi');
+    newElement.target = '_blank';
 
-    if (!element.hasAttribute('url') || !element.hasAttribute('language')) {
+    if (!element.hasAttribute('url')) {
       throw new Error('invalid data for ref-shi');
     }
+
+    newElement.href = 'https://github.com/pytgcalls/pytgcalls/tree/master/' + element.getAttribute('url');
   } else {
     newElement.classList.toggle(element.tagName.toLowerCase());
   }
@@ -414,74 +417,6 @@ function handlePostQueryElement(element, newElement) {
       const ref = utils.generateSectionRefByTextContent(destElement.textContent);
       window.history.pushState('', '', '#' + ref);
       newElement.scrollIntoView();
-    });
-  } else if (element.tagName.toUpperCase() === 'REF-SHI') {
-    newElement.addEventListener('click', () => {
-      const src = 'https://github.com/pytgcalls/pytgcalls/tree/master/' + element.getAttribute('url');
-
-      const closePopup = () => {
-        fullscreenCodePreview.classList.add('disappear');
-        fullscreenCodePreview.addEventListener('animationend', () => {
-          fullscreenCodePreview.remove();
-        }, { once: true });
-      };
-
-      const closeButton = document.createElement('div');
-      closeButton.classList.add('close-button');
-      closeButton.addEventListener('click', closePopup);
-      closeButton.appendChild(document.createElement('div'));
-      closeButton.appendChild(document.createElement('div'));
-
-      const urlBarText = document.createElement('div');
-      urlBarText.classList.add('url');
-      urlBarText.textContent = src;
-      const urlBarOpenImage = iconsManager.get('main', 'upRightFromSquare');
-      urlBarOpenImage.classList.add('open');
-      const urlBarOpen = document.createElement('a');
-      urlBarOpen.classList.add('link');
-      urlBarOpen.addEventListener('click', closePopup);
-      urlBarOpen.target = '_blank';
-      urlBarOpen.href = src;
-      urlBarOpen.appendChild(urlBarOpenImage);
-      const urlBar = document.createElement('div');
-      urlBar.classList.add('url-bar');
-      urlBar.appendChild(iconsManager.get('socials', 'github'));
-      urlBar.appendChild(urlBarText);
-      urlBar.appendChild(urlBarOpen);
-
-      const topBar = document.createElement('div');
-      topBar.classList.add('top-bar');
-      topBar.appendChild(closeButton);
-      topBar.appendChild(urlBar);
-
-      const codePreview = document.createElement('div');
-      codePreview.classList.add('code-preview', 'is-loading');
-      codePreview.appendChild(utils.createLoadingItem());
-
-      const fullscreenCodePreview = document.createElement('div');
-      fullscreenCodePreview.classList.add('fs-code-preview');
-      fullscreenCodePreview.appendChild(topBar);
-      fullscreenCodePreview.appendChild(codePreview);
-      document.body.appendChild(fullscreenCodePreview);
-
-      fullscreenCodePreview.addEventListener('animationend', () => {
-        requestsManager.initRequest(element.getAttribute('url'), 'pytgcalls/pytgcalls').then((response) => {
-          if (!(response instanceof String) && response != null) {
-            return;
-          }
-
-          codePreview.textContent = '';
-          codePreview.classList.remove('is-loading');
-
-          const fakeChild = document.createElement('div');
-          if (element.hasAttribute('language')) {
-            fakeChild.setAttribute('language', element.getAttribute('language'));
-          }
-          fakeChild.textContent = response;
-
-          handleSyntaxHighlight(fakeChild, codePreview, true);
-        });
-      }, { once: true });
     });
   } else if (element.tagName.toUpperCase() === 'ALERT') {
     const elementHeaderText = document.createElement('div');
