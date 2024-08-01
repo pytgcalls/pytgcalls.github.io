@@ -15,7 +15,7 @@
 
 import * as iconsManager from "./main.icons.js";
 import * as indexesManager from "./main.indexes.js";
-import {createLoadingItem} from "./main.utils.js";
+import {createLoadingItem, waitForAnimationEnd} from "./main.utils.js";
 import {globalUpdateActiveFile} from "./main.sidebar.js";
 import * as tooltip from "./main.tooltip.js";
 import * as searchEngine from "./main.search_engine.js";
@@ -365,14 +365,14 @@ function expandContainer(fullResultsList, isDocsRef = false) {
     mainContainer.style.setProperty('--animate-ref', (singleRowHeight * fullResultsList.length + ROW_MARGIN_BOTTOM * (fullResultsList.length - 1)) + 'px');
     purifyChild(mainContainer);
     mainContainer.classList.add('animate-appear');
-    promisesList.push(new Promise((resolve) => mainContainer.addEventListener('animationend', resolve, { once: true })));
+    promisesList.push(waitForAnimationEnd(mainContainer));
 
     if (oppositeContainer != null) {
         const oppositeContainerRect = oppositeContainer.getBoundingClientRect();
         oppositeContainer.style.setProperty('--initial-height', oppositeContainerRect.height + 'px');
         purifyChild(oppositeContainer, true);
         oppositeContainer.classList.add('animate-disappear-as-opposite');
-        promisesList.push(new Promise((resolve) => oppositeContainer.addEventListener('animationend', resolve, { once: true })));
+        promisesList.push(waitForAnimationEnd(oppositeContainer));
     }
 
     Promise.all(promisesList).then(onReadyToExpand);
@@ -406,10 +406,7 @@ function collapseContainer(fullResultsList, mainContainer, oppositeContainer) {
             purifyChild(child);
             child.classList.add('animate-disappear');
             visibleChildren.push(child);
-            promisesList.push(new Promise((resolve) => child.addEventListener('animationend', (e) => {
-                e.stopPropagation();
-                resolve();
-            }, { once: true })));
+            promisesList.push(waitForAnimationEnd(child, true));
         } else {
             removedChildren++;
             child.remove();
@@ -429,12 +426,12 @@ function collapseContainer(fullResultsList, mainContainer, oppositeContainer) {
         mainContainer.style.setProperty('--animate-ref', (singleRowHeight * fullResultsList.length + ROW_MARGIN_BOTTOM * (fullResultsList.length - 1)) + 'px');
         purifyChild(mainContainer);
         mainContainer.classList.add('animate-disappear');
-        promisesList.push(new Promise((resolve) => mainContainer.addEventListener('animationend', resolve, { once: true })));
+        promisesList.push(waitForAnimationEnd(mainContainer));
 
         if (oppositeContainer != null) {
             purifyChild(oppositeContainer);
             oppositeContainer.classList.add('animate-appear-as-opposite');
-            promisesList.push(new Promise((resolve) => oppositeContainer.addEventListener('animationend', resolve, { once: true })));
+            promisesList.push(waitForAnimationEnd(oppositeContainer));
         }
 
         Promise.all(promisesList).then(() => {
@@ -611,7 +608,7 @@ function closeSearch() {
         searchCloseMobileTextElement.classList.remove('animate-appear');
         searchCloseMobileTextElement.offsetHeight;
         searchCloseMobileTextElement.classList.add('animate-disappear');
-        promisesList.push(new Promise((resolve) => searchCloseMobileTextElement.addEventListener('animationend', resolve, { once: true })));
+        promisesList.push(waitForAnimationEnd(searchCloseMobileTextElement));
     }
 
     if (emptyContainerResultElement != null && isMobile) {
@@ -619,7 +616,7 @@ function closeSearch() {
         emptyContainerResultElement.classList.remove('is-first-view');
         emptyContainerResultElement.offsetHeight;
         emptyContainerResultElement.classList.add('animate-disappear');
-        promisesList.push(new Promise((resolve) => emptyContainerResultElement.addEventListener('animationend', resolve, { once: true })));
+        promisesList.push(waitForAnimationEnd(emptyContainerResultElement));
     }
 
     Promise.all(promisesList).then(onClosedAdapter);

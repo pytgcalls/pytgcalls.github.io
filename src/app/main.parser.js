@@ -22,6 +22,7 @@ import * as homePage from "./main.home.js";
 import patienceDiff from "../lib/patiencediff.js";
 import Prism from "../lib/prism.js";
 import {getCollapseLongCodeStatus} from "./main.settings.js";
+import {waitForAnimationEnd} from "./main.utils.js";
 
 const AVAILABLE_ELEMENTS = [
   'H1', 'H2', 'H3', 'H4', 'SEPARATOR',
@@ -897,9 +898,9 @@ function handleMultiSyntax(element, newElement) {
               syntaxElement.classList.add('appearing');
 
               Promise.all([
-                new Promise((resolve) => syntaxHighlightContainer.addEventListener('animationend', resolve, { once: true })),
-                new Promise((resolve) => activeItem.addEventListener('animationend', resolve, { once: true })),
-                new Promise((resolve) => syntaxElement.addEventListener('animationend', resolve, { once: true }))
+                waitForAnimationEnd(syntaxHighlightContainer),
+                waitForAnimationEnd(activeItem),
+                waitForAnimationEnd(syntaxElement)
               ]).then(() => {
                 syntaxElement.classList.remove('appearing');
                 syntaxElement.classList.add('active');

@@ -112,3 +112,10 @@ export function copyToClipboard(text) {
 
   return Promise.reject();
 }
+
+export function waitForAnimationEnd(element, stopPropagation = false) {
+  return new Promise((resolve) => element.addEventListener('animationend', (e) => {
+    stopPropagation && e.stopPropagation();
+    resolve();
+  }, { once: true }));
+}
