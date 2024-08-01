@@ -113,3 +113,7 @@ export function canIncreaseFontSize() {
 export function canDecreaseFontSize() {
     return parseFontSizeFromDatabase() !== -9;
 }
+
+export function isDefaultFontSize() {
+    return parseFontSizeFromDatabase() === 0;
+}

@@ -17,6 +17,7 @@ import * as iconsManager from "./main.icons.js";
 
 let closeCallbacksList = [];
 let closeAdaptedCallbacksList = [];
+let isAnimating = 0;
 
 export function init({
   childElement,
@@ -80,8 +81,10 @@ export function init({
 
   const callbackClose = () => {
     tooltip.classList.add('remove');
+    isAnimating++;
     tooltip.addEventListener('animationend', () => {
       tooltip.remove();
+      isAnimating--;
     }, { once: true });
 
     container.classList.remove('focused-tooltip');
@@ -114,6 +117,10 @@ export function closeAdaptedTooltips() {
     } catch (e) { }
   }
   closeAdaptedCallbacksList = [];
+}
+
+export function isAnimatingClosing() {
+  return isAnimating !== 0;
 }
 
 function adaptedToMobile() {

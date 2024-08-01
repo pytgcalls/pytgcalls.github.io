@@ -246,6 +246,10 @@ function expandLibrarySelectorTooltip() {
 }
 
 function expandSettingsTooltip() {
+  if (tooltip.isAnimatingClosing()) {
+    return;
+  }
+
   if (headerSettingsElement.classList.contains('focused-tooltip')) {
     tooltip.closeTooltips();
     return;
@@ -313,12 +317,22 @@ function expandSettingsTooltip() {
 }
 
 function createFontSizeRow() {
+  let longPressInterval;
+  let standardSizeTimeout;
+
   const updateState = () => {
     fontSizeLess.classList.toggle('disabled', !settingsManager.canDecreaseFontSize());
     fontSizeMore.classList.toggle('disabled', !settingsManager.canIncreaseFontSize());
-  };
 
-  let longPressInterval;
+    if (settingsManager.isDefaultFontSize() && longPressInterval == null) {
+      fontSizeContainer.offsetHeight;
+      fontSizeContainer.classList.add('is-standard');
+
+      standardSizeTimeout = setTimeout(() => {
+        fontSizeContainer.classList.remove('is-standard');
+      }, 920);
+    }
+  };
 
   const handleLongPress = (isIncrease = true, faster = false) => {
     let pressIntN = 0;
@@ -368,10 +382,25 @@ function createFontSizeRow() {
   });
   fontSizeMore.textContent = 'A';
 
+  const fontSizeStandardSpan = document.createElement('span');
+  fontSizeStandardSpan.textContent = '100%';
+  const fontSizeStandard = document.createElement('div');
+  fontSizeStandard.classList.add('font-size-standard');
+  fontSizeStandard.addEventListener('click', () => {
+    if (standardSizeTimeout != null) {
+      clearTimeout(standardSizeTimeout);
+      standardSizeTimeout = null;
+    }
+
+    fontSizeContainer.classList.remove('is-standard');
+  });
+  fontSizeStandard.appendChild(fontSizeStandardSpan);
+
   const fontSizeContainer = document.createElement('div');
   fontSizeContainer.classList.add('font-size');
   fontSizeContainer.appendChild(fontSizeLess);
   fontSizeContainer.appendChild(fontSizeMore);
+  fontSizeContainer.appendChild(fontSizeStandard);
 
   const fontSizePreview = document.createElement('div');
   fontSizePreview.classList.add('font-size-preview');
