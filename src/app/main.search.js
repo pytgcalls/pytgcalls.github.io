@@ -35,6 +35,7 @@ let isAnimating = 0;
 let expandedRefsState = ExpandedRefsState.NONE;
 let isFirstEmptyContainerView = true;
 let lastStartByElement;
+let lastStartByInputElement;
 let searchTextElement;
 let searchTextFullElement;
 let searchCloseMobileTextElement;
@@ -50,8 +51,9 @@ let currentSearchTimeout;
 let windowKeyDownEventListener;
 let alreadyWaitingForIndexingStart = false;
 
-export function openSearchContainer(startBy) {
+export function openSearchContainer(startBy, startByInputElement) {
     lastStartByElement = startBy;
+    lastStartByInputElement = startByInputElement;
 
     document.body.classList.add('focused-by-search');
     onSearchOpenListenerInstance.callAllListeners(true);
@@ -82,7 +84,6 @@ export function openSearchContainer(startBy) {
 
     const searchListAdapter = document.createElement('div');
     searchListAdapter.classList.add('list-adapter', 'is-empty');
-    searchListAdapter.appendChild(getEmptySearchContainerResult(true));
     searchListAdapterElement = searchListAdapter;
 
     const searchTextFullAnimation = searchTextFull.cloneNode(true);
@@ -143,15 +144,18 @@ export function openSearchContainer(startBy) {
         }
     }, { once: true });
 
-    const inputByLastStartBy = getInputByLastStartBy();
-    if (inputByLastStartBy != null) {
-        searchText.value = inputByLastStartBy.value;
-        hasAlreadyText = !!inputByLastStartBy.value.trim();
+    if (lastStartByInputElement != null) {
+        searchText.value = lastStartByInputElement.value;
+        hasAlreadyText = !!lastStartByInputElement.value.trim();
 
         const animationInput = searchTextFullAnimation.querySelector('input');
         if (animationInput != null) {
-            animationInput.value = inputByLastStartBy.value;
+            animationInput.value = lastStartByInputElement.value;
         }
+    }
+
+    if (!hasAlreadyText) {
+        searchListAdapter.appendChild(getEmptySearchContainerResult(true));
     }
 
     windowKeyDownEventListener = (e) => e.key === 'Escape' && !e.shiftKey && !e.altKey && closeSearch();
@@ -586,9 +590,8 @@ function closeSearch() {
             resetData();
         }, { once: true });
 
-        const inputByLastStartBy = getInputByLastStartBy();
-        if (inputByLastStartBy != null) {
-            inputByLastStartBy.value = searchTextElement.value;
+        if (lastStartByInputElement != null) {
+            lastStartByInputElement.value = searchTextElement.value;
             hasAlreadyText = !!searchTextElement.value.trim();
         }
     };
@@ -649,10 +652,6 @@ function getEmptySearchContainerResult(isFirstOpen = false) {
     return emptyContainerResult;
 }
 
-function getInputByLastStartBy() {
-    return lastStartByElement.tagName.toUpperCase() === 'INPUT' ? lastStartByElement : lastStartByElement.querySelector('input');
-}
-
 function updateSearchAnimationState(animatedSearchText, startByRect, endByRect) {
     animatedSearchText.style.setProperty('--start-x', startByRect.left+'px');
     animatedSearchText.style.setProperty('--start-y', startByRect.top+'px');
@@ -704,6 +703,7 @@ export function resetData() {
     expandedRefsState = ExpandedRefsState.NONE;
     isFirstEmptyContainerView = true;
     lastStartByElement = undefined;
+    lastStartByInputElement = undefined;
     searchTextElement = undefined;
     searchTextFullElement = undefined;
     searchCloseMobileTextElement = undefined;

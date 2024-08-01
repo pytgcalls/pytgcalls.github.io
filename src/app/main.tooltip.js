@@ -16,13 +16,15 @@
 import * as iconsManager from "./main.icons.js";
 
 let closeCallbacksList = [];
+let closeAdaptedCallbacksList = [];
 
 export function init({
   childElement,
   container,
   hasTabs = false,
   closeOnClick = true,
-  moreSpace = false
+  moreSpace = false,
+  adaptMobileInterface = false
 }) {
   closeTooltips();
 
@@ -33,6 +35,7 @@ export function init({
   tooltip.classList.add('tooltip');
   tooltip.classList.toggle('has-tabs', hasTabs);
   tooltip.classList.toggle('more-space', moreSpace);
+  tooltip.classList.toggle('adapt-mobile', adaptMobileInterface);
   tooltip.style.setProperty('--center-x', '0px');
   tooltip.style.setProperty('--center-y', elementRect.top + 'px');
   tooltip.appendChild(tooltipArrow);
@@ -57,20 +60,25 @@ export function init({
   container.classList.add('focused-tooltip');
 
   const resizeHandler = () => closeTooltips();
-  let clickHandler = resizeHandler;
+  const clickHandler = (e) => {
+    if (adaptMobileInterface && adaptedToMobile()) {
+      return;
+    }
 
-  if (!closeOnClick) {
-    clickHandler = (e) => {
+    if (!closeOnClick) {
       if (e.target !== tooltip && !tooltip.contains(e.target)) {
         closeTooltips();
       }
-    };
-  }
+      return;
+    }
+
+    closeTooltips();
+  };
 
   window.addEventListener('resize', resizeHandler);
   document.body.addEventListener('click', clickHandler);
 
-  closeCallbacksList.push(() => {
+  const callbackClose = () => {
     tooltip.classList.add('remove');
     tooltip.addEventListener('animationend', () => {
       tooltip.remove();
@@ -80,7 +88,13 @@ export function init({
 
     window.removeEventListener('resize', resizeHandler);
     document.body.removeEventListener('click', clickHandler);
-  });
+  };
+
+  if (adaptMobileInterface) {
+    closeAdaptedCallbacksList.push(callbackClose);
+  } else {
+    closeCallbacksList.push(callbackClose);
+  }
 }
 
 export function closeTooltips() {
@@ -90,4 +104,18 @@ export function closeTooltips() {
     } catch (e) { }
   }
   closeCallbacksList = [];
+  closeAdaptedTooltips();
+}
+
+export function closeAdaptedTooltips() {
+  for (const callback of closeAdaptedCallbacksList) {
+    try {
+      callback();
+    } catch (e) { }
+  }
+  closeAdaptedCallbacksList = [];
+}
+
+function adaptedToMobile() {
+  return window.matchMedia('screen and (max-width: 1000px)').matches;
 }

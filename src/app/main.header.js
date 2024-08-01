@@ -24,6 +24,7 @@ import * as debug from "./main.debug.js";
 export const onChangeListenerInstance = new ListenerManagerInstance();
 export const onSidebarUpdateListenerInstance = new ListenerManagerInstance();
 export const onCompassUpdateListenerInstance = new ListenerManagerInstance();
+export const onSettingsUpdateListenerInstance = new ListenerManagerInstance();
 
 let headerElement;
 let headerMenuElement;
@@ -42,7 +43,11 @@ export function getElement() {
   const headerMenu = document.createElement('div');
   headerMenu.classList.add('menu');
   headerMenu.addEventListener('click', () => {
-    onSidebarUpdateListenerInstance.callAllListeners(true);
+    if (!hasSelectedTab) {
+      expandLibrarySelectorTooltip();
+    } else {
+      onSidebarUpdateListenerInstance.callAllListeners(true);
+    }
   });
   headerMenu.appendChild(document.createElement('div'));
   headerMenu.appendChild(document.createElement('div'));
@@ -94,15 +99,9 @@ export function getElement() {
   searchText.placeholder = 'Search Docs';
   const headerSearch = document.createElement('div');
   headerSearch.classList.add('search-input');
-  headerSearch.addEventListener('click', () => openSearchContainer(headerSearch));
+  headerSearch.addEventListener('click', () => openSearchContainer(headerSearch, searchText));
   headerSearch.appendChild(iconsManager.get('main', 'magnifyingGlass').firstChild);
   headerSearch.appendChild(searchText);
-
-  const headerMobileSearch = document.createElement('div');
-  headerMobileSearch.classList.add('header-icon', 'header-search', 'visible');
-  headerMobileSearch.addEventListener('click', () => openSearchContainer(headerMobileSearch));
-  headerMobileSearch.appendChild(iconsManager.get('main', 'magnifyingGlass').firstChild);
-  headerMobileSearchElement = headerMobileSearch;
 
   const headerCompass = document.createElement('div');
   headerCompass.classList.add('header-icon', 'header-compass');
@@ -112,17 +111,23 @@ export function getElement() {
   headerCompass.appendChild(iconsManager.get('main', 'compass').firstChild);
   headerCompassElement = headerCompass;
 
+  const headerMobileSearch = document.createElement('div');
+  headerMobileSearch.classList.add('header-icon', 'header-search', 'visible');
+  headerMobileSearch.addEventListener('click', () => openSearchContainer(headerMobileSearch, searchText));
+  headerMobileSearch.appendChild(iconsManager.get('main', 'magnifyingGlass').firstChild);
+  headerMobileSearchElement = headerMobileSearch;
+
   const headerSettings = document.createElement('div');
   headerSettings.classList.add('header-icon', 'header-settings', 'visible');
-  headerSettings.addEventListener('click', () => expandSettingsTooltip());
+  headerSettings.addEventListener('click', expandSettingsTooltip);
   headerSettings.appendChild(iconsManager.get('special', 'settings').firstChild);
   headerSettingsElement = headerSettings;
 
   const headerIcons = document.createElement('div');
   headerIcons.classList.add('header-icons');
   headerIcons.appendChild(headerSearch);
-  headerIcons.appendChild(headerMobileSearch);
   headerIcons.appendChild(headerCompass);
+  headerIcons.appendChild(headerMobileSearch);
   headerIcons.appendChild(headerSettings);
 
   const header = document.createElement('div');
@@ -165,6 +170,8 @@ export function updateCompassExpandedState(state) {
 function appendTitleUpdateOnActiveTabUpdate() {
   onChangeListenerInstance.addListener({
     callback: (id) => {
+      hasSelectedTab = id != null;
+
       if (headerLibraryValueElement.textContent === id) {
         return;
       }
@@ -239,6 +246,11 @@ function expandLibrarySelectorTooltip() {
 }
 
 function expandSettingsTooltip() {
+  if (headerSettingsElement.classList.contains('focused-tooltip')) {
+    tooltip.closeTooltips();
+    return;
+  }
+
   requestAnimationFrame(() => {
     const selector = document.createElement('div');
     selector.classList.add('selector');
@@ -289,11 +301,13 @@ function expandSettingsTooltip() {
       selector.appendChild(createDebugRow('Reload page data',  () => debug.reloadPageData()));
     }
 
+    onSettingsUpdateListenerInstance.callAllListeners(true);
     tooltip.init({
       childElement: selector,
       container: headerSettingsElement,
       closeOnClick: false,
-      moreSpace: true
+      moreSpace: true,
+      adaptMobileInterface: true
     });
   });
 }
@@ -359,7 +373,15 @@ function createFontSizeRow() {
   fontSizeContainer.appendChild(fontSizeLess);
   fontSizeContainer.appendChild(fontSizeMore);
 
-  return fontSizeContainer;
+  const fontSizePreview = document.createElement('div');
+  fontSizePreview.classList.add('font-size-preview');
+  fontSizePreview.textContent = "Isn't this the most exciting font size preview ever?";
+
+  const fragment = document.createDocumentFragment();
+  fragment.appendChild(fontSizePreview);
+  fragment.appendChild(fontSizeContainer);
+
+  return fragment;
 }
 
 function createDebugRow(title, callback) {

@@ -22,6 +22,7 @@ import * as utils from "./main.utils.js";
 import * as debug from "./main.debug.js";
 import * as searchManager from "./main.search.js";
 import ListenerManagerInstance from "./main.listener.js";
+import {closeAdaptedTooltips} from "./main.tooltip.js";
 
 export const onChangeFavoriteSyntaxTab = new ListenerManagerInstance();
 export const onChangeFavoriteSyntaxTabAnimationState = new ListenerManagerInstance();
@@ -99,6 +100,7 @@ export function init(pathName) {
         sidebarInstance.updateDesktopCollapsedState(false);
         headerInstance.updateSidebarDesktopExpandedState(false);
       }
+      closeAdaptedTooltips();
     }
   });
 
@@ -108,6 +110,18 @@ export function init(pathName) {
       headerInstance.updateCompassExpandedState(state);
       sidebarInstance.updateMobileVisibilityState(false);
       headerInstance.updateSidebarMobileVisibilityState(false);
+      closeAdaptedTooltips();
+    }
+  });
+
+  headerInstance.onSettingsUpdateListenerInstance.addListener({
+    callback: (opened) => {
+      if (opened) {
+        contentInstance.updateMobileSectionsVisibilityState(false);
+        headerInstance.updateCompassExpandedState(false);
+        sidebarInstance.updateMobileVisibilityState(false);
+        headerInstance.updateSidebarMobileVisibilityState(false);
+      }
     }
   });
 
@@ -118,6 +132,7 @@ export function init(pathName) {
         headerInstance.updateCompassExpandedState(false);
         sidebarInstance.updateMobileVisibilityState(false);
         headerInstance.updateSidebarMobileVisibilityState(false);
+        closeAdaptedTooltips();
       }
     }
   });

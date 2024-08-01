@@ -32,6 +32,13 @@ body.as-home .header {
   }
 }
 
+@media screen and (max-width: 1000px) {
+  body .header:has(.header-settings.focused-tooltip) {
+    background: #0d1117;
+    border-bottom: 1px solid transparent;
+  }
+}
+
 body .header .menu {
   width: 25px;
   height: 20px;
@@ -178,6 +185,12 @@ body .header .header-icons .header-icon.focused-tooltip {
   }
 }
 
+@media screen and (max-width: 1000px) {
+  body .header .header-icons .header-icon.header-settings.focused-tooltip {
+    pointer-events: all !important;
+  }
+}
+
 body .header .header-icons .header-icon:not(.visible) {
   transform: scale(0.8);
   opacity: 0;
@@ -193,11 +206,12 @@ body .header .header-icons .header-icon svg {
   height: 18px;
   fill: rgba(255, 255, 255, 0.4);
   vertical-align: middle;
+  transition: 0.2s fill;
 }
-
 
 body .header .header-icons .header-icon.focused-tooltip svg,
 body .header .header-icons .header-icon.header-compass.show svg {
+  fill: #FFFFFF;
   animation: 0.4s rotateForTooltip forwards;
 }
 

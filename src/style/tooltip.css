@@ -21,8 +21,59 @@ body .tooltip.visible {
     animation: 0.3s appearTooltip cubic-bezier(0.42, 0, 0, 0.98);
 }
 
+body .tooltip.remove {
+    animation: 0.4s removeTooltip cubic-bezier(0.42, 0, 0, 0.98) forwards;
+}
+
+@keyframes appearTooltip {
+    from {
+        opacity: 0;
+        transform: translateY(-50%) scale(0.4);
+    }
+}
+
 body .tooltip.visible.out-of-space {
     transform-origin: var(--origin-x) var(--origin-y);
+}
+
+@media screen and (max-width: 1000px) {
+    body .tooltip.adapt-mobile {
+        background: #0d1117;
+        top: 60px;
+        left: 0;
+        width: 100vw;
+        max-width: none;
+        height: calc(100vh - 60px);
+        border: none;
+        box-shadow: none;
+        border-radius: 0;
+    }
+
+    body .tooltip.adapt-mobile.visible {
+        animation: 0.4s appearTooltipMobile forwards cubic-bezier(0.97, -0.02, 0, 0.98);
+    }
+
+    @keyframes appearTooltipMobile {
+        from {
+            transform: translateX(100%);
+        }
+        to {
+            transform: translateX(0);
+        }
+    }
+
+    body .tooltip.adapt-mobile.remove {
+        animation: 0.4s disappearTooltipMobile forwards cubic-bezier(0.97, -0.02, 0, 0.98);
+    }
+
+    @keyframes disappearTooltipMobile {
+        from {
+            transform: translateX(0);
+        }
+        to {
+            transform: translateX(100%);
+        }
+    }
 }
 
 body .tooltip .title-element {
@@ -53,17 +104,6 @@ body .tooltip.has-tabs {
     background: black;
 }
 
-body .tooltip.remove {
-    animation: 0.4s removeTooltip cubic-bezier(0.42, 0, 0, 0.98) forwards;
-}
-
-@keyframes appearTooltip {
-    from {
-        opacity: 0;
-        transform: translateY(-50%) scale(0.4);
-    }
-}
-
 @keyframes removeTooltip {
     to {
         opacity: 0;
@@ -75,6 +115,12 @@ body .tooltip > .icon-container {
     left: 50%;
     top: -17px;
     transform: translateX(-50%);
+}
+
+@media screen and (max-width: 1000px) {
+    body .tooltip.adapt-mobile > .icon-container {
+        display: none;
+    }
 }
 
 body .tooltip.out-of-space > .icon-container {
@@ -225,6 +271,28 @@ body .tooltip .selector .library.selected .icon-container.success {
 
 body .tooltip .selector .library .icon-container.success svg {
     fill: #FFFFFF;
+}
+
+body .tooltip .selector .font-size-preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100px;
+    max-height: 100px;
+    overflow: hidden;
+    padding-inline: 15px;
+    margin-bottom: 5px;
+    border: 2px dashed #ffffff38;
+    color: #FFFFFF;
+    border-radius: 10px;
+    font-size: calc(16px + var(--font-size, 0));
+    transition: 0.2s font-size;
+}
+
+@media screen and (min-width: 1000px) {
+    body .tooltip .selector .font-size-preview {
+        display: none;
+    }
 }
 
 body .tooltip .selector .font-size {
