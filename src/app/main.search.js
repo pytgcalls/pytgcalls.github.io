@@ -431,9 +431,11 @@ function collapseContainer(fullResultsList, mainContainer, oppositeContainer) {
         mainContainer.classList.add('animate-disappear');
         promisesList.push(new Promise((resolve) => mainContainer.addEventListener('animationend', resolve, { once: true })));
 
-        purifyChild(oppositeContainer);
-        oppositeContainer.classList.add('animate-appear-as-opposite');
-        promisesList.push(new Promise((resolve) => oppositeContainer.addEventListener('animationend', resolve, { once: true })));
+        if (oppositeContainer != null) {
+            purifyChild(oppositeContainer);
+            oppositeContainer.classList.add('animate-appear-as-opposite');
+            promisesList.push(new Promise((resolve) => oppositeContainer.addEventListener('animationend', resolve, { once: true })));
+        }
 
         Promise.all(promisesList).then(() => {
             purifyChild(mainContainer, false);
