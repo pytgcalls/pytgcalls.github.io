@@ -594,6 +594,7 @@ function updateSyntaxHighlightWithCollapsable(element, rows) {
   const externalContainer = document.createElement('div');
   externalContainer.classList.add('external-sh');
   externalContainer.classList.toggle('expanded', !isExpandable);
+  externalContainer.classList.toggle('is-expandable', isExpandable);
   externalContainer.appendChild(element);
   isExpandable && externalContainer.appendChild(expandableView);
 

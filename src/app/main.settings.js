@@ -12,6 +12,9 @@
  *  sources for news related to this source code.
  *  With <3 by @kuogi (and the fox!)
  */
+import ListenerManagerInstance from "./main.listener.js";
+
+export const onCollapseLongCodeSettingListenerInstance = new ListenerManagerInstance();
 
 export function handleSettings() {
     handleDesktopMode();
@@ -35,7 +38,9 @@ export function getCollapseLongCodeStatus() {
 
 export function updateCollapseLongCode(status) {
     localStorage.setItem('collapseLongCode', String(status));
+    onCollapseLongCodeSettingListenerInstance.callAllListeners(status);
 }
+
 export function getForceDesktopModeStatus() {
     const storageData = localStorage.getItem('desktopMode');
     return storageData === 'true';

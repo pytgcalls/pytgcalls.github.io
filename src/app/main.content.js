@@ -22,11 +22,13 @@ import * as indexesManager from "./main.indexes.js";
 import * as debug from "./main.debug.js";
 import * as sourceParser from "./main.parser.js";
 import * as homePage from "./main.home.js";
+import {onCollapseLongCodeSettingListenerInstance} from "./main.settings.js";
 
 export const onSelectedSectionListenerInstance = new ListenerManagerInstance();
 
 let currentContentElement;
 let currentSectionsElement;
+let addedListener = false;
 
 export function getElement() {
   const content = document.createElement('div');
@@ -40,6 +42,13 @@ export function getElement() {
   const fragment = document.createDocumentFragment();
   fragment.append(content);
   fragment.append(pageSections);
+
+  if (!addedListener) {
+    addedListener = true;
+    onCollapseLongCodeSettingListenerInstance.addListener({
+      callback: updateCollapseLongCodeStatus
+    });
+  }
 
   return fragment;
 }
@@ -298,6 +307,16 @@ export function updateActiveSection(section) {
     behavior: 'smooth'
   });
   onSelectedSectionListenerInstance.callAllListeners();
+}
+
+function updateCollapseLongCodeStatus(status) {
+  for (const externalSh of currentContentElement.querySelectorAll('.external-sh')) {
+    if (!status) {
+      externalSh.classList.add('expanded');
+    } else if (externalSh.classList.contains('is-expandable')) {
+      externalSh.classList.remove('expanded');
+    }
+  }
 }
 
 export function resetData() {

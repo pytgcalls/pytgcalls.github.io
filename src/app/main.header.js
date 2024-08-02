@@ -264,8 +264,8 @@ function expandSettingsTooltip() {
     mainTitle.textContent = 'Settings';
     selector.appendChild(mainTitle);
 
-    selector.appendChild(createFontSizeRow());
-    selector.appendChild(createSettingsRow(
+    hasSelectedTab && selector.appendChild(createFontSizeRow());
+    hasSelectedTab && selector.appendChild(createSettingsRow(
         'Collapse Long Code',
         null,
         settingsManager.getCollapseLongCodeStatus(),
@@ -293,7 +293,7 @@ function expandSettingsTooltip() {
       ));
     }
 
-    if (debug.isSafeToUseDebugItems()) {
+    if (debug.isSafeToUseDebugItems() && hasSelectedTab) {
       const debugTitle = document.createElement('div');
       debugTitle.classList.add('mini-text', 'has-margin', 'align-left');
       debugTitle.textContent = 'DEBUG';
