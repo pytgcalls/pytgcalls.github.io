@@ -19,6 +19,7 @@ body.as-home .page-container .left-container {
     width: 100%;
     pointer-events: none;
     z-index: 4;
+    background: #080a0e;
     transition: 0.4s transform cubic-bezier(0.97, -0.02, 0, 0.98);
   }
 

@@ -27,14 +27,14 @@ body.as-home .header {
 
   body .header:has(.menu.show),
   body .header:has(.header-compass.visible.show) {
-    background: #0d1117;
+    background: #080a0e;
     border-bottom: 1px solid transparent;
   }
 }
 
 @media screen and (max-width: 1000px) {
   body .header:has(.header-settings.focused-tooltip) {
-    background: #0d1117;
+    background: #080a0e;
     border-bottom: 1px solid transparent;
   }
 }

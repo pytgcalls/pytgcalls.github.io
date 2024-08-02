@@ -15,7 +15,7 @@ body.as-home .page-container .sections {
     width: 100%;
     padding-inline: 20px;
     pointer-events: none;
-    background: #0d1117;
+    background: #080a0e;
     z-index: 4;
     transition: 0.4s transform cubic-bezier(0.97, -0.02, 0, 0.98);
   }

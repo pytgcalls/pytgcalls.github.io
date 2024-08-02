@@ -10,6 +10,7 @@ body .tooltip {
     box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.15);
     opacity: 0;
     z-index: 4;
+    transform-origin: 50% 0;
 }
 
 body .tooltip.more-space {
@@ -18,27 +19,34 @@ body .tooltip.more-space {
 
 body .tooltip.visible {
     opacity: 1;
-    animation: 0.3s appearTooltip cubic-bezier(0.42, 0, 0, 0.98);
+    animation: 0.2s appearTooltip cubic-bezier(0.42, 0, 0, 0.98);
 }
 
 body .tooltip.remove {
-    animation: 0.4s removeTooltip cubic-bezier(0.42, 0, 0, 0.98) forwards;
+    animation: 0.2s removeTooltip cubic-bezier(0.42, 0, 0, 0.98) forwards;
 }
 
 @keyframes appearTooltip {
     from {
         opacity: 0;
-        transform: translateY(-50%) scale(0.4);
+        transform: scale(0.2);
+    }
+}
+
+@keyframes removeTooltip {
+    to {
+        opacity: 0;
+        transform: scale(0.2);
     }
 }
 
 body .tooltip.visible.out-of-space {
-    transform-origin: var(--origin-x) var(--origin-y);
+    transform-origin: var(--origin-x) 0;
 }
 
 @media screen and (max-width: 1000px) {
     body .tooltip.adapt-mobile {
-        background: #0d1117;
+        background: #080a0e;
         top: 60px;
         left: 0;
         width: 100vw;
@@ -104,16 +112,10 @@ body .tooltip.has-tabs {
     background: black;
 }
 
-@keyframes removeTooltip {
-    to {
-        opacity: 0;
-    }
-}
-
 body .tooltip > .icon-container {
     position: absolute;
     left: 50%;
-    top: -17px;
+    top: -16px;
     transform: translateX(-50%);
 }
 
@@ -124,7 +126,7 @@ body .tooltip > .icon-container {
 }
 
 body .tooltip.out-of-space > .icon-container {
-    left: 42%;
+    left: calc(var(--origin-x) - 30px);
     transform: none;
 }
 
@@ -165,7 +167,7 @@ body .tooltip .selector .mini-text.has-margin {
 }
 
 body .tooltip .selector .library {
-    background: rgba(93, 106, 129, 0.08);
+    background: #0e1117;
     padding: 10px;
     font-weight: 500;
     cursor: pointer;
@@ -290,7 +292,7 @@ body .tooltip .selector .font-size-preview {
     overflow: hidden;
     padding-inline: 15px;
     margin-bottom: 5px;
-    border: 2px dashed #ffffff38;
+    border: 2px dashed #0e1117;
     color: #FFFFFF;
     border-radius: 10px;
     font-size: calc(16px + var(--font-size, 0));
@@ -306,7 +308,7 @@ body .tooltip .selector .font-size-preview {
 body .tooltip .selector .font-size {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    background: #1b2027;
+    background: #0e1117;
     margin-bottom: 5px;
     border-radius: 10px;
     color: #FFFFFF;
@@ -357,7 +359,7 @@ body .tooltip .selector .font-size .font-size-standard::after {
     width: calc(100% - 4px);
     height: calc(100% - 4px);
     border-radius: 7px;
-    background: #1b2027;
+    background: #0e1117;
 }
 
 body .tooltip .selector .font-size .font-size-standard span {
