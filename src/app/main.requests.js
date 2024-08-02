@@ -17,8 +17,13 @@ import * as debug from "./main.debug.js";
 import * as config from "./main.config.js";
 import {getForceGithubAPIStatus} from "./main.settings.js";
 
-let doesLoadViaUserContentWork = true;
-let isRequestFailed = false;
+class ForceGitHubApiReason {
+  static NONE = 0;
+  static REQUEST_FAILED = 1;
+  static USER_CHOICE = 2;
+}
+
+let forceApiReason = ForceGitHubApiReason.NONE;
 
 let pypiDataPromise;
 let pypiDataResult;
@@ -28,29 +33,23 @@ let alternativesList = {};
 export async function initRequest(fileName, repoName = 'pytgcalls/docsdata') {
   const isUsingAnAlternative = !!alternativesList[repoName];
 
-  let forcedFromSettings = false;
   if (!isUsingAnAlternative) {
-    if (getForceGithubAPIStatus() && doesLoadViaUserContentWork) {
-      doesLoadViaUserContentWork = false;
-      isRequestFailed = false;
-      forcedFromSettings = true;
-    } else if (!getForceGithubAPIStatus() && !doesLoadViaUserContentWork && !isRequestFailed) {
-      doesLoadViaUserContentWork = true;
-      isRequestFailed = false;
+    if (getForceGithubAPIStatus()) {
+      forceApiReason = ForceGitHubApiReason.USER_CHOICE;
+    } else if (forceApiReason === ForceGitHubApiReason.USER_CHOICE) {
+      forceApiReason = ForceGitHubApiReason.NONE;
     }
   }
+
   try {
     return await tryToLoadWithUserContent(repoName, fileName);
   } catch (e) {
-    doesLoadViaUserContentWork = false;
-
-    if (!forcedFromSettings) {
-      isRequestFailed = true;
-    }
+    forceApiReason = ForceGitHubApiReason.REQUEST_FAILED;
 
     if (isUsingAnAlternative) {
       alert("Connection to your custom docsdata server failed! We're using GitHub as fallback. Check your port.");
     }
+
     return await tryToLoadWithApi(repoName, fileName);
   }
 }
@@ -61,11 +60,11 @@ export function setAsDebugAlternative(original, alternative) {
   }
 
   alternativesList[original] = alternative;
-  doesLoadViaUserContentWork = true;
+  forceApiReason = ForceGitHubApiReason.NONE;
 }
 
  function tryToLoadWithUserContent(repoName, fileName) {
-  if (!doesLoadViaUserContentWork) {
+  if (forceApiReason !== ForceGitHubApiReason.NONE) {
     return Promise.reject('Ignoring githubusercontent as it isn\'t available');
   } else {
     return new Promise((resolve, reject) => {
