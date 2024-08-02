@@ -537,7 +537,7 @@ function handleSyntaxHighlight(element, newElement, hideTags = false, customText
     }
   }
 
-  if (element.tagName.toUpperCase() !== 'SHI' && !hideTags && !hasValidMarkParameter) {
+  if (element.tagName.toUpperCase() !== 'SHI' && !hideTags && !hasValidMarkParameter && rows > 2) {
     let successTimeout;
 
     const languageTagText = document.createElement('span');
@@ -583,7 +583,7 @@ function handleSyntaxHighlight(element, newElement, hideTags = false, customText
 }
 
 function updateSyntaxHighlightWithCollapsable(element, rows) {
-  const isExpandable = rows > 9 && getCollapseLongCodeStatus();
+  const isExpandable = rows > 12 && getCollapseLongCodeStatus();
 
   const expandableView = document.createElement('div');
   expandableView.classList.add('expandable');
