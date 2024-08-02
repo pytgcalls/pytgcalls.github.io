@@ -23,6 +23,7 @@ import * as debug from "./main.debug.js";
 import * as sourceParser from "./main.parser.js";
 import * as homePage from "./main.home.js";
 import {onCollapseLongCodeSettingListenerInstance} from "./main.settings.js";
+import * as syntaxManager from "./main.syntax.js";
 
 export const onSelectedSectionListenerInstance = new ListenerManagerInstance();
 
@@ -236,7 +237,7 @@ function iterPageSectionsData(container, currentDom, childrenLimit = Infinity) {
         continue;
       }
 
-      if (element.tagName.toUpperCase() === 'TD' || (element.classList.length && ['H1', 'H2', 'H3', 'CATEGORY-TITLE', 'PG-TITLE'].includes(element.classList[0].toUpperCase()))) {
+      if (element.tagName.toUpperCase() === 'TD' || (element.classList.length && [syntaxManager.H1, syntaxManager.H2, syntaxManager.H3, syntaxManager.CATEGORY_TITLE, 'PG-TITLE'].includes(element.classList[0].toUpperCase()))) {
         let cloned = element.cloneNode(true);
 
         if (element.tagName.toUpperCase() === 'TD') {
@@ -277,7 +278,7 @@ function iterPageSectionsData(container, currentDom, childrenLimit = Infinity) {
         const cloned = element.cloneNode(false);
         currentDom.append(cloned);
         iterPageSectionsData(element, cloned);
-      } else if (element.tagName.toUpperCase() === 'TABLE') {
+      } else if (element.tagName.toUpperCase() === syntaxManager.TABLE) {
         const clonedTable = document.createElement('div');
         clonedTable.classList.add('subtext');
         currentDom.append(clonedTable);

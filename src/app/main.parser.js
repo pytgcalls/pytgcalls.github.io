@@ -19,21 +19,11 @@ import * as utils from "./main.utils.js";
 import * as iconsManager from "./main.icons.js";
 import * as config from "./main.config.js";
 import * as homePage from "./main.home.js";
+import * as syntaxManager from "./main.syntax.js";
 import patienceDiff from "../lib/patiencediff.js";
 import Prism from "../lib/prism.js";
 import {getCollapseLongCodeStatus} from "./main.settings.js";
 import {waitForAnimationEnd} from "./main.utils.js";
-
-const AVAILABLE_ELEMENTS = [
-  'H1', 'H2', 'H3', 'H4', 'SEPARATOR',
-  'TEXT', 'BOLD', 'B', 'SB', 'CODE', 'A', 'BR',
-  'SYNTAX-HIGHLIGHT', 'SHI', 'ALERT', 'PG-TITLE',
-  'CATEGORY', 'CATEGORY-TITLE', 'REF', 'SUBTEXT',
-  'LIST', 'ITEM', 'MULTISYNTAX',
-  'TABLE', 'DEFINITIONS', 'COLUMN', 'ITEM',
-  'DOCS-REF', 'GITHUB-REF', 'REF-SHI',
-  'CONFIG', 'BANNER', 'P2P-BANNER', 'MARK'
-];
 
 export function getContentByData(text) {
   const currentElement = document.createElement('div');
@@ -56,7 +46,7 @@ export function handleRecursive(currentDom, elementDom) {
   for (const element of currentDom.childNodes) {
     if (element instanceof Text) {
       elementDom.appendChild(emojisParser.parse(element.textContent));
-    } else if (!AVAILABLE_ELEMENTS.includes(element.tagName.toUpperCase())) {
+    } else if (!syntaxManager.AVAILABLE_ELEMENTS.includes(element.tagName.toUpperCase())) {
       console.error(element);
       throw new Error("An unknown element has been used " + element.tagName);
     } else {
@@ -65,7 +55,7 @@ export function handleRecursive(currentDom, elementDom) {
 
       let containsCustomTags = false;
       for (const data of element.querySelectorAll('*')) {
-        if (!(data instanceof Text) && data.tagName.toUpperCase() !== 'BR') {
+        if (!(data instanceof Text) && data.tagName.toUpperCase() !== syntaxManager.BR) {
           containsCustomTags = true;
           break;
         }
@@ -75,38 +65,38 @@ export function handleRecursive(currentDom, elementDom) {
         newElement.setAttribute('noref', element.getAttribute('noref'));
       }
 
-      if (['TEXT', 'ITEM'].includes(element.tagName.toUpperCase())) {
-        const spacesMultiplier = '<br/>'.repeat(element.tagName.toUpperCase() === 'ITEM' ? 1 : 2);
+      if ([syntaxManager.TEXT, syntaxManager.TABLE_ITEM].includes(element.tagName.toUpperCase())) {
+        const spacesMultiplier = '<br/>'.repeat(element.tagName.toUpperCase() === syntaxManager.TABLE_ITEM ? 1 : 2);
         element.innerHTML = element.innerHTML.replace('\n\n', spacesMultiplier);
         containsCustomTags = true;
       }
 
-      if (['SYNTAX-HIGHLIGHT', 'SHI'].includes(element.tagName.toUpperCase())) {
+      if ([syntaxManager.SYNTAX_HIGHLIGHT, syntaxManager.SYNTAX_HIGHLIGHT_INLINE].includes(element.tagName.toUpperCase())) {
         if (containsCustomTags) {
           throw new Error("Syntax highlight can't contain other tags");
         }
 
-        newElement = handleSyntaxHighlight(element, newElement, false, '', element.tagName.toUpperCase() === 'SHI');
+        newElement = handleSyntaxHighlight(element, newElement, false, '', element.tagName.toUpperCase() === syntaxManager.SYNTAX_HIGHLIGHT_INLINE);
         elementDom.appendChild(newElement);
-      } else if (element.tagName.toUpperCase() === 'GITHUB-REF') {
+      } else if (element.tagName.toUpperCase() === syntaxManager.GITHUB_REF) {
         handleGithubRef(newElement);
         elementDom.appendChild(newElement);
-      } else if (element.tagName.toUpperCase() === 'MULTISYNTAX') {
+      } else if (element.tagName.toUpperCase() === syntaxManager.MULTI_SYNTAX) {
         handleMultiSyntax(element, newElement);
         elementDom.appendChild(newElement);
-      } else if (element.tagName.toUpperCase() === 'BANNER') {
+      } else if (element.tagName.toUpperCase() === syntaxManager.BANNER) {
         if (containsCustomTags) {
           throw new Error("Banner can't contain other tags");
         }
 
         elementDom.appendChild(handlePostQueryElement(element, newElement));
-      } else if (element.tagName.toUpperCase() === 'P2P-BANNER') {
+      } else if (element.tagName.toUpperCase() === syntaxManager.BANNER_PEER_2_PEER) {
         if (containsCustomTags) {
           throw new Error("P2PBanner can't contain other tags");
         }
 
         elementDom.appendChild(handlePostQueryElement(element, newElement));
-      } else if (element.tagName.toUpperCase() === 'MARK') {
+      } else if (element.tagName.toUpperCase() === syntaxManager.SEARCH_HIGHLIGHT) {
         const markElement = document.createElement('span');
         markElement.classList.add('ids');
         markElement.innerHTML = element.innerHTML;
@@ -187,7 +177,7 @@ export function getLanguageColorByName(name) {
 }
 
 function checkAndManageElement(element, newElement, elementDom) {
-  if (element.tagName.toUpperCase() === 'A') {
+  if (element.tagName.toUpperCase() === syntaxManager.LINK) {
     if (element.getAttribute('href').startsWith('https')) {
       newElement = document.createElement('a');
       newElement.href = element.getAttribute('href');
@@ -195,7 +185,7 @@ function checkAndManageElement(element, newElement, elementDom) {
     } else {
       throw new Error("UnsupportedLink");
     }
-  } else if (element.tagName.toUpperCase() === 'BANNER') {
+  } else if (element.tagName.toUpperCase() === syntaxManager.BANNER) {
     newElement.classList.add('banner');
 
     const isValidQuery = (
@@ -302,19 +292,19 @@ function checkAndManageElement(element, newElement, elementDom) {
     } else {
       throw new Error("invalid banner data");
     }
-  } else if (element.tagName.toUpperCase() === 'LIST') {
+  } else if (element.tagName.toUpperCase() === syntaxManager.LIST) {
     newElement = document.createElement('ul');
 
     if (element.getAttribute('style') === 'numbers') {
       newElement.classList.add('with-numbers');
     }
-  } else if (element.tagName.toUpperCase() === 'ITEM' && elementDom.tagName === 'UL') {
+  } else if (element.tagName.toUpperCase() === syntaxManager.TABLE_ITEM && elementDom.tagName === 'UL') {
     newElement = document.createElement('li');
-  } else if (element.tagName.toUpperCase() === 'BOLD' || element.tagName.toUpperCase() === 'B') {
+  } else if (syntaxManager.BOLD.includes(element.tagName.toUpperCase())) {
     newElement = document.createElement('b');
-  } else if (element.tagName.toUpperCase() === 'BR') {
+  } else if (element.tagName.toUpperCase() === syntaxManager.BR) {
     newElement = document.createElement('br');
-  } else if (element.tagName.toUpperCase() === 'CATEGORY-TITLE') {
+  } else if (element.tagName.toUpperCase() === syntaxManager.CATEGORY_TITLE) {
     newElement.classList.toggle(element.tagName.toLowerCase());
 
     let newContent = element.innerHTML.replaceAll('\n', '<br/>');
@@ -322,20 +312,20 @@ function checkAndManageElement(element, newElement, elementDom) {
       newContent = newContent.slice(5);
     }
     element.innerHTML = newContent;
-  } else if (element.tagName.toUpperCase() === 'TABLE') {
+  } else if (element.tagName.toUpperCase() === syntaxManager.TABLE) {
     newElement = document.createElement('table');
-  } else if (element.tagName.toUpperCase() === 'DEFINITIONS') {
+  } else if (element.tagName.toUpperCase() === syntaxManager.TABLE_DEFINITIONS) {
     newElement = document.createElement('tr');
     newElement.classList.add('as-definitions');
-  } else if (element.tagName.toUpperCase() === 'ITEM' && elementDom.tagName === 'TABLE') {
+  } else if (element.tagName.toUpperCase() === syntaxManager.TABLE_ITEM && elementDom.tagName === syntaxManager.TABLE) {
     newElement = document.createElement('tr');
-  } else if (element.tagName.toUpperCase() === 'COLUMN') {
+  } else if (element.tagName.toUpperCase() === syntaxManager.TABLE_COLUMN) {
     if (elementDom.classList.contains('as-definitions')) {
       newElement = document.createElement('th');
     } else {
       newElement = document.createElement('td');
     }
-  } else if (element.tagName.toUpperCase() === 'DOCS-REF') {
+  } else if (element.tagName.toUpperCase() === syntaxManager.DOCS_REF) {
     newElement.classList.add('docs-ref');
     newElement.addEventListener('click', () => {
       if (element.hasAttribute('link')) {
@@ -344,7 +334,7 @@ function checkAndManageElement(element, newElement, elementDom) {
         throw new Error('invalid link for docs-ref');
       }
     });
-  } else if (element.tagName.toUpperCase() === 'GITHUB-REF') {
+  } else if (element.tagName.toUpperCase() === syntaxManager.GITHUB_REF) {
     newElement = document.createElement('a');
     newElement.classList.add('github-ref');
     newElement.target = '_blank';
@@ -355,7 +345,7 @@ function checkAndManageElement(element, newElement, elementDom) {
 
     newElement.setAttribute('reponame', element.getAttribute('reponame'));
     newElement.setAttribute('user', element.getAttribute('user'));
-  } else if (element.tagName.toUpperCase() === 'REF-SHI') {
+  } else if (element.tagName.toUpperCase() === syntaxManager.EXAMPLE_REF) {
     newElement = document.createElement('a');
     newElement.classList.add('ref-shi');
     newElement.target = '_blank';
@@ -391,7 +381,7 @@ export function tryToReduceTags(element) {
     }
   };
 
-  if (element.tagName.toUpperCase() === 'CONFIG') {
+  if (element.tagName.toUpperCase() === syntaxManager.CONFIG) {
     handleItem(element);
   }
 
@@ -401,9 +391,9 @@ export function tryToReduceTags(element) {
 }
 
 function handlePostQueryElement(element, newElement) {
-  if (['H1', 'H2', 'H3', 'BANNER'].includes(element.tagName.toUpperCase())) {
+  if ([syntaxManager.H1, syntaxManager.H2, syntaxManager.H3, syntaxManager.BANNER].includes(element.tagName.toUpperCase())) {
     let destElement = newElement;
-    if (element.tagName.toUpperCase() === 'BANNER') {
+    if (element.tagName.toUpperCase() === syntaxManager.BANNER) {
       const bigTitle = newElement.querySelector('.bottom-container > .big-title');
       if (bigTitle) {
         destElement = bigTitle;
@@ -418,7 +408,7 @@ function handlePostQueryElement(element, newElement) {
       window.history.pushState('', '', '#' + ref);
       newElement.scrollIntoView();
     });
-  } else if (element.tagName.toUpperCase() === 'ALERT') {
+  } else if (element.tagName.toUpperCase() === syntaxManager.ALERT) {
     const elementHeaderText = document.createElement('div');
     elementHeaderText.classList.add('alert-title');
     const elementHeader = document.createElement('div');
@@ -458,7 +448,7 @@ function handlePostQueryElement(element, newElement) {
 
     newElement.replaceWith(compElement);
     return compElement;
-  } else if (element.tagName.toUpperCase() === 'P2P-BANNER') {
+  } else if (element.tagName.toUpperCase() === syntaxManager.BANNER_PEER_2_PEER) {
     const elementHeaderText = document.createElement('div');
     elementHeaderText.classList.add('alert-title');
     elementHeaderText.textContent = 'Security';
@@ -537,7 +527,7 @@ function handleSyntaxHighlight(element, newElement, hideTags = false, customText
     }
   }
 
-  if (element.tagName.toUpperCase() !== 'SHI' && !hideTags && !hasValidMarkParameter && rows > 2) {
+  if (element.tagName.toUpperCase() !== syntaxManager.SYNTAX_HIGHLIGHT_INLINE && !hideTags && !hasValidMarkParameter && rows > 2) {
     let successTimeout;
 
     const languageTagText = document.createElement('span');
@@ -691,7 +681,7 @@ function handleMultiSyntax(element, newElement) {
 
       let containsCustomTags = false;
       for (const data of fakeResyntaxElement.querySelectorAll('*')) {
-        if (!(data instanceof Text) && data.tagName.toUpperCase() !== 'BR') {
+        if (!(data instanceof Text) && data.tagName.toUpperCase() !== syntaxManager.BR) {
           containsCustomTags = true;
           break;
         }
@@ -788,7 +778,7 @@ function handleMultiSyntax(element, newElement) {
 
     let containsCustomTags = false;
     for (const data of syntax.querySelectorAll('*')) {
-      if (!(data instanceof Text) && data.tagName.toUpperCase() !== 'BR') {
+      if (!(data instanceof Text) && data.tagName.toUpperCase() !== syntaxManager.BR) {
         containsCustomTags = true;
         break;
       }

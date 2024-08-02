@@ -15,12 +15,13 @@
 import * as indexesManager from "./main.indexes.js";
 import {initFull} from "./main.indexes.js";
 import {handleRecursive} from "./main.parser.js";
+import * as syntaxManager from "./main.syntax.js";
 
 const MAX_RESULTS = 10;
 export let isSearching = false;
 
 const UNSUPPORTED_HIGHLIGHT_ELEMENTS = [
-    'SYNTAX-HIGHLIGHT', 'SHI', 'MULTISYNTAX'
+    syntaxManager.SYNTAX_HIGHLIGHT, syntaxManager.SYNTAX_HIGHLIGHT_INLINE, syntaxManager.MULTI_SYNTAX
 ];
 
 export async function search(query) {
@@ -175,7 +176,7 @@ function approxMatch(query, text) {
             return [...query.matchAll(/[\w-_()><]+/g)].map((searchWord) => {
                 return {
                     sentence: word.text,
-                    accuracy: LevenshteinAccuracy(word.text.toLowerCase(), searchWord[0].toLowerCase()),
+                    accuracy: getLevenshteinAccuracy(word.text.toLowerCase(), searchWord[0].toLowerCase()),
                     position: word.position,
                     offset: word.offset,
                 };
@@ -188,9 +189,9 @@ function approxMatch(query, text) {
             if (finalMatches.length > 0 && finalMatches[finalMatches.length - 1].position + 1 === match.position) {
                 const offset_prev = finalMatches[finalMatches.length - 1].offset + finalMatches[finalMatches.length - 1].sentence.length;
                 const middleChars = text.substring(offset_prev, match.offset);
-                const prevAccuracy = LevenshteinAccuracy(finalMatches[finalMatches.length - 1].sentence.toLowerCase(), query.toLowerCase());
+                const prevAccuracy = getLevenshteinAccuracy(finalMatches[finalMatches.length - 1].sentence.toLowerCase(), query.toLowerCase());
                 const newText = finalMatches[finalMatches.length - 1].sentence + middleChars + match.sentence;
-                const newAccuracy = LevenshteinAccuracy(newText.toLowerCase(), query.toLowerCase());
+                const newAccuracy = getLevenshteinAccuracy(newText.toLowerCase(), query.toLowerCase());
                 if (newAccuracy >= prevAccuracy) {
                     finalMatches[finalMatches.length - 1].sentence = newText;
                     finalMatches[finalMatches.length - 1].position = match.position;
@@ -212,11 +213,11 @@ function approxMatch(query, text) {
     return null;
 }
 
-function LevenshteinAccuracy(a, b) {
-    return 1 - LevenshteinDistance(a, b) / Math.max(a.length, b.length);
+function getLevenshteinAccuracy(a, b) {
+    return 1 - getLevenshteinDistance(a, b) / Math.max(a.length, b.length);
 }
 
-function LevenshteinDistance(s, t) {
+function getLevenshteinDistance(s, t) {
     if (s === t) {
         return 0;
     }

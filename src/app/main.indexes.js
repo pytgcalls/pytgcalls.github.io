@@ -16,14 +16,15 @@
 import * as requestsManager from "./main.requests.js";
 import * as debug from "./main.debug.js";
 import {tryToReduceTags} from "./main.parser.js";
+import * as syntaxManager from "./main.syntax.js";
 
 const AVAILABLE_TYPES = [
   'method', 'class', 'enum', 'type'
 ];
 
 const SUPPORTED_ELEMENTS = [
-    'TEXT', 'H1', 'H2', 'H3',
-    'CATEGORY-TITLE', 'SUBTITLE', 'SUBTEXT'
+    syntaxManager.TEXT, syntaxManager.H1, syntaxManager.H2, syntaxManager.H3,
+    syntaxManager.CATEGORY_TITLE, 'SUBTITLE', syntaxManager.SUBTEXT
 ];
 
 export let hasIndexed = false;
