@@ -204,6 +204,7 @@ function checkAndManageElement(element, newElement, elementDom) {
 
       const mainImage = document.createElement('img');
       mainImage.classList.add('main-image');
+      mainImage.loading = 'lazy';
       mainImage.style.setProperty('--width', element.getAttribute('imagewidth'));
       mainImage.style.setProperty('--height', element.getAttribute('imageheight'));
       mainImage.src = element.getAttribute('imageurl');
