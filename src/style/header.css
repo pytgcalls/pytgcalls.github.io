@@ -209,7 +209,11 @@ body .header .header-icons .header-icon svg {
   transition: 0.2s fill;
 }
 
-body .header .header-icons .header-icon.focused-tooltip svg,
+body .header .header-icons .header-icon.header-search.focused-tooltip svg {
+  fill: #FFFFFF;
+}
+
+body .header .header-icons .header-icon:not(.header-search).focused-tooltip svg,
 body .header .header-icons .header-icon.header-compass.show svg {
   fill: #FFFFFF;
   animation: 0.4s rotateForTooltip forwards;
