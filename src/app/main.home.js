@@ -237,6 +237,7 @@ function updateLoadedFile(file, hash, updateActiveFilePromise, avoidPushingState
   introductionInstance.isVisible() && introductionInstance.hide();
   headerInstance.updateCompassVisibilityState(true);
   headerInstance.updateCompassExpandedState(false);
+  headerInstance.updateSidebarMobileVisibilityState(false);
   sidebarInstance.updateMobileVisibilityState(false);
   // noinspection JSIgnoredPromiseFromCall
   contentInstance.loadFile(file, hash, avoidPushingState);

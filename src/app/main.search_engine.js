@@ -106,7 +106,7 @@ function applyHighlight(htmlElement, offset, length) {
                     range.setStart(newChild, offsetBox);
                     range.setEnd(newChild, consumeLength);
                     // Style the highlighted text
-                    range.surroundContents(document.createElement('mark'));
+                    range.surroundContents(document.createElement(syntaxManager.SEARCH_HIGHLIGHT.toLowerCase()));
                 }
             } else {
                 throw new Error('Unsupported highlight element');
