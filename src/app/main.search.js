@@ -171,6 +171,7 @@ export function openSearchContainer(startBy, startByInputElement) {
 function handleSearch() {
     const onSearchReady = async (query) => {
         clearLoadingPreviews();
+        expandedRefsState = ExpandedRefsState.NONE;
 
         const results = !query ? [] : await searchEngine.search(query);
 
@@ -216,19 +217,13 @@ function handleSearch() {
             codeRefTitle.textContent = 'Code References';
 
             if (codeRefResults.length > 3) {
-                codeRefTitle.appendChild(createShowMoreLessAnimator(() => expandContainer(codeRefResults), expandedRefsState === ExpandedRefsState.CODE_REF));
+                codeRefTitle.appendChild(createShowMoreLessAnimator(() => expandContainer(codeRefResults)));
             }
 
             const searchResultReferenceContainer = document.createElement('div');
             searchResultReferenceContainer.classList.add('ref-container');
             searchResultReferenceContainer.appendChild(codeRefTitle);
             searchResultReferenceContainer.appendChild(codeRefResultsLimited);
-
-            if (expandedRefsState === ExpandedRefsState.CODE_REF) {
-                searchResultReferenceContainer.append(...codeRefResults);
-            } else if (expandedRefsState === ExpandedRefsState.DOCS_REF) {
-                searchResultReferenceContainer.classList.add('animate-disappear-as-opposite');
-            }
 
             searchListAdapterElement.appendChild(searchResultReferenceContainer);
             searchCodeRefContainerElement = searchResultReferenceContainer;
@@ -242,19 +237,13 @@ function handleSearch() {
             docsRefTitle.textContent = 'Docs References';
 
             if (docsRefResults.length > 3) {
-                docsRefTitle.appendChild(createShowMoreLessAnimator(() => expandContainer(docsRefResults, true), expandedRefsState === ExpandedRefsState.DOCS_REF));
+                docsRefTitle.appendChild(createShowMoreLessAnimator(() => expandContainer(docsRefResults, true)));
             }
 
             const searchResultReferenceContainer = document.createElement('div');
             searchResultReferenceContainer.classList.add('ref-container');
             searchResultReferenceContainer.appendChild(docsRefTitle);
             searchResultReferenceContainer.appendChild(docsRefResultsLimited);
-
-            if (expandedRefsState === ExpandedRefsState.DOCS_REF) {
-                searchResultReferenceContainer.append(...docsRefResults);
-            } else if (expandedRefsState === ExpandedRefsState.CODE_REF) {
-                searchResultReferenceContainer.classList.add('animate-disappear-as-opposite');
-            }
 
             searchListAdapterElement.appendChild(searchResultReferenceContainer);
             searchDocsRefContainerElement = searchResultReferenceContainer;
