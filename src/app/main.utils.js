@@ -119,3 +119,8 @@ export function waitForAnimationEnd(element, stopPropagation = false) {
     resolve();
   }, { once: true }));
 }
+
+export function isElementHidden(element) {
+  const rect = element.getBoundingClientRect();
+  return rect.width === 0 && rect.height === 0 && rect.top === 0 && rect.left === 0;
+}

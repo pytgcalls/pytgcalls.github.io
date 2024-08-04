@@ -20,6 +20,7 @@ import * as iconsManager from "./main.icons.js";
 import * as settingsManager from "./main.settings.js";
 import {openSearchContainer} from "./main.search.js";
 import * as debug from "./main.debug.js";
+import {isElementHidden} from "./main.utils.js";
 
 export const onChangeListenerInstance = new ListenerManagerInstance();
 export const onSidebarUpdateListenerInstance = new ListenerManagerInstance();
@@ -167,7 +168,7 @@ function appendTitleUpdateOnActiveTabUpdate() {
       const wasEmpty = headerLibraryElement.classList.contains('is-empty');
       headerLibraryElement.classList.toggle('is-empty', id == null);
 
-      if (!headerLibraryValueElement.hasChildNodes() && !wasEmpty) {
+      if ((!headerLibraryValueElement.hasChildNodes() && !wasEmpty) || isElementHidden(headerLibraryValueElement)) {
         headerLibraryValueElement.textContent = id;
         return;
       }
