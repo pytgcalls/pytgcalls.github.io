@@ -20,7 +20,7 @@ import * as indexesManager from "./main.indexes.js";
 import * as homePage from "./main.home.js";
 import Prism from "../lib/prism.js";
 
-function reloadPageData(reloadConfig = true) {
+export function reloadPageData(reloadConfig = true) {
   if (!isSafeToUseDebugItems()) {
     return;
   }
@@ -34,7 +34,7 @@ function reloadPageData(reloadConfig = true) {
 
   const onReady = () => {
     config.getRedirectDataForPath(window.location.pathname).then((data) => {
-      if (data && (data.startsWith('https://') || data.startsWith('http://'))) {
+      if (data instanceof String && (data.startsWith('https://') || data.startsWith('http://'))) {
         window.location.href = data;
       } else {
         homePage.init(data || window.location.pathname);
@@ -50,12 +50,13 @@ function reloadPageData(reloadConfig = true) {
   }
 }
 
-function tryCustomPageCode(isConfig = false) {
+export function tryCustomPageCode(isConfig = false) {
   if (!isSafeToUseDebugItems()) {
     return;
   }
 
   const customCodeEditor = composeCustomHighlightedEditor({
+    // noinspection JSUnresolvedReference
     language: Prism.languages.html,
     onConfirm: () => {
       handlePopupContainerClose(popupContainer);
@@ -120,6 +121,7 @@ function composeCustomHighlightedEditor({ language, onConfirm }) {
   customEditor.appendChild(transparentTextarea);
   customEditor.appendChild(prismCode);
 
+  // noinspection JSUnresolvedReference
   Prism.hooks.add("before-highlight", (env) => {
     env.code = env.element.innerText;
   });
@@ -132,6 +134,7 @@ function composeCustomHighlightedEditor({ language, onConfirm }) {
     customEditor.classList.add('defined-height');
 
     let code = transparentTextarea.value;
+    // noinspection JSUnresolvedReference
     code = Prism.highlight(code, language, 'html');
     code = code.replaceAll('\n', '<br/>');
 
@@ -173,7 +176,7 @@ function composeCustomHighlightedEditor({ language, onConfirm }) {
   };
 }
 
-function tryCustomServer() {
+export function tryCustomServer() {
   if (!isSafeToUseDebugItems()) {
     return;
   }
@@ -230,13 +233,6 @@ function tryCustomServer() {
   handlePopupContainerHandlers(popupContainer, popupElement);
 }
 
-function isSafeToUseDebugItems() {
+export function isSafeToUseDebugItems() {
   return window.location.protocol === 'http:';
 }
-
-export {
-  reloadPageData,
-  tryCustomPageCode,
-  tryCustomServer,
-  isSafeToUseDebugItems,
-};
