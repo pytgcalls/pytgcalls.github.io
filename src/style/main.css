@@ -34,7 +34,7 @@ body .page-container {
   overflow: hidden;
   position: absolute;
   padding-left: 0;
-  transition: 0.4s width cubic-bezier(0.42, 0, 0, 0.97), 0.4s padding-left cubic-bezier(0.42, 0, 0, 0.97), 0.2s transform;
+  transition: 0.2s width cubic-bezier(0.42, 0, 0, 0.97), 0.2s padding-left cubic-bezier(0.42, 0, 0, 0.97), 0.2s transform;
 }
 
 body.as-home .page-container {
@@ -57,7 +57,7 @@ body.as-home .page-container {
 
 ::-webkit-scrollbar-thumb {
   background: transparent;
-  transition: 0.4s background;
+  transition: 0.2s background;
 }
 
 :root:hover ::-webkit-scrollbar-thumb {

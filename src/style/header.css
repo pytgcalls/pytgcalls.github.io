@@ -9,7 +9,7 @@ body .header {
   padding-inline: 30px;
   box-sizing: border-box;
   overflow: hidden;
-  transition: 0.4s border-bottom, 0.4s background cubic-bezier(0.97, -0.02, 0, 0.98);
+  transition: 0.2s border-bottom, 0.2s background cubic-bezier(0.97, -0.02, 0, 0.98);
 }
 
 body.as-home.expanded:not(.reduce-blur) .header {
@@ -62,7 +62,7 @@ body .header .menu div {
   background: rgba(255, 255, 255, 0.7);
   border-radius: 10px;
   position: absolute;
-  transition: 0.4s transform, 0.4s background;
+  transition: 0.2s transform, 0.2s background;
 }
 
 body .header .menu.show div {
@@ -115,7 +115,7 @@ body .header .header-icons .search-input {
   padding-inline: 15px;
   min-width: 280px;
   cursor: pointer;
-  transition: 0.4s transform;
+  transition: 0.2s transform;
 }
 
 @media screen and (max-width: 1000px) {
@@ -162,7 +162,7 @@ body .header .header-icons .header-icon {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: 0.4s filter, 0.4s transform, 0.4s opacity;
+  transition: 0.2s filter, 0.2s transform, 0.2s opacity;
 }
 
 body .header .header-icons .search-input:hover,
@@ -216,7 +216,7 @@ body .header .header-icons .header-icon.header-search.focused-tooltip svg {
 body .header .header-icons .header-icon:not(.header-search).focused-tooltip svg,
 body .header .header-icons .header-icon.header-compass.show svg {
   fill: #FFFFFF;
-  animation: 0.4s rotateForTooltip forwards;
+  animation: 0.2s rotateForTooltip forwards;
 }
 
 @keyframes rotateForTooltip {
@@ -266,39 +266,42 @@ body .header .title-container .separator {
   opacity: 0.2;
 }
 
+body .page-container .left-container .left-sidebar .library-container .library,
 body .header .title-container .library {
   cursor: pointer;
   display: flex;
 }
 
 @media screen and (max-width: 1000px) {
+  body .header .title-container .separator,
   body .header .title-container .library {
-    display: none; /* tmp */
-  }
-
-  body .header .title-container .separator {
-    display: none; /* tmp */
+    display: none;
   }
 }
 
+body .page-container .left-container .left-sidebar .library-container .library span,
 body .header .title-container .library span {
   color: #FFFFFF;
   font-size: 16px;
   transition: 0.2s opacity;
 }
 
+body .page-container .left-container .left-sidebar .library-container .library.is-empty span:not(.point):not(.value),
 body .header .title-container .library.is-empty span:not(.point):not(.value) {
   opacity: 0.6;
 }
 
+body .page-container .left-container .left-sidebar .library-container .library.is-empty span.point,
 body .header .title-container .library.is-empty span.point {
   opacity: 0;
 }
 
+body .page-container .left-container .left-sidebar .library-container .library span:not(.value),
 body .header .title-container .library span:not(.value) {
   font-weight: 600;
 }
 
+body .page-container .left-container .left-sidebar .library-container .library span.value,
 body .header .title-container .library span.value {
   width: var(--width);
   font-weight: 500;
@@ -307,6 +310,11 @@ body .header .title-container .library span.value {
   transition: 0.2s width, 0.2s opacity, 0.2s transform, 0.2s margin-inline;
 }
 
+body .page-container .left-container .left-sidebar .library-container .library span.value {
+  --width: auto !important;
+}
+
+body .page-container .left-container .left-sidebar .library-container .library.is-empty span.value,
 body .header .title-container .library.is-empty span.value {
   margin-inline: 1px;
 }
@@ -316,22 +324,26 @@ body .header .title-container .library span.value.updating {
   transform: scale(0.9);
 }
 
+body .page-container .left-container .left-sidebar .library-container .library .icon-container,
 body .header .title-container .library .icon-container {
   fill: rgba(255, 255, 255, 0.4);
   display: flex;
   align-items: center;
 }
 
+body .page-container .left-container .left-sidebar .library-container .library .icon-container svg,
 body .header .title-container .library .icon-container svg {
   width: 13px;
   vertical-align: middle;
-  transition: 0.4s transform;
+  transition: 0.2s transform;
 }
 
+body .page-container .left-container .left-sidebar .library-container .library.focused-tooltip,
 body .header .title-container .library.focused-tooltip {
   pointer-events: none;
 }
 
+body .page-container .left-container .left-sidebar .library-container .library.focused-tooltip .icon-container svg,
 body .header .title-container .library.focused-tooltip .icon-container svg {
   transform: rotate(180deg);
 }

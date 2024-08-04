@@ -58,7 +58,7 @@ body .tooltip.visible.out-of-space {
     }
 
     body .tooltip.adapt-mobile.visible {
-        animation: 0.4s appearTooltipMobile forwards cubic-bezier(0.97, -0.02, 0, 0.98);
+        animation: 0.2s appearTooltipMobile forwards cubic-bezier(0.97, -0.02, 0, 0.98);
     }
 
     @keyframes appearTooltipMobile {
@@ -71,7 +71,7 @@ body .tooltip.visible.out-of-space {
     }
 
     body .tooltip.adapt-mobile.remove {
-        animation: 0.4s disappearTooltipMobile forwards cubic-bezier(0.97, -0.02, 0, 0.98);
+        animation: 0.2s disappearTooltipMobile forwards cubic-bezier(0.97, -0.02, 0, 0.98);
     }
 
     @keyframes disappearTooltipMobile {
@@ -173,7 +173,7 @@ body .tooltip .selector .library {
     cursor: pointer;
     border-radius: 10px;
     position: relative;
-    transition: 0.4s transform;
+    transition: 0.2s transform;
 }
 
 body .tooltip .selector .library:hover {
@@ -201,7 +201,7 @@ body .tooltip .selector .library .title-row .switch {
     border-radius: 30px;
     outline: 1px solid rgba(255, 255, 255, 0.05);
     position: relative;
-    transition: 0.4s background;
+    transition: 0.2s background;
     overflow: hidden;
     padding: 2px;
 }
@@ -220,7 +220,7 @@ body .tooltip .selector .library .title-row .switch::after {
     top: 50%;
     transform: translateY(-50%);
     left: 2px;
-    transition: 0.4s left;
+    transition: 0.2s left;
     filter: drop-shadow(0px 3px 1px rgba(0, 0, 0, 0.06)) drop-shadow(0px 3px 8px rgba(0, 0, 0, 0.15)) drop-shadow(0px 0px 0px rgba(0, 0, 0, 0.04));
 }
 
@@ -231,14 +231,14 @@ body .tooltip .selector .library .title-row .switch.selected::after {
 body .tooltip .selector .library .title {
     font-size: 15px;
     color: #FFFFFF;
-    transition: 0.4s opacity;
+    transition: 0.2s opacity;
 }
 
 body .tooltip .selector .library .description {
     font-size: 11px;
     font-weight: 400;
     color: rgba(255, 255, 255, 0.4);
-    transition: 0.4s opacity;
+    transition: 0.2s opacity;
 }
 
 body .tooltip .selector .library.has-switch .description {
@@ -261,7 +261,7 @@ body .tooltip .selector .library .icon-container.success {
     transform: translateX(-50%) translateY(-50%);
     pointer-events: none;
     opacity: 0;
-    transition: 0.4s opacity;
+    transition: 0.2s opacity;
 }
 
 body .tooltip .selector .library.selected .icon-container.success {

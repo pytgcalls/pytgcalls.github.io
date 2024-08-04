@@ -37,14 +37,14 @@ let headerSettingsElement;
 let headerLibraryValueElement;
 let fakeHeaderLibraryValueElement;
 
-let hasSelectedTab = false;
+let selectedTabID;
 
 export function getElement() {
   const headerMenu = document.createElement('div');
   headerMenu.classList.add('menu');
   headerMenu.addEventListener('click', () => {
-    if (!hasSelectedTab) {
-      expandLibrarySelectorTooltip();
+    if (selectedTabID == null) {
+      expandLibrarySelectorTooltip(headerProjectName);
     } else {
       onSidebarUpdateListenerInstance.callAllListeners(true);
     }
@@ -67,29 +67,15 @@ export function getElement() {
   const headerSeparator = document.createElement('div');
   headerSeparator.classList.add('separator');
 
-  const headerLibraryTitle = document.createElement('span');
-  headerLibraryTitle.textContent = 'Library';
-  const headerLibraryTitlePoint = document.createElement('span');
-  headerLibraryTitlePoint.classList.add('point');
-  headerLibraryTitlePoint.textContent = ':';
-  const headerLibraryValue = document.createElement('span');
-  headerLibraryValue.classList.add('value');
-  headerLibraryValueElement = headerLibraryValue;
-  const headerLibraryIcon = iconsManager.get('main', 'chevronDown');
-  const headerLibrary = document.createElement('div');
-  headerLibrary.classList.add('library');
-  headerLibrary.addEventListener('click', () => expandLibrarySelectorTooltip());
-  headerLibrary.appendChild(headerLibraryTitle);
-  headerLibrary.appendChild(headerLibraryTitlePoint);
-  headerLibrary.appendChild(headerLibraryValue);
-  headerLibrary.appendChild(headerLibraryIcon);
-  headerLibraryElement = headerLibrary;
+  const libraryElement = getLibraryElement();
+  headerLibraryElement = libraryElement.element;
+  headerLibraryValueElement = libraryElement.value;
 
   const headerTitleContainer = document.createElement('div');
   headerTitleContainer.classList.add('title-container');
   headerTitleContainer.appendChild(headerTitle);
   headerTitleContainer.appendChild(headerSeparator);
-  headerTitleContainer.appendChild(headerLibrary);
+  headerTitleContainer.appendChild(headerLibraryElement);
 
   const fakeHeaderLibraryValue = document.createElement('div');
   fakeHeaderLibraryValue.classList.add('fake-title');
@@ -170,7 +156,7 @@ export function updateCompassExpandedState(state) {
 function appendTitleUpdateOnActiveTabUpdate() {
   onChangeListenerInstance.addListener({
     callback: (id) => {
-      hasSelectedTab = id != null;
+      selectedTabID = id;
 
       if (headerLibraryValueElement.textContent === id) {
         return;
@@ -205,7 +191,7 @@ function appendTitleUpdateOnActiveTabUpdate() {
   });
 }
 
-function expandLibrarySelectorTooltip() {
+function expandLibrarySelectorTooltip(container) {
   requestAnimationFrame(() => {
     config.getAvailableCategories().then((ids) => {
       const selector = document.createElement('div');
@@ -239,7 +225,7 @@ function expandLibrarySelectorTooltip() {
     
       tooltip.init({
         childElement: selector,
-        container: headerLibraryElement
+        container
       });
     });
   });
@@ -264,8 +250,8 @@ function expandSettingsTooltip() {
     mainTitle.textContent = 'Settings';
     selector.appendChild(mainTitle);
 
-    hasSelectedTab && selector.appendChild(createFontSizeRow());
-    hasSelectedTab && selector.appendChild(createSettingsRow(
+    selectedTabID != null && selector.appendChild(createFontSizeRow());
+    selectedTabID != null && selector.appendChild(createSettingsRow(
         'Collapse Long Code',
         null,
         settingsManager.getCollapseLongCodeStatus(),
@@ -293,7 +279,7 @@ function expandSettingsTooltip() {
       ));
     }
 
-    if (debug.isSafeToUseDebugItems() && hasSelectedTab) {
+    if (debug.isSafeToUseDebugItems() && selectedTabID != null) {
       const debugTitle = document.createElement('div');
       debugTitle.classList.add('mini-text', 'has-margin', 'align-left');
       debugTitle.textContent = 'DEBUG';
@@ -457,6 +443,33 @@ function createSettingsRow(title, description, status, callback, hasSwitch = tru
   return settingRow;
 }
 
+export function getLibraryElement(isStatic = false) {
+  const headerLibraryTitle = document.createElement('span');
+  headerLibraryTitle.textContent = 'Library';
+  const headerLibraryTitlePoint = document.createElement('span');
+  headerLibraryTitlePoint.classList.add('point');
+  headerLibraryTitlePoint.textContent = ':';
+  const headerLibraryValue = document.createElement('span');
+  headerLibraryValue.classList.add('value');
+  const headerLibraryIcon = iconsManager.get('main', 'chevronDown');
+  const headerLibrary = document.createElement('div');
+  headerLibrary.classList.add('library');
+  headerLibrary.addEventListener('click', () => expandLibrarySelectorTooltip(headerLibrary));
+  headerLibrary.appendChild(headerLibraryTitle);
+  headerLibrary.appendChild(headerLibraryTitlePoint);
+  headerLibrary.appendChild(headerLibraryValue);
+  headerLibrary.appendChild(headerLibraryIcon);
+
+  if (isStatic && selectedTabID != null) {
+    headerLibraryValue.textContent = selectedTabID;
+  }
+
+  return {
+    element: headerLibrary,
+    value: headerLibraryValue
+  };
+}
+
 export function resetData() {
   headerElement = undefined;
   headerMenuElement = undefined;
@@ -466,5 +479,5 @@ export function resetData() {
   headerLibraryValueElement = undefined;
   fakeHeaderLibraryValueElement = undefined;
 
-  hasSelectedTab = false;
+  selectedTabID = undefined;
 }

@@ -12,7 +12,7 @@ body>.popup-container {
 }
 
 body>.popup-container:not(.disappear) {
-  animation: 0.4s appearPopupContainer;
+  animation: 0.2s appearPopupContainer;
 }
 
 @keyframes appearPopupContainer {
@@ -23,7 +23,7 @@ body>.popup-container:not(.disappear) {
 
 body>.popup-container.disappear {
   pointer-events: none;
-  animation: 0.4s disappearPopupContainer;
+  animation: 0.2s disappearPopupContainer;
 }
 
 @keyframes disappearPopupContainer {

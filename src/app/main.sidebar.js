@@ -17,6 +17,7 @@ import * as utils from "./main.utils.js";
 import ListenerManagerInstance from "./main.listener.js";
 import * as iconsManager from "./main.icons.js";
 import * as config from "./main.config.js";
+import {getLibraryElement} from "./main.header.js";
 
 export const onChangeListenerInstance = new ListenerManagerInstance();
 
@@ -68,6 +69,11 @@ export function loadSidebar(id) {
 
     const content = leftSidebar;
     content.textContent = '';
+
+    const libraryContainer = document.createElement('div');
+    libraryContainer.classList.add('library-container');
+    libraryContainer.appendChild(getLibraryElement(true).element);
+    content.appendChild(libraryContainer);
 
     currentLoadedSidebarId = id;
 
@@ -182,9 +188,7 @@ function handleSidebarGroup(i, basePathForMainFiles, basePathForGroupFiles, grou
 function createSidebarFileElement(id, textContent, contentUri = textContent) {
   const element = document.createElement('div');
   element.classList.add('element');
-  element.addEventListener('click', () => {
-    globalUpdateActiveFile(contentUri);
-  });
+  element.addEventListener('click', () => globalUpdateActiveFile(contentUri));
   element.style.setProperty('--id', id);
   element.textContent = textContent;
 

@@ -224,7 +224,7 @@ body .search-container .search-input-container .close {
 }
 
 body .search-container .search-input-container .close.animate-appear {
-    animation: 0.4s appearSIClose forwards;
+    animation: 0.2s appearSIClose forwards;
 }
 
 @keyframes appearSIClose {
@@ -412,7 +412,7 @@ body .search-container .search-results .list-adapter.is-empty .empty-container {
 
 @media screen and (max-width: 1000px) {
     body .search-container .search-results .list-adapter.is-empty .empty-container.is-first-view {
-        animation: 0.4s appearSIClose forwards;
+        animation: 0.2s appearSIClose forwards;
     }
 
     body .search-container .search-results .list-adapter.is-empty .empty-container.animate-disappear {
@@ -554,7 +554,7 @@ body .search-container .search-results .list-adapter .ref-container .row {
     padding: 8px;
     border-radius: 10px;
     cursor: pointer;
-    transition: 0.4s background;
+    transition: 0.2s background;
 }
 
 body .search-container .search-results .list-adapter .ref-container .row:hover {
@@ -669,7 +669,7 @@ body .search-container .search-results .list-adapter .ref-container .row .page-c
     left: 0;
     width: 100%;
     height: 100%;
-    transition: 0.4s transform, 0.4s filter;
+    transition: 0.2s transform, 0.2s filter;
 }
 
 body .search-container .search-results .list-adapter .ref-container .row .page-container::before {

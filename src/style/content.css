@@ -51,7 +51,7 @@ body .page-container .content.is-loading svg circle {
 }
 
 body .page-container:not(.is-preview) .content:not(.disappear) .page {
-  animation: 0.4s appearPage cubic-bezier(0.42, 0, 0, 0.97);
+  animation: 0.2s appearPage cubic-bezier(0.42, 0, 0, 0.97);
 }
 
 @keyframes appearPage {
@@ -62,7 +62,7 @@ body .page-container:not(.is-preview) .content:not(.disappear) .page {
 }
 
 body .page-container:not(.is-preview) .content.disappear {
-  animation: 0.4s disappearPage cubic-bezier(0.42, 0, 0, 0.97);
+  animation: 0.2s disappearPage cubic-bezier(0.42, 0, 0, 0.97);
 }
 
 @keyframes disappearPage {
@@ -115,7 +115,7 @@ body .page-container .content:not(.is-loading) .go-to-container .go-to {
 }
 
 body .page-container .content:not(.is-loading) .go-to-container .go-to .icon-container {
-  transition: 0.4s margin-right, 0.4s opacity;
+  transition: 0.2s margin-right, 0.2s opacity;
 }
 
 body .page-container .content:not(.is-loading) .go-to-container .go-to .icon-container svg {
@@ -130,7 +130,7 @@ body .page-container .content:not(.is-loading) .go-to-container .go-to:hover .ic
 
 body .page-container .content:not(.is-loading) .go-to-container .go-to .big-title {
   transform: translateY(-7px);
-  transition: 0.4s transform;
+  transition: 0.2s transform;
 }
 
 @media screen and (max-width: 800px) {
@@ -150,7 +150,7 @@ body .page-container .content:not(.is-loading) .go-to-container .go-to .mini-tit
   left: 42px;
   opacity: 0.7;
   white-space: nowrap;
-  transition: 0.4s bottom, 0.4s opacity;
+  transition: 0.2s bottom, 0.2s opacity;
 }
 
 body .page-container .content:not(.is-loading) .go-to-container .go-to:hover .mini-title {
@@ -348,7 +348,7 @@ body .page-container .content:not(.is-loading) .page .external-sh.expanded {
 }
 
 body .page-container .content:not(.is-loading) .page .external-sh.expanded.with-animation {
-  animation: 0.4s expandExternalSh;
+  animation: 0.2s expandExternalSh;
 }
 
 @keyframes expandExternalSh {
@@ -375,7 +375,7 @@ body .page-container .content:not(.is-loading) .page .external-sh > .expandable 
   padding-top: 100px;
   cursor: pointer;
   user-select: none;
-  transition: 0.4s transform;
+  transition: 0.2s transform;
 }
 
 body .page-container .content:not(.is-loading) .page .external-sh.expanded > .expandable {
@@ -437,7 +437,7 @@ body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.
 
 body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating {
   overflow: hidden;
-  animation: 0.4s updateHeight forwards;
+  animation: 0.2s updateHeight forwards;
 }
 
 @keyframes updateHeight {
@@ -457,7 +457,7 @@ body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.
 }
 
 body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating.animating-asback .external-sh.disappearing {
-  animation: 0.4s disappearSy forwards cubic-bezier(1, -0.02, 0, 0.97);
+  animation: 0.2s disappearSy forwards cubic-bezier(1, -0.02, 0, 0.97);
 }
 
 @keyframes disappearSy {
@@ -468,7 +468,7 @@ body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.
 }
 
 body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating.animating-asback .external-sh.appearing {
-  animation: 0.4s appearSy forwards cubic-bezier(1, -0.02, 0, 0.97);
+  animation: 0.2s appearSy forwards cubic-bezier(1, -0.02, 0, 0.97);
 }
 
 @keyframes appearSy {
@@ -479,7 +479,7 @@ body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.
 }
 
 body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating:not(.animating-asback) .external-sh.disappearing {
-  animation: 0.4s disappearSyRev forwards cubic-bezier(1, -0.02, 0, 0.97);
+  animation: 0.2s disappearSyRev forwards cubic-bezier(1, -0.02, 0, 0.97);
 }
 
 @keyframes disappearSyRev {
@@ -490,7 +490,7 @@ body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.
 }
 
 body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating:not(.animating-asback) .external-sh.appearing {
-  animation: 0.4s appearSyRev forwards cubic-bezier(1, -0.02, 0, 0.97);
+  animation: 0.2s appearSyRev forwards cubic-bezier(1, -0.02, 0, 0.97);
 }
 
 @keyframes appearSyRev {
@@ -539,11 +539,11 @@ body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-con
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag.is-clickable {
   cursor: pointer;
-  transition: 0.4s background;
+  transition: 0.2s background;
 }
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag.is-clickable::before {
-  transition: 0.4s background;
+  transition: 0.2s background;
 }
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag.is-clickable:not(.success):hover::before,
@@ -575,7 +575,7 @@ body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-con
 }
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag .icon-container:not(.success) {
-  transition: 0.4s opacity;
+  transition: 0.2s opacity;
 }
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag.success .icon-container:not(.success) {
@@ -584,7 +584,7 @@ body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-con
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag>span {
   z-index: 1;
-  transition: 0.4s opacity;
+  transition: 0.2s opacity;
 }
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag.success span {
@@ -597,7 +597,7 @@ body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-con
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
   opacity: 0;
-  transition: 0.4s opacity;
+  transition: 0.2s opacity;
 }
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag.success .icon-container.success {
@@ -622,7 +622,7 @@ body .page-container .content:not(.is-loading) .page .syntax-highlight.has-mark:
   left: -10px;
   width: calc(100% + 10px);
   background: rgba(13, 17, 23, 0.7);
-  transition: 0.4s transform, 0.2s height, 0.2s top;
+  transition: 0.2s transform, 0.2s height, 0.2s top;
 }
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight.has-mark::before {
@@ -914,7 +914,7 @@ body .page-container .content:not(.is-loading) .page .github-ref {
   position: relative;
   user-select: none;
   box-sizing: border-box;
-  transition: 0.4s gap, 0.4s background;
+  transition: 0.2s gap, 0.2s background;
 }
 
 body .page-container .content:not(.is-loading) .page .github-ref+.github-ref {
@@ -1079,7 +1079,7 @@ body .page-container .content:not(.is-loading) .page .banner .banner-container .
   aspect-ratio: var(--width) / var(--height);
   border-radius: 18px;
   box-sizing: border-box;
-  transition: 0.4s opacity;
+  transition: 0.2s opacity;
 }
 
 body .page-container .content:not(.is-loading) .page .banner .banner-container .main-image:not(.loaded) {
@@ -1202,7 +1202,7 @@ body .page-container .content:not(.is-loading) .page .banner .lib-presentation .
   box-sizing: border-box;
   text-align: center;
   margin-left: auto;
-  transition: 0.4s transform, 0.4s background;
+  transition: 0.2s transform, 0.2s background;
 }
 
 body .page-container .content:not(.is-loading) .page .banner .lib-presentation .update:not([href]) {

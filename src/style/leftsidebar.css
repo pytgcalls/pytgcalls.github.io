@@ -20,7 +20,7 @@ body.as-home .page-container .left-container {
     pointer-events: none;
     z-index: 4;
     background: #080a0e;
-    transition: 0.4s transform cubic-bezier(0.97, -0.02, 0, 0.98);
+    transition: 0.2s transform cubic-bezier(0.97, -0.02, 0, 0.98);
   }
 
   body .page-container .left-container.show {
@@ -83,7 +83,7 @@ body .page-container .left-container .left-sidebar .collapsed:first-child+.micro
 body .page-container .left-container .left-sidebar .elements {
   max-height: 37px;
   overflow: hidden;
-  transition: 0.4s max-height;
+  transition: 0.2s max-height;
 }
 
 body .page-container .left-container .left-sidebar .elements.expanded {
@@ -101,7 +101,7 @@ body .page-container .left-container .left-sidebar .elements .element:first-chil
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: 0.4s transform;
+  transition: 0.2s transform;
 }
 
 body .page-container .left-container .left-sidebar .elements .element:first-child .icon-container svg {
@@ -121,7 +121,7 @@ body .page-container .left-container .left-sidebar .element {
   padding: 6px 6px 6px 15px;
   border-radius: 10px;
   cursor: pointer;
-  transition: 0.4s background, 0.4s transform;
+  transition: 0.2s background, 0.2s transform;
 }
 
 body .page-container .left-container .left-sidebar .element.active {
@@ -151,7 +151,7 @@ body .page-container .left-container .left-sidebar:not(.disappear) .element,
 body .page-container .left-container .left-sidebar:not(.disappear) .microtag {
   transform: translateX(-10%);
   opacity: 0;
-  animation: var(--animation-timing, 0.4s) appearElement forwards calc(var(--id) * var(--animation-delay, 0.03s));
+  animation: var(--animation-timing, 0.2s) appearElement forwards calc(var(--id) * var(--animation-delay, 0.03s));
 }
 
 @keyframes appearElement {
@@ -164,7 +164,7 @@ body .page-container .left-container .left-sidebar:not(.disappear) .microtag {
 body .page-container .left-container .left-sidebar.disappear .element,
 body .page-container .left-container .left-sidebar.disappear .microtag {
   transform: translateX(0);
-  animation: var(--animation-timing, 0.4s) disappearElement forwards calc(var(--id) * var(--animation-delay, 0.03s));
+  animation: var(--animation-timing, 0.2s) disappearElement forwards calc(var(--id) * var(--animation-delay, 0.03s));
 }
 
 @keyframes disappearElement {
@@ -172,4 +172,29 @@ body .page-container .left-container .left-sidebar.disappear .microtag {
     opacity: 0;
     transform: translateX(10%);
   }
+}
+
+body .page-container .left-container .left-sidebar .library-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 15px;
+  transition: 0.2s opacity;
+}
+
+@media screen and (min-width: 1000px) {
+  body .page-container .left-container .left-sidebar .library-container {
+    display: none;
+  }
+}
+
+body .page-container .left-container .left-sidebar .library-container .library {
+  background: rgb(22, 26, 32);
+  padding-inline: 10px;
+  padding-block: 5px;
+  border-radius: 15px;
+}
+
+body .page-container .left-container .left-sidebar.disappear .library-container {
+  opacity: 0;
 }
