@@ -15,56 +15,40 @@
 
 import * as debug from "./main.debug.js";
 import * as config from "./main.config.js";
-import {getForceGithubAPIStatus} from "./main.settings.js";
 
-class ForceGitHubApiReason {
-  static NONE = 0;
-  static REQUEST_FAILED = 1;
-  static USER_CHOICE = 2;
-}
-
-let forceApiReason = ForceGitHubApiReason.NONE;
+let doesLoadViaUserContentWork = true;
 
 let pypiDataPromise;
 let pypiDataResult;
 
 let alternativesList = {};
 
-export async function initRequest(fileName, repoName = 'pytgcalls/docsdata') {
-  const isUsingAnAlternative = !!alternativesList[repoName];
+function initRequest(fileName, repoName = 'pytgcalls/docsdata') {
+  return new Promise((resolve, reject) => {
+    const isUsingAnAlternative = !!alternativesList[repoName];
+    tryToLoadWithUserContent(repoName, fileName).then(resolve).catch(() => {
+      doesLoadViaUserContentWork = false;
 
-  if (!isUsingAnAlternative) {
-    if (getForceGithubAPIStatus()) {
-      forceApiReason = ForceGitHubApiReason.USER_CHOICE;
-    } else if (forceApiReason === ForceGitHubApiReason.USER_CHOICE) {
-      forceApiReason = ForceGitHubApiReason.NONE;
-    }
-  }
+      if (isUsingAnAlternative) {
+        alert("Connection to your custom docsdata server failed! We're using GitHub as fallback. Check your port.");
+      }
 
-  try {
-    return await tryToLoadWithUserContent(repoName, fileName);
-  } catch (e) {
-    forceApiReason = ForceGitHubApiReason.REQUEST_FAILED;
-
-    if (isUsingAnAlternative) {
-      alert("Connection to your custom docsdata server failed! We're using GitHub as fallback. Check your port.");
-    }
-
-    return await tryToLoadWithApi(repoName, fileName);
-  }
+      tryToLoadWithApi(repoName, fileName).then(resolve).catch(reject);
+    });
+  });
 }
 
-export function setAsDebugAlternative(original, alternative) {
+function setAsDebugAlternative(original, alternative) {
   if (!debug.isSafeToUseDebugItems()) {
     return;
   }
 
   alternativesList[original] = alternative;
-  forceApiReason = ForceGitHubApiReason.NONE;
+  doesLoadViaUserContentWork = true;
 }
 
- function tryToLoadWithUserContent(repoName, fileName) {
-  if (forceApiReason !== ForceGitHubApiReason.NONE) {
+function tryToLoadWithUserContent(repoName, fileName) {
+  if (!doesLoadViaUserContentWork) {
     return Promise.reject('Ignoring githubusercontent as it isn\'t available');
   } else {
     return new Promise((resolve, reject) => {
@@ -112,10 +96,10 @@ function tryToLoadWithApi(repoName, fileName) {
   });
 }
 
-export function retrievePackageData() {
-  if (pypiDataResult != null) {
+function retrievePackageData() {
+  if (typeof pypiDataResult != 'undefined') {
     return Promise.resolve(pypiDataResult);
-  } else if (pypiDataPromise != null) {
+  } else if (typeof pypiDataPromise != 'undefined') {
     return pypiDataPromise;
   } else {
     pypiDataPromise = new Promise((resolve, reject) => {
@@ -147,3 +131,9 @@ export function retrievePackageData() {
     return pypiDataPromise;
   }
 }
+
+export {
+  initRequest,
+  setAsDebugAlternative,
+  retrievePackageData
+};

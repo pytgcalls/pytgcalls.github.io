@@ -19,7 +19,7 @@ import ListenerManagerInstance from "./main.listener.js";
 import * as homePage from "./main.home.js";
 import * as sourceParser from "./main.parser.js";
 
-export const onVisibilityUpdateListenerInstance = new ListenerManagerInstance();
+const onVisibilityUpdateListenerInstance = new ListenerManagerInstance();
 
 let containerElement;
 
@@ -28,7 +28,7 @@ let currentVscTimeout;
 let rightCodeFilesListElement;
 let rightCodeHighlightElement;
 
-export function getElement() {
+function getElement() {
   const container = document.createElement('div');
   container.classList.add('home-container');
 
@@ -40,24 +40,18 @@ export function getElement() {
   return container;
 }
 
-export function show() {
+function show() {
   onVisibilityUpdateListenerInstance.callAllListeners(true);
   composeContainer();
 }
 
-export function isVisible() {
-  return containerElement != null && containerElement.hasChildNodes();
-}
-
-export function hide() {
+function hide() {
   containerElement.textContent = '';
   onVisibilityUpdateListenerInstance.callAllListeners(false);
 
-  if (currentVscTimeout != null) {
+  if (typeof currentVscTimeout != 'undefined') {
     clearTimeout(currentVscTimeout);
   }
-
-  resetData();
 }
 
 function composeContainer() {
@@ -821,7 +815,7 @@ function composeFooter() {
   return fragment;
 }
 
-export function resetData() {
+function resetData() {
   containerElement = undefined;
 
   currentVscTimeout = undefined;
@@ -829,3 +823,11 @@ export function resetData() {
   rightCodeFilesListElement = undefined;
   rightCodeHighlightElement = undefined;
 }
+
+export {
+  getElement,
+  show,
+  hide,
+  resetData,
+  onVisibilityUpdateListenerInstance
+};

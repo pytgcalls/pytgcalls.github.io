@@ -18,33 +18,34 @@ import * as debug from "./main.debug.js";
 
 let precachedConfig;
 
-export async function loadConfig() {
+function loadConfig() {
   if (isConfigReady()) {
-    return precachedConfig;
+    return Promise.resolve(precachedConfig);
   } else {
-    try {
-      return precachedConfig = new DOMParser().parseFromString(
-          await requestsManager.initRequest('config.xml'),
-          'application/xml'
-      );
-    } catch (e) {
-      alert("This documentation isn't available in your country");
-    }
+    return new Promise((resolve) => {
+      const configPromise = requestsManager.initRequest('config.xml');
+
+      configPromise.then((response) => {
+        precachedConfig = response;
+        resolve(response);
+      });
+
+      configPromise.catch(() => {
+        alert("This documentation isn't available in your country");
+      });
+    });
   }
 }
 
-export function setAsConfig(text) {
+function setAsConfig(text) {
   if (!debug.isSafeToUseDebugItems()) {
     return;
   }
 
-  precachedConfig = new DOMParser().parseFromString(
-      text,
-      'application/xml'
-  );
+  precachedConfig = text;
 }
 
-export function resetConfigByDebug() {
+function resetConfigByDebug() {
   if (!debug.isSafeToUseDebugItems()) {
     return;
   }
@@ -52,143 +53,269 @@ export function resetConfigByDebug() {
   precachedConfig = undefined;
 }
 
-export function isConfigReady() {
-  return precachedConfig != null;
+function isConfigReady() {
+  return typeof precachedConfig != 'undefined';
 }
 
-export async function getTeamMembers() {
-  return (await loadConfig()).querySelectorAll('team > member');
+function getTeamMembers() {
+  return new Promise((resolve) => {
+    loadConfig().then((config) => {
+      const domHelper = new DOMParser();
+      const dom = domHelper.parseFromString(config, 'application/xml');
+      const teamMembers = dom.querySelectorAll('team > member');
+
+      resolve(teamMembers);
+    });
+  });
 }
 
-export async function getOwnerData() {
-  return (await loadConfig()).querySelector('homepage-config > team > member[owner="true"]');
+function getOwnerData() {
+  return new Promise((resolve) => {
+    loadConfig().then((config) => {
+      const domHelper = new DOMParser();
+      const dom = domHelper.parseFromString(config, 'application/xml');
+      const teamMember = dom.querySelector('homepage-config > team > member[owner="true"]');
+
+      resolve(teamMember);
+    });
+  });
 }
 
-export async function getOwnerCitation() {
-  return (await loadConfig()).querySelector('homepage-config > citation > value');
+function getOwnerCitation() {
+  return new Promise((resolve) => {
+    loadConfig().then((config) => {
+      const domHelper = new DOMParser();
+      const dom = domHelper.parseFromString(config, 'application/xml');
+      const citationValue = dom.querySelector('homepage-config > citation > value');
+
+      resolve(citationValue);
+    });
+  });
 }
 
-export async function getNumericPresPoints() {
-  return (await loadConfig()).querySelectorAll('homepage-config > numeric-pres-points > item');
+function getNumericPresPoints() {
+  return new Promise((resolve) => {
+    loadConfig().then((config) => {
+      const domHelper = new DOMParser();
+      const dom = domHelper.parseFromString(config, 'application/xml');
+      const presentationPoints = dom.querySelectorAll('homepage-config > numeric-pres-points > item');
+
+      resolve(presentationPoints);
+    });
+  });
 }
 
-export async function getHomePagePresFiles() {
-  return (await loadConfig()).querySelectorAll('homepage-config > pres-items > file');
+function getHomePagePresFiles() {
+  return new Promise((resolve) => {
+    loadConfig().then((config) => {
+      const domHelper = new DOMParser();
+      const dom = domHelper.parseFromString(config, 'application/xml');
+      const presFiles = dom.querySelectorAll('homepage-config > pres-items > file');
+
+      resolve(presFiles);
+    });
+  });
 }
 
-export async function getFooterCategories() {
-  return (await loadConfig()).querySelectorAll('homepage-config > footer-links > category');
+function getFooterCategories() {
+  return new Promise((resolve) => {
+    loadConfig().then((config) => {
+      const domHelper = new DOMParser();
+      const dom = domHelper.parseFromString(config, 'application/xml');
+      const presFiles = dom.querySelectorAll('homepage-config > footer-links > category');
+
+      resolve(presFiles);
+    });
+  });
 }
 
-export async function getFooterContributionLink() {
-  return (await loadConfig()).querySelector('homepage-config > footer-links > contribution-link');
+function getFooterContributionLink() {
+  return new Promise((resolve) => {
+    loadConfig().then((config) => {
+      const domHelper = new DOMParser();
+      const dom = domHelper.parseFromString(config, 'application/xml');
+      const presFiles = dom.querySelector('homepage-config > footer-links > contribution-link');
+
+      resolve(presFiles);
+    });
+  });
 }
 
-export async function getFooterDescription() {
-  return (await loadConfig()).querySelector('homepage-config > footer-links > dsc');
+function getFooterDescription() {
+  return new Promise((resolve) => {
+    loadConfig().then((config) => {
+      const domHelper = new DOMParser();
+      const dom = domHelper.parseFromString(config, 'application/xml');
+      const presFiles = dom.querySelector('homepage-config > footer-links > dsc');
+
+      resolve(presFiles);
+    });
+  });
 }
 
-export async function getAvailableCategories() {
-  return [...(await loadConfig()).querySelectorAll('config > files-list')].filter(
-      (x) => x.hasAttribute('id') && x.hasAttribute('description')
-  );
-}
+function getAvailableCategories() {
+  return new Promise((resolve) => {
+    loadConfig().then((config) => {
+      const domHelper = new DOMParser();
+      const dom = domHelper.parseFromString(config, 'application/xml');
+      const filesListElements = dom.querySelectorAll('config > files-list');
 
-export async function getTheNextFileAfter(fileName) {
-  const filesListElementsGlobal = (await loadConfig()).querySelectorAll('config > files-list file');
-
-  let detectedId;
-  for (const file of filesListElementsGlobal) {
-    if (getFullPathByFileElement(file) === fileName) {
-      detectedId = file.parentElement;
-
-      if (detectedId.tagName.toUpperCase() === 'GROUP') {
-        detectedId = detectedId.parentElement;
-      }
-
-      break;
-    }
-  }
-
-  if (detectedId == null) {
-    return Promise.reject('detected id not found');
-  } else {
-    const filesListElements = detectedId.querySelectorAll('file');
-
-    let nextFile, previousFile, previousStateFile;
-    let found = false;
-    for (const file of filesListElements) {
-      const finalText = getFullPathByFileElement(file);
-
-      if (nextFile == null) {
-        if (found) {
-          nextFile = finalText;
-        } else if (finalText === fileName) {
-          found = true;
+      let finalList = [];
+      for (const element of filesListElements) {
+        if (element.hasAttribute('id')) {
+          finalList.push(element.getAttribute('id'));
         }
       }
 
-      if (previousFile == null) {
-        if (finalText === fileName && previousStateFile != null) {
-          previousFile = previousStateFile;
+      resolve(finalList);
+    });
+  });
+}
+
+function getAllFilesListFiles() {
+  return new Promise((resolve) => {
+    loadConfig().then((config) => {
+      const domHelper = new DOMParser();
+      const dom = domHelper.parseFromString(config, 'application/xml');
+      const filesListElements = dom.querySelectorAll('config > files-list file');
+
+      let finalList = [];
+      for (const element of filesListElements) {
+        finalList.push(getFullPathByFileElement(element));
+      }
+
+      resolve(finalList);
+    });
+  });
+}
+
+function getTheNextFileAfter(fileName) {
+  return new Promise((resolve, reject) => {
+    loadConfig().then((config) => {
+      const domHelper = new DOMParser();
+      const dom = domHelper.parseFromString(config, 'application/xml');
+      const filesListElementsGlobal = dom.querySelectorAll('config > files-list file');
+
+      let detectedId;
+      for (const file of filesListElementsGlobal) {
+        if (getFullPathByFileElement(file) === fileName) {
+          detectedId = file.parentElement;
+
+          if (detectedId.tagName.toUpperCase() === 'GROUP') {
+            detectedId = detectedId.parentElement;
+          }
+
+          break;
+        }
+      }
+
+      if (typeof detectedId == 'undefined') {
+        reject('detected id not found');
+      } else {
+        const filesListElements = detectedId.querySelectorAll('file');
+
+        let nextFile, previousFile, previousStateFile;
+        let found = false;
+        for (const file of filesListElements) {
+          const finalText = getFullPathByFileElement(file);
+
+          if (typeof nextFile == 'undefined') {
+            if (found) {
+              nextFile = finalText;
+            } else if (finalText === fileName) {
+              found = true;
+            }
+          }
+
+          if (typeof previousFile == 'undefined') {
+            if (finalText === fileName && typeof previousStateFile != 'undefined') {
+              previousFile = previousStateFile;
+            } else {
+              previousStateFile = finalText;
+            }
+          }
+        }
+
+        if (typeof nextFile == 'undefined' && typeof previousFile == 'undefined') {
+          reject('path not found');
         } else {
-          previousStateFile = finalText;
+          resolve({
+            previousFile,
+            nextFile,
+            basePath: detectedId.hasAttribute('basepath') ? detectedId.getAttribute('basepath') : ''
+          });
         }
       }
-    }
-
-    if (nextFile == null && previousFile == null) {
-      return Promise.reject('path not found');
-    } else {
-      return {
-        previousFile,
-        nextFile,
-        basePath: detectedId.hasAttribute('basepath') ? detectedId.getAttribute('basepath') : ''
-      };
-    }
-  }
+    });
+  });
 }
 
-export async function getAllFilesListFilesById(id) {
-  const filesListElements = (await loadConfig()).querySelectorAll('config > files-list[id="' + id + '"] file');
-  let finalList = [];
-  for (const element of filesListElements) {
-    let finalText = '';
-    if (element.parentElement.hasAttribute('basepath')) {
-      finalText = element.parentElement.getAttribute('basepath');
-    }
-    finalText += element.textContent;
-    finalList.push(finalText);
-  }
-  return finalList;
+function getAllFilesListFilesById(id) {
+  return new Promise((resolve) => {
+    loadConfig().then((config) => {
+      const domHelper = new DOMParser();
+      const dom = domHelper.parseFromString(config, 'application/xml');
+      const filesListElements = dom.querySelectorAll('config > files-list[id="' + id + '"] file');
+
+      let finalList = [];
+      for (const element of filesListElements) {
+        let finalText = '';
+        if (element.parentElement.hasAttribute('basepath')) {
+          finalText = element.parentElement.getAttribute('basepath');
+        }
+        finalText += element.textContent;
+        finalList.push(finalText);
+      }
+
+      resolve(finalList);
+    });
+  });
 }
 
-export async function getFilesListDefaultFileById(id) {
-  const filesListElement = (await loadConfig()).querySelector('config > files-list[id="' + id + '"]');
+function getFilesListDefaultFileById(id) {
+  return new Promise((resolve) => {
+    loadConfig().then((config) => {
+      const domHelper = new DOMParser();
+      const dom = domHelper.parseFromString(config, 'application/xml');
+      const filesListElement = dom.querySelector('config > files-list[id="' + id + '"]');
 
-  if (filesListElement && filesListElement.hasAttribute('defaultfile')) {
-    let fullPath = filesListElement.getAttribute('defaultfile');
-    if (filesListElement.hasAttribute('basepath')) {
-      fullPath = filesListElement.getAttribute('basepath') + fullPath;
-    }
+      if (filesListElement && filesListElement.hasAttribute('defaultfile')) {
+        let fullPath = filesListElement.getAttribute('defaultfile');
+        if (filesListElement.hasAttribute('basepath')) {
+          fullPath = filesListElement.getAttribute('basepath') + fullPath;
+        }
 
-    return fullPath;
-  }
+        resolve(fullPath);
+      } else {
+        resolve();
+      }
+    });
+  });
 }
 
-export async function getFilesListInstanceById(id) {
-  return (await loadConfig()).querySelector('config > files-list[id="' + id + '"]');
+function getFilesListInstanceById(id) {
+  return new Promise((resolve) => {
+    loadConfig().then((config) => {
+      const domHelper = new DOMParser();
+      const dom = domHelper.parseFromString(config, 'application/xml');
+      const filesListElements = dom.querySelector('config > files-list[id="' + id + '"]');
+
+      resolve(filesListElements);
+    });
+  });
 }
 
-export function getOptionValueByIdSync(id) {
+function getOptionValueByIdSync(id) {
   if (isConfigReady()) {
-    return precachedConfig.querySelector('config > option[id="' + id + '"]');
+    const domHelper = new DOMParser();
+    const dom = domHelper.parseFromString(precachedConfig, 'application/xml');
+    return dom.querySelector('config > option[id="' + id + '"]');
   }
 
   return null;
 }
 
-export function isComplexOptionValueByIdSync(id) {
+function isComplexOptionValueByIdSync(id) {
   if (isConfigReady()) {
     const child = getOptionValueByIdSync(id);
     if (child) {
@@ -199,7 +326,7 @@ export function isComplexOptionValueByIdSync(id) {
   return false;
 }
 
-export function getFullPathByFileElement(file) {
+function getFullPathByFileElement(file) {
   let finalText = '';
   if (file.parentElement.hasAttribute('basepath')) {
     finalText = file.parentElement.getAttribute('basepath');
@@ -208,7 +335,38 @@ export function getFullPathByFileElement(file) {
   return finalText;
 }
 
-export async function getRedirectDataForPath(path) {
-  const redirectTo = (await loadConfig()).querySelector('config > redirects > redirect[path="' + path.toLowerCase() + '"]');
-  return redirectTo && redirectTo.textContent;
+function getRedirectDataForPath(path) {
+  return new Promise((resolve) => {
+    loadConfig().then((config) => {
+      const domHelper = new DOMParser();
+      const dom = domHelper.parseFromString(config, 'application/xml');
+      const redirectTo = dom.querySelector('config > redirects > redirect[path="' + path.toLowerCase() + '"]');
+
+      resolve(redirectTo && redirectTo.textContent);
+    });
+  });
 }
+
+export {
+    loadConfig,
+    setAsConfig,
+    resetConfigByDebug,
+    isConfigReady,
+    getTeamMembers,
+    getOwnerData,
+    getOwnerCitation,
+    getNumericPresPoints,
+    getHomePagePresFiles,
+    getFooterCategories,
+    getFooterContributionLink,
+    getFooterDescription,
+    getAvailableCategories,
+    getAllFilesListFiles,
+    getTheNextFileAfter,
+    getAllFilesListFilesById,
+    getFilesListDefaultFileById,
+    getFilesListInstanceById,
+    getOptionValueByIdSync,
+    isComplexOptionValueByIdSync,
+    getRedirectDataForPath
+};

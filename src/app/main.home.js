@@ -20,14 +20,12 @@ import * as headerInstance from "./main.header.js";
 import * as config from "./main.config.js";
 import * as utils from "./main.utils.js";
 import * as debug from "./main.debug.js";
-import * as searchManager from "./main.search.js";
 import ListenerManagerInstance from "./main.listener.js";
-import {closeAdaptedTooltips} from "./main.tooltip.js";
 
-export const onChangeFavoriteSyntaxTab = new ListenerManagerInstance();
-export const onChangeFavoriteSyntaxTabAnimationState = new ListenerManagerInstance();
+const onChangeFavoriteSyntaxTab = new ListenerManagerInstance();
+const onChangeFavoriteSyntaxTabAnimationState = new ListenerManagerInstance();
 
-export function init(pathName) {
+function init(pathName) {
   resetChildrenData();
 
   const syntaxTabData = localStorage.getItem('currentTabDataIndexes');
@@ -55,7 +53,9 @@ export function init(pathName) {
   requestAnimationFrame(() => {
     if (typeof pathName === 'string' && pathName.length) {
       chooseRightTab(pathName, window.location.hash).then((found) => {
-        if (!found) {
+        if (found) {
+          headerInstance.highlightTabsForSelection();
+        } else {
           forceSwitchToHome();
         }
       });
@@ -68,17 +68,32 @@ export function init(pathName) {
     callback: (state) => {
       document.body.classList.toggle('as-home', state);
       document.body.classList.remove('expanded');
+
+      if (state) {
+        headerInstance.highlightTabsForIntroduction();
+      }
+    }
+  });
+
+  headerInstance.onTabsVisibilityUpdateListenerInstance.addListener({
+    callback: (state) => {
+      if (state) {
+        headerInstance.updateSidebarMobileVisibilityState(false);
+        headerInstance.updateCompassExpandedState(false);
+        sidebarInstance.updateMobileVisibilityState(false);
+        contentInstance.updateMobileSectionsVisibilityState(false);
+      }
     }
   });
 
   headerInstance.onChangeListenerInstance.addListener({
     callback: (id) => {
-      introductionInstance.isVisible() && introductionInstance.hide();
-
+      introductionInstance.hide();
       const promise = sidebarInstance.loadSidebar(id);
       sidebarInstance.focusOnSidebar();
       headerInstance.updateCompassVisibilityState(false);
       headerInstance.updateCompassExpandedState(false);
+      headerInstance.updateTabsMobileVisibility(false);
       contentInstance.clearBoard();
 
       config.getFilesListDefaultFileById(id).then((file) => {
@@ -95,12 +110,12 @@ export function init(pathName) {
         const state = sidebarInstance.updateMobileVisibilityState();
         headerInstance.updateSidebarMobileVisibilityState(state);
         headerInstance.updateCompassExpandedState(false);
+        headerInstance.updateTabsMobileVisibility(false);
         contentInstance.updateMobileSectionsVisibilityState(false);
       } else {
         sidebarInstance.updateDesktopCollapsedState(false);
         headerInstance.updateSidebarDesktopExpandedState(false);
       }
-      closeAdaptedTooltips();
     }
   });
 
@@ -110,44 +125,23 @@ export function init(pathName) {
       headerInstance.updateCompassExpandedState(state);
       sidebarInstance.updateMobileVisibilityState(false);
       headerInstance.updateSidebarMobileVisibilityState(false);
-      closeAdaptedTooltips();
+      headerInstance.updateTabsMobileVisibility(false);
     }
   });
 
-  headerInstance.onSettingsUpdateListenerInstance.addListener({
-    callback: (opened) => {
-      if (opened) {
-        contentInstance.updateMobileSectionsVisibilityState(false);
-        headerInstance.updateCompassExpandedState(false);
-        sidebarInstance.updateMobileVisibilityState(false);
-        headerInstance.updateSidebarMobileVisibilityState(false);
-      }
-    }
-  });
-
-  searchManager.onSearchOpenListenerInstance.addListener({
-    callback: (opened) => {
-      if (opened) {
-        contentInstance.updateMobileSectionsVisibilityState(false);
-        headerInstance.updateCompassExpandedState(false);
-        sidebarInstance.updateMobileVisibilityState(false);
-        headerInstance.updateSidebarMobileVisibilityState(false);
-        closeAdaptedTooltips();
-      }
+  sidebarInstance.onCollapsedListenerInstance.addListener({
+    callback: (isCollapsed) => {
+      headerInstance.updateSidebarDesktopExpandedState(isCollapsed);
     }
   });
 
   sidebarInstance.onChangeListenerInstance.addListener({
-    callback: (pathName) => {
-      if (!pathName.startsWith('/')) {
-        pathName = '/' + pathName;
-      }
-
-      chooseRightTab(pathName, '', false).then((found) => {
-        if (!found) {
-          forceSwitchToHome();
-        }
-      });
+    callback: (file) => {
+      headerInstance.updateSidebarMobileVisibilityState(false);
+      headerInstance.updateCompassVisibilityState(true);
+      headerInstance.updateCompassExpandedState(false);
+      sidebarInstance.updateMobileVisibilityState(false);
+      contentInstance.loadFile(file);
     }
   });
 
@@ -159,7 +153,7 @@ export function init(pathName) {
   });
 }
 
-export function handleAsRedirect(pathName, avoidPushingState = false) {
+function handleAsRedirect(pathName, avoidPushingState = false) {
   if (typeof pathName === 'string') {
     if (!pathName.startsWith('/')) {
       pathName = '/' + pathName;
@@ -179,21 +173,25 @@ export function handleAsRedirect(pathName, avoidPushingState = false) {
   }
 }
 
-async function chooseRightTab(pathName, hash, avoidPushingState = false) {
-  let ids = await config.getAvailableCategories();
-  let found = false;
-  for (const category of ids) {
-    const id = category.getAttribute('id').trim();
-    if (decodeURI(pathName).startsWith(utils.parseCategoryUrl(id))) {
-      found = true;
+function chooseRightTab(pathName, hash, avoidPushingState = false) {
+  return new Promise((resolve) => {
+    config.getAvailableCategories().then((ids) => {
+      let found = false;
 
-      headerInstance.updateActiveTab(id);
-      const promise = sidebarInstance.loadSidebar(id);
+      for (const id of ids) {
+        if (decodeURI(pathName).startsWith(utils.parseCategoryUrl(id))) {
+          found = true;
 
-      tryToIndexFilePathFromId(id, pathName, hash, promise, avoidPushingState);
-    }
-  }
-  return found;
+          headerInstance.updateActiveTab(id);
+          const promise = sidebarInstance.loadSidebar(id);
+
+          tryToIndexFilePathFromId(id, pathName, hash, promise, avoidPushingState);
+        }
+      }
+
+      resolve(found);
+    });
+  });
 }
 
 function forceSwitchToHome(avoidPushingState = false) {
@@ -201,7 +199,7 @@ function forceSwitchToHome(avoidPushingState = false) {
 
   if (!avoidPushingState) {
     window.history.pushState('', '', '/');
-    headerInstance.onChangeListenerInstance.callInternalListeners(null);
+    headerInstance.onChangeListenerInstance.callInternalListeners("Documentation");
   }
 }
 
@@ -210,7 +208,7 @@ function tryToIndexFilePathFromId(id, pathName, hash, updateActiveFilePromise, a
     let found = false;
 
     for (const file of files) {
-      if (utils.parseCategoryUrl(file) === utils.parseCategoryUrl(decodeURI(pathName))) {
+      if (utils.parseCategoryUrl(file) === decodeURI(pathName)) {
         found = true;
         updateLoadedFile(file, hash, updateActiveFilePromise, avoidPushingState);
         break;
@@ -234,16 +232,14 @@ function updateLoadedFile(file, hash, updateActiveFilePromise, avoidPushingState
     });
   });
 
-  introductionInstance.isVisible() && introductionInstance.hide();
   headerInstance.updateCompassVisibilityState(true);
   headerInstance.updateCompassExpandedState(false);
-  headerInstance.updateSidebarMobileVisibilityState(false);
+  headerInstance.updateTabsMobileVisibility(false);
   sidebarInstance.updateMobileVisibilityState(false);
-  // noinspection JSIgnoredPromiseFromCall
   contentInstance.loadFile(file, hash, avoidPushingState);
 }
 
-export function handleCustomCodeInsert(data) {
+function handleCustomCodeInsert(data) {
   if (!debug.isSafeToUseDebugItems()) {
     return;
   }
@@ -256,5 +252,12 @@ function resetChildrenData() {
   contentInstance.resetData();
   introductionInstance.resetData();
   headerInstance.resetData();
-  searchManager.resetData();
 }
+
+export {
+  init,
+  handleAsRedirect,
+  handleCustomCodeInsert,
+  onChangeFavoriteSyntaxTab,
+  onChangeFavoriteSyntaxTabAnimationState,
+};

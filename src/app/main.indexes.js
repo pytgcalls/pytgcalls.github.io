@@ -13,49 +13,71 @@
  *  With <3 by @kuogi (and the fox!)
  */
 
+import * as config from "./main.config.js";
 import * as requestsManager from "./main.requests.js";
+import * as sourceParser from "./main.parser.js";
 import * as debug from "./main.debug.js";
-import {tryToReduceTags} from "./main.parser.js";
-import * as syntaxManager from "./main.syntax.js";
 
-const AVAILABLE_TYPES = [
-  'method', 'class', 'enum', 'type'
-];
-
-const SUPPORTED_ELEMENTS = [
-    syntaxManager.TEXT, syntaxManager.H1, syntaxManager.H2, syntaxManager.H3,
-    syntaxManager.CATEGORY_TITLE, 'SUBTITLE', syntaxManager.SUBTEXT
-];
-
-export let hasIndexed = false;
-export let isCurrentlyIndexing = false;
+let hasIndexed = false;
+let isCurrentlyIndexing = false;
 let indexes = {};
 let indexes_caching = {};
 
-export async function initFull() {
+function initFull(callback) {
   if (hasIndexed) {
     return Promise.resolve();
   } else if (isCurrentlyIndexing) {
     return Promise.reject();
   }
 
-  isCurrentlyIndexing = true;
-  const data = JSON.parse(await requestsManager.initRequest('map.json'));
-  for (const file in data) {
-    let indexFileId = file;
-    if (file.startsWith('/')) {
-      indexFileId = file.slice(1);
-    }
+  const hasCallback = typeof callback === 'function';
 
-    indexes[indexFileId] = parseFile(file, data[file]);
-    indexes_caching[indexFileId] = data[file];
-  }
-  isCurrentlyIndexing = false;
-  hasIndexed = true;
-  return Promise.resolve();
+  return new Promise((resolve) => {
+    isCurrentlyIndexing = true;
+    hasCallback && callback(0, 0);
+
+    let i = 0;
+
+    config.getAllFilesListFiles().then((files) => {
+      hasCallback && callback(0, files.length);
+
+      const handleIndexingWithResponse = (i, file, response, status) => {
+        hasCallback && callback(i, files.length);
+
+        if (status === 200) {
+          indexes[file] = sourceParser.handleSearchIndexByText(response);
+          indexes_caching[file] = response;
+        }
+
+        if (i === files.length) {
+          isCurrentlyIndexing = false;
+          hasIndexed = true;
+          resolve();
+        }
+      };
+
+      // TODO: wait for animationend event
+      setTimeout(() => {
+        for (const file of files) {
+          if (indexes_caching[file]) {
+            i++;
+            handleIndexingWithResponse(i, file, indexes_caching[file], 200);
+          } else {
+            requestsManager.initRequest(file).then((data) => {
+              i++;
+              handleIndexingWithResponse(i, file, data, 200);
+            }).catch(() => {
+              i++;
+              handleIndexingWithResponse(i, file, undefined, 500);
+            });
+          }
+        }
+      }, 700);
+    });
+  });
 }
 
-export function clearFullFromDebug() {
+function clearFullFromDebug() {
   if (!debug.isSafeToUseDebugItems()) {
     return;
   }
@@ -66,137 +88,24 @@ export function clearFullFromDebug() {
   indexes_caching = {};
 }
 
-export function getIndexedValue(file) {
+function getIndexedValue(file) {
   return indexes[file];
 }
 
-export function getFullIndexedValue(file) {
+function getFullIndexedValue(file) {
   return indexes_caching[file];
 }
 
-export function saveAsFullIndexedValue(file, data) {
-  indexes[file] = parseFile(file, data);
+function saveAsFullIndexedValue(file, data) {
   indexes_caching[file] = data;
 }
 
-function composeOptimizedPageQuery() {
-  let pageQueryComponents = ['page [src]'];
-
-  for (const element of SUPPORTED_ELEMENTS) {
-    pageQueryComponents.push('page '+element.toLowerCase());
-  }
-
-  return pageQueryComponents.join(', ');
-}
-
-function parseFile(filePath, fileContent) {
-  let fileIndexes = [];
-
-  try {
-    const domHelper = new DOMParser();
-    const dom = domHelper.parseFromString(fileContent, 'application/xml');
-
-    tryToReduceTags(dom.documentElement);
-
-    const classyElements = dom.querySelectorAll(composeOptimizedPageQuery());
-
-    for (const element of classyElements) {
-      if (element.hasAttribute('src')) {
-        const elementType = element.getAttribute('src');
-        if (AVAILABLE_TYPES.includes(elementType)) {
-          fileIndexes.push(new FileIndex(elementType, element.textContent));
-        }
-      }
-
-      if (SUPPORTED_ELEMENTS.includes(element.tagName.toUpperCase())) {
-        const elementIndex = new ElementIndex(element);
-
-        if (element.previousElementSibling instanceof Element && SUPPORTED_ELEMENTS.includes(element.previousElementSibling.tagName.toUpperCase())) {
-          const preChunk = element.previousElementSibling;
-          elementIndex.prependToChunk(preChunk);
-        }
-
-        if (element.nextElementSibling instanceof Element && SUPPORTED_ELEMENTS.includes(element.nextElementSibling.tagName.toUpperCase())) {
-          const postChunk = element.nextElementSibling;
-          elementIndex.addToChunk(postChunk);
-        }
-
-        fileIndexes.push(elementIndex);
-      }
-    }
-  } catch (e) {
-    console.error(e);
-  }
-
-  return fileIndexes;
-}
-
-export function getAllIndexedFiles() {
-  return Object.keys(indexes);
-}
-
-export class ElementIndex {
-  #chunk;
-  #main;
-
-  constructor(element) {
-    this.#chunk = [element];
-    this.#main = element;
-  }
-
-  static cloneFrom(mainElement, target) {
-    if (!target instanceof ElementIndex) {
-      throw new Error('ElementIndex.cloneFrom: elementToClone is not an instance of ElementIndex');
-    }
-    const newElement = new ElementIndex(mainElement);
-
-    let foundMainElement = false;
-    for (let child of target.chunk) {
-      if (child === target.mainElement) {
-        foundMainElement = true;
-      } else if (foundMainElement) {
-        newElement.addToChunk(child.cloneNode(true));
-      } else {
-        newElement.prependToChunk(child.cloneNode(true));
-      }
-    }
-    return newElement;
-  }
-
-  get mainElement() {
-    return this.#main;
-  }
-
-  get chunk() {
-    return this.#chunk;
-  }
-
-  addToChunk(element) {
-    this.#chunk.push(element);
-  }
-
-  prependToChunk(element) {
-    this.#chunk = [
-        element,
-        ...this.#chunk
-    ];
-  }
-}
-
-export class FileIndex {
-  #type;
-  #name;
-
-  constructor(type, name) {
-    this.#type = type;
-    this.#name = name;
-  }
-
-  get type() {
-    return this.#type;
-  }
-
-  get name() {
-    return this.#name;
-  }
+export {
+  hasIndexed,
+  isCurrentlyIndexing,
+  initFull,
+  clearFullFromDebug,
+  getIndexedValue,
+  getFullIndexedValue,
+  saveAsFullIndexedValue,
 }

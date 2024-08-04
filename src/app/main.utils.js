@@ -13,7 +13,7 @@
  *  With <3 by @kuogi (and the fox!)
  */
 
-export function createLoadingItem(size = 100) {
+function createLoadingItem(size = 100) {
   const circleItem = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
   circleItem.setAttributeNS(null, 'cx', '50%');
   circleItem.setAttributeNS(null, 'cy', '50%');
@@ -26,7 +26,7 @@ export function createLoadingItem(size = 100) {
   return loaderSvg;
 }
 
-export function generateSectionRefByTextContent(textContent) {
+function generateSectionRefByTextContent(textContent) {
   const alphabet = Array.from(Array(26), (_, i) => String.fromCharCode(i + 65));
   const numbers = Array.from(Array(10), (_, i) => i.toString());
   const chars = ['-', '+'];
@@ -47,7 +47,7 @@ export function generateSectionRefByTextContent(textContent) {
   }
 }
 
-export function parseCategoryName(fileName) {
+function parseCategoryName(fileName) {
   if (fileName.endsWith('.xml')) {
     fileName = fileName.slice(0, -4);
   }
@@ -59,11 +59,11 @@ export function parseCategoryName(fileName) {
   return fileName;
 }
 
-export function getCategoryFileName(fileName) {
+function getCategoryFileName(fileName) {
   return this.parseCategoryName(fileName).split('/').reverse()[0];
 }
 
-export function parseCategoryUrl(fileName) {
+function parseCategoryUrl(fileName) {
   if (fileName.endsWith('.xml')) {
     fileName = fileName.slice(0, -4);
   }
@@ -79,13 +79,33 @@ export function parseCategoryUrl(fileName) {
   return fileName;
 }
 
-export function escapeHTML(text) {
+function splitSearchResult(text, isZeroSplit = false) {
+  if (isZeroSplit) {
+    let newText = text.split("").reverse().join("");
+
+    if (newText.length > 30) {
+      newText = '...' + newText.slice(0, 30);
+    }
+
+    newText = newText.split("").reverse().join("");
+
+    return newText;
+  } else {
+    if (text.length > 30) {
+      text = text.slice(0, 30) + '...';
+    }
+
+    return text;
+  }
+}
+
+function escapeHTML(text) {
   return text.replace(/[\x26\x0A\<>'"]/g, function (r) {
     return "&#" + r.charCodeAt(0) + ";";
   });
 }
 
-export function copyToClipboard(text) {
+function copyToClipboard(text) {
   if (navigator.clipboard) {
     return navigator.clipboard.writeText(text);
   }
@@ -100,11 +120,7 @@ export function copyToClipboard(text) {
     textarea.focus();
     textarea.select();
 
-    // noinspection JSDeprecatedSymbols
     const successful = document.execCommand("copy");
-
-    requestAnimationFrame(() => textarea.remove());
-
     if (successful) {
       return Promise.resolve();
     }
@@ -113,14 +129,13 @@ export function copyToClipboard(text) {
   return Promise.reject();
 }
 
-export function waitForAnimationEnd(element, stopPropagation = false) {
-  return new Promise((resolve) => element.addEventListener('animationend', (e) => {
-    stopPropagation && e.stopPropagation();
-    resolve();
-  }, { once: true }));
-}
-
-export function isElementHidden(element) {
-  const rect = element.getBoundingClientRect();
-  return rect.width === 0 && rect.height === 0 && rect.top === 0 && rect.left === 0;
-}
+export {
+  createLoadingItem,
+  generateSectionRefByTextContent,
+  parseCategoryName,
+  getCategoryFileName,
+  parseCategoryUrl,
+  splitSearchResult,
+  escapeHTML,
+  copyToClipboard
+};
