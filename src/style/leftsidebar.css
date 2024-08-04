@@ -70,6 +70,7 @@ body .page-container .left-container .left-sidebar .microtag {
   font-size: 20px;
   font-weight: 600;
   margin-bottom: 5px;
+  transition: 0.2s filter;
 }
 
 body .page-container .left-container .left-sidebar .microtag:not(:first-child) {
@@ -121,7 +122,7 @@ body .page-container .left-container .left-sidebar .element {
   padding: 6px 6px 6px 15px;
   border-radius: 10px;
   cursor: pointer;
-  transition: 0.2s background, 0.2s transform;
+  transition: 0.2s background, 0.2s transform, 0.2s filter;
 }
 
 body .page-container .left-container .left-sidebar .element.active {
@@ -172,6 +173,11 @@ body .page-container .left-container .left-sidebar.disappear .microtag {
     opacity: 0;
     transform: translateX(10%);
   }
+}
+
+body .page-container .left-container .left-sidebar:has(.library-container .library.focused-tooltip) .microtag,
+body .page-container .left-container .left-sidebar:has(.library-container .library.focused-tooltip) .element {
+  filter: opacity(0.3);
 }
 
 body .page-container .left-container .left-sidebar .library-container {
