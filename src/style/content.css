@@ -8,12 +8,6 @@ body .page-container .content {
   padding: 30px;
 }
 
-body .page-container.is-preview .content {
-  overflow-y: hidden;
-  width: 100%;
-  padding: 20px;
-}
-
 body.as-home .page-container .content {
   display: none;
 }
@@ -50,8 +44,8 @@ body .page-container .content.is-loading svg circle {
   }
 }
 
-body .page-container:not(.is-preview) .content:not(.disappear) .page {
-  animation: 0.2s appearPage cubic-bezier(0.42, 0, 0, 0.97);
+body .page-container .content:not(.disappear) .page {
+  animation: 0.4s appearPage cubic-bezier(0.42, 0, 0, 0.97);
 }
 
 @keyframes appearPage {
@@ -61,8 +55,8 @@ body .page-container:not(.is-preview) .content:not(.disappear) .page {
   }
 }
 
-body .page-container:not(.is-preview) .content.disappear {
-  animation: 0.2s disappearPage cubic-bezier(0.42, 0, 0, 0.97);
+body .page-container .content.disappear {
+  animation: 0.4s disappearPage cubic-bezier(0.42, 0, 0, 0.97);
 }
 
 @keyframes disappearPage {
@@ -115,7 +109,7 @@ body .page-container .content:not(.is-loading) .go-to-container .go-to {
 }
 
 body .page-container .content:not(.is-loading) .go-to-container .go-to .icon-container {
-  transition: 0.2s margin-right, 0.2s opacity;
+  transition: 0.4s margin-right, 0.4s opacity;
 }
 
 body .page-container .content:not(.is-loading) .go-to-container .go-to .icon-container svg {
@@ -130,7 +124,7 @@ body .page-container .content:not(.is-loading) .go-to-container .go-to:hover .ic
 
 body .page-container .content:not(.is-loading) .go-to-container .go-to .big-title {
   transform: translateY(-7px);
-  transition: 0.2s transform;
+  transition: 0.4s transform;
 }
 
 @media screen and (max-width: 800px) {
@@ -150,7 +144,7 @@ body .page-container .content:not(.is-loading) .go-to-container .go-to .mini-tit
   left: 42px;
   opacity: 0.7;
   white-space: nowrap;
-  transition: 0.2s bottom, 0.2s opacity;
+  transition: 0.4s bottom, 0.4s opacity;
 }
 
 body .page-container .content:not(.is-loading) .go-to-container .go-to:hover .mini-title {
@@ -190,10 +184,9 @@ body .page-container .content:not(.is-loading) .page .separator {
 }
 
 body .page-container .content:not(.is-loading) .page .h1 {
-  font-size: calc(40px + var(--font-size, 0));
+  font-size: 40px;
   font-weight: 700;
   position: relative;
-  transition: 0.2s font-size;
 }
 
 body .page-container .content:not(.is-loading) .page .h1:not(:first-child) {
@@ -201,34 +194,29 @@ body .page-container .content:not(.is-loading) .page .h1:not(:first-child) {
 }
 
 body .page-container .content:not(.is-loading) .page .h1 .emoji-parsed img {
-  height: calc(42px + var(--font-size, 0));
-  transition: 0.2s height;
+  height: 42px;
 }
 
 body .page-container .content:not(.is-loading) .page .h2 {
-  font-size: calc(30px + var(--font-size, 0));
+  font-size: 30px;
   margin-top: 36px;
   font-weight: 600;
   position: relative;
-  transition: 0.2s font-size;
 }
 
 body .page-container .content:not(.is-loading) .page .h2 .emoji-parsed img {
-  height: calc(34px + var(--font-size, 0));
-  transition: 0.2s height;
+  height: 34px;
 }
 
 body .page-container .content:not(.is-loading) .page .h3 {
-  font-size: calc(25px + var(--font-size, 0));
+  font-size: 25px;
   margin-top: 10px;
   font-weight: 600;
   position: relative;
-  transition: 0.2s font-size;
 }
 
 body .page-container .content:not(.is-loading) .page .h3 .emoji-parsed img {
-  height: calc(31px + var(--font-size, 0));
-  transition: 0.2s height;
+  height: 31px;
 }
 
 body .page-container .content:not(.is-loading) .page .h1.has-hashtag-ref,
@@ -239,11 +227,10 @@ body .page-container .content:not(.is-loading) .page .banner-container .bottom-c
 }
 
 body .page-container .content:not(.is-loading) .page .h4 {
-  font-size: calc(18px + var(--font-size, 0));
+  font-size: 18px;
   margin-top: 5px;
   font-weight: 600;
   position: relative;
-  transition: 0.2s font-size;
 }
 
 body .page-container .content:not(.is-loading) .page .h4 .emoji-parsed img {
@@ -253,14 +240,12 @@ body .page-container .content:not(.is-loading) .page .h4 .emoji-parsed img {
 body .page-container .content:not(.is-loading) .page .text,
 body .page-container .content:not(.is-loading) .page .pg-title {
   color: rgba(255, 255, 255, 0.8);
-  font-size: calc(17px + var(--font-size, 0));
+  font-size: 17px;
   margin-block: 5px;
-  transition: 0.2s font-size;
 }
 
 body .page-container .content:not(.is-loading) .page .text .emoji-parsed img {
-  height: calc(23px + var(--font-size, 0));
-  transition: 0.2s height;
+  height: 23px;
 }
 
 body .page-container .content:not(.is-loading) .page .pg-title {
@@ -276,6 +261,10 @@ body .page-container .content:not(.is-loading) .page .code {
   box-sizing: border-box;
   border-radius: 5px;
   user-select: all;
+}
+
+body.disable-blur .page-container .content:not(.is-loading) .code {
+  border: none;
 }
 
 body .page-container .content:not(.is-loading) .page .sb {
@@ -301,95 +290,20 @@ body .page-container .content:not(.is-loading) ul li .emoji-parsed img {
   height: 23px;
 }
 
-
 body .page-container .content:not(.is-loading) .page .multisyntax,
-body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-code-high .syntax-highlight,
-body .page-container .content:not(.is-loading) .page .external-sh {
+body .page-container .content:not(.is-loading) .page .syntax-highlight,
+body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-code-high .syntax-highlight {
+  padding: 10px;
   background: rgb(45, 45, 45, 0.3);
   border: 1px solid rgba(93, 106, 129, 0.2);
   margin-block: 5px;
   border-radius: 10px;
-}
-
-body .page-container .content:not(.is-loading) .page .multisyntax .external-sh {
-  background: initial;
-  border: none;
-  margin: 0;
-}
-
-body .page-container .content:not(.is-loading) .page .multisyntax,
-body .page-container .content:not(.is-loading) .page .external-sh .syntax-highlight,
-body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-code-high .syntax-highlight {
-  --line-height: 25px;
-  padding: 10px;
   user-select: text;
   overflow-x: auto;
   overflow-y: hidden;
   position: relative;
   white-space: nowrap;
-  line-height: var(--line-height);
-}
-
-body .page-container .content:not(.is-loading) .page .multisyntax,
-body .page-container .content:not(.is-loading) .page .external-sh .syntax-highlight {
-  --line-height: calc(25px + var(--font-size, 0));
-  font-size: calc(16px + var(--font-size, 0));
-  transition: 0.2s font-size, 0.2s line-height;
-}
-
-body .page-container .content:not(.is-loading) .page .external-sh {
-  max-height: 300px;
-  overflow: hidden;
-  position: relative;
-}
-
-body .page-container .content:not(.is-loading) .page .external-sh.expanded {
-  max-height: none;
-}
-
-body .page-container .content:not(.is-loading) .page .external-sh.expanded.with-animation {
-  animation: 0.2s expandExternalSh;
-}
-
-@keyframes expandExternalSh {
-  from {
-    max-height: 300px;
-  }
-  to {
-    max-height: 1000px;
-  }
-}
-
-body .page-container .content:not(.is-loading) .page .external-sh > .expandable {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 150px;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(0deg, #0d1117, transparent);
-  box-sizing: border-box;
-  padding-top: 100px;
-  cursor: pointer;
-  user-select: none;
-  transition: 0.2s transform;
-}
-
-body .page-container .content:not(.is-loading) .page .external-sh.expanded > .expandable {
-  transform: translateY(100%);
-  pointer-events: none;
-}
-
-body .page-container .content:not(.is-loading) .page .external-sh > .expandable svg {
-  fill: #FFFFFF;
-}
-
-body .page-container .content:not(.is-loading) .page .external-sh:not(.expanded) > .syntax-highlight {
-  pointer-events: none;
-  user-select: none;
+  line-height: 25px;
 }
 
 body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-code-high .syntax-highlight {
@@ -417,7 +331,7 @@ body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container 
   position: relative;
 }
 
-body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container>.external-sh {
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container>.syntax-highlight {
   background: none;
   border: none;
 }
@@ -427,17 +341,17 @@ body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.
   overflow: hidden;
 }
 
-body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container:not(.preparing-animation):not(.animating)>.external-sh:not(.active) {
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container:not(.preparing-animation):not(.animating)>.syntax-highlight:not(.active) {
   display: none;
 }
 
-body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.preparing-animation>.external-sh:not(.active) {
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.preparing-animation>.syntax-highlight:not(.active) {
   visibility: hidden;
 }
 
 body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating {
   overflow: hidden;
-  animation: 0.2s updateHeight forwards;
+  animation: 0.4s updateHeight forwards;
 }
 
 @keyframes updateHeight {
@@ -450,14 +364,14 @@ body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.
   }
 }
 
-body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating .external-sh.disappearing,
-body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating .external-sh.appearing {
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating .syntax-highlight.disappearing,
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating .syntax-highlight.appearing {
   position: absolute;
   top: 0;
 }
 
-body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating.animating-asback .external-sh.disappearing {
-  animation: 0.2s disappearSy forwards cubic-bezier(1, -0.02, 0, 0.97);
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating.animating-asback .syntax-highlight.disappearing {
+  animation: 0.4s disappearSy forwards cubic-bezier(1, -0.02, 0, 0.97);
 }
 
 @keyframes disappearSy {
@@ -467,8 +381,8 @@ body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.
   }
 }
 
-body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating.animating-asback .external-sh.appearing {
-  animation: 0.2s appearSy forwards cubic-bezier(1, -0.02, 0, 0.97);
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating.animating-asback .syntax-highlight.appearing {
+  animation: 0.4s appearSy forwards cubic-bezier(1, -0.02, 0, 0.97);
 }
 
 @keyframes appearSy {
@@ -478,8 +392,8 @@ body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.
   }
 }
 
-body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating:not(.animating-asback) .external-sh.disappearing {
-  animation: 0.2s disappearSyRev forwards cubic-bezier(1, -0.02, 0, 0.97);
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating:not(.animating-asback) .syntax-highlight.disappearing {
+  animation: 0.4s disappearSyRev forwards cubic-bezier(1, -0.02, 0, 0.97);
 }
 
 @keyframes disappearSyRev {
@@ -489,8 +403,8 @@ body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.
   }
 }
 
-body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating:not(.animating-asback) .external-sh.appearing {
-  animation: 0.2s appearSyRev forwards cubic-bezier(1, -0.02, 0, 0.97);
+body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating:not(.animating-asback) .syntax-highlight.appearing {
+  animation: 0.4s appearSyRev forwards cubic-bezier(1, -0.02, 0, 0.97);
 }
 
 @keyframes appearSyRev {
@@ -539,11 +453,11 @@ body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-con
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag.is-clickable {
   cursor: pointer;
-  transition: 0.2s background;
+  transition: 0.4s background;
 }
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag.is-clickable::before {
-  transition: 0.2s background;
+  transition: 0.4s background;
 }
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag.is-clickable:not(.success):hover::before,
@@ -575,7 +489,7 @@ body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-con
 }
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag .icon-container:not(.success) {
-  transition: 0.2s opacity;
+  transition: 0.4s opacity;
 }
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag.success .icon-container:not(.success) {
@@ -584,7 +498,7 @@ body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-con
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag>span {
   z-index: 1;
-  transition: 0.2s opacity;
+  transition: 0.4s opacity;
 }
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag.success span {
@@ -597,7 +511,7 @@ body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-con
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
   opacity: 0;
-  transition: 0.2s opacity;
+  transition: 0.4s opacity;
 }
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag.success .icon-container.success {
@@ -608,10 +522,12 @@ body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-con
 @keyframes showSuccessIcon {
   from {
     clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
+    ;
   }
 
   to {
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    ;
   }
 }
 
@@ -622,16 +538,16 @@ body .page-container .content:not(.is-loading) .page .syntax-highlight.has-mark:
   left: -10px;
   width: calc(100% + 10px);
   background: rgba(13, 17, 23, 0.7);
-  transition: 0.2s transform, 0.2s height, 0.2s top;
+  transition: 0.4s transform;
 }
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight.has-mark::before {
   top: 0;
-  height: calc(10px + var(--line-height) * var(--start-mark) - var(--line-height));
+  height: calc(10px + 25px * var(--start-mark) - 25px);
 }
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight.has-mark::after {
-  --top: calc(10px + var(--line-height) * calc(var(--start-mark) + var(--offset-mark)));
+  --top: calc(10px + 25px * calc(var(--start-mark) + var(--offset-mark)));
   top: var(--top);
   height: calc(var(--length) * 25px - var(--top) + 20px);
 }
@@ -722,6 +638,11 @@ body .page-container .content:not(.is-loading) .page .multisyntax .tabs>.tab:not
   color: rgba(255, 255, 255, 0.5);
 }
 
+body.disable-blur .page-container .content:not(.is-loading) .syntax-highlight,
+body.as-home.disable-blur .page-container .home-container .final-pres .pres-item .syntax-highlight {
+  border: none;
+}
+
 body .page-container .content:not(.is-loading) .page .shi {
   display: inline-block;
 }
@@ -738,8 +659,6 @@ body .page-container .content:not(.is-loading) .page .category-title {
   border: 1px solid rgba(93, 106, 129, 0.2);
   padding: 9px;
   border-radius: 10px;
-  font-size: calc(16px + var(--font-size, 0));
-  transition: 0.2s font-size;
 }
 
 body .page-container .content:not(.is-loading) .page .category-title .spacer {
@@ -763,6 +682,10 @@ body .page-container .content:not(.is-loading) table {
   padding: 7px;
   border-radius: 20px;
   margin-top: 20px;
+}
+
+body.disable-blur .page-container .content:not(.is-loading) table {
+  border: none;
 }
 
 body .page-container .content:not(.is-loading) table tr.as-definitions th {
@@ -914,7 +837,7 @@ body .page-container .content:not(.is-loading) .page .github-ref {
   position: relative;
   user-select: none;
   box-sizing: border-box;
-  transition: 0.2s gap, 0.2s background;
+  transition: 0.4s gap, 0.4s background;
 }
 
 body .page-container .content:not(.is-loading) .page .github-ref+.github-ref {
@@ -1079,7 +1002,7 @@ body .page-container .content:not(.is-loading) .page .banner .banner-container .
   aspect-ratio: var(--width) / var(--height);
   border-radius: 18px;
   box-sizing: border-box;
-  transition: 0.2s opacity;
+  transition: 0.4s opacity;
 }
 
 body .page-container .content:not(.is-loading) .page .banner .banner-container .main-image:not(.loaded) {
@@ -1202,7 +1125,7 @@ body .page-container .content:not(.is-loading) .page .banner .lib-presentation .
   box-sizing: border-box;
   text-align: center;
   margin-left: auto;
-  transition: 0.2s transform, 0.2s background;
+  transition: 0.4s transform, 0.4s background;
 }
 
 body .page-container .content:not(.is-loading) .page .banner .lib-presentation .update:not([href]) {

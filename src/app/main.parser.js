@@ -19,13 +19,21 @@ import * as utils from "./main.utils.js";
 import * as iconsManager from "./main.icons.js";
 import * as config from "./main.config.js";
 import * as homePage from "./main.home.js";
-import * as syntaxManager from "./main.syntax.js";
 import patienceDiff from "../lib/patiencediff.js";
 import Prism from "../lib/prism.js";
-import {getCollapseLongCodeStatus} from "./main.settings.js";
-import {waitForAnimationEnd} from "./main.utils.js";
 
-export function getContentByData(text) {
+const AVAILABLE_ELEMENTS = [
+  'H1', 'H2', 'H3', 'H4', 'SEPARATOR',
+  'TEXT', 'BOLD', 'B', 'SB', 'CODE', 'A', 'BR',
+  'SYNTAX-HIGHLIGHT', 'SHI', 'ALERT', 'PG-TITLE',
+  'CATEGORY', 'CATEGORY-TITLE', 'REF', 'SUBTEXT',
+  'LIST', 'ITEM', 'MULTISYNTAX',
+  'TABLE', 'DEFINITIONS', 'COLUMN', 'ITEM',
+  'DOCS-REF', 'GITHUB-REF', 'REF-SHI',
+  'CONFIG', 'BANNER', 'P2P-BANNER'
+];
+
+function getContentByData(text) {
   const currentElement = document.createElement('div');
   currentElement.classList.add('page');
 
@@ -40,22 +48,21 @@ export function getContentByData(text) {
   return currentElement;
 }
 
-export function handleRecursive(currentDom, elementDom) {
-  tryToReduceTags(currentDom);
-
+function handleRecursive(currentDom, elementDom) {
   for (const element of currentDom.childNodes) {
     if (element instanceof Text) {
       elementDom.appendChild(emojisParser.parse(element.textContent));
-    } else if (!syntaxManager.AVAILABLE_ELEMENTS.includes(element.tagName.toUpperCase())) {
+    } else if (!AVAILABLE_ELEMENTS.includes(element.tagName.toUpperCase())) {
       console.error(element);
       throw new Error("An unknown element has been used " + element.tagName);
     } else {
       let newElement = document.createElement('div');
+      tryToReduceTags(element);
       newElement = checkAndManageElement(element, newElement, elementDom);
 
       let containsCustomTags = false;
       for (const data of element.querySelectorAll('*')) {
-        if (!(data instanceof Text) && data.tagName.toUpperCase() !== syntaxManager.BR) {
+        if (!(data instanceof Text) && data.tagName.toUpperCase() !== 'BR') {
           containsCustomTags = true;
           break;
         }
@@ -65,42 +72,37 @@ export function handleRecursive(currentDom, elementDom) {
         newElement.setAttribute('noref', element.getAttribute('noref'));
       }
 
-      if ([syntaxManager.TEXT, syntaxManager.TABLE_ITEM].includes(element.tagName.toUpperCase())) {
-        const spacesMultiplier = '<br/>'.repeat(element.tagName.toUpperCase() === syntaxManager.TABLE_ITEM ? 1 : 2);
+      if (['TEXT', 'ITEM'].includes(element.tagName.toUpperCase())) {
+        const spacesMultiplier = '<br/>'.repeat(element.tagName.toUpperCase() === 'ITEM' ? 1 : 2);
         element.innerHTML = element.innerHTML.replace('\n\n', spacesMultiplier);
         containsCustomTags = true;
       }
 
-      if ([syntaxManager.SYNTAX_HIGHLIGHT, syntaxManager.SYNTAX_HIGHLIGHT_INLINE].includes(element.tagName.toUpperCase())) {
+      if (['SYNTAX-HIGHLIGHT', 'SHI'].includes(element.tagName.toUpperCase())) {
         if (containsCustomTags) {
           throw new Error("Syntax highlight can't contain other tags");
         }
 
-        newElement = handleSyntaxHighlight(element, newElement, false, '', element.tagName.toUpperCase() === syntaxManager.SYNTAX_HIGHLIGHT_INLINE);
+        handleSyntaxHighlight(element, newElement);
         elementDom.appendChild(newElement);
-      } else if (element.tagName.toUpperCase() === syntaxManager.GITHUB_REF) {
+      } else if (element.tagName.toUpperCase() === 'GITHUB-REF') {
         handleGithubRef(newElement);
         elementDom.appendChild(newElement);
-      } else if (element.tagName.toUpperCase() === syntaxManager.MULTI_SYNTAX) {
+      } else if (element.tagName.toUpperCase() === 'MULTISYNTAX') {
         handleMultiSyntax(element, newElement);
         elementDom.appendChild(newElement);
-      } else if (element.tagName.toUpperCase() === syntaxManager.BANNER) {
+      } else if (element.tagName.toUpperCase() === 'BANNER') {
         if (containsCustomTags) {
           throw new Error("Banner can't contain other tags");
         }
 
         elementDom.appendChild(handlePostQueryElement(element, newElement));
-      } else if (element.tagName.toUpperCase() === syntaxManager.BANNER_PEER_2_PEER) {
+      } else if (element.tagName.toUpperCase() === 'P2P-BANNER') {
         if (containsCustomTags) {
           throw new Error("P2PBanner can't contain other tags");
         }
 
         elementDom.appendChild(handlePostQueryElement(element, newElement));
-      } else if (element.tagName.toUpperCase() === syntaxManager.SEARCH_HIGHLIGHT) {
-        const markElement = document.createElement('span');
-        markElement.classList.add('ids');
-        markElement.innerHTML = element.innerHTML;
-        elementDom.appendChild(markElement);
       } else {
         if (containsCustomTags) {
           handleRecursive(element, newElement);
@@ -115,7 +117,7 @@ export function handleRecursive(currentDom, elementDom) {
   }
 }
 
-export function detectLanguageByElement(element) {
+function detectLanguageByElement(element) {
   let language = {
     prism: Prism.languages.python,
     name: 'Python',
@@ -143,7 +145,6 @@ export function detectLanguageByElement(element) {
         language.icon.name = 'cpp';
         break;
       case 'bash':
-        // noinspection JSUnresolvedReference
         language.prism = Prism.languages.bash;
         language.name = 'Bash';
         language.icon.name = '';
@@ -154,7 +155,7 @@ export function detectLanguageByElement(element) {
   return language;
 }
 
-export function getLanguageColorByName(name) {
+function getLanguageColorByName(name) {
   // reference: https://raw.githubusercontent.com/github/linguist/master/lib/linguist/languages.yml
   switch (name) {
     case 'Python':
@@ -177,7 +178,7 @@ export function getLanguageColorByName(name) {
 }
 
 function checkAndManageElement(element, newElement, elementDom) {
-  if (element.tagName.toUpperCase() === syntaxManager.LINK) {
+  if (element.tagName.toUpperCase() === 'A') {
     if (element.getAttribute('href').startsWith('https')) {
       newElement = document.createElement('a');
       newElement.href = element.getAttribute('href');
@@ -185,7 +186,7 @@ function checkAndManageElement(element, newElement, elementDom) {
     } else {
       throw new Error("UnsupportedLink");
     }
-  } else if (element.tagName.toUpperCase() === syntaxManager.BANNER) {
+  } else if (element.tagName.toUpperCase() === 'BANNER') {
     newElement.classList.add('banner');
 
     const isValidQuery = (
@@ -204,7 +205,6 @@ function checkAndManageElement(element, newElement, elementDom) {
 
       const mainImage = document.createElement('img');
       mainImage.classList.add('main-image');
-      mainImage.loading = 'lazy';
       mainImage.style.setProperty('--width', element.getAttribute('imagewidth'));
       mainImage.style.setProperty('--height', element.getAttribute('imageheight'));
       mainImage.src = element.getAttribute('imageurl');
@@ -293,19 +293,19 @@ function checkAndManageElement(element, newElement, elementDom) {
     } else {
       throw new Error("invalid banner data");
     }
-  } else if (element.tagName.toUpperCase() === syntaxManager.LIST) {
+  } else if (element.tagName.toUpperCase() === 'LIST') {
     newElement = document.createElement('ul');
 
     if (element.getAttribute('style') === 'numbers') {
       newElement.classList.add('with-numbers');
     }
-  } else if (element.tagName.toUpperCase() === syntaxManager.TABLE_ITEM && elementDom.tagName === 'UL') {
+  } else if (element.tagName.toUpperCase() === 'ITEM' && elementDom.tagName === 'UL') {
     newElement = document.createElement('li');
-  } else if (syntaxManager.BOLD.includes(element.tagName.toUpperCase())) {
+  } else if (element.tagName.toUpperCase() === 'BOLD' || element.tagName.toUpperCase() === 'B') {
     newElement = document.createElement('b');
-  } else if (element.tagName.toUpperCase() === syntaxManager.BR) {
+  } else if (element.tagName.toUpperCase() === 'BR') {
     newElement = document.createElement('br');
-  } else if (element.tagName.toUpperCase() === syntaxManager.CATEGORY_TITLE) {
+  } else if (element.tagName.toUpperCase() === 'CATEGORY-TITLE') {
     newElement.classList.toggle(element.tagName.toLowerCase());
 
     let newContent = element.innerHTML.replaceAll('\n', '<br/>');
@@ -313,20 +313,20 @@ function checkAndManageElement(element, newElement, elementDom) {
       newContent = newContent.slice(5);
     }
     element.innerHTML = newContent;
-  } else if (element.tagName.toUpperCase() === syntaxManager.TABLE) {
+  } else if (element.tagName.toUpperCase() === 'TABLE') {
     newElement = document.createElement('table');
-  } else if (element.tagName.toUpperCase() === syntaxManager.TABLE_DEFINITIONS) {
+  } else if (element.tagName.toUpperCase() === 'DEFINITIONS') {
     newElement = document.createElement('tr');
     newElement.classList.add('as-definitions');
-  } else if (element.tagName.toUpperCase() === syntaxManager.TABLE_ITEM && elementDom.tagName === syntaxManager.TABLE) {
+  } else if (element.tagName.toUpperCase() === 'ITEM' && elementDom.tagName === 'TABLE') {
     newElement = document.createElement('tr');
-  } else if (element.tagName.toUpperCase() === syntaxManager.TABLE_COLUMN) {
+  } else if (element.tagName.toUpperCase() === 'COLUMN') {
     if (elementDom.classList.contains('as-definitions')) {
       newElement = document.createElement('th');
     } else {
       newElement = document.createElement('td');
     }
-  } else if (element.tagName.toUpperCase() === syntaxManager.DOCS_REF) {
+  } else if (element.tagName.toUpperCase() === 'DOCS-REF') {
     newElement.classList.add('docs-ref');
     newElement.addEventListener('click', () => {
       if (element.hasAttribute('link')) {
@@ -335,7 +335,7 @@ function checkAndManageElement(element, newElement, elementDom) {
         throw new Error('invalid link for docs-ref');
       }
     });
-  } else if (element.tagName.toUpperCase() === syntaxManager.GITHUB_REF) {
+  } else if (element.tagName.toUpperCase() === 'GITHUB-REF') {
     newElement = document.createElement('a');
     newElement.classList.add('github-ref');
     newElement.target = '_blank';
@@ -346,16 +346,13 @@ function checkAndManageElement(element, newElement, elementDom) {
 
     newElement.setAttribute('reponame', element.getAttribute('reponame'));
     newElement.setAttribute('user', element.getAttribute('user'));
-  } else if (element.tagName.toUpperCase() === syntaxManager.EXAMPLE_REF) {
+  } else if (element.tagName.toUpperCase() === 'REF-SHI') {
     newElement = document.createElement('a');
     newElement.classList.add('ref-shi');
-    newElement.target = '_blank';
 
-    if (!element.hasAttribute('url')) {
+    if (!element.hasAttribute('url') || !element.hasAttribute('language')) {
       throw new Error('invalid data for ref-shi');
     }
-
-    newElement.href = 'https://github.com/pytgcalls/pytgcalls/tree/master/' + element.getAttribute('url');
   } else {
     newElement.classList.toggle(element.tagName.toLowerCase());
   }
@@ -363,38 +360,38 @@ function checkAndManageElement(element, newElement, elementDom) {
   return newElement;
 }
 
-export function tryToReduceTags(element) {
+function tryToReduceTags(element) {
   const handleItem = (child) => {
-    const currentOptionData = config.getOptionValueByIdSync(child.getAttribute('id'));
+    if (!(child instanceof Text) && child.tagName.toUpperCase() === 'CONFIG') {
+      const currentOptionData = config.getOptionValueByIdSync(child.getAttribute('id'));
 
-    if (currentOptionData) {
-      const isComplex = config.isComplexOptionValueByIdSync(child.getAttribute('id'));
+      if (currentOptionData) {
+        const isComplex = config.isComplexOptionValueByIdSync(child.getAttribute('id'));
 
-      if (isComplex) {
-        const fragment = document.createDocumentFragment();
-        fragment.append(...currentOptionData.cloneNode(true).childNodes);
-        child.replaceWith(fragment);
+        if (isComplex) {
+          const fragment = document.createDocumentFragment();
+          fragment.append(...currentOptionData.cloneNode(true).childNodes);
+          child.replaceWith(fragment);
+        } else {
+          child.replaceWith(document.createTextNode(currentOptionData.textContent));
+        }
       } else {
-        child.replaceWith(document.createTextNode(currentOptionData.textContent));
+        throw new Error("A config key that doesn't exist has been requested " + child.getAttribute('id'));
       }
-    } else {
-      throw new Error("A config key that doesn't exist has been requested " + child.getAttribute('id'));
     }
   };
 
-  if (element.tagName.toUpperCase() === syntaxManager.CONFIG) {
-    handleItem(element);
-  }
+  handleItem(element);
 
-  for (const child of element.querySelectorAll('config')) {
+  for (const child of element.childNodes) {
     handleItem(child);
   }
 }
 
 function handlePostQueryElement(element, newElement) {
-  if ([syntaxManager.H1, syntaxManager.H2, syntaxManager.H3, syntaxManager.BANNER].includes(element.tagName.toUpperCase())) {
+  if (['H1', 'H2', 'H3', 'BANNER'].includes(element.tagName.toUpperCase())) {
     let destElement = newElement;
-    if (element.tagName.toUpperCase() === syntaxManager.BANNER) {
+    if (element.tagName.toUpperCase() === 'BANNER') {
       const bigTitle = newElement.querySelector('.bottom-container > .big-title');
       if (bigTitle) {
         destElement = bigTitle;
@@ -409,7 +406,71 @@ function handlePostQueryElement(element, newElement) {
       window.history.pushState('', '', '#' + ref);
       newElement.scrollIntoView();
     });
-  } else if (element.tagName.toUpperCase() === syntaxManager.ALERT) {
+  } else if (element.tagName.toUpperCase() === 'REF-SHI') {
+    newElement.addEventListener('click', () => {
+      const src = 'https://github.com/pytgcalls/pytgcalls/tree/master/' + element.getAttribute('url');
+
+      const closePopup = () => {
+        fullscreenCodePreview.classList.add('disappear');
+        fullscreenCodePreview.addEventListener('animationend', () => {
+          fullscreenCodePreview.remove();
+        }, { once: true });
+      };
+
+      const closeButton = document.createElement('div');
+      closeButton.classList.add('close-button');
+      closeButton.addEventListener('click', closePopup);
+      closeButton.appendChild(document.createElement('div'));
+      closeButton.appendChild(document.createElement('div'));
+
+      const urlBarText = document.createElement('div');
+      urlBarText.classList.add('url');
+      urlBarText.textContent = src;
+      const urlBarOpenImage = iconsManager.get('main', 'upRightFromSquare');
+      urlBarOpenImage.classList.add('open');
+      const urlBarOpen = document.createElement('a');
+      urlBarOpen.classList.add('link');
+      urlBarOpen.addEventListener('click', closePopup);
+      urlBarOpen.target = '_blank';
+      urlBarOpen.href = src;
+      urlBarOpen.appendChild(urlBarOpenImage);
+      const urlBar = document.createElement('div');
+      urlBar.classList.add('url-bar');
+      urlBar.appendChild(iconsManager.get('socials', 'github'));
+      urlBar.appendChild(urlBarText);
+      urlBar.appendChild(urlBarOpen);
+
+      const topBar = document.createElement('div');
+      topBar.classList.add('top-bar');
+      topBar.appendChild(closeButton);
+      topBar.appendChild(urlBar);
+
+      const codePreview = document.createElement('div');
+      codePreview.classList.add('code-preview', 'is-loading');
+      codePreview.appendChild(utils.createLoadingItem());
+
+      const fullscreenCodePreview = document.createElement('div');
+      fullscreenCodePreview.classList.add('fs-code-preview');
+      fullscreenCodePreview.appendChild(topBar);
+      fullscreenCodePreview.appendChild(codePreview);
+      document.body.appendChild(fullscreenCodePreview);
+
+      fullscreenCodePreview.addEventListener('animationend', () => {
+        requestsManager.initRequest(element.getAttribute('url'), 'pytgcalls/pytgcalls').then((response) => {
+          codePreview.textContent = '';
+          codePreview.classList.remove('is-loading');
+
+          const fakeChild = document.createElement('div');
+          if (element.hasAttribute('language')) {
+            fakeChild.setAttribute('language', element.getAttribute('language'));
+          }
+          fakeChild.textContent = response;
+
+          handleSyntaxHighlight(fakeChild, codePreview, true);
+        });
+      }, { once: true });
+    });
+  } else if (element.tagName.toUpperCase() === 'ALERT') {
     const elementHeaderText = document.createElement('div');
     elementHeaderText.classList.add('alert-title');
     const elementHeader = document.createElement('div');
@@ -449,7 +510,7 @@ function handlePostQueryElement(element, newElement) {
 
     newElement.replaceWith(compElement);
     return compElement;
-  } else if (element.tagName.toUpperCase() === syntaxManager.BANNER_PEER_2_PEER) {
+  } else if (element.tagName.toUpperCase() === 'P2P-BANNER') {
     const elementHeaderText = document.createElement('div');
     elementHeaderText.classList.add('alert-title');
     elementHeaderText.textContent = 'Security';
@@ -485,9 +546,8 @@ function handlePostQueryElement(element, newElement) {
   return newElement;
 }
 
-function handleSyntaxHighlight(element, newElement, hideTags = false, customTextContent = '', forceDisableCollapse = false) {
+function handleSyntaxHighlight(element, newElement, hideTags = false, customTextContent = '') {
   let code = customTextContent || element.textContent;
-  // noinspection JSUnresolvedReference
   code = Prism.highlight(code, detectLanguageByElement(element).prism, 'html');
   code = code.replaceAll('\n', '<br/>');
 
@@ -495,11 +555,9 @@ function handleSyntaxHighlight(element, newElement, hideTags = false, customText
     code = code.slice(5);
   }
 
-  const rows = code.split('<br/>').length;
-
   code = handleTabsWithSpacer(code);
   newElement.innerHTML = code;
-  newElement.style.setProperty('--length', String(rows - 1));
+  newElement.style.setProperty('--length', String(code.split('<br/>').length - 1));
 
   const updateMark = (startAt, endAt) => {
     newElement.style.setProperty('--start-mark', startAt);
@@ -528,7 +586,7 @@ function handleSyntaxHighlight(element, newElement, hideTags = false, customText
     }
   }
 
-  if (element.tagName.toUpperCase() !== syntaxManager.SYNTAX_HIGHLIGHT_INLINE && !hideTags && !hasValidMarkParameter && rows > 2) {
+  if (element.tagName.toUpperCase() !== 'SHI' && !hideTags && !hasValidMarkParameter) {
     let successTimeout;
 
     const languageTagText = document.createElement('span');
@@ -569,27 +627,6 @@ function handleSyntaxHighlight(element, newElement, hideTags = false, customText
     tagsContainer.appendChild(copyTag);
     newElement.appendChild(tagsContainer);
   }
-
-  return forceDisableCollapse ? newElement : updateSyntaxHighlightWithCollapsable(newElement, rows);
-}
-
-function updateSyntaxHighlightWithCollapsable(element, rows) {
-  const isExpandable = rows > 12 && getCollapseLongCodeStatus();
-
-  const expandableView = document.createElement('div');
-  expandableView.classList.add('expandable');
-  expandableView.addEventListener('click', () => externalContainer.classList.add('expanded', 'with-animation'));
-  expandableView.textContent = 'Click to expand';
-  expandableView.prepend(iconsManager.get('main', 'chevronDown').firstChild);
-
-  const externalContainer = document.createElement('div');
-  externalContainer.classList.add('external-sh');
-  externalContainer.classList.toggle('expanded', !isExpandable);
-  externalContainer.classList.toggle('is-expandable', isExpandable);
-  externalContainer.appendChild(element);
-  isExpandable && externalContainer.appendChild(expandableView);
-
-  return externalContainer;
 }
 
 function handleTabsWithSpacer(code) {
@@ -649,7 +686,6 @@ function handleMultiSyntax(element, newElement) {
       throw new Error('multisyntax as-blame-mode doesn\'t support mark property');
     }
 
-    // noinspection JSUnresolvedReference
     requestAnimationFrame(() => {
       tryToReduceTags(firstElement);
       tryToReduceTags(secondElement);
@@ -682,7 +718,7 @@ function handleMultiSyntax(element, newElement) {
 
       let containsCustomTags = false;
       for (const data of fakeResyntaxElement.querySelectorAll('*')) {
-        if (!(data instanceof Text) && data.tagName.toUpperCase() !== syntaxManager.BR) {
+        if (!(data instanceof Text) && data.tagName.toUpperCase() !== 'BR') {
           containsCustomTags = true;
           break;
         }
@@ -695,7 +731,7 @@ function handleMultiSyntax(element, newElement) {
       newElement.classList.remove('multisyntax');
       newElement.classList.add('syntax-highlight');
       newElement.classList.add('has-blame');
-      newElement = handleSyntaxHighlight(fakeResyntaxElement, newElement, true, finalCode);
+      handleSyntaxHighlight(fakeResyntaxElement, newElement, true, finalCode);
 
       for (const addedRow of addedRows) {
         const tempMark = document.createElement('div');
@@ -779,7 +815,7 @@ function handleMultiSyntax(element, newElement) {
 
     let containsCustomTags = false;
     for (const data of syntax.querySelectorAll('*')) {
-      if (!(data instanceof Text) && data.tagName.toUpperCase() !== syntaxManager.BR) {
+      if (!(data instanceof Text) && data.tagName.toUpperCase() !== 'BR') {
         containsCustomTags = true;
         break;
       }
@@ -789,7 +825,7 @@ function handleMultiSyntax(element, newElement) {
       throw new Error("Syntax highlight can't contain other tags");
     }
 
-    syntaxElement = handleSyntaxHighlight(syntax, syntaxElement, true);
+    handleSyntaxHighlight(syntax, syntaxElement, true);
     syntaxHighlightContainer.appendChild(syntaxElement);
 
     homePage.onChangeFavoriteSyntaxTab.addListener({
@@ -813,11 +849,11 @@ function handleMultiSyntax(element, newElement) {
               const asBack = childNodes.indexOf(activeItem) > childNodes.indexOf(syntaxElement);
 
               const activeItemRect = activeItem.getBoundingClientRect();
-              syntaxHighlightContainer.style.setProperty('--height', activeItemRect.height + 'px');
+              syntaxHighlightContainer.style.setProperty('--height', (activeItemRect.height + 10) + 'px');
               syntaxHighlightContainer.classList.add('preparing-animation');
 
               const currentItemRect = syntaxElement.getBoundingClientRect();
-              syntaxHighlightContainer.style.setProperty('--to-height', currentItemRect.height + 'px');
+              syntaxHighlightContainer.style.setProperty('--to-height', (currentItemRect.height + 10) + 'px');
               activeItem.classList.add('disappearing');
               syntaxHighlightContainer.classList.add('animating');
               syntaxHighlightContainer.classList.toggle('animating-asback', asBack);
@@ -825,9 +861,9 @@ function handleMultiSyntax(element, newElement) {
               syntaxElement.classList.add('appearing');
 
               Promise.all([
-                waitForAnimationEnd(syntaxHighlightContainer),
-                waitForAnimationEnd(activeItem),
-                waitForAnimationEnd(syntaxElement)
+                new Promise((resolve) => syntaxHighlightContainer.addEventListener('animationend', resolve, { once: true })),
+                new Promise((resolve) => activeItem.addEventListener('animationend', resolve, { once: true })),
+                new Promise((resolve) => syntaxElement.addEventListener('animationend', resolve, { once: true }))
               ]).then(() => {
                 syntaxElement.classList.remove('appearing');
                 syntaxElement.classList.add('active');
@@ -997,10 +1033,33 @@ function handleGithubRef(element) {
   });
 }
 
-export function handleHomepageSyntaxHighlightElement(element) {
+function handleSearchIndexByText(text) {
+  const domHelper = new DOMParser();
+  const dom = domHelper.parseFromString(text, 'application/xml');
+  const children = dom.querySelectorAll('h1, h2, h3, text, subtext, category-title');
+
+  let finalText = '';
+
+  for (const child of children) {
+    tryToReduceTags(child);
+    finalText += ' ' + child.textContent;
+  }
+
+  return finalText;
+}
+
+function handleHomepageSyntaxHighlightElement(element) {
   let newElement = document.createElement('div');
   tryToReduceTags(element);
   newElement = checkAndManageElement(element, newElement, document.createElement('div'));
-  newElement = handleSyntaxHighlight(element, newElement, true, '', true);
+  handleSyntaxHighlight(element, newElement, true);
   return newElement;
 }
+
+export {
+  getContentByData,
+  detectLanguageByElement,
+  getLanguageColorByName,
+  handleSearchIndexByText,
+  handleHomepageSyntaxHighlightElement,
+};

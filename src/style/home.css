@@ -10,7 +10,7 @@ body .page-container .home-container {
 }
 
 body.as-home .page-container .home-container.disappear {
-  animation: 0.2s disappearElement forwards;
+  animation: 0.4s disappearElement forwards;
 }
 
 @keyframes disappearElement {
@@ -44,7 +44,7 @@ body .page-container .home-container .mgc-button {
   cursor: pointer;
   font-size: 15px;
   margin-bottom: 40px;
-  transition: 0.2s transform, 0.2s gap;
+  transition: 0.4s transform, 0.4s gap;
 }
 
 body .page-container .home-container .mgc-button:hover {
@@ -91,7 +91,7 @@ body .page-container .home-container .mgc-button .button-icon div:nth-child(3) {
   height: 2px;
   background: #000000;
   border-radius: 10px;
-  transition: 0.2s width;
+  transition: 0.4s width;
 }
 
 body .page-container .home-container .mgc-button:not(:hover) .button-icon div:nth-child(3) {
@@ -303,7 +303,7 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
 }
 
 body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-files-list .file:not(.disappear) {
-  animation: 0.2s appearFile;
+  animation: 0.4s appearFile;
 }
 
 @keyframes appearFile {
@@ -319,7 +319,7 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
 }
 
 body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-files-list .file.disappear {
-  animation: 0.2s disappearFile forwards;
+  animation: 0.4s disappearFile forwards;
 }
 
 @keyframes disappearFile {
@@ -413,7 +413,7 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
 }
 
 body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-code-high .syntax-highlight.disappear {
-  animation: 0.2s disappearSH forwards;
+  animation: 0.4s disappearSH forwards;
 }
 
 @keyframes disappearSH {
@@ -870,7 +870,7 @@ body .page-container .home-container .team-members .carousel-container .carousel
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: 0.2s opacity;
+  transition: 0.4s opacity;
   background: rgb(20, 25, 33);
 }
 
@@ -928,12 +928,12 @@ body .page-container .home-container .team-members .carousel-container .carousel
   gap: 10px;
   text-decoration: none;
   color: rgba(255, 255, 255, 0.4);
-  transition: 0.2s color;
+  transition: 0.4s color;
 }
 
 body .page-container .home-container .team-members .carousel-container .carousel .member .buttons a .icon-container {
   opacity: 0.4;
-  transition: 0.2s opacity;
+  transition: 0.4s opacity;
 }
 
 body .page-container .home-container .team-members .carousel-container .carousel .member .buttons a .icon-container svg {

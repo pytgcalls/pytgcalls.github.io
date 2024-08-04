@@ -3,10 +3,8 @@
 @import url("home.css");
 @import url("leftsidebar.css");
 @import url("popups.css");
-@import url("search.css");
 @import url("sections.css");
 @import url("splash.css");
-@import url("tooltip.css");
 
 html {
   height: 100%;
@@ -22,6 +20,9 @@ body {
   margin: 0;
   overscroll-behavior: none;
   user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -34,17 +35,11 @@ body .page-container {
   overflow: hidden;
   position: absolute;
   padding-left: 0;
-  transition: 0.2s width cubic-bezier(0.42, 0, 0, 0.97), 0.2s padding-left cubic-bezier(0.42, 0, 0, 0.97), 0.2s transform;
+  transition: 0.4s width cubic-bezier(0.42, 0, 0, 0.97), 0.4s padding-left cubic-bezier(0.42, 0, 0, 0.97);
 }
 
 body.as-home .page-container {
   height: 100%;
-}
-
-@media screen and (min-width: 1000px) {
-  body.focused-by-search:not(.reduce-blur) > .page-container {
-    transform: scale(1.08);
-  }
 }
 
 ::-webkit-scrollbar {
@@ -57,7 +52,7 @@ body.as-home .page-container {
 
 ::-webkit-scrollbar-thumb {
   background: transparent;
-  transition: 0.2s background;
+  transition: 0.4s background;
 }
 
 :root:hover ::-webkit-scrollbar-thumb {
@@ -71,29 +66,286 @@ textarea:focus {
   border: none;
 }
 
-@keyframes rotateSvg {
-  from {
-    transform: rotate(0deg) scale(var(--scale, 1.0));
+body .tooltip {
+  position: fixed;
+  top: calc(var(--center-y) + 49px);
+  left: var(--center-x);
+  color: black;
+  background: linear-gradient(45deg, #535f70, #2f3744);
+  padding: 15px;
+  max-width: min(360px, 80vw);
+  box-sizing: border-box;
+  border-radius: 10px;
+  border: 1px solid #000000;
+  box-shadow: 0 0 17px 5px black;
+  opacity: 0;
+  z-index: 4;
+}
+
+body .tooltip.visible {
+  opacity: 1;
+  animation: 0.8s appearTooltip cubic-bezier(0.42, 0, 0, 0.98);
+}
+
+body .tooltip .title-element {
+  font-size: 24px;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin-bottom: 7px;
+}
+
+body .tooltip .text-element {
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+}
+
+@media screen and (max-width: 500px) {
+  body .tooltip .title-element {
+    font-size: 20px;
   }
 
-  to {
-    transform: rotate(360deg) scale(var(--scale, 1.0));
+  body .tooltip .text-element {
+    font-size: 14px;
   }
 }
 
-@keyframes animateStroke {
+body .tooltip.has-tabs {
+  width: auto;
+  padding: 8px;
+  background: black;
+}
+
+body .tooltip.remove {
+  animation: 0.4s removeTooltip cubic-bezier(0.42, 0, 0, 0.98) forwards;
+}
+
+@keyframes appearTooltip {
   from {
-    stroke-dasharray: 1, 200;
-    stroke-dashoffset: 0;
+    opacity: 0;
+    transform: translateY(-50%) scale(0.4);
   }
+}
 
-  50% {
-    stroke-dasharray: 89, 200;
-    stroke-dashoffset: -35;
-  }
-
+@keyframes removeTooltip {
   to {
-    stroke-dasharray: 89, 200;
-    stroke-dashoffset: -124;
+    opacity: 0;
   }
+}
+
+body .tooltip .triangle {
+  position: absolute;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  background: #3c4654;
+  top: -5px;
+  border-top-left-radius: 3px;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+body .tooltip.has-tabs .triangle {
+  background: #000000;
+}
+
+body .fs-code-preview {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  padding: 30px;
+  box-sizing: border-box;
+  z-index: 2;
+}
+
+@media screen and (max-width: 600px) {
+  body .fs-code-preview {
+    padding: 15px;
+  }
+}
+
+body .fs-code-preview:not(.disappear) {
+  animation: 0.4s appearFsCodePreview cubic-bezier(1, 0.05, 0, 0.93);
+}
+
+@keyframes appearFsCodePreview {
+  from {
+    background: transparent;
+  }
+}
+
+body .fs-code-preview.disappear {
+  animation: 0.4s disappearFsCodePreview forwards;
+}
+
+@keyframes disappearFsCodePreview {
+  to {
+    background: transparent;
+  }
+}
+
+body .fs-code-preview .top-bar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+body .fs-code-preview:not(.disappear) .top-bar {
+  animation: 0.4s appearTopBar cubic-bezier(1, 0.05, 0, 0.93);
+}
+
+@keyframes appearTopBar {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+body .fs-code-preview.disappear .top-bar {
+  animation: 0.4s disappearTopBar forwards;
+}
+
+@keyframes disappearTopBar {
+  to {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+body .fs-code-preview .top-bar .close-button {
+  height: 43px;
+  width: 45px;
+  position: relative;
+  cursor: pointer;
+}
+
+body .fs-code-preview .top-bar .close-button div {
+  height: 5px;
+  width: 50px;
+  background: white;
+  border-radius: 10px;
+}
+
+body .fs-code-preview .top-bar .close-button div:first-child {
+  transform: rotate(45deg) translateY(16px) translateX(12px);
+}
+
+body .fs-code-preview .top-bar .close-button div:nth-child(2) {
+  transform: rotate(-45deg) translateY(8px) translateX(-12px);
+}
+
+body .fs-code-preview .top-bar .url-bar {
+  background: #1e1e1e;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  gap: 15px;
+  overflow: hidden;
+  padding-inline: 12px;
+}
+
+body:not(.disable-blur) .fs-code-preview .top-bar .url-bar {
+  background: rgba(30, 30, 30, 0.22);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+body .fs-code-preview .top-bar .url-bar .icon-container svg {
+  height: 24px;
+  width: 24px;
+  fill: rgba(255, 255, 255, 0.8);
+  vertical-align: middle;
+}
+
+body .fs-code-preview .top-bar .url-bar a {
+  display: flex;
+}
+
+body .fs-code-preview .top-bar .url-bar .url {
+  flex: 1;
+  color: #FFFFFF;
+  font-size: 18px;
+  user-select: text;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+body .fs-code-preview .code-preview {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  flex: 1;
+  background: #1e1e1e;
+  border-radius: 10px;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  user-select: text;
+  color: #FFFFFF;
+}
+
+body:not(.disable-blur) .fs-code-preview .code-preview {
+  background: rgba(30, 30, 30, 0.22);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+@supports (overflow-y: overlay) {
+  body .fs-code-preview .code-preview {
+    overflow-y: overlay;
+  }
+}
+
+body .fs-code-preview:not(.disappear) .code-preview {
+  animation: 0.4s appearCodePreview cubic-bezier(1, 0.05, 0, 0.93);
+}
+
+@keyframes appearCodePreview {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+body .fs-code-preview.disappear .code-preview {
+  animation: 0.4s disappearCodePreview forwards;
+}
+
+@keyframes disappearCodePreview {
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+body .fs-code-preview .code-preview:not(.is-loading) .spacer {
+  display: inline-block;
+  width: calc(10px * var(--id));
+}
+
+body .fs-code-preview .code-preview.is-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+}
+
+body .fs-code-preview .code-preview.is-loading svg {
+  animation: 0.9s rotateSvg linear infinite;
+}
+
+body .fs-code-preview .code-preview.is-loading svg circle {
+  fill: none;
+  stroke: #FFFFFF;
+  stroke-width: 4px;
+  stroke-linecap: round;
+  stroke-dasharray: 10, 10;
+  animation: 1.5s animateStroke linear infinite;
 }
