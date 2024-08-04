@@ -22,13 +22,16 @@ import * as indexesManager from "./main.indexes.js";
 import * as debug from "./main.debug.js";
 import * as sourceParser from "./main.parser.js";
 import * as homePage from "./main.home.js";
+import {onCollapseLongCodeSettingListenerInstance} from "./main.settings.js";
+import * as syntaxManager from "./main.syntax.js";
 
-const onSelectedSectionListenerInstance = new ListenerManagerInstance();
+export const onSelectedSectionListenerInstance = new ListenerManagerInstance();
 
 let currentContentElement;
 let currentSectionsElement;
+let addedListener = false;
 
-function getElement() {
+export function getElement() {
   const content = document.createElement('div');
   content.classList.add('content');
   currentContentElement = content;
@@ -41,45 +44,48 @@ function getElement() {
   fragment.append(content);
   fragment.append(pageSections);
 
+  if (!addedListener) {
+    addedListener = true;
+    onCollapseLongCodeSettingListenerInstance.addListener({
+      callback: updateCollapseLongCodeStatus
+    });
+  }
+
   return fragment;
 }
 
-function loadFile(fileName, hash = '', avoidPushingState = false) {
+export async function loadFile(fileName, hash = '', avoidPushingState = false) {
   const { content, pageSections } = replaceWithValidElements();
 
   const pathFileName = utils.parseCategoryUrl(fileName);
   const indexedCache = indexesManager.getFullIndexedValue(fileName);
 
-  if (typeof indexedCache != 'undefined') {
+  if (indexedCache != null) {
     if (!avoidPushingState) {
       window.history.pushState('', '', pathFileName + (hash ?? ''));
     }
 
-    handleResponse(fileName, content, pageSections, indexedCache, hash).then(() => {
-      handlePathPNManager(content, fileName);
-    });
+    await handleResponse(fileName, content, pageSections, indexedCache, hash);
+    handlePathPNManager(content, fileName);
   } else {
-    const handleData = (response) => {
+    try {
+      let response = await requestsManager.initRequest(fileName);
       if (!avoidPushingState) {
         window.history.pushState('', '', pathFileName + (hash ?? ''));
       }
-
       indexesManager.saveAsFullIndexedValue(fileName, response);
-      handleResponse(fileName, content, pageSections, response, hash).then(() => {
-        handlePathPNManager(content, fileName);
-      });
-    };
-
-    requestsManager.initRequest(fileName).then(handleData).catch(() => {
+      await handleResponse(fileName, content, pageSections, response, hash);
+      handlePathPNManager(content, fileName);
+    } catch (ignored) {
       content.classList.add('is-loading');
       content.textContent = 'Request failed';
       pageSections.classList.add('is-loading');
       pageSections.textContent = '';
-    });
+    }
   }
 }
 
-function handleCustomCodeInsert(data) {
+export function handleCustomCodeInsert(data) {
   if (!debug.isSafeToUseDebugItems()) {
     return;
   }
@@ -89,7 +95,7 @@ function handleCustomCodeInsert(data) {
   handleResponse("", content, pageSections, data, "");
 }
 
-function clearBoard() {
+export function clearBoard() {
   replaceWithValidElements(true);
 }
 
@@ -109,38 +115,34 @@ function replaceWithValidElements(isEmpty = false) {
 }
 
 function handleResponse(fileName, content, pageSections, response, hash) {
-  return new Promise((resolve) => {
-    const data = sourceParser.getContentByData(response);
-    content.classList.remove('is-loading');
-    content.textContent = '';
-    content.appendChild(data);
+  const data = sourceParser.getContentByData(response);
+  content.classList.remove('is-loading');
+  content.textContent = '';
+  content.appendChild(data);
 
-    const sectionsContainer = document.createElement('div');
-    sectionsContainer.classList.add('sections-recap');
-    iterPageSectionsData(data, sectionsContainer);
+  const sectionsContainer = document.createElement('div');
+  sectionsContainer.classList.add('sections-recap');
+  iterPageSectionsData(data, sectionsContainer);
 
-    pageSections.classList.remove('is-loading');
-    pageSections.textContent = '';
-    pageSections.appendChild(sectionsContainer);
+  pageSections.classList.remove('is-loading');
+  pageSections.textContent = '';
+  pageSections.appendChild(sectionsContainer);
 
-    if (fileName !== "") {
-      const contributeToEdit = document.createElement('a');
-      contributeToEdit.classList.add('h2');
-      contributeToEdit.href = 'https://github.com/pytgcalls/docsdata/edit/master/' + fileName;
-      contributeToEdit.target = '_blank';
-      contributeToEdit.textContent = 'Contribute to this page';
-      const contributionsContainer = document.createElement('div');
-      contributionsContainer.classList.add('contributions');
-      contributionsContainer.appendChild(contributeToEdit);
-      pageSections.appendChild(contributionsContainer);
-    }
+  if (fileName !== "") {
+    const contributeToEdit = document.createElement('a');
+    contributeToEdit.classList.add('h2');
+    contributeToEdit.href = 'https://github.com/pytgcalls/docsdata/edit/master/' + fileName;
+    contributeToEdit.target = '_blank';
+    contributeToEdit.textContent = 'Contribute to this page';
+    const contributionsContainer = document.createElement('div');
+    contributionsContainer.classList.add('contributions');
+    contributionsContainer.appendChild(contributeToEdit);
+    pageSections.appendChild(contributionsContainer);
+  }
 
-    try {
-      handleHash(data, hash);
-    } catch (e) { }
-
-    resolve();
-  });
+  try {
+    handleHash(data, hash);
+  } catch (ignored) { }
 }
 
 function handlePathPNManager(content, fileName) {
@@ -171,7 +173,7 @@ function handlePathPNManager(content, fileName) {
     goToContainer.classList.add('go-to-container');
     goToContainer.classList.toggle('has-only-next', !previousFile && !!nextFile);
 
-    if (typeof previousFile != 'undefined') {
+    if (previousFile != null) {
       goToPreviousMiniTitle.textContent = utils.getCategoryFileName(previousFile.replace(basePath, ''));
       goToPreviousContainer.addEventListener('click', () => {
         handleRedirectWithAnimation(content, previousFile);
@@ -179,7 +181,7 @@ function handlePathPNManager(content, fileName) {
       goToContainer.appendChild(goToPreviousContainer);
     }
 
-    if (typeof nextFile != 'undefined') {
+    if (nextFile != null) {
       goToNextMiniTitle.textContent = utils.getCategoryFileName(nextFile.replace(basePath, ''));
       goToNextContainer.addEventListener('click', () => {
         handleRedirectWithAnimation(content, nextFile);
@@ -199,7 +201,7 @@ function handleRedirectWithAnimation(content, url) {
 }
 
 function handleHash(data, hash) {
-  if (typeof hash != 'undefined' && hash.length) {
+  if (hash != null && hash.length) {
     if (hash.startsWith('#')) {
       hash = hash.slice(1);
     }
@@ -235,7 +237,7 @@ function iterPageSectionsData(container, currentDom, childrenLimit = Infinity) {
         continue;
       }
 
-      if (element.tagName.toUpperCase() === 'TD' || (element.classList.length && ['H1', 'H2', 'H3', 'CATEGORY-TITLE', 'PG-TITLE'].includes(element.classList[0].toUpperCase()))) {
+      if (element.tagName.toUpperCase() === 'TD' || (element.classList.length && [syntaxManager.H1, syntaxManager.H2, syntaxManager.H3, syntaxManager.CATEGORY_TITLE, 'PG-TITLE'].includes(element.classList[0].toUpperCase()))) {
         let cloned = element.cloneNode(true);
 
         if (element.tagName.toUpperCase() === 'TD') {
@@ -276,7 +278,7 @@ function iterPageSectionsData(container, currentDom, childrenLimit = Infinity) {
         const cloned = element.cloneNode(false);
         currentDom.append(cloned);
         iterPageSectionsData(element, cloned);
-      } else if (element.tagName.toUpperCase() === 'TABLE') {
+      } else if (element.tagName.toUpperCase() === syntaxManager.TABLE) {
         const clonedTable = document.createElement('div');
         clonedTable.classList.add('subtext');
         currentDom.append(clonedTable);
@@ -297,29 +299,28 @@ function iterPageSectionsData(container, currentDom, childrenLimit = Infinity) {
   }
 }
 
-function updateMobileSectionsVisibilityState(forcedState) {
+export function updateMobileSectionsVisibilityState(forcedState) {
   return currentSectionsElement.classList.toggle('show', forcedState);
 }
 
-function updateActiveSection(section) {
+export function updateActiveSection(section) {
   section.scrollIntoView({
     behavior: 'smooth'
   });
   onSelectedSectionListenerInstance.callAllListeners();
 }
 
-function resetData() {
+function updateCollapseLongCodeStatus(status) {
+  for (const externalSh of currentContentElement.querySelectorAll('.external-sh')) {
+    if (!status) {
+      externalSh.classList.add('expanded');
+    } else if (externalSh.classList.contains('is-expandable')) {
+      externalSh.classList.remove('expanded');
+    }
+  }
+}
+
+export function resetData() {
    currentContentElement = undefined;
    currentSectionsElement = undefined;
 }
-
-export {
-  getElement,
-  loadFile,
-  handleCustomCodeInsert,
-  clearBoard,
-  updateMobileSectionsVisibilityState,
-  updateActiveSection,
-  resetData,
-  onSelectedSectionListenerInstance
-};

@@ -13,7 +13,7 @@
  *  With <3 by @kuogi (and the fox!)
  */
 
-class ListenerManagerInstance {
+export default class ListenerManagerInstance {
   ultimateDataCall;
   ultimateDataCallInternal;
 
@@ -28,13 +28,13 @@ class ListenerManagerInstance {
 
     if (recallWithCurrentData) {
       if (isInternal) {
-        if (typeof this.ultimateDataCallInternal != 'undefined') {
+        if (this.ultimateDataCallInternal != null) {
           callback(this.ultimateDataCallInternal);
         } else {
           onUnknownRecall && onUnknownRecall();
         }
       } else if (!isInternal) {
-        if (typeof this.ultimateDataCall != 'undefined') {
+        if (this.ultimateDataCall != null) {
           callback(this.ultimateDataCall);
         } else {
           onUnknownRecall && onUnknownRecall();
@@ -73,5 +73,3 @@ class ListenerManagerInstance {
     this.#callbacks = reparsedCallbacks;
   }
 }
-
-export default ListenerManagerInstance;

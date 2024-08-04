@@ -15,15 +15,9 @@ body.as-home .page-container .sections {
     width: 100%;
     padding-inline: 20px;
     pointer-events: none;
-    background: #000000;
+    background: #080a0e;
     z-index: 4;
-    transition: 0.4s transform cubic-bezier(0.97, -0.02, 0, 0.98);
-  }
-
-  body:not(.disable-blur) .page-container .sections {
-    background: rgba(0, 0, 0, 0.9);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
+    transition: 0.2s transform cubic-bezier(0.97, -0.02, 0, 0.98);
   }
 
   body .page-container .sections.show {
@@ -49,7 +43,7 @@ body .page-container .sections.is-loading svg circle {
   stroke-linecap: round;
   stroke-dasharray: 10, 10;
   opacity: 0;
-  animation: 2s animateStroke linear infinite, 0.4s appearSvg 0.2s forwards;
+  animation: 2s animateStroke linear infinite, 0.2s appearSvg 0.2s forwards;
 }
 
 body .page-container .sections:not(.is-loading) {

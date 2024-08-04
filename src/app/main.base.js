@@ -16,6 +16,7 @@
 import * as config from "./main.config.js";
 import * as devicesManager from "./main.devices.js";
 import * as homePage from "./main.home.js";
+import {handleSettings} from "./main.settings.js";
 
 window.addEventListener('load', () => {
   const splashScreen = document.querySelector('body .splash');
@@ -44,18 +45,20 @@ window.addEventListener('load', () => {
     promisesList.push(config.loadConfig());
 
     Promise.all(promisesList).then(() => {
-      if (typeof splashTimeout != 'undefined') {
+      if (splashTimeout != null) {
         clearTimeout(splashTimeout);
       }
 
       if (devicesManager.isAndroid()) {
-        document.body.classList.add('disable-blur');
+        document.body.classList.add('reduce-blur');
       }
 
       reloadScreenData();
       splashScreen.remove();
+      handleSettings();
+
       config.getRedirectDataForPath(window.location.pathname).then((data) => {
-        if (data && (data.startsWith('https://') || data.startsWith('http://'))) {
+        if (data instanceof String && (data.startsWith('https://') || data.startsWith('http://'))) {
           window.location.href = data;
         } else {
           homePage.init(data || window.location.pathname);

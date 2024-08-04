@@ -12,7 +12,7 @@ body>.popup-container {
 }
 
 body>.popup-container:not(.disappear) {
-  animation: 0.4s appearPopupContainer;
+  animation: 0.2s appearPopupContainer;
 }
 
 @keyframes appearPopupContainer {
@@ -23,7 +23,7 @@ body>.popup-container:not(.disappear) {
 
 body>.popup-container.disappear {
   pointer-events: none;
-  animation: 0.4s disappearPopupContainer;
+  animation: 0.2s disappearPopupContainer;
 }
 
 @keyframes disappearPopupContainer {
@@ -100,7 +100,7 @@ body>.popup-container .popup-element .custom-editor textarea {
   position: absolute;
   height: calc(100% - 30px);
   width: calc(100% - 30px);
-  font-family: 'Poppins', serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 1em;
   tab-size: 4;
   resize: none;
