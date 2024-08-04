@@ -198,7 +198,7 @@ body .page-container .left-container .left-sidebar .library-container .library {
   background: rgb(22, 26, 32);
   padding-inline: 10px;
   padding-block: 5px;
-  border-radius: 15px;
+  border-radius: 10px;
 }
 
 body .page-container .left-container .left-sidebar.disappear .library-container {
