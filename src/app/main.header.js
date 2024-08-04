@@ -74,6 +74,7 @@ export function getElement() {
 
   const headerTitleContainer = document.createElement('div');
   headerTitleContainer.classList.add('title-container');
+  headerTitleContainer.appendChild(headerMenu);
   headerTitleContainer.appendChild(headerTitle);
   headerTitleContainer.appendChild(headerSeparator);
   headerTitleContainer.appendChild(headerLibraryElement);
@@ -119,7 +120,6 @@ export function getElement() {
 
   const header = document.createElement('div');
   header.classList.add('header');
-  header.appendChild(headerMenu);
   header.appendChild(headerTitleContainer);
   header.appendChild(fakeHeaderLibraryValue);
   header.appendChild(headerIcons);

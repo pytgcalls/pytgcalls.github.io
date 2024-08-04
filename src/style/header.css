@@ -39,62 +39,6 @@ body.as-home .header {
   }
 }
 
-body .header .menu {
-  width: 25px;
-  height: 20px;
-  cursor: pointer;
-  position: relative;
-}
-
-@media screen and (min-width: 1330px) {
-  body .header .menu {
-    display: none;
-  }
-
-  body .header .header-compass {
-    display: none !important;
-  }
-}
-
-body .header .menu div {
-  width: 100%;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 10px;
-  position: absolute;
-  transition: 0.2s transform, 0.2s background;
-}
-
-body .header .menu.show div {
-  background: #FFFFFF;
-}
-
-body .header .menu div:first-child {
-  top: 0;
-}
-
-body .header .menu div:nth-child(2) {
-  top: calc(50% - 3px);
-}
-
-body .header .menu div:nth-child(3) {
-  top: calc(100% - 6px);
-}
-
-body .header .menu.show div:first-child {
-  transform: rotate(45deg) translateX(3px) translateY(7px);
-  width: 24px;
-}
-
-body .header .menu.show div:nth-child(2) {
-  transform: rotate(-45deg) translateX(-2px) translateY(-2px);
-  width: 24px;
-}
-
-body .header .menu.show div:nth-child(3) {
-  transform: scale(0);
-}
-
 body .header .header-icons {
   display: flex;
   align-items: center;
@@ -232,6 +176,58 @@ body .header .title-container {
   gap: 15px;
 }
 
+body .header .title-container .menu {
+  width: 21px;
+  height: 16px;
+  cursor: pointer;
+  position: relative;
+}
+
+@media screen and (min-width: 1330px) {
+  body .header .title-container .menu {
+    display: none;
+  }
+
+  body .header .header-compass {
+    display: none !important;
+  }
+}
+
+body .header .title-container .menu div {
+  width: 100%;
+  height: 2px;
+  background: #FFFFFF;
+  border-radius: 15px;
+  position: absolute;
+  transition: 0.2s transform, 0.2s background;
+}
+
+body .header .title-container .menu div:first-child {
+  top: 0;
+}
+
+body .header .title-container .menu div:nth-child(2) {
+  top: calc(50% - 1px);
+}
+
+body .header .title-container .menu div:nth-child(3) {
+  top: calc(100% - 2px);
+}
+
+body .header .title-container .menu.show div:first-child {
+  transform: rotate(45deg) translateX(3px) translateY(7px);
+  width: 21px;
+}
+
+body .header .title-container .menu.show div:nth-child(2) {
+  transform: rotate(-45deg) translateX(-2px) translateY(-2px);
+  width: 21px;
+}
+
+body .header .title-container .menu.show div:nth-child(3) {
+  transform: scale(0);
+}
+
 body .header .title-container .title {
   display: flex;
   align-items: center;
@@ -349,7 +345,7 @@ body .header .title-container .library.focused-tooltip .icon-container svg {
 }
 
 @media screen and (max-width: 1000px) {
-  body .header .menu,
+  body .header .title-container .menu,
   body .header .title-container,
   body .header .header-icons {
     transition: 0.2s transform, 0.2s opacity;
