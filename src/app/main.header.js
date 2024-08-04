@@ -264,12 +264,6 @@ function expandSettingsTooltip() {
         settingsManager.getForceGithubAPIStatus(),
         (status) => settingsManager.updateForceGithubAPI(status)
     ));
-    selector.appendChild(createSettingsRow(
-        'Reduce Blur Effects',
-        'Avoid using blur effects, useful on slower devices',
-        settingsManager.getReduceBlurStatus(),
-        (status) => settingsManager.updateReduceBlur(status)
-    ));
 
     if (window.innerWidth < 1000) {
       selector.appendChild(createSettingsRow(
@@ -277,6 +271,13 @@ function expandSettingsTooltip() {
           'Force desktop mode even on mobile devices',
           settingsManager.getForceDesktopModeStatus(),
           (status) => settingsManager.updateDesktopMode(status)
+      ));
+    } else {
+      selector.appendChild(createSettingsRow(
+          'Reduce Blur Effects',
+          'Avoid using blur effects, useful on slower devices',
+          settingsManager.getReduceBlurStatus(),
+          (status) => settingsManager.updateReduceBlur(status)
       ));
     }
 
