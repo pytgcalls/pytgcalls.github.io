@@ -52,14 +52,10 @@ export function updateDesktopMode(status) {
 }
 
 function handleDesktopMode() {
-    let metaViewPortTag = document.head.querySelector('meta[name="viewport"]');
-    if (getForceDesktopModeStatus() && metaViewPortTag) {
-        metaViewPortTag.remove();
-    } else if (!getForceDesktopModeStatus() && !metaViewPortTag) {
-        metaViewPortTag = document.createElement('meta');
-        metaViewPortTag.setAttribute('name', 'viewport');
-        metaViewPortTag.setAttribute('content', 'width=device-width, initial-scale=1.0');
-        document.head.appendChild(metaViewPortTag);
+    const metaViewPortTag = document.head.querySelector('meta[name="viewport"]');
+    if (metaViewPortTag != null) {
+        const scale = getForceDesktopModeStatus() ? '0.1' : '1.0';
+        metaViewPortTag.setAttribute('content', 'width=device-width, initial-scale='+scale);
     }
 }
 

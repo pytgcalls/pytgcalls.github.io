@@ -21,6 +21,7 @@ import * as settingsManager from "./main.settings.js";
 import {openSearchContainer} from "./main.search.js";
 import * as debug from "./main.debug.js";
 import {isElementHidden} from "./main.utils.js";
+import {getForceDesktopModeStatus} from "./main.settings.js";
 
 export const onChangeListenerInstance = new ListenerManagerInstance();
 export const onSidebarUpdateListenerInstance = new ListenerManagerInstance();
@@ -256,30 +257,26 @@ function expandSettingsTooltip() {
         'Collapse Long Code',
         null,
         settingsManager.getCollapseLongCodeStatus(),
-        (status) => settingsManager.updateCollapseLongCode(status)
+        settingsManager.updateCollapseLongCode
     ));
     selector.appendChild(createSettingsRow(
         'Force Github API',
         'Use api.github.com instead of raw.githubusercontent.com',
         settingsManager.getForceGithubAPIStatus(),
-        (status) => settingsManager.updateForceGithubAPI(status)
+        settingsManager.updateForceGithubAPI
     ));
-
-    if (window.innerWidth < 1000) {
-      selector.appendChild(createSettingsRow(
-          'Desktop Mode',
-          'Force desktop mode even on mobile devices',
-          settingsManager.getForceDesktopModeStatus(),
-          (status) => settingsManager.updateDesktopMode(status)
-      ));
-    } else {
-      selector.appendChild(createSettingsRow(
-          'Reduce Blur Effects',
-          'Avoid using blur effects, useful on slower devices',
-          settingsManager.getReduceBlurStatus(),
-          (status) => settingsManager.updateReduceBlur(status)
-      ));
-    }
+    (window.innerWidth < 1000 || getForceDesktopModeStatus()) && selector.appendChild(createSettingsRow(
+        'Desktop Mode',
+        'Force desktop mode even on mobile devices',
+        settingsManager.getForceDesktopModeStatus(),
+        settingsManager.updateDesktopMode
+    ));
+    window.innerWidth > 1000 && selector.appendChild(createSettingsRow(
+        'Reduce Blur Effects',
+        'Avoid using blur effects, useful on slower devices',
+        settingsManager.getReduceBlurStatus(),
+        settingsManager.updateReduceBlur
+    ));
 
     if (debug.isSafeToUseDebugItems() && selectedTabID != null) {
       const debugTitle = document.createElement('div');
