@@ -124,5 +124,5 @@ export function isAnimatingClosing() {
 }
 
 function adaptedToMobile() {
-  return window.matchMedia('screen and (max-width: 1000px)').matches;
+  return window.innerWidth < 1000;
 }

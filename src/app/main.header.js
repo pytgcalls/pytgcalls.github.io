@@ -271,7 +271,7 @@ function expandSettingsTooltip() {
         settingsManager.getForceDesktopModeStatus(),
         settingsManager.updateDesktopMode
     ));
-    window.innerWidth > 1000 && selector.appendChild(createSettingsRow(
+    window.innerWidth >= 1000 && selector.appendChild(createSettingsRow(
         'Reduce Blur Effects',
         'Avoid using blur effects, useful on slower devices',
         settingsManager.getReduceBlurStatus(),

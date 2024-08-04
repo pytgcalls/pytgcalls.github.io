@@ -44,7 +44,7 @@ body .tooltip.visible.out-of-space {
     transform-origin: var(--origin-x) 0;
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 999px) {
     body .tooltip.adapt-mobile {
         background: #080a0e;
         top: 60px;
@@ -119,7 +119,7 @@ body .tooltip > .icon-container {
     transform: translateX(-50%);
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 999px) {
     body .tooltip.adapt-mobile > .icon-container {
         display: none;
     }
@@ -145,7 +145,7 @@ body .tooltip .selector .main-title {
     margin-bottom: 5px;
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 999px) {
     body .tooltip.adapt-mobile .selector .main-title {
         color: #FFFFFF;
         font-size: 20px;

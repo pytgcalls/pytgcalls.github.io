@@ -38,7 +38,7 @@ body .search-container::before {
     z-index: -1;
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 999px) {
     body .search-container::before {
         background: rgb(16, 18, 22);
     }
@@ -278,7 +278,7 @@ body .search-container.animate-disappear > .search-input.animated {
     --end-background: rgb(22, 26, 32);
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 999px) {
     body .search-container.animate-appear > .search-input.animated {
         background: rgb(16, 18, 22);
         width: var(--end-width);
@@ -325,7 +325,7 @@ body .search-container .search-results {
     flex-direction: column;
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 999px) {
     body .search-container .search-results {
         max-height: none;
         height: 100vh;
@@ -353,7 +353,7 @@ body .search-container .search-results::before {
     transition: var(--animation-speed) all;
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 999px) {
     body .search-container .search-results::before {
         display: none;
     }
@@ -410,7 +410,7 @@ body .search-container .search-results .list-adapter.is-empty .empty-container {
     }
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 999px) {
     body .search-container .search-results .list-adapter.is-empty .empty-container.is-first-view {
         animation: 0.2s appearSIClose forwards;
     }

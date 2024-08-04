@@ -615,7 +615,7 @@ function closeSearch() {
 }
 
 function useMobileUI() {
-    return window.matchMedia('screen and (max-width: 1000px)').matches;
+    return window.innerWidth < 1000;
 }
 
 function getEmptySearchContainerResult(isFirstOpen = false) {

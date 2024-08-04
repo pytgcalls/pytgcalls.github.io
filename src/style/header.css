@@ -32,7 +32,7 @@ body.as-home .header {
   }
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 999px) {
   body .header:has(.header-settings.focused-tooltip) {
     background: #080a0e;
     border-bottom: 1px solid transparent;
@@ -62,7 +62,7 @@ body .header .header-icons .search-input {
   transition: 0.2s transform;
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 999px) {
   body .header .header-icons .search-input {
     display: none; /* tmp */
   }
@@ -129,7 +129,7 @@ body .header .header-icons .header-icon.focused-tooltip {
   }
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 999px) {
   body .header .header-icons .header-icon.header-settings.focused-tooltip {
     pointer-events: all !important;
   }
@@ -268,7 +268,7 @@ body .header .title-container .library {
   display: flex;
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 999px) {
   body .header .title-container .separator,
   body .header .title-container .library {
     display: none;
@@ -344,7 +344,7 @@ body .header .title-container .library.focused-tooltip .icon-container svg {
   transform: rotate(180deg);
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 999px) {
   body .header .title-container .menu,
   body .header .title-container,
   body .header .header-icons {
