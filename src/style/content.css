@@ -276,6 +276,7 @@ body .page-container .content:not(.is-loading) .page .code {
   box-sizing: border-box;
   border-radius: 5px;
   user-select: all;
+  font-family: 'Fira Code', serif;
 }
 
 body .page-container .content:not(.is-loading) .page .sb {
@@ -335,6 +336,7 @@ body .page-container .content:not(.is-loading) .page .external-sh .syntax-highli
   --line-height: calc(25px + var(--font-size, 0));
   font-size: calc(16px + var(--font-size, 0));
   transition: 0.2s font-size, 0.2s line-height;
+  font-family: 'Fira Code', serif;
 }
 
 body .page-container .content:not(.is-loading) .page .external-sh {
@@ -740,6 +742,7 @@ body .page-container .content:not(.is-loading) .page .category-title {
   border-radius: 10px;
   font-size: calc(16px + var(--font-size, 0));
   transition: 0.2s font-size;
+  font-family: 'Fira Code', serif;
 }
 
 body .page-container .content:not(.is-loading) .page .category-title .spacer {
