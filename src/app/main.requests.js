@@ -100,7 +100,9 @@ function tryToLoadWithApi(repoName, fileName) {
         if (e.target.status === 200) {
           const response = JSON.parse(e.target.responseText);
           if (typeof response['content'] === 'string' && response['content'].length > 0) {
-            resolve(atob(response['content']));
+            const decodedContent = atob(response['content']);
+            const utf8Content = new TextDecoder('utf-8').decode(new Uint8Array([...decodedContent].map(char => char.charCodeAt(0))));
+            resolve(utf8Content);
           } else {
             reject('Failed to parse github api response');
           }
