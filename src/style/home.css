@@ -358,6 +358,7 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
   overflow-y: auto;
   color: #FFFFFF;
   display: flex;
+  font-family: 'Fira Code', serif;
 }
 
 @supports (overflow: overlay) {
