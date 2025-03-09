@@ -148,6 +148,11 @@ export function detectLanguageByElement(element) {
         language.name = 'Bash';
         language.icon.name = '';
         break;
+      case 'java':
+        language.prism = Prism.languages.java;
+        language.name = 'Java';
+        language.icon.name = 'java';
+        break;
     }
   }
 
