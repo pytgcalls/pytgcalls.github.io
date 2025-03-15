@@ -84,15 +84,9 @@ export function handleRecursive(currentDom, elementDom) {
       } else if (element.tagName.toUpperCase() === syntaxManager.MULTI_SYNTAX) {
         handleMultiSyntax(element, newElement);
         elementDom.appendChild(newElement);
-      } else if (element.tagName.toUpperCase() === syntaxManager.BANNER) {
+      } else if (element.tagName.toUpperCase() === syntaxManager.BANNER || element.tagName.toUpperCase() === syntaxManager.BANNER_PEER_2_PEER) {
         if (containsCustomTags) {
           throw new Error("Banner can't contain other tags");
-        }
-
-        elementDom.appendChild(handlePostQueryElement(element, newElement));
-      } else if (element.tagName.toUpperCase() === syntaxManager.BANNER_PEER_2_PEER) {
-        if (containsCustomTags) {
-          throw new Error("P2PBanner can't contain other tags");
         }
 
         elementDom.appendChild(handlePostQueryElement(element, newElement));
@@ -697,23 +691,27 @@ function handleMultiSyntax(element, newElement) {
         throw new Error("Syntax highlight can't contain other tags");
       }
 
+      const internalElement = document.createElement('div');
       newElement.classList.remove('multisyntax');
-      newElement.classList.add('syntax-highlight');
-      newElement.classList.add('has-blame');
-      newElement = handleSyntaxHighlight(fakeResyntaxElement, newElement, true, finalCode);
+      internalElement.classList.add('syntax-highlight');
+      internalElement.classList.add('has-blame');
+      handleSyntaxHighlight(fakeResyntaxElement, internalElement, true, finalCode, true);
+
+      newElement.classList.add('external-sh', 'expanded');
+      newElement.appendChild(internalElement);
 
       for (const addedRow of addedRows) {
         const tempMark = document.createElement('div');
         tempMark.classList.add('temp-mark', 'added-row');
         tempMark.style.setProperty('--start-mark', addedRow);
-        newElement.appendChild(tempMark);
+        internalElement.appendChild(tempMark);
       }
 
       for (const addedRow of removedRows) {
         const tempMark = document.createElement('div');
         tempMark.classList.add('temp-mark', 'removed-row');
         tempMark.style.setProperty('--start-mark', addedRow);
-        newElement.appendChild(tempMark);
+        internalElement.appendChild(tempMark);
       }
     });
 
