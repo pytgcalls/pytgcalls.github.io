@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2024.
+ * Copyright (c) 2020-2026.
  *
  *  The code in this file is part of the PyTgCalls project.
  *  Please refer to official links:
