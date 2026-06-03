@@ -10,6 +10,7 @@ export const TEXT = 'TEXT';
 export const SUBTEXT = 'SUBTEXT';
 export const BOLD = ['B', 'BOLD'];
 export const SEMI_BOLD = 'SB';
+export const ITALIC = ['I', 'ITALIC'];
 export const CODE = 'CODE';
 
 export const LINK = 'A';
@@ -42,7 +43,7 @@ export const SEARCH_HIGHLIGHT = 'MARK';
 export const AVAILABLE_ELEMENTS = [
   H1, H2, H3, H4,
   BR, SEPARATOR,
-  TEXT, SUBTEXT, ...BOLD, SEMI_BOLD, CODE,
+  TEXT, SUBTEXT, ...BOLD, ...ITALIC, SEMI_BOLD, CODE,
   LINK, STANDARD_REF, DOCS_REF, GITHUB_REF, EXAMPLE_REF,
   ALERT,
   CATEGORY, CATEGORY_TITLE,

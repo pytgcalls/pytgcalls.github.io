@@ -302,6 +302,8 @@ function checkAndManageElement(element, newElement, elementDom) {
     newElement = document.createElement('li');
   } else if (syntaxManager.BOLD.includes(element.tagName.toUpperCase())) {
     newElement = document.createElement('b');
+  } else if (syntaxManager.ITALIC.includes(element.tagName.toUpperCase())) {
+    newElement = document.createElement('i');
   } else if (element.tagName.toUpperCase() === syntaxManager.BR) {
     newElement = document.createElement('br');
   } else if (element.tagName.toUpperCase() === syntaxManager.CATEGORY_TITLE) {
