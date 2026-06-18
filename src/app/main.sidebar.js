@@ -39,9 +39,104 @@ export function getElement() {
   const leftContainerElement = document.createElement('div');
   leftContainerElement.classList.add('left-container');
   leftContainerElement.appendChild(leftSidebarElement);
+  leftContainerElement.appendChild(composeSponsorCard());
   leftContainer = leftContainerElement;
 
   return leftContainerElement;
+}
+
+function composeSponsorCard() {
+  const card = document.createElement('a');
+  card.classList.add('sponsor-card');
+  card.target = '_blank';
+  card.rel = 'noopener';
+  card.style.display = 'none';
+
+  const badgeText = document.createElement('span');
+  const badge = document.createElement('div');
+  badge.classList.add('sponsor-badge');
+  badge.appendChild(iconsManager.get('main', 'bolt'));
+  badge.appendChild(badgeText);
+
+  const logo = document.createElement('img');
+  logo.classList.add('sponsor-logo');
+  logo.alt = '';
+  logo.style.display = 'none';
+
+  const title = document.createElement('div');
+  title.classList.add('sponsor-title');
+  const description = document.createElement('div');
+  description.classList.add('sponsor-description');
+  const texts = document.createElement('div');
+  texts.classList.add('sponsor-texts');
+  texts.appendChild(title);
+  texts.appendChild(description);
+
+  const body = document.createElement('div');
+  body.classList.add('sponsor-body');
+  body.appendChild(logo);
+  body.appendChild(texts);
+
+  const buttonText = document.createElement('span');
+  const button = document.createElement('div');
+  button.classList.add('sponsor-button');
+  button.appendChild(buttonText);
+  button.appendChild(iconsManager.get('main', 'arrowRight'));
+
+  const disclaimer = document.createElement('div');
+  disclaimer.classList.add('sponsor-disclaimer');
+  disclaimer.textContent = 'PyTgCalls is not affiliated with or endorsed by this sponsor';
+
+  card.appendChild(badge);
+  card.appendChild(body);
+  card.appendChild(button);
+  card.appendChild(disclaimer);
+
+  config.getSponsorData().then((sponsor) => {
+    if (!sponsor) {
+      return;
+    }
+
+    const href = sponsor.getAttribute('href');
+    const titleNode = sponsor.querySelector('title');
+
+    if (!href || !href.trim() || !titleNode || !titleNode.textContent.trim()) {
+      return;
+    }
+
+    card.href = href.trim();
+    title.textContent = titleNode.textContent.trim();
+
+    const badgeNode = sponsor.querySelector('badge');
+    badgeText.textContent = badgeNode && badgeNode.textContent.trim()
+      ? badgeNode.textContent.trim()
+      : 'Sponsored';
+
+    const descriptionNode = sponsor.querySelector('description');
+    if (descriptionNode && descriptionNode.textContent.trim()) {
+      description.textContent = descriptionNode.textContent.trim();
+    } else {
+      description.remove();
+    }
+
+    const buttonNode = sponsor.querySelector('button');
+    if (buttonNode && buttonNode.textContent.trim()) {
+      buttonText.textContent = buttonNode.textContent.trim();
+    } else {
+      button.remove();
+    }
+
+    const logoNode = sponsor.querySelector('logo');
+    if (logoNode && logoNode.textContent.trim()) {
+      logo.src = logoNode.textContent.trim();
+      logo.style.display = '';
+    }
+
+    card.style.display = '';
+    card.classList.add('appear');
+  });
+
+  return card;
 }
 
 export function focusOnSidebar() {
