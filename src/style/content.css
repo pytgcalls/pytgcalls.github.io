@@ -1226,3 +1226,11 @@ body .page-container .content:not(.is-loading) .page .banner .lib-presentation .
 body .page-container .content:not(.is-loading) .page .banner .lib-presentation .update:active {
   transform: scale(0.95);
 }
+
+.lang-block.hidden {
+  display: none;
+}
+
+.multisyntax.lang-tabs {
+  margin-bottom: 15px;
+}

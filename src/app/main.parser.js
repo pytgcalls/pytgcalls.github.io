@@ -23,6 +23,15 @@ import * as syntaxManager from "./main.syntax.js";
 import patienceDiff from "../lib/patiencediff.js";
 import Prism from "../lib/prism.js";
 import {getCollapseLongCodeStatus} from "./main.settings.js";
+
+const LANG_BLOCK_GROUP = 'languages';
+const LANGUAGE_NAMES = {
+  python: 'Python',
+  c: 'C',
+  node: 'Node.js',
+  java: 'Java',
+  rust: 'Rust',
+};
 import {waitForAnimationEnd} from "./main.utils.js";
 
 export function getContentByData(text) {
@@ -84,6 +93,13 @@ export function handleRecursive(currentDom, elementDom) {
       } else if (element.tagName.toUpperCase() === syntaxManager.MULTI_SYNTAX) {
         handleMultiSyntax(element, newElement);
         elementDom.appendChild(newElement);
+      } else if (element.tagName.toUpperCase() === syntaxManager.LANG_TABS) {
+        handleLangTabs(element, newElement);
+        elementDom.appendChild(newElement);
+      } else if (element.tagName.toUpperCase() === syntaxManager.LANG_BLOCK) {
+        handleRecursive(element, newElement);
+        handleLangBlock(element, newElement);
+        elementDom.appendChild(newElement);
       } else if (element.tagName.toUpperCase() === syntaxManager.BANNER || element.tagName.toUpperCase() === syntaxManager.BANNER_PEER_2_PEER) {
         if (containsCustomTags) {
           throw new Error("Banner can't contain other tags");
@@ -107,6 +123,70 @@ export function handleRecursive(currentDom, elementDom) {
       }
     }
   }
+}
+
+function handleLangTabs(element, newElement) {
+  const group = element.getAttribute('id') || LANG_BLOCK_GROUP;
+  const languages = [...element.parentElement.querySelectorAll('lang-block')]
+      .map((block) => block.getAttribute('language'))
+      .filter((language, id, list) => language && list.indexOf(language) === id);
+
+  if (!languages.length) {
+    throw new Error('lang-tabs requires sibling lang-block elements');
+  }
+
+  newElement.classList.add('multisyntax', 'lang-tabs');
+
+  const tabsContainer = document.createElement('div');
+  tabsContainer.classList.add('tabs');
+  tabsContainer.style.setProperty('--i', languages.length);
+  newElement.appendChild(tabsContainer);
+
+  for (const [id, language] of languages.entries()) {
+    const tabElement = document.createElement('div');
+    tabElement.classList.add('tab');
+    tabElement.textContent = LANGUAGE_NAMES[language] || language;
+    tabElement.addEventListener('click', () => {
+      const currentState = homePage.onChangeFavoriteSyntaxTab.ultimateDataCall || {};
+      currentState[group] = language;
+      homePage.onChangeFavoriteSyntaxTab.callAllListeners(currentState);
+      localStorage.setItem('currentTabDataIndexes', JSON.stringify(currentState));
+    });
+    tabsContainer.appendChild(tabElement);
+
+    homePage.onChangeFavoriteSyntaxTab.addListener({
+      callback: (data) => {
+        const currentLanguage = data[group];
+        const isActive = currentLanguage ? currentLanguage === language : !id;
+        tabElement.classList.toggle('active', isActive);
+        if (isActive) {
+          tabsContainer.style.setProperty('--eid', String(id));
+        }
+      },
+      ref: tabElement,
+      recallWithCurrentData: true,
+    });
+  }
+}
+
+function handleLangBlock(element, newElement) {
+  const language = element.getAttribute('language');
+
+  if (!language) {
+    throw new Error('lang-block requires a language attribute');
+  }
+
+  newElement.classList.add('lang-block');
+
+  homePage.onChangeFavoriteSyntaxTab.addListener({
+    callback: (data) => {
+      const currentLanguage = data[LANG_BLOCK_GROUP];
+      const isActive = currentLanguage ? currentLanguage === language : element.hasAttribute('default');
+      newElement.classList.toggle('hidden', !isActive);
+    },
+    ref: newElement,
+    recallWithCurrentData: true,
+  });
 }
 
 export function detectLanguageByElement(element) {
@@ -146,6 +226,18 @@ export function detectLanguageByElement(element) {
         language.prism = Prism.languages.java;
         language.name = 'Java';
         language.icon.name = 'java';
+        break;
+
+      case 'javascript':
+        language.prism = Prism.languages.javascript;
+        language.name = 'JavaScript';
+        language.icon.name = '';
+        break;
+
+      case 'rust':
+        language.prism = Prism.languages.rust;
+        language.name = 'Rust';
+        language.icon.name = '';
         break;
     }
   }
