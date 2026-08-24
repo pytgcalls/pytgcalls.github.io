@@ -635,7 +635,7 @@ body .page-container .content:not(.is-loading) .page .syntax-highlight.has-mark:
 body .page-container .content:not(.is-loading) .page .syntax-highlight.has-mark::after {
   --top: calc(10px + var(--line-height) * calc(var(--start-mark) + var(--offset-mark)));
   top: var(--top);
-  height: calc(var(--length) * 25px - var(--top) + 20px);
+  height: calc(var(--length) * var(--line-height) - var(--top) + var(--line-height) + 20px);
 }
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight.has-mark:hover::before {
