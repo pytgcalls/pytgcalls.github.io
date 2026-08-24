@@ -30,6 +30,50 @@ let pypiDataResult;
 
 let alternativesList = {};
 
+const DEFAULT_DOCS_REF = 'master';
+let docsRef = readInitialDocsRef();
+
+function readInitialDocsRef() {
+  const fromUrl = new URLSearchParams(window.location.search).get('ref');
+
+  if (fromUrl) {
+    localStorage.setItem('docsRef', fromUrl);
+    return fromUrl;
+  }
+
+  return localStorage.getItem('docsRef') || DEFAULT_DOCS_REF;
+}
+
+export function getDocsRef() {
+  return docsRef;
+}
+
+export function fallbackToDefaultDocsRef() {
+  if (docsRef === DEFAULT_DOCS_REF) {
+    return false;
+  }
+
+  localStorage.removeItem('docsRef');
+  window.location.reload();
+  return true;
+}
+
+export function setDocsRef(ref) {
+  const newRef = ref || DEFAULT_DOCS_REF;
+
+  if (newRef === docsRef) {
+    return;
+  }
+
+  if (newRef === DEFAULT_DOCS_REF) {
+    localStorage.removeItem('docsRef');
+  } else {
+    localStorage.setItem('docsRef', newRef);
+  }
+
+  window.location.reload();
+}
+
 export async function initRequest(fileName, repoName = 'pytgcalls/docsdata') {
   const isUsingAnAlternative = !!alternativesList[repoName];
 
@@ -68,7 +112,7 @@ export function setAsDebugAlternative(original, alternative) {
     return Promise.reject('Ignoring githubusercontent as it isn\'t available');
   } else {
     return new Promise((resolve, reject) => {
-      let completeUrl = 'https://raw.githubusercontent.com/' + repoName + '/master/' + fileName;
+      let completeUrl = 'https://raw.githubusercontent.com/' + repoName + '/' + docsRef + '/' + fileName;
       if (alternativesList[repoName]) {
         completeUrl = alternativesList[repoName] + '/' + fileName;
       }
@@ -93,7 +137,7 @@ export function setAsDebugAlternative(original, alternative) {
 function tryToLoadWithApi(repoName, fileName) {
   return new Promise((resolve, reject) => {
     const XML = new XMLHttpRequest();
-    XML.open('GET', 'https://api.github.com/repos/' + repoName + '/contents/' + fileName, true);
+    XML.open('GET', 'https://api.github.com/repos/' + repoName + '/contents/' + fileName + '?ref=' + encodeURIComponent(docsRef), true);
     XML.send();
     XML.addEventListener('readystatechange', (e) => {
       if (e.target.readyState === 4) {

@@ -17,7 +17,7 @@ import * as utils from "./main.utils.js";
 import ListenerManagerInstance from "./main.listener.js";
 import * as iconsManager from "./main.icons.js";
 import * as config from "./main.config.js";
-import {getLibraryElement} from "./main.header.js";
+import {getLibraryElement, getVersionElement} from "./main.header.js";
 
 export const onChangeListenerInstance = new ListenerManagerInstance();
 
@@ -168,7 +168,13 @@ export function loadSidebar(id) {
     const libraryContainer = document.createElement('div');
     libraryContainer.classList.add('library-container');
     libraryContainer.appendChild(getLibraryElement(true).element);
+
+    const versionContainer = document.createElement('div');
+    versionContainer.classList.add('library-container');
+    versionContainer.appendChild(getVersionElement(versionContainer));
+
     content.appendChild(libraryContainer);
+    content.appendChild(versionContainer);
 
     currentLoadedSidebarId = id;
 

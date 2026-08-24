@@ -166,6 +166,10 @@ body .tooltip .selector .mini-text.has-margin {
     margin-top: 15px;
 }
 
+body .tooltip .selector {
+    min-width: min(240px, 70vw);
+}
+
 body .tooltip .selector .library {
     background: #0e1117;
     padding: 10px;

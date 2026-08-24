@@ -28,6 +28,10 @@ export async function loadConfig() {
           'application/xml'
       );
     } catch (e) {
+      if (requestsManager.fallbackToDefaultDocsRef()) {
+        return;
+      }
+
       alert("This documentation isn't available in your country");
     }
   }
@@ -182,6 +186,14 @@ export async function getFilesListDefaultFileById(id) {
 
 export async function getFilesListInstanceById(id) {
   return (await loadConfig()).querySelector('config > files-list[id="' + id + '"]');
+}
+
+export function getDocsVersionsSync() {
+  if (isConfigReady()) {
+    return [...precachedConfig.querySelectorAll('config > versions > version')];
+  }
+
+  return [];
 }
 
 export function getOptionValueByIdSync(id) {

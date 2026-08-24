@@ -20,6 +20,7 @@ import * as iconsManager from "./main.icons.js";
 import * as settingsManager from "./main.settings.js";
 import {openSearchContainer} from "./main.search.js";
 import * as debug from "./main.debug.js";
+import * as requestsManager from "./main.requests.js";
 import {isElementHidden} from "./main.utils.js";
 import {getForceDesktopModeStatus} from "./main.settings.js";
 
@@ -73,12 +74,17 @@ export function getElement() {
   headerLibraryElement = libraryElement.element;
   headerLibraryValueElement = libraryElement.value;
 
+  const headerVersionSeparator = document.createElement('div');
+  headerVersionSeparator.classList.add('separator');
+
   const headerTitleContainer = document.createElement('div');
   headerTitleContainer.classList.add('title-container');
   headerTitleContainer.appendChild(headerMenu);
   headerTitleContainer.appendChild(headerTitle);
   headerTitleContainer.appendChild(headerSeparator);
   headerTitleContainer.appendChild(headerLibraryElement);
+  headerTitleContainer.appendChild(headerVersionSeparator);
+  headerTitleContainer.appendChild(getVersionElement(headerVersionSeparator));
 
   const fakeHeaderLibraryValue = document.createElement('div');
   fakeHeaderLibraryValue.classList.add('fake-title');
@@ -231,6 +237,87 @@ function expandLibrarySelectorTooltip(container) {
       });
     });
   });
+}
+
+function expandVersionSelectorTooltip(container) {
+  requestAnimationFrame(() => {
+    const versions = config.getDocsVersionsSync();
+
+    if (!versions.length) {
+      return;
+    }
+
+    const currentRef = requestsManager.getDocsRef();
+    const selector = document.createElement('div');
+    selector.classList.add('selector');
+
+    for (const version of versions) {
+      const ref = version.getAttribute('ref');
+
+      const singleVersionTitle = document.createElement('div');
+      singleVersionTitle.classList.add('title');
+      singleVersionTitle.textContent = version.textContent.trim();
+
+      const singleVersionDescription = document.createElement('div');
+      singleVersionDescription.classList.add('description');
+      singleVersionDescription.textContent = (version.getAttribute('description') || ref).trim();
+
+      const copyTagSuccess = iconsManager.get('main', 'check');
+      copyTagSuccess.classList.add('success');
+
+      const singleVersion = document.createElement('div');
+      singleVersion.classList.add('library');
+      singleVersion.classList.toggle('selected', ref === currentRef);
+      singleVersion.addEventListener('click', () => {
+        singleVersion.classList.add('selected');
+        requestsManager.setDocsRef(ref);
+      });
+      singleVersion.appendChild(singleVersionTitle);
+      singleVersion.appendChild(singleVersionDescription);
+      singleVersion.appendChild(copyTagSuccess);
+
+      selector.appendChild(singleVersion);
+    }
+
+    tooltip.init({
+      childElement: selector,
+      container
+    });
+  });
+}
+
+export function getVersionElement(separator) {
+  const headerVersionTitle = document.createElement('span');
+  headerVersionTitle.textContent = 'Version';
+  const headerVersionTitlePoint = document.createElement('span');
+  headerVersionTitlePoint.classList.add('point');
+  headerVersionTitlePoint.textContent = ':';
+  const headerVersionValue = document.createElement('span');
+  headerVersionValue.classList.add('value');
+  headerVersionValue.textContent = requestsManager.getDocsRef();
+  const headerVersionIcon = iconsManager.get('main', 'chevronDown');
+  const headerVersion = document.createElement('div');
+  headerVersion.classList.add('library', 'version');
+  headerVersion.addEventListener('click', () => expandVersionSelectorTooltip(headerVersion));
+  headerVersion.appendChild(headerVersionTitle);
+  headerVersion.appendChild(headerVersionTitlePoint);
+  headerVersion.appendChild(headerVersionValue);
+  headerVersion.appendChild(headerVersionIcon);
+
+  config.loadConfig().then(() => {
+    const versions = config.getDocsVersionsSync();
+    const current = versions.find((version) => version.getAttribute('ref') === requestsManager.getDocsRef());
+
+    if (!versions.length) {
+      headerVersion.remove();
+      separator.remove();
+      return;
+    }
+
+    headerVersionValue.textContent = (current || versions[0]).textContent.trim();
+  });
+
+  return headerVersion;
 }
 
 function expandSettingsTooltip() {
