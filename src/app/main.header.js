@@ -35,7 +35,6 @@ let headerExpandedElement;
 let headerCompassElement;
 let headerDescriptionElement;
 let headerLibraryElement;
-let headerMobileSearchElement;
 let headerSettingsElement;
 let headerLibraryValueElement;
 let fakeHeaderLibraryValueElement;
@@ -106,12 +105,6 @@ export function getElement() {
   headerCompass.appendChild(iconsManager.get('main', 'compass').firstChild);
   headerCompassElement = headerCompass;
 
-  const headerMobileSearch = document.createElement('div');
-  headerMobileSearch.classList.add('header-icon', 'header-search', 'visible');
-  headerMobileSearch.addEventListener('click', () => openSearchContainer(headerMobileSearch, searchText));
-  headerMobileSearch.appendChild(iconsManager.get('main', 'magnifyingGlass').firstChild);
-  headerMobileSearchElement = headerMobileSearch;
-
   const headerDonate = document.createElement('a');
   headerDonate.classList.add('header-icon', 'header-donate', 'visible');
   headerDonate.target = '_blank';
@@ -139,7 +132,6 @@ export function getElement() {
   headerIcons.classList.add('header-icons');
   headerIcons.appendChild(headerSearch);
   headerIcons.appendChild(headerCompass);
-  headerIcons.appendChild(headerMobileSearch);
   headerIcons.appendChild(headerDonate);
   headerIcons.appendChild(headerSettings);
 
