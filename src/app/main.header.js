@@ -112,6 +112,23 @@ export function getElement() {
   headerMobileSearch.appendChild(iconsManager.get('main', 'magnifyingGlass').firstChild);
   headerMobileSearchElement = headerMobileSearch;
 
+  const headerDonate = document.createElement('a');
+  headerDonate.classList.add('header-icon', 'header-donate', 'visible');
+  headerDonate.target = '_blank';
+  headerDonate.rel = 'noopener';
+  headerDonate.title = 'Support PyTgCalls';
+  headerDonate.style.display = 'none';
+  headerDonate.appendChild(iconsManager.get('main', 'heart').firstChild);
+
+  config.getDonationLink().then((donationLink) => {
+    if (!donationLink || !donationLink.textContent.trim()) {
+      return;
+    }
+
+    headerDonate.href = donationLink.textContent.trim();
+    headerDonate.style.display = '';
+  });
+
   const headerSettings = document.createElement('div');
   headerSettings.classList.add('header-icon', 'header-settings', 'visible');
   headerSettings.addEventListener('click', expandSettingsTooltip);
@@ -123,6 +140,7 @@ export function getElement() {
   headerIcons.appendChild(headerSearch);
   headerIcons.appendChild(headerCompass);
   headerIcons.appendChild(headerMobileSearch);
+  headerIcons.appendChild(headerDonate);
   headerIcons.appendChild(headerSettings);
 
   const header = document.createElement('div');

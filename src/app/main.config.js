@@ -88,6 +88,10 @@ export async function getSponsorsData() {
   return (await loadConfig()).querySelectorAll('homepage-config > sponsor');
 }
 
+export async function getDonationLink() {
+  return (await loadConfig()).querySelector('homepage-config > donation-link');
+}
+
 export async function getFooterContributionLink() {
   return (await loadConfig()).querySelector('homepage-config > footer-links > contribution-link');
 }
