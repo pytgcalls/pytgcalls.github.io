@@ -84,8 +84,8 @@ export async function getFooterCategories() {
   return (await loadConfig()).querySelectorAll('homepage-config > footer-links > category');
 }
 
-export async function getSponsorData() {
-  return (await loadConfig()).querySelector('homepage-config > sponsor');
+export async function getSponsorsData() {
+  return (await loadConfig()).querySelectorAll('homepage-config > sponsor');
 }
 
 export async function getFooterContributionLink() {

@@ -45,6 +45,23 @@ export function getElement() {
   return leftContainerElement;
 }
 
+function pickWeightedSponsor(sponsors) {
+  const weights = sponsors.map((sponsor) => {
+    const weight = parseFloat(sponsor.getAttribute('weight'));
+    return Number.isFinite(weight) ? Math.max(0, weight) : 1;
+  });
+  const total = weights.reduce((sum, weight) => sum + weight, 0);
+
+  if (total <= 0) {
+    return null;
+  }
+
+  let roll = Math.random() * total;
+
+  return sponsors.find((sponsor, index) => (roll -= weights[index]) < 0)
+    ?? sponsors[sponsors.length - 1];
+}
+
 function composeSponsorCard() {
   const card = document.createElement('a');
   card.classList.add('sponsor-card');
@@ -92,7 +109,9 @@ function composeSponsorCard() {
   card.appendChild(button);
   card.appendChild(disclaimer);
 
-  config.getSponsorData().then((sponsor) => {
+  config.getSponsorsData().then((sponsors) => {
+    const sponsor = pickWeightedSponsor(Array.from(sponsors));
+
     if (!sponsor) {
       return;
     }
