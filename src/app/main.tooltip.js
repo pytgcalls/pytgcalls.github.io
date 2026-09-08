@@ -49,8 +49,11 @@ export function init({
   newLeftPosition += elementRect.width / 2;
   newLeftPosition -= tooltipRect.width / 2;
 
-  if (newLeftPosition + tooltipRect.width >= window.innerWidth) {
-    newLeftPosition = window.innerWidth - tooltipRect.width - 7.5;
+  const maxLeftPosition = window.innerWidth - tooltipRect.width - 7.5;
+  const clampedLeftPosition = Math.max(7.5, Math.min(newLeftPosition, maxLeftPosition));
+
+  if (clampedLeftPosition !== newLeftPosition) {
+    newLeftPosition = clampedLeftPosition;
     tooltip.classList.add('out-of-space');
     tooltip.style.setProperty('--origin-x', elementRect.left + elementRect.width / 2 - newLeftPosition + 'px');
     tooltip.style.setProperty('--origin-y', (tooltipRect.top * 2 + 40) + 'px');

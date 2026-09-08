@@ -187,13 +187,9 @@ export function loadSidebar(id) {
     const libraryContainer = document.createElement('div');
     libraryContainer.classList.add('library-container');
     libraryContainer.appendChild(getLibraryElement(true).element);
-
-    const versionContainer = document.createElement('div');
-    versionContainer.classList.add('library-container');
-    versionContainer.appendChild(getVersionElement(versionContainer));
+    libraryContainer.appendChild(getVersionElement(document.createElement('div')));
 
     content.appendChild(libraryContainer);
-    content.appendChild(versionContainer);
 
     currentLoadedSidebarId = id;
 

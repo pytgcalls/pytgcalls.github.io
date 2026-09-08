@@ -183,9 +183,16 @@ body .page-container .left-container .left-sidebar:has(.library-container .libra
 body .page-container .left-container .left-sidebar .library-container {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  gap: 8px;
   margin-top: 15px;
+  padding-bottom: 13px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   transition: 0.2s opacity;
+}
+
+body .page-container .left-container .left-sidebar .library-container + .microtag {
+  margin-top: 12px;
 }
 
 @media screen and (min-width: 1000px) {
