@@ -125,6 +125,17 @@ export function handleRecursive(currentDom, elementDom) {
   }
 }
 
+function updateTabsIndicator(tabsContainer) {
+  const active = tabsContainer.querySelector('.tab.active');
+
+  if (!active) {
+    return;
+  }
+
+  tabsContainer.style.setProperty('--tab-x', active.offsetLeft + 'px');
+  tabsContainer.style.setProperty('--tab-w', active.offsetWidth + 'px');
+}
+
 function handleLangTabs(element, newElement) {
   const group = element.getAttribute('id') || LANG_BLOCK_GROUP;
   const languages = [...element.parentElement.querySelectorAll('lang-block')]
@@ -161,12 +172,15 @@ function handleLangTabs(element, newElement) {
         tabElement.classList.toggle('active', isActive);
         if (isActive) {
           tabsContainer.style.setProperty('--eid', String(id));
+          updateTabsIndicator(tabsContainer);
         }
       },
       ref: tabElement,
       recallWithCurrentData: true,
     });
   }
+
+  new ResizeObserver(() => updateTabsIndicator(tabsContainer)).observe(tabsContainer);
 }
 
 function handleLangBlock(element, newElement) {
@@ -845,16 +859,20 @@ function handleMultiSyntax(element, newElement) {
           tabElement.classList.toggle('active', tab.getAttribute('id') === currentData);
           if (tab.getAttribute('id') === currentData) {
             tabsContainer.style.setProperty('--eid', parseInt(id));
+            updateTabsIndicator(tabsContainer);
           }
         } else if (!currentData && !parseInt(id)) {
           tabElement.classList.add('active');
           tabsContainer.style.setProperty('--eid', '0');
+          updateTabsIndicator(tabsContainer);
         }
       },
       ref: tabElement,
       recallWithCurrentData: true,
     });
   }
+
+  new ResizeObserver(() => updateTabsIndicator(tabsContainer)).observe(tabsContainer);
 
   const syntaxHighlightContainer = document.createElement('div');
   syntaxHighlightContainer.classList.add('sy-container');

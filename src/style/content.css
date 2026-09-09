@@ -315,6 +315,7 @@ body .page-container .content:not(.is-loading) .page .external-sh {
 body .page-container .content:not(.is-loading) .page .multisyntax .external-sh {
   background: initial;
   border: none;
+  border-radius: 0;
   margin: 0;
 }
 
@@ -456,6 +457,8 @@ body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.
 body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating .external-sh.appearing {
   position: absolute;
   top: 0;
+  left: 0;
+  right: 0;
 }
 
 body .page-container .content:not(.is-loading) .page .multisyntax>.sy-container.animating.animating-asback .external-sh.disappearing {
@@ -696,27 +699,42 @@ body .page-container .content:not(.is-loading) .page .multisyntax {
 body .page-container .content:not(.is-loading) .page .multisyntax .tabs {
   display: flex;
   align-items: center;
-  justify-content: center;
-  border-bottom: 1px solid rgb(255, 255, 255, 0.1);
+  justify-content: flex-start;
+  overflow-x: auto;
+  scrollbar-width: none;
   position: relative;
+}
+
+body .page-container .content:not(.is-loading) .page .multisyntax .tabs::-webkit-scrollbar {
+  display: none;
 }
 
 body .page-container .content:not(.is-loading) .page .multisyntax .tabs::before {
   content: "";
   position: absolute;
   top: 0;
-  left: calc(calc(100% * var(--eid)) / var(--i));
-  width: calc(100% / var(--i));
+  left: 0;
   height: 100%;
-  background: rgba(255, 255, 255, 0.04);
-  transition: 0.2s left;
+  width: var(--tab-w, 0);
+  transform: translateX(var(--tab-x, 0));
+  background: rgba(255, 255, 255, 0.09);
+  transition: 0.2s transform, 0.2s width;
+}
+
+body .page-container .content:not(.is-loading) .page .multisyntax.lang-tabs {
+  margin-bottom: 15px;
 }
 
 body .page-container .content:not(.is-loading) .page .multisyntax .tabs>.tab {
-  width: calc(100% / var(--i));
-  text-align: center;
+  position: relative;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  min-width: 70px;
   padding-block: 12px;
-  transition: 0.2s color;
+  padding-inline: 16px;
+  text-align: center;
+  white-space: nowrap;
+  transition: 0.2s color, 0.2s background;
 }
 
 body .page-container .content:not(.is-loading) .page .multisyntax .tabs>.tab:not(.active) {
