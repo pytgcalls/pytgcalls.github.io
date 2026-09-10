@@ -32,7 +32,7 @@ export async function loadConfig() {
         return;
       }
 
-      alert("This documentation isn't available in your country");
+      console.error("Documentation config could not be loaded:", e);
     }
   }
 }
