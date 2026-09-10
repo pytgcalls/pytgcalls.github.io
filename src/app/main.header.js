@@ -91,11 +91,29 @@ export function getElement() {
 
   const searchText = document.createElement('input');
   searchText.placeholder = 'Search Docs';
+  const headerSearchShortcut = document.createElement('div');
+  headerSearchShortcut.classList.add('search-shortcut');
+  headerSearchShortcut.innerHTML = '<kbd>⇧</kbd><kbd>K</kbd>';
+
   const headerSearch = document.createElement('div');
   headerSearch.classList.add('search-input');
   headerSearch.addEventListener('click', () => openSearchContainer(headerSearch, searchText));
   headerSearch.appendChild(iconsManager.get('main', 'magnifyingGlass').firstChild);
   headerSearch.appendChild(searchText);
+  headerSearch.appendChild(headerSearchShortcut);
+
+  window.addEventListener('keydown', (e) => {
+    const isShiftK = e.shiftKey && (e.key === 'K' || e.key === 'k');
+    const isCtrlK = (e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K');
+    const isSlash = e.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName);
+
+    if (isShiftK || isCtrlK || isSlash) {
+      if (!document.body.classList.contains('focused-by-search')) {
+        e.preventDefault();
+        openSearchContainer(headerSearch, searchText);
+      }
+    }
+  });
 
   const headerCompass = document.createElement('div');
   headerCompass.classList.add('header-icon', 'header-compass');
@@ -122,6 +140,30 @@ export function getElement() {
     headerDonate.style.display = '';
   });
 
+  const headerThemeToggle = document.createElement('div');
+  headerThemeToggle.classList.add('header-icon', 'header-theme-toggle', 'visible');
+
+  const updateThemeIcon = () => {
+    const isLight = settingsManager.isLightMode();
+    headerThemeToggle.title = isLight ? 'Switch to Dark mode' : 'Switch to Light mode';
+    headerThemeToggle.textContent = '';
+    const icon = iconsManager.get('main', isLight ? 'moon' : 'sun').firstChild;
+    if (icon) {
+      headerThemeToggle.appendChild(icon);
+    }
+  };
+
+  updateThemeIcon();
+  settingsManager.onThemeChangeListenerInstance.addListener({
+    callback: () => updateThemeIcon()
+  });
+
+  headerThemeToggle.addEventListener('click', () => {
+    headerThemeToggle.classList.add('theme-animating');
+    setTimeout(() => headerThemeToggle.classList.remove('theme-animating'), 450);
+    settingsManager.toggleTheme();
+  });
+
   const headerSettings = document.createElement('div');
   headerSettings.classList.add('header-icon', 'header-settings', 'visible');
   headerSettings.addEventListener('click', expandSettingsTooltip);
@@ -133,6 +175,7 @@ export function getElement() {
   headerIcons.appendChild(headerSearch);
   headerIcons.appendChild(headerCompass);
   headerIcons.appendChild(headerDonate);
+  headerIcons.appendChild(headerThemeToggle);
   headerIcons.appendChild(headerSettings);
 
   const header = document.createElement('div');
@@ -349,6 +392,12 @@ function expandSettingsTooltip() {
     mainTitle.textContent = 'Settings';
     selector.appendChild(mainTitle);
 
+    selector.appendChild(createSettingsRow(
+        'Light Mode',
+        'Switch between dark and light appearance',
+        settingsManager.isLightMode(),
+        (isLight) => settingsManager.setTheme(isLight ? 'light' : 'dark')
+    ));
     selectedTabID != null && selector.appendChild(createFontSizeRow());
     selectedTabID != null && selector.appendChild(createSettingsRow(
         'Collapse Long Code',
@@ -374,18 +423,6 @@ function expandSettingsTooltip() {
         settingsManager.getReduceBlurStatus(),
         settingsManager.updateReduceBlur
     ));
-
-    if (debug.isSafeToUseDebugItems() && selectedTabID != null) {
-      const debugTitle = document.createElement('div');
-      debugTitle.classList.add('mini-text', 'has-margin', 'align-left');
-      debugTitle.textContent = 'DEBUG';
-      selector.appendChild(debugTitle);
-
-      selector.appendChild(createDebugRow('Try custom page code', () => debug.tryCustomPageCode()));
-      selector.appendChild(createDebugRow('Try custom config code', () => debug.tryCustomPageCode(true)));
-      selector.appendChild(createDebugRow('Try custom server', () => debug.tryCustomServer()));
-      selector.appendChild(createDebugRow('Reload page data',  () => debug.reloadPageData()));
-    }
 
     onSettingsUpdateListenerInstance.callAllListeners(true);
     tooltip.init({
@@ -493,13 +530,6 @@ function createFontSizeRow() {
   fragment.appendChild(fontSizeContainer);
 
   return fragment;
-}
-
-function createDebugRow(title, callback) {
-  return createSettingsRow(title, null, false, () => {
-    tooltip.closeTooltips();
-    callback();
-  }, false);
 }
 
 function createSettingsRow(title, description, status, callback, hasSwitch = true) {

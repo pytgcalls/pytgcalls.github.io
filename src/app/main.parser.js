@@ -34,19 +34,552 @@ const LANGUAGE_NAMES = {
 };
 import {waitForAnimationEnd} from "./main.utils.js";
 
-export function getContentByData(text) {
+const CHANGELOG_METADATA = {
+  '2.3.0': { date: 'Sep 10, 2026', type: 'minor', label: 'Minor Update', icon: 'tag', color: 'purple', isLatest: true, releaseUrl: 'https://pypi.org/project/py-tgcalls/2.3.0/' },
+  'v2.3.0': { date: 'Sep 10, 2026', type: 'minor', label: 'Minor Update', icon: 'tag', color: 'purple', isLatest: true, releaseUrl: 'https://pypi.org/project/py-tgcalls/2.3.0/' },
+  '2.2.11': { date: 'Aug 18, 2026', type: 'bugfix', label: 'Patch Release', icon: 'bug', color: 'blue', releaseUrl: 'https://pypi.org/project/py-tgcalls/2.2.11/' },
+  'v2.2.11': { date: 'Aug 18, 2026', type: 'bugfix', label: 'Patch Release', icon: 'bug', color: 'blue', releaseUrl: 'https://pypi.org/project/py-tgcalls/2.2.11/' },
+  '2.2.X': { date: 'Jul 02, 2026', type: 'minor', label: 'Minor Update', icon: 'tag', color: 'purple', releaseUrl: 'https://pypi.org/project/py-tgcalls/2.2.0/' },
+  'v2.2.X': { date: 'Jul 02, 2026', type: 'minor', label: 'Minor Update', icon: 'tag', color: 'purple', releaseUrl: 'https://pypi.org/project/py-tgcalls/2.2.0/' },
+  '2.1.X': { date: 'May 14, 2026', type: 'major', label: 'Major Update', icon: 'rocket', color: 'green', releaseUrl: 'https://pypi.org/project/py-tgcalls/2.1.0/' },
+  'v2.1.X': { date: 'May 14, 2026', type: 'major', label: 'Major Update', icon: 'rocket', color: 'green', releaseUrl: 'https://pypi.org/project/py-tgcalls/2.1.0/' },
+  '2.0.3': { date: 'Mar 21, 2026', type: 'bugfix', label: 'Patch Release', icon: 'bug', color: 'blue', releaseUrl: 'https://pypi.org/project/py-tgcalls/2.0.3/' },
+  'v2.0.3': { date: 'Mar 21, 2026', type: 'bugfix', label: 'Patch Release', icon: 'bug', color: 'blue', releaseUrl: 'https://pypi.org/project/py-tgcalls/2.0.3/' },
+  '2.0.X': { date: 'Jan 10, 2026', type: 'major', label: 'Major Update', icon: 'rocket', color: 'green', releaseUrl: 'https://pypi.org/project/py-tgcalls/2.0.0/' },
+  'v2.0.X': { date: 'Jan 10, 2026', type: 'major', label: 'Major Update', icon: 'rocket', color: 'green', releaseUrl: 'https://pypi.org/project/py-tgcalls/2.0.0/' },
+  '1.2.X': { date: 'Oct 02, 2025', type: 'minor', label: 'Minor Update', icon: 'tag', color: 'purple', releaseUrl: 'https://pypi.org/project/py-tgcalls/1.2.1/' },
+  'v1.2.X': { date: 'Oct 02, 2025', type: 'minor', label: 'Minor Update', icon: 'tag', color: 'purple', releaseUrl: 'https://pypi.org/project/py-tgcalls/1.2.1/' },
+  '1.1.6': { date: 'Aug 16, 2025', type: 'improvements', label: 'Contest / News', icon: 'chart', color: 'orange', releaseUrl: 'https://github.com/pytgcalls/pytgcalls/discussions/199' },
+  '#PyTgCon2K24': { date: 'Aug 16, 2025', type: 'improvements', label: 'Contest / News', icon: 'chart', color: 'orange', releaseUrl: 'https://github.com/pytgcalls/pytgcalls/discussions/199' },
+  '1.1.X': { date: 'Jun 11, 2025', type: 'minor', label: 'Minor Update', icon: 'tag', color: 'purple', releaseUrl: 'https://pypi.org/project/py-tgcalls/1.1.6/' },
+  'v1.1.X': { date: 'Jun 11, 2025', type: 'minor', label: 'Minor Update', icon: 'tag', color: 'purple', releaseUrl: 'https://pypi.org/project/py-tgcalls/1.1.6/' },
+  '1.0.X': { date: 'Apr 09, 2025', type: 'major', label: 'Major Update', icon: 'rocket', color: 'green', releaseUrl: 'https://pypi.org/project/py-tgcalls/1.0.9/' },
+  'v1.0.X': { date: 'Apr 09, 2025', type: 'major', label: 'Major Update', icon: 'rocket', color: 'green', releaseUrl: 'https://pypi.org/project/py-tgcalls/1.0.9/' },
+  '0.9.X': { date: 'Jan 15, 2025', type: 'minor', label: 'Minor Update', icon: 'tag', color: 'purple', releaseUrl: 'https://pypi.org/project/py-tgcalls/0.9.7/' },
+  'v0.9.X': { date: 'Jan 15, 2025', type: 'minor', label: 'Minor Update', icon: 'tag', color: 'purple', releaseUrl: 'https://pypi.org/project/py-tgcalls/0.9.7/' },
+  'Google Partnership!': { date: 'Jul 15, 2023', type: 'improvements', label: 'News / Milestone', icon: 'chart', color: 'orange', releaseUrl: 'https://pypi.org/project/py-tgcalls/0.9.7/' },
+  '0.8.3': { date: 'Nov 21, 2024', type: 'bugfix', label: 'Patch Release', icon: 'bug', color: 'blue', releaseUrl: 'https://pypi.org/project/py-tgcalls/0.8.6/' },
+  'v0.8.3': { date: 'Nov 21, 2024', type: 'bugfix', label: 'Patch Release', icon: 'bug', color: 'blue', releaseUrl: 'https://pypi.org/project/py-tgcalls/0.8.6/' },
+  '0.8.X': { date: 'Oct 03, 2024', type: 'minor', label: 'Minor Update', icon: 'tag', color: 'purple', releaseUrl: 'https://pypi.org/project/py-tgcalls/0.8.6/' },
+  'v0.8.X': { date: 'Oct 03, 2024', type: 'minor', label: 'Minor Update', icon: 'tag', color: 'purple', releaseUrl: 'https://pypi.org/project/py-tgcalls/0.8.6/' },
+  '0.7.X': { date: 'Aug 20, 2024', type: 'minor', label: 'Minor Update', icon: 'tag', color: 'purple', releaseUrl: 'https://pypi.org/project/py-tgcalls/0.7.4/' },
+  'v0.7.X': { date: 'Aug 20, 2024', type: 'minor', label: 'Minor Update', icon: 'tag', color: 'purple', releaseUrl: 'https://pypi.org/project/py-tgcalls/0.7.4/' },
+  '0.6.X': { date: 'Aug 05, 2024', type: 'minor', label: 'Minor Update', icon: 'tag', color: 'purple', releaseUrl: 'https://pypi.org/project/py-tgcalls/0.6.0/' },
+  'v0.6.X': { date: 'Aug 05, 2024', type: 'minor', label: 'Minor Update', icon: 'tag', color: 'purple', releaseUrl: 'https://pypi.org/project/py-tgcalls/0.6.0/' },
+  '0.5.X': { date: 'Jul 15, 2024', type: 'major', label: 'Initial Release', icon: 'rocket', color: 'green', releaseUrl: 'https://pypi.org/project/py-tgcalls/0.5.5/' },
+  'v0.5.X': { date: 'Jul 15, 2024', type: 'major', label: 'Initial Release', icon: 'rocket', color: 'green', releaseUrl: 'https://pypi.org/project/py-tgcalls/0.5.5/' },
+};
+
+export function getContentByData(text, fileName = '') {
   const currentElement = document.createElement('div');
   currentElement.classList.add('page');
 
   const parser = new DOMParser();
-  const doc = parser.parseFromString(text, 'application/xml');
+  let doc;
+  try {
+    doc = parser.parseFromString(text, 'application/xml');
+    if (doc.querySelector('parsererror') || !doc.documentElement) {
+      doc = parser.parseFromString(text, 'text/html');
+    }
+  } catch (_) {
+    doc = parser.parseFromString(text, 'text/html');
+  }
 
-  const currentPage = doc.querySelector('page');
+  const currentPage = doc.querySelector('page, PAGE') || doc.body || doc.documentElement;
   if (currentPage) {
-    handleRecursive(currentPage, currentElement);
+    const pageH1 = currentPage.querySelector('h1, H1');
+    const h1Text = pageH1 ? pageH1.textContent.trim().toLowerCase() : '';
+    const isChangelogs = h1Text.includes('changelog') ||
+      (typeof fileName === 'string' && fileName.toLowerCase().includes('changelog')) ||
+      (typeof window !== 'undefined' && window.location.pathname && window.location.pathname.toLowerCase().includes('changelog'));
+
+    if (isChangelogs) {
+      try {
+        renderChangelogsPage(currentPage, currentElement);
+      } catch (e) {
+        console.error('renderChangelogsPage error:', e);
+      }
+    } else {
+      renderDocBreadcrumb(fileName, currentPage, currentElement);
+      handleRecursive(currentPage, currentElement);
+    }
   }
 
   return currentElement;
+}
+
+function renderDocBreadcrumb(fileName, currentPage, currentElement) {
+  const pageH1 = currentPage.querySelector('h1, H1');
+  const pageTitle = pageH1 ? pageH1.textContent.trim() : '';
+
+  let pathParts = [];
+  if (typeof fileName === 'string' && fileName.trim()) {
+    const cleanPath = fileName.replace(/\.xml$/i, '').replace(/^\/+/, '');
+    pathParts = cleanPath.split('/').filter(Boolean);
+  }
+
+  if (pathParts.length === 0 && typeof window !== 'undefined' && window.location.pathname) {
+    const cleanPath = window.location.pathname.replace(/^\/+/, '');
+    pathParts = cleanPath.split('/').filter(Boolean);
+  }
+
+  if (pathParts.length > 0 || pageTitle) {
+    const breadcrumb = document.createElement('div');
+    breadcrumb.classList.add('doc-page-breadcrumb');
+
+    const homeIcon = iconsManager.get('main', 'home');
+    homeIcon.classList.add('breadcrumb-home');
+    breadcrumb.appendChild(homeIcon);
+
+    const bSep1 = document.createElement('span');
+    bSep1.classList.add('breadcrumb-sep');
+    bSep1.textContent = '/';
+    breadcrumb.appendChild(bSep1);
+
+    const libName = pathParts[0] || 'Docs';
+    const bLib = document.createElement('span');
+    bLib.classList.add('breadcrumb-item');
+    bLib.textContent = libName;
+    breadcrumb.appendChild(bLib);
+
+    if (pathParts.length > 2) {
+      for (let i = 1; i < pathParts.length - 1; i++) {
+        const bSep = document.createElement('span');
+        bSep.classList.add('breadcrumb-sep');
+        bSep.textContent = '/';
+        breadcrumb.appendChild(bSep);
+
+        const bSection = document.createElement('span');
+        bSection.classList.add('breadcrumb-item');
+        bSection.textContent = pathParts[i];
+        breadcrumb.appendChild(bSection);
+      }
+    }
+
+    const currentTitle = pageTitle || (pathParts.length > 1 ? pathParts[pathParts.length - 1] : '');
+    if (currentTitle && currentTitle !== libName) {
+      const bSepLast = document.createElement('span');
+      bSepLast.classList.add('breadcrumb-sep');
+      bSepLast.textContent = '/';
+      breadcrumb.appendChild(bSepLast);
+
+      const bCurrent = document.createElement('span');
+      bCurrent.classList.add('breadcrumb-current');
+      bCurrent.textContent = currentTitle;
+      breadcrumb.appendChild(bCurrent);
+    }
+
+    currentElement.appendChild(breadcrumb);
+  }
+}
+
+function renderChangelogsPage(currentPage, currentElement) {
+  currentElement.classList.add('changelog-page-wrapper');
+
+  // 1. Breadcrumb
+  const breadcrumb = document.createElement('div');
+  breadcrumb.classList.add('changelog-breadcrumb');
+  const homeIcon = iconsManager.get('main', 'home');
+  homeIcon.classList.add('breadcrumb-home');
+  breadcrumb.appendChild(homeIcon);
+  const bSep1 = document.createElement('span');
+  bSep1.classList.add('breadcrumb-sep');
+  bSep1.textContent = '/';
+  breadcrumb.appendChild(bSep1);
+  const bIntro = document.createElement('span');
+  bIntro.classList.add('breadcrumb-item');
+  bIntro.textContent = 'Introduction';
+  breadcrumb.appendChild(bIntro);
+  const bSep2 = document.createElement('span');
+  bSep2.classList.add('breadcrumb-sep');
+  bSep2.textContent = '/';
+  breadcrumb.appendChild(bSep2);
+  const bCurrent = document.createElement('span');
+  bCurrent.classList.add('breadcrumb-current');
+  bCurrent.textContent = 'Changelogs';
+  breadcrumb.appendChild(bCurrent);
+  currentElement.appendChild(breadcrumb);
+
+  // 2. Title & Subtitle
+  const title = document.createElement('h1');
+  title.classList.add('changelog-title');
+  title.textContent = 'Changelogs';
+  currentElement.appendChild(title);
+
+  const subtitle = document.createElement('p');
+  subtitle.classList.add('changelog-subtitle');
+  subtitle.textContent = 'Stay up to date with the latest changes, improvements, and bug fixes in PyTgCalls.';
+  currentElement.appendChild(subtitle);
+
+  // 3. Hero Card
+  const heroCard = document.createElement('div');
+  heroCard.classList.add('changelog-hero-card');
+
+  const heroLeft = document.createElement('div');
+  heroLeft.classList.add('hero-left');
+
+  const heroGithubBadge = document.createElement('div');
+  heroGithubBadge.classList.add('hero-github-badge');
+  heroGithubBadge.appendChild(iconsManager.get('socials', 'github'));
+  heroLeft.appendChild(heroGithubBadge);
+
+  const heroTexts = document.createElement('div');
+  heroTexts.classList.add('hero-texts');
+
+  const heroHeading = document.createElement('h2');
+  heroHeading.classList.add('hero-heading');
+  heroHeading.textContent = 'Open Source & Community Driven';
+  heroTexts.appendChild(heroHeading);
+
+  const heroSub = document.createElement('p');
+  heroSub.classList.add('hero-subtext');
+  heroSub.textContent = 'PyTgCalls is constantly evolving with the help of the community.';
+  heroTexts.appendChild(heroSub);
+
+  const heroActions = document.createElement('div');
+  heroActions.classList.add('hero-actions');
+
+  function formatStatCount(num) {
+    if (typeof num !== 'number' || isNaN(num)) return '0';
+    if (num >= 1000) {
+      return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+    }
+    return num.toLocaleString();
+  }
+
+  const repoStatsConfig = [
+    {
+      repo: 'pytgcalls/pytgcalls',
+      name: 'pytgcalls',
+      url: 'https://github.com/pytgcalls/pytgcalls',
+      defaultStars: 430,
+      defaultForks: 209
+    },
+    {
+      repo: 'pytgcalls/ntgcalls',
+      name: 'ntgcalls',
+      url: 'https://github.com/pytgcalls/ntgcalls',
+      defaultStars: 117,
+      defaultForks: 43
+    }
+  ];
+
+  repoStatsConfig.forEach((item) => {
+    const card = document.createElement('a');
+    card.classList.add('hero-repo-stat-card');
+    card.href = item.url;
+    card.target = '_blank';
+    card.rel = 'noopener';
+    card.title = `View ${item.name} on GitHub`;
+
+    const repoHeader = document.createElement('div');
+    repoHeader.classList.add('repo-name-group');
+    repoHeader.appendChild(iconsManager.get('socials', 'github'));
+    const nameSpan = document.createElement('span');
+    nameSpan.classList.add('repo-title');
+    nameSpan.textContent = item.name;
+    repoHeader.appendChild(nameSpan);
+
+    const statsGroup = document.createElement('div');
+    statsGroup.classList.add('repo-stats-pills');
+
+    const starPill = document.createElement('div');
+    starPill.classList.add('repo-stat-pill', 'stars-pill');
+    starPill.title = `${item.name} Stars on GitHub`;
+    starPill.appendChild(iconsManager.get('main', 'star'));
+    const starCount = document.createElement('span');
+    starCount.classList.add('stat-count');
+    starCount.textContent = formatStatCount(item.defaultStars);
+    starPill.appendChild(starCount);
+
+    const forkPill = document.createElement('div');
+    forkPill.classList.add('repo-stat-pill', 'forks-pill');
+    forkPill.title = `${item.name} Forks on GitHub`;
+    forkPill.appendChild(iconsManager.get('main', 'codeFork'));
+    const forkCount = document.createElement('span');
+    forkCount.classList.add('stat-count');
+    forkCount.textContent = formatStatCount(item.defaultForks);
+    forkPill.appendChild(forkCount);
+
+    statsGroup.appendChild(starPill);
+    statsGroup.appendChild(forkPill);
+
+    card.appendChild(repoHeader);
+    card.appendChild(statsGroup);
+    heroActions.appendChild(card);
+
+    const updateStats = async (isLive = false) => {
+      try {
+        const stats = await requestsManager.getGitHubRepoStats(item.repo, isLive);
+        if (stats && document.body.contains(card)) {
+          if (typeof stats.stars === 'number') {
+            const formattedStars = formatStatCount(stats.stars);
+            if (starCount.textContent !== formattedStars) {
+              starCount.textContent = formattedStars;
+              starPill.classList.remove('stat-updated');
+              void starPill.offsetWidth;
+              starPill.classList.add('stat-updated');
+              setTimeout(() => starPill.classList.remove('stat-updated'), 1200);
+            }
+          }
+          if (typeof stats.forks === 'number') {
+            const formattedForks = formatStatCount(stats.forks);
+            if (forkCount.textContent !== formattedForks) {
+              forkCount.textContent = formattedForks;
+              forkPill.classList.remove('stat-updated');
+              void forkPill.offsetWidth;
+              forkPill.classList.add('stat-updated');
+              setTimeout(() => forkPill.classList.remove('stat-updated'), 1200);
+            }
+          }
+        }
+      } catch (_) {}
+    };
+
+    // Immediate initial live fetch
+    updateStats(true);
+
+    // Live background polling every 30 seconds
+    const statsInterval = setInterval(() => {
+      if (!document.body.contains(card)) {
+        clearInterval(statsInterval);
+        return;
+      }
+      updateStats(true);
+    }, 30000);
+
+    // Immediate live refresh on tab focus
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        if (!document.body.contains(card)) {
+          document.removeEventListener('visibilitychange', onVisibilityChange);
+          return;
+        }
+        updateStats(true);
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibilityChange);
+  });
+
+  heroTexts.appendChild(heroActions);
+  heroLeft.appendChild(heroTexts);
+  heroCard.appendChild(heroLeft);
+
+  const heroRight = document.createElement('div');
+  heroRight.classList.add('hero-right');
+  heroRight.innerHTML = `
+    <div class="hero-mockup-wrapper">
+      <div class="hero-mockup-card">
+        <div class="mockup-header">
+          <span class="mockup-tag">Changelog</span>
+          <span class="mockup-pill">v2.3.0</span>
+        </div>
+        <div class="mockup-content">
+          <div class="mockup-heading">What's Changed</div>
+          <p class="mockup-paragraph">Stream optimizations, stability fixes, and improved call lifecycle handling.</p>
+        </div>
+        <div class="mockup-refresh-icon">
+          ${iconsManager.get('main', 'refresh').outerHTML}
+        </div>
+      </div>
+      <div class="hero-note">
+        <span class="note-text">Better Calls Every Release</span>
+        <svg class="note-arrow" viewBox="0 0 65 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M55 6 C38 6, 22 20, 12 38" stroke="#79c0ff" stroke-width="1.8" stroke-dasharray="3.5 3.5"/>
+          <path d="M6 30 L11 39 L21 34" stroke="#79c0ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+  `;
+  heroCard.appendChild(heroRight);
+  currentElement.appendChild(heroCard);
+
+  // 4. Filter Bar
+  const filterBar = document.createElement('div');
+  filterBar.classList.add('changelog-filter-bar');
+
+  const filterOptions = [
+    { id: 'all', label: 'All', icon: 'layerGroup' },
+    { id: 'major', label: 'Major Releases', icon: 'rocket' },
+    { id: 'minor', label: 'Minor Updates', icon: 'tag' },
+    { id: 'bugfix', label: 'Bug Fixes', icon: 'bug' },
+    { id: 'improvements', label: 'Improvements', icon: 'chart' }
+  ];
+
+  filterOptions.forEach((opt, idx) => {
+    const pill = document.createElement('button');
+    pill.classList.add('filter-pill');
+    if (idx === 0) pill.classList.add('active');
+    pill.setAttribute('data-filter', opt.id);
+    pill.appendChild(iconsManager.get('main', opt.icon));
+    pill.appendChild(document.createTextNode(' ' + opt.label));
+    filterBar.appendChild(pill);
+  });
+  currentElement.appendChild(filterBar);
+
+  // 5. Cards list
+  const cardsContainer = document.createElement('div');
+  cardsContainer.classList.add('changelog-cards-list');
+
+  let categories = [...currentPage.querySelectorAll('category, CATEGORY, Category')];
+  if (categories.length === 0) {
+    const banners = [...currentPage.querySelectorAll('banner, BANNER, Banner')];
+    categories = banners.map(b => b.parentElement || b);
+  }
+
+  let releaseIndex = 0;
+
+  categories.forEach((cat) => {
+    const banner = cat.querySelector('banner, BANNER, Banner') || (cat.tagName && cat.tagName.toUpperCase() === 'BANNER' ? cat : null);
+    const subtext = cat.querySelector('subtext, SUBTEXT, Subtext');
+    if (!banner) return;
+
+    const version = banner.getAttribute('version') || banner.getAttribute('VERSION') || '2.3.0';
+    const minititle = banner.getAttribute('minititle') || banner.getAttribute('MINITITLE') || 'MINOR UPDATE';
+    const bigtitle = banner.getAttribute('bigtitle') || banner.getAttribute('BIGTITLE') || ('PyTgCalls v' + version);
+    const description = banner.getAttribute('description') || banner.getAttribute('DESCRIPTION') || '';
+    const cleanVersion = bigtitle.replace(/^PyTgCalls\s+/i, '').trim();
+
+    const meta = CHANGELOG_METADATA[cleanVersion] || CHANGELOG_METADATA[version] || {
+      date: '2026',
+      type: minititle.toLowerCase().includes('major') ? 'major' : (minititle.toLowerCase().includes('patch') || minititle.toLowerCase().includes('bug') ? 'bugfix' : (minititle.toLowerCase().includes('improve') ? 'improvements' : 'minor')),
+      label: minititle.charAt(0) + minititle.slice(1).toLowerCase(),
+      icon: minititle.toLowerCase().includes('major') ? 'rocket' : (minititle.toLowerCase().includes('patch') || minititle.toLowerCase().includes('bug') ? 'bug' : (minititle.toLowerCase().includes('improve') ? 'chart' : 'tag')),
+      color: minititle.toLowerCase().includes('major') ? 'green' : (minititle.toLowerCase().includes('patch') || minititle.toLowerCase().includes('bug') ? 'blue' : (minititle.toLowerCase().includes('improve') ? 'orange' : 'purple')),
+      isLatest: releaseIndex === 0
+    };
+
+    const card = document.createElement('div');
+    card.classList.add('changelog-release-card');
+    card.setAttribute('data-category', meta.type);
+    card.id = 'version-' + cleanVersion.replace(/[^a-zA-Z0-9]/g, '-');
+
+    // Header
+    const header = document.createElement('div');
+    header.classList.add('changelog-card-header');
+
+    // Icon Badge
+    const iconBadge = document.createElement('div');
+    iconBadge.classList.add('changelog-icon-badge', meta.color);
+    iconBadge.appendChild(iconsManager.get('main', meta.icon));
+    header.appendChild(iconBadge);
+
+    // Info
+    const info = document.createElement('div');
+    info.classList.add('changelog-card-info');
+
+    const titleRow = document.createElement('div');
+    titleRow.classList.add('changelog-title-row');
+
+    const vTitle = document.createElement('span');
+    vTitle.classList.add('changelog-version-name', 'big-title');
+    vTitle.textContent = cleanVersion;
+    titleRow.appendChild(vTitle);
+
+    if (meta.isLatest || releaseIndex === 0) {
+      const latestBadge = document.createElement('span');
+      latestBadge.classList.add('changelog-tag-latest');
+      latestBadge.textContent = 'Latest';
+      titleRow.appendChild(latestBadge);
+    }
+    info.appendChild(titleRow);
+
+    const metaText = document.createElement('div');
+    metaText.classList.add('changelog-card-meta');
+    metaText.textContent = `${meta.date} · ${meta.label}`;
+    info.appendChild(metaText);
+
+    if (description) {
+      const descText = document.createElement('div');
+      descText.classList.add('changelog-card-desc');
+      descText.textContent = description;
+      info.appendChild(descText);
+    }
+
+    header.appendChild(info);
+
+    // Details button
+    const detailsBtn = document.createElement('a');
+    detailsBtn.classList.add('changelog-btn-details');
+    const btnTitle = banner.getAttribute('presentationbuttontitle') || 'View Details';
+    detailsBtn.textContent = btnTitle + ' ';
+    const btnArrow = iconsManager.get('main', 'arrowRight');
+    detailsBtn.appendChild(btnArrow);
+
+    const presentationUrl = banner.getAttribute('presentationbuttonurl');
+    const releaseUrl = presentationUrl || meta.releaseUrl || ('https://pypi.org/project/py-tgcalls/' + cleanVersion.replace(/^v/i, ''));
+    detailsBtn.href = releaseUrl;
+    detailsBtn.target = '_blank';
+    detailsBtn.rel = 'noopener';
+    header.appendChild(detailsBtn);
+
+    card.appendChild(header);
+
+    // Accordion Toggle
+    const accordionToggle = document.createElement('div');
+    accordionToggle.classList.add('changelog-accordion-toggle');
+    const chevron = iconsManager.get('main', 'chevronDown');
+    chevron.classList.add('toggle-chevron');
+    accordionToggle.appendChild(chevron);
+    accordionToggle.appendChild(document.createTextNode(" What's new?"));
+
+    // Accordion Body
+    const detailsBody = document.createElement('div');
+    detailsBody.classList.add('changelog-details-body');
+
+    if (releaseIndex === 0) {
+      accordionToggle.classList.add('is-open');
+      detailsBody.classList.add('is-open');
+    }
+
+    accordionToggle.addEventListener('click', () => {
+      const isOpen = accordionToggle.classList.toggle('is-open');
+      detailsBody.classList.toggle('is-open', isOpen);
+    });
+
+    const imageUrl = banner.getAttribute('imageurl') || banner.getAttribute('IMAGEURL');
+    if (imageUrl) {
+      const bannerImg = document.createElement('img');
+      bannerImg.classList.add('changelog-banner-img');
+      bannerImg.src = imageUrl;
+      bannerImg.alt = cleanVersion;
+      bannerImg.loading = 'lazy';
+      detailsBody.appendChild(bannerImg);
+    }
+
+    if (subtext) {
+      try {
+        handleRecursive(subtext, detailsBody);
+      } catch (subErr) {
+        console.warn('Error parsing subtext for changelog:', subErr);
+      }
+    }
+
+    card.appendChild(accordionToggle);
+    card.appendChild(detailsBody);
+
+    cardsContainer.appendChild(card);
+    releaseIndex++;
+  });
+
+  currentElement.appendChild(cardsContainer);
+
+  // Filter interaction
+  filterBar.querySelectorAll('.filter-pill').forEach((pill) => {
+    pill.addEventListener('click', () => {
+      filterBar.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      const filter = pill.getAttribute('data-filter');
+      cardsContainer.querySelectorAll('.changelog-release-card').forEach((card) => {
+        const cat = card.getAttribute('data-category');
+        if (filter === 'all' || cat === filter || (filter === 'minor' && cat === 'minor') || (filter === 'major' && cat === 'major') || (filter === 'bugfix' && (cat === 'bugfix' || cat === 'patch')) || (filter === 'improvements' && (cat === 'minor' || cat === 'improvements'))) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
 }
 
 export function handleRecursive(currentDom, elementDom) {
@@ -55,9 +588,14 @@ export function handleRecursive(currentDom, elementDom) {
   for (const element of currentDom.childNodes) {
     if (element instanceof Text) {
       elementDom.appendChild(emojisParser.parse(element.textContent));
-    } else if (!syntaxManager.AVAILABLE_ELEMENTS.includes(element.tagName.toUpperCase())) {
-      console.error(element);
-      throw new Error("An unknown element has been used " + element.tagName);
+    } else if (element.nodeType === 8) {
+      // Ignore XML/HTML comment nodes
+      continue;
+    } else if (!element.tagName || !syntaxManager.AVAILABLE_ELEMENTS.includes(element.tagName.toUpperCase())) {
+      console.warn("Unrecognized or custom element:", element.tagName);
+      const fallbackDiv = document.createElement('div');
+      handleRecursive(element, fallbackDiv);
+      elementDom.appendChild(fallbackDiv);
     } else {
       let newElement = document.createElement('div');
       newElement = checkAndManageElement(element, newElement, elementDom);
@@ -76,8 +614,10 @@ export function handleRecursive(currentDom, elementDom) {
 
       if ([syntaxManager.TEXT, syntaxManager.TABLE_ITEM].includes(element.tagName.toUpperCase())) {
         const spacesMultiplier = '<br/>'.repeat(element.tagName.toUpperCase() === syntaxManager.TABLE_ITEM ? 1 : 2);
-        element.innerHTML = element.innerHTML.replace('\n\n', spacesMultiplier);
-        containsCustomTags = true;
+        if (typeof element.innerHTML === 'string') {
+          element.innerHTML = element.innerHTML.replaceAll('\n\n', spacesMultiplier);
+          containsCustomTags = true;
+        }
       }
 
       if ([syntaxManager.SYNTAX_HIGHLIGHT, syntaxManager.SYNTAX_HIGHLIGHT_INLINE].includes(element.tagName.toUpperCase())) {
@@ -283,12 +823,12 @@ export function getLanguageColorByName(name) {
 
 function checkAndManageElement(element, newElement, elementDom) {
   if (element.tagName.toUpperCase() === syntaxManager.LINK) {
-    if (element.getAttribute('href').startsWith('https')) {
-      newElement = document.createElement('a');
-      newElement.href = element.getAttribute('href');
+    newElement = document.createElement('a');
+    const href = element.getAttribute('href') || '#';
+    newElement.href = href;
+    if (href.startsWith('http://') || href.startsWith('https://')) {
       newElement.target = '_blank';
-    } else {
-      throw new Error("UnsupportedLink");
+      newElement.rel = 'noopener';
     }
   } else if (element.tagName.toUpperCase() === syntaxManager.BANNER) {
     newElement.classList.add('banner');
@@ -373,7 +913,7 @@ function checkAndManageElement(element, newElement, elementDom) {
         updateButton.href = element.getAttribute('presentationbuttonurl');
       } else {
         const currentVersion = element.getAttribute('version');
-        if (currentVersion.endsWith('X')) {
+        if (currentVersion && currentVersion.endsWith('X')) {
           const searchForVersion = currentVersion.replace(/X+$/g, '');
           if (searchForVersion !== '') {
             requestsManager.retrievePackageData().then((data) => {
@@ -385,7 +925,7 @@ function checkAndManageElement(element, newElement, elementDom) {
               }
             });
           }
-        } else {
+        } else if (currentVersion) {
           updateButton.href = 'https://pypi.org/project/py-tgcalls/' + currentVersion;
         }
       }
@@ -396,7 +936,7 @@ function checkAndManageElement(element, newElement, elementDom) {
       libPresentationRow.appendChild(updateButton);
       newElement.appendChild(libPresentationRow);
     } else {
-      throw new Error("invalid banner data");
+      console.warn("Invalid banner data, rendering minimal placeholder");
     }
   } else if (element.tagName.toUpperCase() === syntaxManager.LIST) {
     newElement = document.createElement('ul');
@@ -471,11 +1011,14 @@ function checkAndManageElement(element, newElement, elementDom) {
 }
 
 export function tryToReduceTags(element) {
+  if (!element || !element.querySelectorAll) return;
+
   const handleItem = (child) => {
-    const currentOptionData = config.getOptionValueByIdSync(child.getAttribute('id'));
+    const optionId = child.getAttribute('id');
+    const currentOptionData = config.getOptionValueByIdSync(optionId);
 
     if (currentOptionData) {
-      const isComplex = config.isComplexOptionValueByIdSync(child.getAttribute('id'));
+      const isComplex = config.isComplexOptionValueByIdSync(optionId);
 
       if (isComplex) {
         const fragment = document.createDocumentFragment();
@@ -485,11 +1028,12 @@ export function tryToReduceTags(element) {
         child.replaceWith(document.createTextNode(currentOptionData.textContent));
       }
     } else {
-      throw new Error("A config key that doesn't exist has been requested " + child.getAttribute('id'));
+      console.warn("A config key that doesn't exist has been requested: " + optionId);
+      child.remove();
     }
   };
 
-  if (element.tagName.toUpperCase() === syntaxManager.CONFIG) {
+  if (element.tagName && element.tagName.toUpperCase() === syntaxManager.CONFIG) {
     handleItem(element);
   }
 
@@ -686,8 +1230,16 @@ function updateSyntaxHighlightWithCollapsable(element, rows) {
   const expandableView = document.createElement('div');
   expandableView.classList.add('expandable');
   expandableView.addEventListener('click', () => externalContainer.classList.add('expanded', 'with-animation'));
-  expandableView.textContent = 'Click to expand';
-  expandableView.prepend(iconsManager.get('main', 'chevronDown').firstChild);
+
+  const inner = document.createElement('div');
+  inner.classList.add('expandable-inner');
+  inner.appendChild(iconsManager.get('main', 'chevronDown').firstChild);
+
+  const label = document.createElement('span');
+  label.textContent = 'Click to expand';
+  inner.appendChild(label);
+
+  expandableView.appendChild(inner);
 
   const externalContainer = document.createElement('div');
   externalContainer.classList.add('external-sh');
@@ -1027,88 +1579,214 @@ function handleGithubRef(element) {
 
   const handleElementUpdate = (response) => {
     requestAnimationFrame(() => {
-      const recommendedIcon = iconsManager.get('main', 'star');
-      const recommendedBadge = document.createElement('div');
-      recommendedBadge.classList.add('recommended-badge');
-      recommendedBadge.appendChild(recommendedIcon);
-      recommendedBadge.appendChild(document.createTextNode('Recommended by our staff'));
-
-      const repoTitle = document.createElement('div');
-      repoTitle.classList.add('repo-title');
-      repoTitle.textContent = response['full_name'];
-      const repoDescription = document.createElement('div');
-      repoDescription.classList.add('repo-description');
-      repoDescription.textContent = response['description'];
-      const repoDetails = document.createElement('div');
-      repoDetails.classList.add('repo-details');
-      repoDetails.appendChild(repoTitle);
-      repoDetails.appendChild(repoDescription);
-
-      const repoOwnerImage = document.createElement('img');
-      repoOwnerImage.src = response['owner']['avatar_url'];
-      const repoPresentation = document.createElement('div');
-      repoPresentation.classList.add('repo-presentation');
-      repoPresentation.appendChild(repoDetails);
-      repoPresentation.appendChild(repoOwnerImage);
-
-      const repoLanguage = document.createElement('div');
-      repoLanguage.classList.add('value', 'repo-language');
-      repoLanguage.style.setProperty('--color', getLanguageColorByName(response['language']));
-      repoLanguage.textContent = response['language'];
-      const repoStars = document.createElement('div');
-      repoStars.classList.add('value', 'repo-stars');
-      repoStars.appendChild(iconsManager.get('main', 'star'));
-      repoStars.appendChild(document.createTextNode(response['stargazers_count']));
-      const repoForks = document.createElement('div');
-      repoForks.classList.add('value', 'repo-forks');
-      repoForks.appendChild(iconsManager.get('main', 'codeFork'));
-      repoForks.appendChild(document.createTextNode(response['forks']));
-      const repoValues = document.createElement('div');
-      repoValues.classList.add('repo-values');
-      repoValues.appendChild(repoLanguage);
-      repoValues.appendChild(repoStars);
-      repoValues.appendChild(repoForks);
-
       element.classList.remove('is-loading');
       element.textContent = '';
       element.setAttribute('href', response['html_url']);
-      element.appendChild(recommendedBadge);
+      element.setAttribute('target', '_blank');
+      element.setAttribute('rel', 'noopener noreferrer');
+
+      // Top Row: Badge + External Link Icon
+      const topRow = document.createElement('div');
+      topRow.classList.add('repo-top-row');
+
+      const recommendedBadge = document.createElement('div');
+      recommendedBadge.classList.add('recommended-badge');
+      recommendedBadge.appendChild(iconsManager.get('main', 'star'));
+      const badgeSpan = document.createElement('span');
+      badgeSpan.textContent = 'Recommended by our staff';
+      recommendedBadge.appendChild(badgeSpan);
+
+      const githubLinkIcon = document.createElement('div');
+      githubLinkIcon.classList.add('repo-external-icon');
+      githubLinkIcon.appendChild(iconsManager.get('main', 'upRightFromSquare'));
+
+      topRow.appendChild(recommendedBadge);
+      topRow.appendChild(githubLinkIcon);
+
+      // Main Presentation Row
+      const repoPresentation = document.createElement('div');
+      repoPresentation.classList.add('repo-presentation');
+
+      const repoDetails = document.createElement('div');
+      repoDetails.classList.add('repo-details');
+
+      const repoTitle = document.createElement('div');
+      repoTitle.classList.add('repo-title');
+      const fullName = response['full_name'] || '';
+      if (fullName.includes('/')) {
+        const [owner, repo] = fullName.split('/');
+        const ownerSpan = document.createElement('span');
+        ownerSpan.classList.add('repo-owner');
+        ownerSpan.textContent = owner;
+        const slashSpan = document.createElement('span');
+        slashSpan.classList.add('repo-slash');
+        slashSpan.textContent = '/';
+        const nameSpan = document.createElement('span');
+        nameSpan.classList.add('repo-name');
+        nameSpan.textContent = repo;
+        repoTitle.appendChild(ownerSpan);
+        repoTitle.appendChild(slashSpan);
+        repoTitle.appendChild(nameSpan);
+      } else {
+        repoTitle.textContent = fullName;
+      }
+
+      const repoDescription = document.createElement('div');
+      repoDescription.classList.add('repo-description');
+      repoDescription.textContent = response['description'] || 'No description provided.';
+
+      repoDetails.appendChild(repoTitle);
+      repoDetails.appendChild(repoDescription);
+
+      const repoAvatarWrapper = document.createElement('div');
+      repoAvatarWrapper.classList.add('repo-avatar-wrapper');
+      const repoOwnerImage = document.createElement('img');
+      repoOwnerImage.src = response['owner']['avatar_url'];
+      repoOwnerImage.alt = fullName;
+      repoOwnerImage.loading = 'lazy';
+      repoAvatarWrapper.appendChild(repoOwnerImage);
+
+      repoPresentation.appendChild(repoDetails);
+      repoPresentation.appendChild(repoAvatarWrapper);
+
+      // Footer Stats Row
+      const repoValues = document.createElement('div');
+      repoValues.classList.add('repo-values');
+
+      const statsLeft = document.createElement('div');
+      statsLeft.classList.add('repo-stats-group');
+
+      if (response['language']) {
+        const repoLanguage = document.createElement('div');
+        repoLanguage.classList.add('value', 'repo-language');
+        repoLanguage.style.setProperty('--color', getLanguageColorByName(response['language']));
+        const langText = document.createElement('span');
+        langText.textContent = response['language'];
+        repoLanguage.appendChild(langText);
+        statsLeft.appendChild(repoLanguage);
+      }
+
+      const repoStars = document.createElement('div');
+      repoStars.classList.add('value', 'repo-stars');
+      repoStars.appendChild(iconsManager.get('main', 'star'));
+      const starText = document.createElement('span');
+      starText.textContent = Number(response['stargazers_count'] || 0).toLocaleString();
+      repoStars.appendChild(starText);
+      statsLeft.appendChild(repoStars);
+
+      const repoForks = document.createElement('div');
+      repoForks.classList.add('value', 'repo-forks');
+      repoForks.appendChild(iconsManager.get('main', 'codeFork'));
+      const forkText = document.createElement('span');
+      forkText.textContent = Number(response['forks'] || 0).toLocaleString();
+      repoForks.appendChild(forkText);
+      statsLeft.appendChild(repoForks);
+
+      const viewRepoBtn = document.createElement('div');
+      viewRepoBtn.classList.add('repo-view-action');
+      viewRepoBtn.innerHTML = `<span>View on GitHub</span> ${iconsManager.get('main', 'arrowRight').outerHTML}`;
+
+      repoValues.appendChild(statsLeft);
+      repoValues.appendChild(viewRepoBtn);
+
+      element.appendChild(topRow);
       element.appendChild(repoPresentation);
       element.appendChild(repoValues);
     });
   };
 
-  requestAnimationFrame(() => {
+  requestAnimationFrame(async () => {
+    const user = element.getAttribute('user');
+    const reponame = element.getAttribute('reponame');
+    const repoFullName = `${user}/${reponame}`;
+
+    let rendered = false;
+    let starTextEl = null;
+    let forkTextEl = null;
+
+    const applyData = (data) => {
+      if (!rendered) {
+        handleElementUpdate(data);
+        rendered = true;
+      } else {
+        // Live counter update
+        if (!starTextEl) starTextEl = element.querySelector('.repo-stars span');
+        if (!forkTextEl) forkTextEl = element.querySelector('.repo-forks span');
+        if (starTextEl && typeof data.stargazers_count === 'number') {
+          const formatted = Number(data.stargazers_count).toLocaleString();
+          if (starTextEl.textContent !== formatted) {
+            starTextEl.textContent = formatted;
+            const parent = starTextEl.closest('.value');
+            if (parent) {
+              parent.classList.remove('stat-updated');
+              void parent.offsetWidth;
+              parent.classList.add('stat-updated');
+              setTimeout(() => parent.classList.remove('stat-updated'), 1200);
+            }
+          }
+        }
+        if (forkTextEl && typeof data.forks === 'number') {
+          const formatted = Number(data.forks).toLocaleString();
+          if (forkTextEl.textContent !== formatted) {
+            forkTextEl.textContent = formatted;
+            const parent = forkTextEl.closest('.value');
+            if (parent) {
+              parent.classList.remove('stat-updated');
+              void parent.offsetWidth;
+              parent.classList.add('stat-updated');
+              setTimeout(() => parent.classList.remove('stat-updated'), 1200);
+            }
+          }
+        }
+      }
+    };
+
+    // Fast initial render from cache if available
     const dataFromCache = localStorage.getItem(githubCacheKey);
     if (dataFromCache) {
       try {
         const parsedData = JSON.parse(dataFromCache);
         if (isValidCacheContent(parsedData, true)) {
-          handleElementUpdate(parsedData);
-          return;
+          applyData(parsedData);
         }
       } catch(e) {}
     }
 
-    const XML = new XMLHttpRequest();
-    XML.open('GET', 'https://api.github.com/repos/' + element.getAttribute('user') + '/' + element.getAttribute('reponame'), true);
-    XML.send();
-    XML.addEventListener('readystatechange', (e) => {
-      if (e.target.readyState === 4 && e.target.status === 200) {
-        const response = JSON.parse(e.target.response);
-
-        if (response['message']) {
-          throw new Error('the repository is invalid');
-        } else {
-          if (isValidCacheContent(response)) {
-            handleElementUpdate(response);
-
-            response['svd_time'] = new Date().getTime();
-            localStorage.setItem(githubCacheKey, JSON.stringify(filterResponse(response)));
-          }
+    // Live fetch
+    const fetchLive = async () => {
+      if (!document.body.contains(element)) return;
+      try {
+        const stats = await requestsManager.getGitHubRepoStats(repoFullName, true);
+        if (stats && isValidCacheContent(stats)) {
+          applyData(stats);
+          stats['svd_time'] = Date.now();
+          localStorage.setItem(githubCacheKey, JSON.stringify(filterResponse(stats)));
         }
+      } catch(e) {}
+    };
+
+    await fetchLive();
+
+    // Polling every 30s
+    const refInterval = setInterval(() => {
+      if (!document.body.contains(element)) {
+        clearInterval(refInterval);
+        return;
       }
-    });
+      fetchLive();
+    }, 30000);
+
+    // Refresh on tab focus
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        if (!document.body.contains(element)) {
+          document.removeEventListener('visibilitychange', onVisibility);
+          return;
+        }
+        fetchLive();
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibility);
   });
 }
 

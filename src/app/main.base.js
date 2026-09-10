@@ -18,7 +18,7 @@ import * as devicesManager from "./main.devices.js";
 import * as homePage from "./main.home.js";
 import {handleSettings} from "./main.settings.js";
 
-window.addEventListener('load', () => {
+function startApp() {
   const splashScreen = document.querySelector('body .splash');
   if (splashScreen) {
     let promisesList = [];
@@ -34,15 +34,15 @@ window.addEventListener('load', () => {
       if (splashScreen.classList.contains('faster')) {
         resolve();
       } else {
+        const fallbackTimer = setTimeout(resolve, 800);
         splashScreen.addEventListener('animationend', (e) => {
-          if (e.target === splashScreen) {
-            resolve();
-          }
-        });
+          clearTimeout(fallbackTimer);
+          resolve();
+        }, { once: true });
       }
     }));
 
-    promisesList.push(config.loadConfig());
+    promisesList.push(config.loadConfig().catch(() => null));
 
     Promise.all(promisesList).then(() => {
       if (splashTimeout != null) {
@@ -63,10 +63,27 @@ window.addEventListener('load', () => {
         } else {
           homePage.init(data || window.location.pathname);
         }
+      }).catch(() => {
+        homePage.init(window.location.pathname);
       });
+    }).catch(() => {
+      splashScreen.remove();
+      handleSettings();
+      homePage.init(window.location.pathname);
     });
+  } else {
+    reloadScreenData();
+    handleSettings();
+    homePage.init(window.location.pathname);
   }
-});
+}
+
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+  startApp();
+} else {
+  window.addEventListener('DOMContentLoaded', startApp, { once: true });
+  window.addEventListener('load', startApp, { once: true });
+}
 
 window.addEventListener('popstate', () => {
   homePage.handleAsRedirect(window.location.pathname, true);

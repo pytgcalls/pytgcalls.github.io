@@ -15,11 +15,45 @@
 import ListenerManagerInstance from "./main.listener.js";
 
 export const onCollapseLongCodeSettingListenerInstance = new ListenerManagerInstance();
+export const onThemeChangeListenerInstance = new ListenerManagerInstance();
 
 export function handleSettings() {
     handleDesktopMode();
     handleReduceBlur();
     handlePageFontSize();
+    handleTheme();
+}
+
+export function getTheme() {
+    const storageData = localStorage.getItem('theme');
+    if (storageData === 'light' || storageData === 'dark') {
+        return storageData;
+    }
+    return 'dark';
+}
+
+export function isLightMode() {
+    return getTheme() === 'light';
+}
+
+export function setTheme(theme) {
+    if (theme !== 'light' && theme !== 'dark') theme = 'dark';
+    localStorage.setItem('theme', theme);
+    handleTheme();
+    onThemeChangeListenerInstance.callAllListeners(theme);
+}
+
+export function toggleTheme() {
+    const nextTheme = getTheme() === 'light' ? 'dark' : 'light';
+    setTheme(nextTheme);
+    return nextTheme;
+}
+
+export function handleTheme() {
+    const theme = getTheme();
+    const isLight = theme === 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+    document.body.classList.toggle('light-theme', isLight);
 }
 
 export function getForceGithubAPIStatus() {

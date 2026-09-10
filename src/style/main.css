@@ -7,6 +7,7 @@
 @import url("sections.css");
 @import url("splash.css");
 @import url("tooltip.css");
+@import url("theme.css");
 
 html {
   height: 100%;
@@ -23,6 +24,8 @@ body {
   overscroll-behavior: none;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+  display: flex;
+  flex-direction: column;
 }
 
 body .page-container {
@@ -30,20 +33,38 @@ body .page-container {
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: calc(100% - 66px);
+  flex: 1;
+  height: calc(100% - 60px);
   overflow: hidden;
-  position: absolute;
+  position: relative;
   padding-left: 0;
   transition: 0.2s width cubic-bezier(0.42, 0, 0, 0.97), 0.2s padding-left cubic-bezier(0.42, 0, 0, 0.97), 0.2s transform;
-}
-
-body.as-home .page-container {
-  height: 100%;
 }
 
 @media screen and (min-width: 1000px) {
   body.focused-by-search:not(.reduce-blur) > .page-container {
     transform: scale(1.08);
+  }
+}
+
+@media screen and (max-width: 1330px) {
+  body .page-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    z-index: 9;
+  }
+
+  body .page-container:has(.left-container.show)::before,
+  body .page-container:has(.sections.show)::before {
+    opacity: 1;
+    pointer-events: auto;
   }
 }
 
