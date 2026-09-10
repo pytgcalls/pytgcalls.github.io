@@ -74,22 +74,61 @@ export function setDocsRef(ref) {
   window.location.reload();
 }
 
+function fetchWithTimeout(url, options = {}, timeoutMs = 3500) {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeoutMs);
+  return fetch(url, { ...options, signal: controller.signal })
+    .finally(() => clearTimeout(id));
+}
+
 export async function initRequest(fileName, repoName = 'pytgcalls/docsdata') {
   const isUsingAnAlternative = !!alternativesList[repoName];
-  const forceApi = getForceGithubAPIStatus();
-
-  if (forceApi && !isUsingAnAlternative) {
-    return await tryToLoadWithApi(repoName, fileName);
+  if (isUsingAnAlternative) {
+    try {
+      const completeUrl = alternativesList[repoName] + '/' + fileName;
+      const res = await fetchWithTimeout(completeUrl, { cache: 'default' }, 3000);
+      if (res.ok) return await res.text();
+    } catch (e) {
+      console.warn(`[RequestsManager] Alternative server failed for ${fileName}:`, e);
+    }
   }
 
-  try {
-    return await tryToLoadWithUserContent(repoName, fileName);
-  } catch (e) {
-    console.warn(`[RequestsManager] UserContent load failed for ${fileName}, falling back to GitHub API:`, e);
-    if (isUsingAnAlternative) {
-      alert("Connection to your custom docsdata server failed! We're using GitHub as fallback. Check your port.");
+  const forceApi = getForceGithubAPIStatus();
+  if (forceApi && !isUsingAnAlternative) {
+    try {
+      return await tryToLoadWithApi(repoName, fileName);
+    } catch (e) {
+      console.warn(`[RequestsManager] Force API failed for ${fileName}, trying CDN mirrors:`, e);
     }
+  }
+
+  // 1. Try Raw GitHub with fast 2.5s timeout
+  try {
+    const rawUrl = 'https://raw.githubusercontent.com/' + repoName + '/' + docsRef + '/' + fileName;
+    const res = await fetchWithTimeout(rawUrl, { cache: 'default' }, 2500);
+    if (res.ok) return await res.text();
+  } catch (_) {}
+
+  // 2. Try jsDelivr Global CDN Mirror (Fast global CDN)
+  try {
+    const jsdelivrUrl = 'https://cdn.jsdelivr.net/gh/' + repoName + '@' + docsRef + '/' + fileName;
+    const res = await fetchWithTimeout(jsdelivrUrl, { cache: 'default' }, 3000);
+    if (res.ok) return await res.text();
+  } catch (_) {}
+
+  // 3. Try Fastly jsDelivr Mirror
+  try {
+    const fastlyUrl = 'https://fastly.jsdelivr.net/gh/' + repoName + '@' + docsRef + '/' + fileName;
+    const res = await fetchWithTimeout(fastlyUrl, { cache: 'default' }, 3000);
+    if (res.ok) return await res.text();
+  } catch (_) {}
+
+  // 4. Try GitHub REST API as fallback
+  try {
     return await tryToLoadWithApi(repoName, fileName);
+  } catch (apiErr) {
+    console.warn(`[RequestsManager] All sources failed for ${fileName}:`, apiErr);
+    throw apiErr;
   }
 }
 
@@ -108,7 +147,7 @@ function tryToLoadWithUserContent(repoName, fileName) {
     completeUrl = alternativesList[repoName] + '/' + fileName;
   }
 
-  return fetch(completeUrl, { cache: 'default' })
+  return fetchWithTimeout(completeUrl, { cache: 'default' }, 3500)
     .then((res) => {
       if (!res.ok) throw new Error('HTTP ' + res.status);
       return res.text();
@@ -116,9 +155,9 @@ function tryToLoadWithUserContent(repoName, fileName) {
 }
 
 function tryToLoadWithApi(repoName, fileName) {
-  return fetch('https://api.github.com/repos/' + repoName + '/contents/' + fileName + '?ref=' + encodeURIComponent(docsRef), {
+  return fetchWithTimeout('https://api.github.com/repos/' + repoName + '/contents/' + fileName + '?ref=' + encodeURIComponent(docsRef), {
     headers: { Accept: 'application/vnd.github.v3+json' }
-  })
+  }, 3500)
     .then((res) => {
       if (!res.ok) throw new Error('Failed to get data from github api: ' + res.status);
       return res.json();
