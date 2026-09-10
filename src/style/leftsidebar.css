@@ -181,9 +181,9 @@ body .page-container .left-container .left-sidebar:has(.library-container .libra
 }
 
 body .page-container .left-container .left-sidebar .library-container {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   align-items: center;
-  justify-content: flex-start;
   gap: 8px;
   margin-top: 15px;
   padding-bottom: 13px;
@@ -206,6 +206,7 @@ body .page-container .left-container .left-sidebar .library-container .library {
   padding-inline: 10px;
   padding-block: 5px;
   border-radius: 10px;
+  min-width: 0;
 }
 
 body .page-container .left-container .left-sidebar.disappear .library-container {

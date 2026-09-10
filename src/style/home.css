@@ -1075,3 +1075,30 @@ body .page-container .home-container .footer>.description {
   text-align: center;
   color: rgba(255, 255, 255, 0.6);
 }
+@media screen and (max-width: 480px) {
+  body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container .pseudo-icons {
+    margin-bottom: 30px;
+  }
+
+  body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container .pseudo-icons .icon-container svg {
+    height: 34px;
+    width: 34px;
+  }
+
+  body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container .pseudo-icons .icon-container.secondary {
+    width: 26px;
+    margin-left: 10px;
+  }
+
+  body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.dark .pseudo-icons .icon-container:not(.secondary) {
+    padding: 8px;
+  }
+
+  body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container.light .pseudo-icons .icon-container {
+    border-width: 3px;
+  }
+
+  body .page-container .home-container .pres-points .int-pres-points .grid-element .row .container .text br {
+    display: none;
+  }
+}

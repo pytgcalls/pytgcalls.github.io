@@ -15,6 +15,9 @@
 
 import * as iconsManager from "./main.icons.js";
 
+const ARROW_LEFT_OFFSET = 30;
+const TOOLTIP_BORDER_RADIUS = 10;
+
 let closeCallbacksList = [];
 let closeAdaptedCallbacksList = [];
 let isAnimating = 0;
@@ -55,7 +58,13 @@ export function init({
   if (clampedLeftPosition !== newLeftPosition) {
     newLeftPosition = clampedLeftPosition;
     tooltip.classList.add('out-of-space');
-    tooltip.style.setProperty('--origin-x', elementRect.left + elementRect.width / 2 - newLeftPosition + 'px');
+
+    const arrowWidth = tooltipArrow.getBoundingClientRect().width;
+    const minOriginX = ARROW_LEFT_OFFSET + TOOLTIP_BORDER_RADIUS;
+    const maxOriginX = tooltipRect.width - arrowWidth + ARROW_LEFT_OFFSET - TOOLTIP_BORDER_RADIUS;
+    const originX = elementRect.left + elementRect.width / 2 - newLeftPosition;
+
+    tooltip.style.setProperty('--origin-x', Math.min(Math.max(originX, minOriginX), maxOriginX) + 'px');
     tooltip.style.setProperty('--origin-y', (tooltipRect.top * 2 + 40) + 'px');
   }
 

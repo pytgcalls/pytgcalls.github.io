@@ -46,7 +46,7 @@ export function getElement() {
   headerMenu.classList.add('menu');
   headerMenu.addEventListener('click', () => {
     if (selectedTabID == null) {
-      expandLibrarySelectorTooltip(headerProjectName);
+      expandLibrarySelectorTooltip(headerMenu);
     } else {
       onSidebarUpdateListenerInstance.callAllListeners(true);
     }
