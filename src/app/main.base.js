@@ -59,18 +59,20 @@ function startApp() {
       });
     };
 
-    // Safety timeout: dismiss splash after 1.4s max under any condition
-    const maxSplashTimer = setTimeout(launch, 1400);
+    // Safety timeout: dismiss splash after 1.6s max if anything stalls
+    const maxSplashTimer = setTimeout(launch, 1600);
 
     const animationPromise = new Promise((resolve) => {
       if (splashScreen.classList.contains('faster')) {
         resolve();
       } else {
-        const fallbackTimer = setTimeout(resolve, 1300);
-        splashScreen.addEventListener('animationend', () => {
-          clearTimeout(fallbackTimer);
-          resolve();
-        }, { once: true });
+        const fallbackTimer = setTimeout(resolve, 1550);
+        splashScreen.addEventListener('animationend', (e) => {
+          if (e.target === splashScreen && e.animationName === 'hideSplash') {
+            clearTimeout(fallbackTimer);
+            resolve();
+          }
+        });
       }
     });
 
