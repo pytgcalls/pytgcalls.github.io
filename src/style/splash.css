@@ -4,14 +4,22 @@ body .splash {
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #0d1117 !important;
   overflow: hidden;
+  z-index: 999999;
   transform: scale(var(--zlm));
+  pointer-events: all;
 }
 
 body .splash:not(.faster) {
-  animation: 0.2s hideSplash 1.3s forwards;
+  animation: 0.25s hideSplash 1.35s forwards cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @media screen and (max-width: 500px) {
@@ -23,14 +31,18 @@ body .splash:not(.faster) {
 @keyframes hideSplash {
   to {
     opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
   }
 }
 
 body .splash .animated-icon {
   height: 60px;
   width: 60px;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
   position: absolute;
   top: 50%;
   left: 50%;
