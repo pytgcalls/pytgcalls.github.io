@@ -18,11 +18,13 @@ import * as devicesManager from "./main.devices.js";
 import * as homePage from "./main.home.js";
 import {handleSettings} from "./main.settings.js";
 
+let appStarted = false;
+
 function startApp() {
+  if (appStarted) return;
+
   const splashScreen = document.querySelector('body .splash');
   if (splashScreen) {
-    let promisesList = [];
-
     let splashTimeout;
     if (splashScreen.classList.contains('faster')) {
       splashTimeout = setTimeout(() => {
@@ -30,21 +32,10 @@ function startApp() {
       }, 300);
     }
 
-    promisesList.push(new Promise((resolve) => {
-      if (splashScreen.classList.contains('faster')) {
-        resolve();
-      } else {
-        const fallbackTimer = setTimeout(resolve, 800);
-        splashScreen.addEventListener('animationend', (e) => {
-          clearTimeout(fallbackTimer);
-          resolve();
-        }, { once: true });
-      }
-    }));
+    const launch = () => {
+      if (appStarted) return;
+      appStarted = true;
 
-    promisesList.push(config.loadConfig().catch(() => null));
-
-    Promise.all(promisesList).then(() => {
       if (splashTimeout != null) {
         clearTimeout(splashTimeout);
       }
@@ -58,7 +49,7 @@ function startApp() {
       handleSettings();
 
       config.getRedirectDataForPath(window.location.pathname).then((data) => {
-        if (data instanceof String && (data.startsWith('https://') || data.startsWith('http://'))) {
+        if (typeof data === 'string' && (data.startsWith('https://') || data.startsWith('http://'))) {
           window.location.href = data;
         } else {
           homePage.init(data || window.location.pathname);
@@ -66,12 +57,34 @@ function startApp() {
       }).catch(() => {
         homePage.init(window.location.pathname);
       });
+    };
+
+    // Safety timeout: dismiss splash after 1.4s max under any condition
+    const maxSplashTimer = setTimeout(launch, 1400);
+
+    const animationPromise = new Promise((resolve) => {
+      if (splashScreen.classList.contains('faster')) {
+        resolve();
+      } else {
+        const fallbackTimer = setTimeout(resolve, 1300);
+        splashScreen.addEventListener('animationend', () => {
+          clearTimeout(fallbackTimer);
+          resolve();
+        }, { once: true });
+      }
+    });
+
+    const configPromise = config.loadConfig().catch(() => null);
+
+    Promise.all([animationPromise, configPromise]).then(() => {
+      clearTimeout(maxSplashTimer);
+      launch();
     }).catch(() => {
-      splashScreen.remove();
-      handleSettings();
-      homePage.init(window.location.pathname);
+      clearTimeout(maxSplashTimer);
+      launch();
     });
   } else {
+    appStarted = true;
     reloadScreenData();
     handleSettings();
     homePage.init(window.location.pathname);
