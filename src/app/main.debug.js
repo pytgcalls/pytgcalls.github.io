@@ -234,5 +234,5 @@ export function tryCustomServer() {
 }
 
 export function isSafeToUseDebugItems() {
-  return window.location.protocol === 'http:';
+  return false;
 }

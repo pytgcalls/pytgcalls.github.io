@@ -76,24 +76,19 @@ export function setDocsRef(ref) {
 
 export async function initRequest(fileName, repoName = 'pytgcalls/docsdata') {
   const isUsingAnAlternative = !!alternativesList[repoName];
+  const forceApi = getForceGithubAPIStatus();
 
-  if (!isUsingAnAlternative) {
-    if (getForceGithubAPIStatus()) {
-      forceApiReason = ForceGitHubApiReason.USER_CHOICE;
-    } else if (forceApiReason === ForceGitHubApiReason.USER_CHOICE) {
-      forceApiReason = ForceGitHubApiReason.NONE;
-    }
+  if (forceApi && !isUsingAnAlternative) {
+    return await tryToLoadWithApi(repoName, fileName);
   }
 
   try {
     return await tryToLoadWithUserContent(repoName, fileName);
   } catch (e) {
-    forceApiReason = ForceGitHubApiReason.REQUEST_FAILED;
-
+    console.warn(`[RequestsManager] UserContent load failed for ${fileName}, falling back to GitHub API:`, e);
     if (isUsingAnAlternative) {
       alert("Connection to your custom docsdata server failed! We're using GitHub as fallback. Check your port.");
     }
-
     return await tryToLoadWithApi(repoName, fileName);
   }
 }
@@ -107,55 +102,36 @@ export function setAsDebugAlternative(original, alternative) {
   forceApiReason = ForceGitHubApiReason.NONE;
 }
 
- function tryToLoadWithUserContent(repoName, fileName) {
-  if (forceApiReason !== ForceGitHubApiReason.NONE) {
-    return Promise.reject('Ignoring githubusercontent as it isn\'t available');
-  } else {
-    return new Promise((resolve, reject) => {
-      let completeUrl = 'https://raw.githubusercontent.com/' + repoName + '/' + docsRef + '/' + fileName;
-      if (alternativesList[repoName]) {
-        completeUrl = alternativesList[repoName] + '/' + fileName;
-      }
-
-      const XML = new XMLHttpRequest();
-      XML.timeout = 3500;
-      XML.open('GET', completeUrl, true);
-      XML.send();
-      XML.addEventListener('readystatechange', (e) => {
-        if (e.target.readyState === 4) {
-          if (e.target.status === 200) {
-            resolve(e.target.response);
-          } else {
-            reject('Unable to resolve domain via githubusercontent');
-          }
-        }
-      });
-    });
+function tryToLoadWithUserContent(repoName, fileName) {
+  let completeUrl = 'https://raw.githubusercontent.com/' + repoName + '/' + docsRef + '/' + fileName;
+  if (alternativesList[repoName]) {
+    completeUrl = alternativesList[repoName] + '/' + fileName;
   }
+
+  return fetch(completeUrl, { cache: 'default' })
+    .then((res) => {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.text();
+    });
 }
 
 function tryToLoadWithApi(repoName, fileName) {
-  return new Promise((resolve, reject) => {
-    const XML = new XMLHttpRequest();
-    XML.open('GET', 'https://api.github.com/repos/' + repoName + '/contents/' + fileName + '?ref=' + encodeURIComponent(docsRef), true);
-    XML.send();
-    XML.addEventListener('readystatechange', (e) => {
-      if (e.target.readyState === 4) {
-        if (e.target.status === 200) {
-          const response = JSON.parse(e.target.responseText);
-          if (typeof response['content'] === 'string' && response['content'].length > 0) {
-            const decodedContent = atob(response['content']);
-            const utf8Content = new TextDecoder('utf-8').decode(new Uint8Array([...decodedContent].map(char => char.charCodeAt(0))));
-            resolve(utf8Content);
-          } else {
-            reject('Failed to parse github api response');
-          }
-        } else {
-          reject('Failed to get data from github api');
-        }
+  return fetch('https://api.github.com/repos/' + repoName + '/contents/' + fileName + '?ref=' + encodeURIComponent(docsRef), {
+    headers: { Accept: 'application/vnd.github.v3+json' }
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error('Failed to get data from github api: ' + res.status);
+      return res.json();
+    })
+    .then((response) => {
+      if (typeof response['content'] === 'string' && response['content'].length > 0) {
+        const cleanBase64 = response['content'].replace(/\s/g, '');
+        const decodedContent = atob(cleanBase64);
+        const utf8Content = new TextDecoder('utf-8').decode(new Uint8Array([...decodedContent].map(char => char.charCodeAt(0))));
+        return utf8Content;
       }
+      throw new Error('Failed to parse github api response');
     });
-  });
 }
 
 export function retrievePackageData() {
@@ -191,5 +167,45 @@ export function retrievePackageData() {
       });
     });
     return pypiDataPromise;
+  }
+}
+
+export async function getGitHubRepoStats(repoName) {
+  const cacheKey = `gh_stats_${repoName}`;
+  try {
+    const cached = sessionStorage.getItem(cacheKey);
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      if (Date.now() - parsed.timestamp < 10 * 60 * 1000) {
+        return parsed.data;
+      }
+    }
+  } catch (_) {}
+
+  try {
+    const res = await fetch(`https://api.github.com/repos/${repoName}`, {
+      headers: { Accept: 'application/vnd.github.v3+json' }
+    });
+    if (!res.ok) throw new Error('Status ' + res.status);
+    const data = await res.json();
+    const stats = {
+      stars: data.stargazers_count ?? 0,
+      forks: data.forks_count ?? 0
+    };
+    try {
+      sessionStorage.setItem(cacheKey, JSON.stringify({
+        timestamp: Date.now(),
+        data: stats
+      }));
+    } catch (_) {}
+    return stats;
+  } catch (e) {
+    if (repoName === 'pytgcalls/pytgcalls') {
+      return { stars: 430, forks: 209 };
+    }
+    if (repoName === 'pytgcalls/ntgcalls') {
+      return { stars: 117, forks: 43 };
+    }
+    return { stars: 0, forks: 0 };
   }
 }

@@ -91,11 +91,29 @@ export function getElement() {
 
   const searchText = document.createElement('input');
   searchText.placeholder = 'Search Docs';
+  const headerSearchShortcut = document.createElement('div');
+  headerSearchShortcut.classList.add('search-shortcut');
+  headerSearchShortcut.innerHTML = '<kbd>⇧</kbd><kbd>K</kbd>';
+
   const headerSearch = document.createElement('div');
   headerSearch.classList.add('search-input');
   headerSearch.addEventListener('click', () => openSearchContainer(headerSearch, searchText));
   headerSearch.appendChild(iconsManager.get('main', 'magnifyingGlass').firstChild);
   headerSearch.appendChild(searchText);
+  headerSearch.appendChild(headerSearchShortcut);
+
+  window.addEventListener('keydown', (e) => {
+    const isShiftK = e.shiftKey && (e.key === 'K' || e.key === 'k');
+    const isCtrlK = (e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K');
+    const isSlash = e.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName);
+
+    if (isShiftK || isCtrlK || isSlash) {
+      if (!document.body.classList.contains('focused-by-search')) {
+        e.preventDefault();
+        openSearchContainer(headerSearch, searchText);
+      }
+    }
+  });
 
   const headerCompass = document.createElement('div');
   headerCompass.classList.add('header-icon', 'header-compass');
@@ -375,18 +393,6 @@ function expandSettingsTooltip() {
         settingsManager.updateReduceBlur
     ));
 
-    if (debug.isSafeToUseDebugItems() && selectedTabID != null) {
-      const debugTitle = document.createElement('div');
-      debugTitle.classList.add('mini-text', 'has-margin', 'align-left');
-      debugTitle.textContent = 'DEBUG';
-      selector.appendChild(debugTitle);
-
-      selector.appendChild(createDebugRow('Try custom page code', () => debug.tryCustomPageCode()));
-      selector.appendChild(createDebugRow('Try custom config code', () => debug.tryCustomPageCode(true)));
-      selector.appendChild(createDebugRow('Try custom server', () => debug.tryCustomServer()));
-      selector.appendChild(createDebugRow('Reload page data',  () => debug.reloadPageData()));
-    }
-
     onSettingsUpdateListenerInstance.callAllListeners(true);
     tooltip.init({
       childElement: selector,
@@ -493,13 +499,6 @@ function createFontSizeRow() {
   fragment.appendChild(fontSizeContainer);
 
   return fragment;
-}
-
-function createDebugRow(title, callback) {
-  return createSettingsRow(title, null, false, () => {
-    tooltip.closeTooltips();
-    callback();
-  }, false);
 }
 
 function createSettingsRow(title, description, status, callback, hasSwitch = true) {

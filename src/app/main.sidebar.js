@@ -310,7 +310,11 @@ function createSidebarFileElement(id, textContent, contentUri = textContent) {
 
   onChangeListenerInstance.addListener({
     callback: (activePath) => {
-      element.classList.toggle('active', contentUri === activePath);
+      const isActive = contentUri === activePath;
+      element.classList.toggle('active', isActive);
+      if (isActive && element.parentElement && element.parentElement.classList.contains('elements')) {
+        element.parentElement.classList.add('expanded');
+      }
     },
     isInternal: true,
     ref: element

@@ -158,7 +158,55 @@ export function openSearchContainer(startBy, startByInputElement) {
         searchListAdapter.appendChild(getEmptySearchContainerResult(true));
     }
 
-    windowKeyDownEventListener = (e) => e.key === 'Escape' && !e.shiftKey && !e.altKey && closeSearch();
+    let selectedResultIndex = -1;
+
+    const getVisibleResultRows = () => {
+        return Array.from(searchListAdapter.querySelectorAll('.ref-container .row:not(.hidden)'));
+    };
+
+    const updateSelectedRow = (index) => {
+        const rows = getVisibleResultRows();
+        if (!rows.length) return;
+        selectedResultIndex = Math.max(0, Math.min(index, rows.length - 1));
+        rows.forEach((r, i) => {
+            r.classList.toggle('is-selected', i === selectedResultIndex);
+            if (i === selectedResultIndex) {
+                r.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            }
+        });
+    };
+
+    windowKeyDownEventListener = (e) => {
+        if (e.key === 'Escape' && !e.shiftKey && !e.altKey) {
+            e.preventDefault();
+            closeSearch();
+            return;
+        }
+
+        const rows = getVisibleResultRows();
+        if (!rows.length) return;
+
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            if (selectedResultIndex < rows.length - 1) {
+                updateSelectedRow(selectedResultIndex + 1);
+            } else {
+                updateSelectedRow(0);
+            }
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (selectedResultIndex > 0) {
+                updateSelectedRow(selectedResultIndex - 1);
+            } else {
+                updateSelectedRow(rows.length - 1);
+            }
+        } else if (e.key === 'Enter') {
+            if (selectedResultIndex >= 0 && selectedResultIndex < rows.length) {
+                e.preventDefault();
+                rows[selectedResultIndex].click();
+            }
+        }
+    };
     window.addEventListener('keydown', windowKeyDownEventListener);
 
     isAnimating++;
