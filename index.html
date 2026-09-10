@@ -7,7 +7,7 @@
   <link rel="shortcut icon" href="/src/assets/pytgcalls.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/src/lib/prism.css">
-  <link rel="stylesheet" href="/src/style/main.css?v=2.5.4">
+  <link rel="stylesheet" href="/src/style/main.css?v=2.5.6">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -21,9 +21,6 @@
     try {
       const theme = localStorage.getItem('theme') || 'dark';
       document.documentElement.setAttribute('data-theme', theme);
-      if (theme === 'light') {
-        document.addEventListener('DOMContentLoaded', () => document.body.classList.add('light-theme'));
-      }
     } catch (_) {}
   </script>
 </head>
@@ -62,6 +59,6 @@
     </div>
   </div>
 </body>
-<script src="/src/app/main.base.js?v=2.5.4" type="module"></script>
+<script src="/src/app/main.base.js?v=2.5.6" type="module"></script>
 
 </html>
