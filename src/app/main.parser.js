@@ -607,6 +607,9 @@ function handleSyntaxHighlight(element, newElement, hideTags = false, customText
   code = handleTabsWithSpacer(code);
   newElement.innerHTML = code;
   newElement.style.setProperty('--length', String(rows - 1));
+  newElement.addEventListener('scroll', () => {
+    newElement.style.setProperty('--scroll-left', newElement.scrollLeft + 'px');
+  }, { passive: true });
 
   const updateMark = (startAt, endAt) => {
     newElement.style.setProperty('--start-mark', startAt);

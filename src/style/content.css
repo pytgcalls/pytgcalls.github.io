@@ -624,7 +624,7 @@ body .page-container .content:not(.is-loading) .page .syntax-highlight.has-mark:
 body .page-container .content:not(.is-loading) .page .syntax-highlight.has-mark::after {
   content: "";
   position: absolute;
-  left: -10px;
+  left: calc(var(--scroll-left, 0px) - 10px);
   width: calc(100% + 10px);
   background: rgba(13, 17, 23, 0.7);
   transition: 0.2s transform, 0.2s height, 0.2s top;
@@ -652,7 +652,7 @@ body .page-container .content:not(.is-loading) .page .syntax-highlight.has-mark:
 body .page-container .content:not(.is-loading) .page .syntax-highlight .temp-mark {
   position: absolute;
   left: -10px;
-  width: calc(100% + 10px);
+  width: calc(100% + 10px + var(--scroll-left, 0px));
   background: rgba(0, 0, 0, 0.4);
   top: calc(10px + 25px * var(--start-mark) - 25px);
   height: 25px;
