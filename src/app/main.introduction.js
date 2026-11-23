@@ -432,6 +432,20 @@ function composeSinglePresentationPoint(type) {
   }
 }
 
+function setTextKeepingNames(element, text) {
+  element.textContent = '';
+  for (const part of text.split(/(Py-TgCalls)/)) {
+    if (part === 'Py-TgCalls') {
+      const name = document.createElement('span');
+      name.classList.add('no-break');
+      name.textContent = part;
+      element.appendChild(name);
+    } else if (part) {
+      element.appendChild(document.createTextNode(part));
+    }
+  }
+}
+
 function composeSingleNumericPresentationPoint(title, description, origin) {
   const bigTitle = document.createElement('div');
   bigTitle.classList.add('text', 'short');
@@ -439,7 +453,7 @@ function composeSingleNumericPresentationPoint(title, description, origin) {
 
   const containerText = document.createElement('div');
   containerText.classList.add('text');
-  containerText.textContent = description;
+  setTextKeepingNames(containerText, description);
 
   const container = document.createElement('div');
   container.classList.add('container', 'numeric');
@@ -568,7 +582,7 @@ function composeTeamMembers() {
 
   const description = document.createElement('div');
   description.classList.add('description');
-  description.textContent = 'The people who build, test and maintain Py-TgCalls and NTgCalls.';
+  setTextKeepingNames(description, 'The people who build, test and maintain Py-TgCalls and NTgCalls.');
 
   const intTeamMembers = document.createElement('div');
   intTeamMembers.classList.add('int-team-members');
