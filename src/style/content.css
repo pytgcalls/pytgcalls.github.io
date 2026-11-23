@@ -1181,8 +1181,35 @@ body .page-container .content:not(.is-loading) .page .banner .lib-presentation {
 
 @media screen and (max-width: 800px) {
   body .page-container .content:not(.is-loading) .page .banner .lib-presentation {
-    flex-direction: column;
-    align-items: unset;
+    gap: 12px;
+    padding-inline: 14px;
+    padding-block: 10px;
+  }
+
+  body .page-container .content:not(.is-loading) .page .banner .lib-presentation .presentation-data {
+    min-width: 0;
+  }
+
+  body .page-container .content:not(.is-loading) .page .banner .lib-presentation .lib-details .pres-title {
+    font-size: 16px;
+  }
+
+  body .page-container .content:not(.is-loading) .page .banner .lib-presentation .lib-details .pres-description {
+    font-size: 13px;
+    line-height: 16px;
+  }
+
+  body .page-container .content:not(.is-loading) .page .banner .banner-container .bottom-container .mini-title {
+    font-size: 14px;
+  }
+
+  body .page-container .content:not(.is-loading) .page .banner .banner-container .bottom-container .big-title {
+    font-size: 26px;
+    line-height: 32px;
+  }
+
+  body .page-container .content:not(.is-loading) .page .banner .description {
+    font-size: 15px;
   }
 }
 
@@ -1215,13 +1242,13 @@ body .page-container .content:not(.is-loading) .page .banner .lib-presentation .
 
 body .page-container .content:not(.is-loading) .page .banner .lib-presentation .update {
   text-decoration: none;
-  color: white;
+  color: #0A1028;
   display: block;
-  background: linear-gradient(90deg, #3D6BFF, #7B4DFF);
+  background: #FFFFFF;
   padding-inline: 16px;
   padding-block: 8px;
-  border-radius: 20px;
-  font-weight: 500;
+  border-radius: 10px;
+  font-weight: 600;
   box-sizing: border-box;
   text-align: center;
   margin-left: auto;
@@ -1234,13 +1261,14 @@ body .page-container .content:not(.is-loading) .page .banner .lib-presentation .
 
 @media screen and (max-width: 800px) {
   body .page-container .content:not(.is-loading) .page .banner .lib-presentation .update {
-    margin-top: 20px;
-    margin-left: 0;
+    flex-shrink: 0;
+    padding-inline: 14px;
+    padding-block: 7px;
   }
 }
 
 body .page-container .content:not(.is-loading) .page .banner .lib-presentation .update:hover {
-  background: linear-gradient(90deg, #5580FF, #8E66FF);
+  background: #E3E9FF;
 }
 
 body .page-container .content:not(.is-loading) .page .banner .lib-presentation .update:active {
