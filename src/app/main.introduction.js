@@ -378,7 +378,7 @@ function composeSinglePresentationPoint(type) {
       container.appendChild(composePointIcon('leaf', 'Lightweight'));
       const metrics = document.createElement('div');
       metrics.classList.add('metrics');
-      for (const [value, label] of [['60%', 'Less CPU'], ['4×', 'Audio bitrate']]) {
+      for (const [value, label] of [['70%', 'Less CPU'], ['4×', 'Audio bitrate']]) {
         const metric = document.createElement('div');
         metric.classList.add('metric');
         const metricValue = document.createElement('div');
@@ -393,7 +393,7 @@ function composeSinglePresentationPoint(type) {
       }
       const smallContainerText = document.createElement('div');
       smallContainerText.classList.add('small-text', 'metrics-note');
-      smallContainerText.textContent = 'Up to 60% less CPU and 4× the audio bitrate compared to other Telegram call libraries.';
+      smallContainerText.textContent = 'Up to 70% less CPU and 4× the audio bitrate compared to other Telegram call libraries.';
       const benchmarksLink = document.createElement('a');
       benchmarksLink.classList.add('metrics-link');
       benchmarksLink.href = 'https://github.com/pytgcalls/ntgcalls#benchmarks';
