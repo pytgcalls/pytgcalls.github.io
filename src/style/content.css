@@ -306,7 +306,7 @@ body .page-container .content:not(.is-loading) ul li .emoji-parsed img {
 body .page-container .content:not(.is-loading) .page .multisyntax,
 body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-code-high .syntax-highlight,
 body .page-container .content:not(.is-loading) .page .external-sh {
-  background: #0C1330;
+  background: rgba(28, 40, 90, 0.35);
   border: 1px solid rgba(150, 170, 255, 0.14);
   margin-block: 5px;
   border-radius: 10px;
@@ -662,11 +662,10 @@ body .page-container .content:not(.is-loading) .page .syntax-highlight .temp-mar
 body .page-container .content:not(.is-loading) .page .syntax-highlight .temp-mark::after {
   content: "";
   position: absolute;
-  left: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  height: 15px;
-  width: 15px;
+  left: 14px;
+  top: 4px;
+  height: 16px;
+  width: 16px;
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -674,21 +673,26 @@ body .page-container .content:not(.is-loading) .page .syntax-highlight .temp-mar
 }
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight .temp-mark.added-row {
-  background: #12261e;
+  background: rgba(110, 231, 183, 0.12);
 }
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight .temp-mark.added-row::after {
-  background: #1c4428;
-  content: "+";
+  background:
+    linear-gradient(#6EE7B7, #6EE7B7) center / 8px 2px no-repeat,
+    linear-gradient(#6EE7B7, #6EE7B7) center / 2px 8px no-repeat,
+    rgba(110, 231, 183, 0.3);
+  content: "";
 }
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight .temp-mark.removed-row {
-  background: #25171c;
+  background: rgba(255, 122, 138, 0.12);
 }
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight .temp-mark.removed-row::after {
-  background: #542426;
-  content: "-";
+  background:
+    linear-gradient(#FF7A8A, #FF7A8A) center / 8px 2px no-repeat,
+    rgba(255, 122, 138, 0.3);
+  content: "";
 }
 
 body .page-container .content:not(.is-loading) .page .multisyntax {
