@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2020-2026.
  *
- *  The code in this file is part of the PyTgCalls project.
+ *  The code in this file is part of the Py-TgCalls project.
  *  Please refer to official links:
  *  * Repo: https://github.com/pytgcalls
  *  * News: https://t.me/pytgcallsnews
@@ -69,12 +69,21 @@ function composeContainer() {
   backgroundImage.classList.add('background-image');
   const background = document.createElement('div');
   background.classList.add('background');
+  const backgroundTint = document.createElement('div');
+  backgroundTint.classList.add('background-tint');
+  const backgroundShade = document.createElement('div');
+  backgroundShade.classList.add('background-shade');
   background.appendChild(backgroundSurface);
   background.appendChild(backgroundImage);
+  background.appendChild(backgroundTint);
+  background.appendChild(backgroundShade);
 
   const bigTitle = document.createElement('div');
   bigTitle.classList.add('bigtitle');
-  bigTitle.innerHTML = 'A simplified implementation of<br/>Telegram Calls in a<br/>seamless way';
+  bigTitle.innerHTML = '<div>Stream, record and talk in <span class="gradient-text">Telegram calls</span></div>';
+  const subtitle = document.createElement('div');
+  subtitle.classList.add('subtitle');
+  subtitle.textContent = 'One fast native core, with bindings for Python, Node.js, Rust, Go, C and Android.';
   const buttonIcon = document.createElement('div');
   buttonIcon.classList.add('button-icon');
   buttonIcon.appendChild(document.createElement('div'));
@@ -86,11 +95,12 @@ function composeContainer() {
     hide();
     homePage.handleAsRedirect('/NTgCalls');
   });
-  button.textContent = 'Get started with Telegram Calls';
+  button.textContent = 'Get started';
   button.appendChild(buttonIcon);
   const textContainer = document.createElement('div');
   textContainer.classList.add('text-container');
   textContainer.appendChild(bigTitle);
+  textContainer.appendChild(subtitle);
   textContainer.appendChild(button);
   textContainer.appendChild(composeSmallFileEditor());
 
@@ -313,12 +323,12 @@ function composePresentationPoints() {
 
   const smallBadge = document.createElement('div');
   smallBadge.classList.add('small-badge');
-  smallBadge.textContent = 'Ready for Deployment';
+  smallBadge.textContent = 'Ready for Production';
   fragment.append(smallBadge);
 
   const bigTitle = document.createElement('div');
   bigTitle.classList.add('big-text');
-  bigTitle.innerHTML = 'Gain the Competitive Advantage<br/>Developers Demand.';
+  bigTitle.innerHTML = 'Fast, light and ready for <span class="gradient-text">production</span>.';
   fragment.append(bigTitle);
 
   const firstRow = document.createElement('div');
@@ -338,115 +348,83 @@ function composePresentationPoints() {
   return fragment;
 }
 
+function composePointIcon(iconName, label) {
+  const chip = document.createElement('div');
+  chip.classList.add('icon-chip');
+  chip.appendChild(iconsManager.get('cards', iconName));
+  chip.appendChild(document.createTextNode(label));
+  const iconContainer = document.createElement('div');
+  iconContainer.classList.add('pseudo-icons');
+  iconContainer.appendChild(chip);
+  return iconContainer;
+}
+
 function composeSinglePresentationPoint(type) {
+  const container = document.createElement('div');
+  container.classList.add('container');
+  const containerText = document.createElement('div');
+  containerText.classList.add('text');
+
   switch (type) {
     case 'bolt': {
-      const lightPseudoElementPattern = document.createElement('img');
-      lightPseudoElementPattern.classList.add('pattern');
-      lightPseudoElementPattern.src = '/src/assets/costructionpattern.svg';
-      const lightPseudoElement = document.createElement('div');
-      lightPseudoElement.classList.add('pseudo-bg');
-      lightPseudoElement.appendChild(document.createElement('div'));
-      lightPseudoElement.appendChild(document.createElement('div'));
-      lightPseudoElement.appendChild(document.createElement('div'));
-      lightPseudoElement.appendChild(lightPseudoElementPattern);
-
-      const iconContainer = document.createElement('div');
-      iconContainer.classList.add('pseudo-icons');
-      iconContainer.appendChild(iconsManager.get('main', 'bolt'));
-
-      const containerText = document.createElement('div');
-      containerText.classList.add('text');
-      containerText.innerHTML = 'Accelerate your coding<br/>process with seamless<br/>and effortless<br/>implementation.';
-
-      const container = document.createElement('div');
-      container.classList.add('container', 'light');
-      container.appendChild(lightPseudoElement);
-      container.appendChild(iconContainer);
+      container.classList.add('light');
+      container.appendChild(composePointIcon('stream', 'Quick start'));
+      containerText.textContent = 'Join a call and start streaming in a few lines of code.';
       container.appendChild(containerText);
-
       return container;
     }
     case 'light': {
-      const backShadow = document.createElement('div');
-      backShadow.classList.add('back-shadow');
-      const iconContainer = document.createElement('div');
-      iconContainer.classList.add('pseudo-icons');
-      iconContainer.appendChild(backShadow);
-      iconContainer.appendChild(iconsManager.get('main', 'energyLeaf'));
-
-      const containerText = document.createElement('div');
-      containerText.classList.add('text', 'short');
-      containerText.innerHTML = '35%';
-
+      container.classList.add('dark');
+      container.appendChild(composePointIcon('leaf', 'Lightweight'));
+      const metrics = document.createElement('div');
+      metrics.classList.add('metrics');
+      for (const [value, label] of [['60%', 'Less CPU'], ['4×', 'Audio bitrate']]) {
+        const metric = document.createElement('div');
+        metric.classList.add('metric');
+        const metricValue = document.createElement('div');
+        metricValue.classList.add('metric-value');
+        metricValue.textContent = value;
+        const metricLabel = document.createElement('div');
+        metricLabel.classList.add('metric-label');
+        metricLabel.textContent = label;
+        metric.appendChild(metricValue);
+        metric.appendChild(metricLabel);
+        metrics.appendChild(metric);
+      }
       const smallContainerText = document.createElement('div');
-      smallContainerText.classList.add('small-text');
-      smallContainerText.innerHTML = 'Lighter than alternatives';
-
-      const container = document.createElement('div');
-      container.classList.add('container', 'dark');
-      container.appendChild(iconContainer);
-      container.appendChild(containerText);
+      smallContainerText.classList.add('small-text', 'metrics-note');
+      smallContainerText.textContent = 'Up to 60% less CPU and 4× the audio bitrate compared to other Telegram call libraries.';
+      const benchmarksLink = document.createElement('a');
+      benchmarksLink.classList.add('metrics-link');
+      benchmarksLink.href = 'https://github.com/pytgcalls/ntgcalls#benchmarks';
+      benchmarksLink.target = '_blank';
+      benchmarksLink.textContent = 'See benchmarks';
+      benchmarksLink.insertAdjacentHTML('beforeend', '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>');
+      container.appendChild(metrics);
       container.appendChild(smallContainerText);
-
+      container.appendChild(benchmarksLink);
       return container;
     }
     case 'devices': {
-      const icon = iconsManager.get('main', 'devices');
-
-      const windowsIcon = iconsManager.get('devices', 'windows');
-      windowsIcon.classList.add('secondary');
-      const devicesIcon = iconsManager.get('devices', 'linux');
-      devicesIcon.classList.add('secondary');
-      const appleIcon = iconsManager.get('devices', 'apple');
-      appleIcon.classList.add('secondary');
-
-      const backShadow = document.createElement('div');
-      backShadow.classList.add('back-shadow');
+      container.classList.add('dark');
+      const chip = document.createElement('div');
+      chip.classList.add('icon-chip', 'os-chip');
+      for (const os of ['windows', 'linux', 'apple', 'android']) {
+        chip.appendChild(iconsManager.get('devices', os));
+      }
       const iconContainer = document.createElement('div');
       iconContainer.classList.add('pseudo-icons');
-      iconContainer.appendChild(backShadow);
-      iconContainer.appendChild(icon);
-      iconContainer.appendChild(windowsIcon);
-      iconContainer.appendChild(devicesIcon);
-      iconContainer.appendChild(appleIcon);
-
-      const containerText = document.createElement('div');
-      containerText.classList.add('text');
-      containerText.innerHTML = 'Compatible with a<br/>wide range of devices<br/>and operating<br/>systems.';
-
-      const container = document.createElement('div');
-      container.classList.add('container', 'dark');
+      iconContainer.appendChild(chip);
       container.appendChild(iconContainer);
+      containerText.innerHTML = 'Runs on Windows, Linux, macOS and <span class="gradient-text">Android</span>.';
       container.appendChild(containerText);
-
       return container;
     }
     case 'dictionary': {
-      const lightPseudoElementPattern = document.createElement('img');
-      lightPseudoElementPattern.classList.add('pattern');
-      lightPseudoElementPattern.src = '/src/assets/costructionpattern.svg';
-      const lightPseudoElement = document.createElement('div');
-      lightPseudoElement.classList.add('pseudo-bg');
-      lightPseudoElement.appendChild(document.createElement('div'));
-      lightPseudoElement.appendChild(document.createElement('div'));
-      lightPseudoElement.appendChild(document.createElement('div'));
-      lightPseudoElement.appendChild(lightPseudoElementPattern);
-
-      const iconContainer = document.createElement('div');
-      iconContainer.classList.add('pseudo-icons');
-      iconContainer.appendChild(iconsManager.get('main', 'dictionary'));
-
-      const containerText = document.createElement('div');
-      containerText.classList.add('text');
-      containerText.innerHTML = 'Achieve Language<br/>Flexibility with Effortless<br/>Integration through C<br/>Bindings.';
-
-      const container = document.createElement('div');
-      container.classList.add('container', 'light');
-      container.appendChild(lightPseudoElement);
-      container.appendChild(iconContainer);
+      container.classList.add('light');
+      container.appendChild(composePointIcon('code', 'Multi-language'));
+      containerText.textContent = 'Native bindings for Python, Node.js, Rust, Go, C and Java.';
       container.appendChild(containerText);
-
       return container;
     }
     default:
@@ -522,8 +500,12 @@ function composeOwnerCitation() {
     }
   });
 
+  const sparkles = iconsManager.get('cards', 'sparkles');
+  sparkles.classList.add('citation-sparkles');
+
   const container = document.createElement('div');
   container.classList.add('container', 'citation');
+  container.appendChild(sparkles);
   container.appendChild(mainIcon);
   container.appendChild(citationElement);
   container.appendChild(ownerRow);
@@ -586,7 +568,7 @@ function composeTeamMembers() {
 
   const description = document.createElement('div');
   description.classList.add('description');
-  description.textContent = 'Each member contributes their specific skills and knowledge to the team. They can include technical expertise, communication skills, problem-solving abilities or creative thinking.';
+  description.textContent = 'The people who build, test and maintain Py-TgCalls and NTgCalls.';
 
   const intTeamMembers = document.createElement('div');
   intTeamMembers.classList.add('int-team-members');
@@ -672,7 +654,7 @@ function composeTeamMembers() {
       githubButton.href = 'https://github.com/' + github.textContent.trim();
       githubButton.target = '_blank';
       githubButton.appendChild(iconsManager.get('socials', 'github'));
-      githubButton.appendChild(document.createTextNode('Github'));
+      githubButton.appendChild(document.createTextNode('GitHub'));
 
       const memberButtons = document.createElement('div');
       memberButtons.classList.add('buttons');
@@ -739,13 +721,13 @@ function composeFooter() {
 
   const dedSectionTitle = document.createElement('div');
   dedSectionTitle.classList.add('title');
-  dedSectionTitle.textContent = 'PyTgCalls Foundation';
+  dedSectionTitle.textContent = 'Py-TgCalls Foundation';
   const dedSectionDescription = document.createElement('div');
   dedSectionDescription.classList.add('description');
   dedSectionDescription.textContent = 'Help us make these docs great!';
   const dedSectionDescriptionMini = document.createElement('div');
   dedSectionDescriptionMini.classList.add('mini-description');
-  dedSectionDescriptionMini.textContent = 'All Github docs are open source. See something that\'s wrong or unclear? Submit a pull request.';
+  dedSectionDescriptionMini.textContent = 'All GitHub docs are open source. See something that\'s wrong or unclear? Submit a pull request.';
 
   const buttonIcon = document.createElement('div');
   buttonIcon.classList.add('button-icon');

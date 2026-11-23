@@ -4,7 +4,7 @@ body>.popup-container {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(7, 11, 30, 0.7);
   z-index: 4;
   display: flex;
   align-items: center;
@@ -33,13 +33,13 @@ body>.popup-container.disappear {
 }
 
 body>.popup-container .popup-element {
-  background: #151515;
+  background: #0F1738;
   padding: 20px;
   min-width: 500px;
   max-width: min(500px, 80vw);
   color: white;
   border-radius: 20px;
-  border: 1px solid #ffffff1f;
+  border: 1px solid rgba(150, 170, 255, 0.2);
 }
 
 body>.popup-container:not(.disappear) .popup-element {
@@ -68,12 +68,12 @@ body>.popup-container .popup-element .title {
 }
 
 body>.popup-container .popup-element .description {
-  color: rgba(255, 255, 255, 0.7);
+  color: #C9D4F5;
   font-size: 18px;
 }
 
 body>.popup-container .popup-element input {
-  background: rgba(0, 0, 0, 0.5);
+  background: #0A1028;
   color: #FFFFFF;
   font-size: 1em;
   border-radius: 10px;
@@ -86,7 +86,7 @@ body>.popup-container .popup-element input {
 body>.popup-container .popup-element .custom-editor {
   margin-top: 20px;
   padding: 15px;
-  background: rgba(0, 0, 0, 0.5);
+  background: #0A1028;
   border-radius: 10px;
   position: relative;
   box-sizing: border-box;
@@ -100,7 +100,7 @@ body>.popup-container .popup-element .custom-editor textarea {
   position: absolute;
   height: calc(100% - 30px);
   width: calc(100% - 30px);
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Google Sans', 'Poppins', sans-serif;
   font-size: 1em;
   tab-size: 4;
   resize: none;

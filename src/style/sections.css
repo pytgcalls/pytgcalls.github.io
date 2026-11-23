@@ -15,7 +15,7 @@ body.as-home .page-container .sections {
     width: 100%;
     padding-inline: 20px;
     pointer-events: none;
-    background: #080a0e;
+    background: #060A1A;
     z-index: 4;
     transition: 0.2s transform cubic-bezier(0.97, -0.02, 0, 0.98);
   }
@@ -56,7 +56,7 @@ body .page-container .sections:not(.is-loading) {
 
 body .page-container .sections:not(.is-loading) *:not(.sections-recap) {
   cursor: pointer;
-  color: rgba(255, 255, 255, 0.7);
+  color: #C9D4F5;
   margin-bottom: 4px;
   transition: 0.2s color;
 }
@@ -78,7 +78,7 @@ body .page-container .sections:not(.is-loading) .sections-recap *:hover {
 }
 
 body .page-container .sections:not(.is-loading) .sections-recap:has(*:hover) *:not(:hover) {
-  color: rgba(255, 255, 255, 0.4);
+  color: #A9B6E0;
 }
 
 body .page-container .sections:not(.is-loading) .h1 {

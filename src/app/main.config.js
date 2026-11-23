@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2020-2026.
  *
- *  The code in this file is part of the PyTgCalls project.
+ *  The code in this file is part of the Py-TgCalls project.
  *  Please refer to official links:
  *  * Repo: https://github.com/pytgcalls
  *  * News: https://t.me/pytgcallsnews
@@ -186,6 +186,15 @@ export async function getFilesListDefaultFileById(id) {
 
     return fullPath;
   }
+}
+
+export function getLibraryTitleSync(id) {
+  if (id == null || !isConfigReady()) {
+    return id;
+  }
+
+  const filesList = precachedConfig.querySelector('config > files-list[id="' + id + '"]');
+  return filesList?.getAttribute('title') || id;
 }
 
 export async function getFilesListInstanceById(id) {

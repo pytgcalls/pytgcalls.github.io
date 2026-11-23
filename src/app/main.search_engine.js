@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2020-2026.
  *
- *  The code in this file is part of the PyTgCalls project.
+ *  The code in this file is part of the Py-TgCalls project.
  *  Please refer to official links:
  *  * Repo: https://github.com/pytgcalls
  *  * News: https://t.me/pytgcallsnews
@@ -332,6 +332,6 @@ export function generateResultPreview(docsRefPreview, chunks) {
         const y = selectedCoords.top - tempPreviewCoords.top;
         const yCenter = (y - containerHeight / 2 + selectedCoords.height / 2);
 
-        docsRefPage.style.setProperty('--try', '-'+yCenter+'px');
+        docsRefPage.style.setProperty('--try', -Math.max(yCenter, 0) + 'px');
     }
 }

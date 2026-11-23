@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2020-2026.
  *
- *  The code in this file is part of the PyTgCalls project.
+ *  The code in this file is part of the Py-TgCalls project.
  *  Please refer to official links:
  *  * Repo: https://github.com/pytgcalls
  *  * News: https://t.me/pytgcallsnews
@@ -346,7 +346,7 @@ function checkAndManageElement(element, newElement, elementDom) {
 
       const presentationTitle = document.createElement('div');
       presentationTitle.classList.add('pres-title');
-      presentationTitle.textContent = element.getAttribute('presentationtitle') || 'PyTgCalls';
+      presentationTitle.textContent = element.getAttribute('presentationtitle') || 'Py-TgCalls';
       const presentationDescription = document.createElement('div');
       presentationDescription.classList.add('pres-description');
       presentationDescription.textContent = element.getAttribute('presentationdescription') || 'Async client API for the Telegram calls';

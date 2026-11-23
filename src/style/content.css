@@ -14,7 +14,7 @@ body .page-container.is-preview .content {
   padding: 20px;
 }
 
-body.as-home .page-container .content {
+body.as-home .page-container:not(.is-preview) .content {
   display: none;
 }
 
@@ -77,7 +77,7 @@ body .page-container .content:not(.is-loading) {
 }
 
 body .page-container .content:not(.is-loading) ::selection {
-  background: #5d6a81;
+  background: #7F8CBF;
   color: #FFFFFF;
 }
 
@@ -95,8 +95,8 @@ body .page-container .content:not(.is-loading) .go-to-container.has-only-next {
 body .page-container .content:not(.is-loading) .go-to-container .go-to {
   display: flex;
   align-items: center;
-  background: #161a20;
-  border: 1px solid rgba(93, 106, 129, 0.2);
+  background: #0C1330;
+  border: 1px solid rgba(150, 170, 255, 0.14);
   padding: 17px;
   gap: 11px;
   position: relative;
@@ -148,7 +148,7 @@ body .page-container .content:not(.is-loading) .go-to-container .go-to .mini-tit
   bottom: 8px;
   font-size: 14px;
   left: 42px;
-  opacity: 0.7;
+  color: #A9B6E0;
   white-space: nowrap;
   transition: 0.2s bottom, 0.2s opacity;
 }
@@ -169,7 +169,7 @@ body .page-container .content:not(.is-loading) .page {
 }
 
 body .page-container .content:not(.is-loading) .page a {
-  color: #5d6a81;
+  color: #7FB2FF;
 }
 
 body .page-container .content:not(.is-loading) .page a.ref-shi {
@@ -252,7 +252,7 @@ body .page-container .content:not(.is-loading) .page .h4 .emoji-parsed img {
 
 body .page-container .content:not(.is-loading) .page .text,
 body .page-container .content:not(.is-loading) .page .pg-title {
-  color: rgba(255, 255, 255, 0.8);
+  color: #E3E9FF;
   font-size: calc(17px + var(--font-size, 0));
   margin-block: 5px;
   transition: 0.2s font-size;
@@ -270,8 +270,8 @@ body .page-container .content:not(.is-loading) .page .pg-title {
 
 body .page-container .content:not(.is-loading) .page .code {
   display: inline-block;
-  background: #161a20;
-  border: 1px solid rgba(93, 106, 129, 0.2);
+  background: #0C1330;
+  border: 1px solid rgba(150, 170, 255, 0.14);
   padding-inline: 7px;
   box-sizing: border-box;
   border-radius: 5px;
@@ -286,7 +286,7 @@ body .page-container .content:not(.is-loading) .page .sb {
 
 body .page-container .content:not(.is-loading) .page .docs-ref {
   display: inline-block;
-  color: #007fff;
+  color: #7FB2FF;
   cursor: pointer;
 }
 
@@ -306,8 +306,8 @@ body .page-container .content:not(.is-loading) ul li .emoji-parsed img {
 body .page-container .content:not(.is-loading) .page .multisyntax,
 body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-container .vsc-right-code .vsc-code-high .syntax-highlight,
 body .page-container .content:not(.is-loading) .page .external-sh {
-  background: rgb(45, 45, 45, 0.3);
-  border: 1px solid rgba(93, 106, 129, 0.2);
+  background: #0C1330;
+  border: 1px solid rgba(150, 170, 255, 0.14);
   margin-block: 5px;
   border-radius: 10px;
 }
@@ -373,7 +373,7 @@ body .page-container .content:not(.is-loading) .page .external-sh > .expandable 
   gap: 10px;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(0deg, #0d1117, transparent);
+  background: linear-gradient(0deg, #070B1E, transparent);
   box-sizing: border-box;
   padding-top: 100px;
   cursor: pointer;
@@ -527,8 +527,8 @@ body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-con
 }
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag {
-  background: #0d1117;
-  border: 1px solid rgba(93, 106, 129, 0.2);
+  background: #070B1E;
+  border: 1px solid rgba(150, 170, 255, 0.14);
   border-right: 0;
   width: fit-content;
   padding-inline: 12px;
@@ -553,12 +553,12 @@ body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-con
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag.is-clickable:not(.success):hover::before,
 body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag.is-clickable:not(.success):hover {
-  background: rgb(22, 29, 39);
+  background: #16204A;
 }
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag.is-clickable:not(.success):active::before,
 body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag.is-clickable:not(.success):active {
-  background: rgb(28, 36, 48);
+  background: #16204A;
 }
 
 body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-container .tag::before {
@@ -567,9 +567,9 @@ body .page-container .content:not(.is-loading) .page .syntax-highlight .tags-con
   right: -9px;
   top: 50%;
   height: 19px;
-  border-right: 1px solid rgb(255, 255, 255, 0.1);
-  border-top: 1px solid rgb(255, 255, 255, 0.1);
-  background: #0d1117;
+  border-right: 1px solid rgba(150, 170, 255, 0.16);
+  border-top: 1px solid rgba(150, 170, 255, 0.16);
+  background: #070B1E;
   aspect-ratio: 1;
   transform: translateY(-50%) rotate(45deg);
 }
@@ -626,7 +626,7 @@ body .page-container .content:not(.is-loading) .page .syntax-highlight.has-mark:
   position: absolute;
   left: calc(var(--scroll-left, 0px) - 10px);
   width: calc(100% + 10px);
-  background: rgba(13, 17, 23, 0.7);
+  background: rgba(7, 11, 30, 0.7);
   transition: 0.2s transform, 0.2s height, 0.2s top;
 }
 
@@ -653,7 +653,7 @@ body .page-container .content:not(.is-loading) .page .syntax-highlight .temp-mar
   position: absolute;
   left: -10px;
   width: calc(100% + 10px + var(--scroll-left, 0px));
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(7, 11, 30, 0.5);
   top: calc(10px + 25px * var(--start-mark) - 25px);
   height: 25px;
   z-index: -1;
@@ -717,7 +717,8 @@ body .page-container .content:not(.is-loading) .page .multisyntax .tabs::before 
   height: 100%;
   width: var(--tab-w, 0);
   transform: translateX(var(--tab-x, 0));
-  background: rgba(255, 255, 255, 0.09);
+  background: rgba(127, 178, 255, 0.16);
+  box-shadow: inset 0 -2px 0 #7FB2FF;
   transition: 0.2s transform, 0.2s width;
 }
 
@@ -739,7 +740,7 @@ body .page-container .content:not(.is-loading) .page .multisyntax .tabs>.tab {
 
 body .page-container .content:not(.is-loading) .page .multisyntax .tabs>.tab:not(.active) {
   cursor: pointer;
-  color: rgba(255, 255, 255, 0.5);
+  color: #8F9BC8;
 }
 
 body .page-container .content:not(.is-loading) .page .shi {
@@ -754,8 +755,8 @@ body .page-container .home-container .text-container .vsc-mockup .vsc-bottom-con
 }
 
 body .page-container .content:not(.is-loading) .page .category-title {
-  background: #161a20;
-  border: 1px solid rgba(93, 106, 129, 0.2);
+  background: #0C1330;
+  border: 1px solid rgba(150, 170, 255, 0.14);
   padding: 9px;
   border-radius: 10px;
   font-size: calc(16px + var(--font-size, 0));
@@ -779,15 +780,15 @@ body .page-container .content:not(.is-loading) .page .subtext+.category-title {
 
 body .page-container .content:not(.is-loading) table {
   border-spacing: 0;
-  background: #0d1117;
-  border: 1px solid rgba(93, 106, 129, 0.2);
+  background: #070B1E;
+  border: 1px solid rgba(150, 170, 255, 0.14);
   padding: 7px;
   border-radius: 20px;
   margin-top: 20px;
 }
 
 body .page-container .content:not(.is-loading) table tr.as-definitions th {
-  background: #161a20;
+  background: #0C1330;
 }
 
 body .page-container .content:not(.is-loading) table tr.as-definitions th:first-child {
@@ -806,12 +807,12 @@ body .page-container .content:not(.is-loading) table tr td {
 }
 
 body .page-container .content:not(.is-loading) table tr:not(:last-child) td {
-  border-bottom: 2px solid #ffffff0d;
+  border-bottom: 2px solid rgba(150, 170, 255, 0.08);
 }
 
 body .page-container .content:not(.is-loading) .page .alert {
-  background: #161a20;
-  box-shadow: 0 0 0 1px rgba(93, 106, 129, 0.2);
+  background: #0C1330;
+  box-shadow: 0 0 0 1px rgba(150, 170, 255, 0.14);
   border-radius: 10px;
   overflow: hidden;
   margin-block: 20px;
@@ -843,68 +844,68 @@ body .page-container .content:not(.is-loading) .page .alert .alert-content .emoj
 }
 
 body .page-container .content:not(.is-loading) .page .alert[data-type="important"] {
-  border-left: 3px solid #f42b3c;
+  border-left: 3px solid #FF7A8A;
 }
 
 body .page-container .content:not(.is-loading) .page .alert[data-type="important"] .alert-header {
-  background: #f42b3c17;
+  background: rgba(255, 122, 138, 0.1);
 }
 
 body .page-container .content:not(.is-loading) .page .alert[data-type="important"] .alert-header .icon-container svg {
-  fill: #f42b3c;
+  fill: #FF7A8A;
 }
 
 body .page-container .content:not(.is-loading) .page .alert[data-type="important"] .alert-header .alert-title {
-  color: #f42b3c;
+  color: #FF7A8A;
 }
 
 body .page-container .content:not(.is-loading) .page .alert[data-type="note"] {
-  border-left: 3px solid #00ff4b;
+  border-left: 3px solid #6EE7B7;
 }
 
 body .page-container .content:not(.is-loading) .page .alert[data-type="note"] .alert-header {
-  background: #00ff4b21;
+  background: rgba(110, 231, 183, 0.1);
 }
 
 body .page-container .content:not(.is-loading) .page .alert[data-type="note"] .alert-header .icon-container svg {
-  fill: #00ff4b;
+  fill: #6EE7B7;
 }
 
 body .page-container .content:not(.is-loading) .page .alert[data-type="note"] .alert-header .alert-title {
-  color: #00ff4b;
+  color: #6EE7B7;
 }
 
 body .page-container .content:not(.is-loading) .page .alert[data-type="warning"] {
-  border-left: 3px solid #ff9100;
+  border-left: 3px solid #FFC46B;
 }
 
 body .page-container .content:not(.is-loading) .page .alert[data-type="warning"] .alert-header {
-  background: #ff91001a;
+  background: rgba(255, 196, 107, 0.1);
 }
 
 body .page-container .content:not(.is-loading) .page .alert[data-type="warning"] .alert-header .icon-container svg {
-  fill: #ff9100;
+  fill: #FFC46B;
 }
 
 body .page-container .content:not(.is-loading) .page .alert[data-type="warning"] .alert-header .alert-title {
-  color: #ff9100;
+  color: #FFC46B;
 }
 
 body .page-container .content:not(.is-loading) .page .alert[data-type="p2p"] {
-  border-left: 3px solid #00b0ff;
+  border-left: 3px solid #7FB2FF;
   text-align: center;
 }
 
 body .page-container .content:not(.is-loading) .page .alert[data-type="p2p"] .alert-header {
-  background: #00b0ff17;
+  background: rgba(127, 178, 255, 0.1);
 }
 
 body .page-container .content:not(.is-loading) .page .alert[data-type="p2p"] .alert-header .icon-container svg {
-  fill: #00b0ff;
+  fill: #7FB2FF;
 }
 
 body .page-container .content:not(.is-loading) .page .alert[data-type="p2p"] .alert-header .alert-title {
-  color: #00b0ff;
+  color: #7FB2FF;
 }
 
 body .page-container .content:not(.is-loading) .page .alert[data-type="p2p"] img {
@@ -924,13 +925,13 @@ body .page-container .content:not(.is-loading) .page .alert[data-type="p2p"] .al
   max-width: 80%;
   margin-inline: auto;
   padding: 0 0 20px;
-  color: rgba(255, 255, 255, 0.7);
+  color: #C9D4F5;
 }
 
 body .page-container .content:not(.is-loading) .page .github-ref {
   width: 100%;
-  background: #161a20;
-  border: 1px solid #ffffff26;
+  background: #0C1330;
+  border: 1px solid rgba(150, 170, 255, 0.22);
   border-radius: 10px;
   position: relative;
   user-select: none;
@@ -987,7 +988,7 @@ body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading
   display: flex;
   align-items: center;
   gap: 10px;
-  color: rgba(255, 255, 255, 0.6);
+  color: #C9D4F5;
   font-size: min(15px, 4.2vw);
   line-height: min(15px, 4.2vw);
 }
@@ -998,7 +999,7 @@ body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading
 
 body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .recommended-badge .icon-container svg {
   vertical-align: middle;
-  fill: rgba(255, 255, 255, 0.6);
+  fill: #C9D4F5;
 }
 
 body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .repo-presentation {
@@ -1013,7 +1014,7 @@ body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading
 body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .repo-presentation img {
   width: min(62px, 13vw);
   aspect-ratio: 1;
-  border: 1px solid #ffffff26;
+  border: 1px solid rgba(150, 170, 255, 0.22);
   border-radius: 12px;
 }
 
@@ -1029,7 +1030,7 @@ body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading
 body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .repo-presentation .repo-details .repo-description {
   font-size: min(16px, 3.5vw);
   margin-top: 2px;
-  color: rgba(255, 255, 255, 0.6);
+  color: #C9D4F5;
 }
 
 body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .repo-values {
@@ -1045,7 +1046,7 @@ body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading
   gap: 5px;
   font-size: 14px;
   line-height: 14px;
-  color: rgba(255, 255, 255, 0.6);
+  color: #C9D4F5;
 }
 
 body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .repo-values .value .icon-container {
@@ -1054,7 +1055,7 @@ body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading
 
 body .page-container .content:not(.is-loading) .page .github-ref:not(.is-loading) .repo-values .value .icon-container svg {
   vertical-align: middle;
-  fill: rgba(255, 255, 255, 0.6);
+  fill: #C9D4F5;
   width: 15px;
   height: 15px;
 }
@@ -1072,8 +1073,8 @@ body .page-container .content:not(.is-loading) .page .banner {
   width: 100%;
   border-radius: 20px;
   overflow: hidden;
-  background: var(--mainbg);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #0A1028;
+  border: 1px solid rgba(150, 170, 255, 0.16);
 }
 
 body .page-container .content:not(.is-loading) .page .banner .banner-container {
@@ -1091,12 +1092,12 @@ body .page-container .content:not(.is-loading) .page .banner .banner-container::
   width: 100%;
   z-index: 1;
   height: 325px;
-  background: linear-gradient(0deg, var(--mainbg) 10%, transparent);
+  background: linear-gradient(0deg, #0A1028 10%, transparent);
 }
 
 body .page-container .content:not(.is-loading) .page .banner .banner-container .main-image {
   width: 100%;
-  border: 4px solid var(--mainbg);
+  border: 4px solid #0A1028;
   aspect-ratio: var(--width) / var(--height);
   border-radius: 18px;
   box-sizing: border-box;
@@ -1134,7 +1135,7 @@ body .page-container .content:not(.is-loading) .page .banner .banner-container .
 body .page-container .content:not(.is-loading) .page .banner .banner-container .bottom-container .mini-title {
   font-size: 17px;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.4);
+  color: #A9B6E0;
   transform: translateY(5px);
 }
 
@@ -1157,7 +1158,7 @@ body .page-container .content:not(.is-loading) .page .banner .description {
   font-size: 17px;
   font-weight: 300;
   padding-inline: 20px;
-  color: rgba(255, 255, 255, 0.4);
+  color: #A9B6E0;
 }
 
 body .page-container .content:not(.is-loading) .page .banner .description .emoji-parsed>img {
@@ -1165,7 +1166,8 @@ body .page-container .content:not(.is-loading) .page .banner .description .emoji
 }
 
 body .page-container .content:not(.is-loading) .page .banner .lib-presentation {
-  background: rgba(0, 0, 0, 0.5);
+  background: #0C1330;
+  box-shadow: inset 0 0 0 1px rgba(150, 170, 255, 0.14);
   width: calc(100% - 8px);
   border-radius: 16px;
   box-sizing: border-box;
@@ -1208,14 +1210,14 @@ body .page-container .content:not(.is-loading) .page .banner .lib-presentation .
 body .page-container .content:not(.is-loading) .page .banner .lib-presentation .lib-details .pres-description {
   line-height: 18px;
   font-weight: 100;
-  opacity: 0.4;
+  color: #A9B6E0;
 }
 
 body .page-container .content:not(.is-loading) .page .banner .lib-presentation .update {
   text-decoration: none;
   color: white;
   display: block;
-  background: rgba(255, 255, 255, 0.12);
+  background: linear-gradient(90deg, #3D6BFF, #7B4DFF);
   padding-inline: 16px;
   padding-block: 8px;
   border-radius: 20px;
@@ -1238,7 +1240,7 @@ body .page-container .content:not(.is-loading) .page .banner .lib-presentation .
 }
 
 body .page-container .content:not(.is-loading) .page .banner .lib-presentation .update:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: linear-gradient(90deg, #5580FF, #8E66FF);
 }
 
 body .page-container .content:not(.is-loading) .page .banner .lib-presentation .update:active {

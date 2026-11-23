@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2020-2026.
  *
- *  The code in this file is part of the PyTgCalls project.
+ *  The code in this file is part of the Py-TgCalls project.
  *  Please refer to official links:
  *  * Repo: https://github.com/pytgcalls
  *  * News: https://t.me/pytgcallsnews
@@ -102,7 +102,7 @@ function composeSponsorCard() {
 
   const disclaimer = document.createElement('div');
   disclaimer.classList.add('sponsor-disclaimer');
-  disclaimer.textContent = 'PyTgCalls is not affiliated with or endorsed by this sponsor';
+  disclaimer.textContent = 'Py-TgCalls is not affiliated with or endorsed by this sponsor';
 
   card.appendChild(badge);
   card.appendChild(body);
@@ -196,6 +196,11 @@ export function loadSidebar(id) {
     config.getFilesListInstanceById(id).then((child) => {
       const fragment = document.createDocumentFragment();
       const basePathForMainFiles = child.getAttribute('basepath');
+      const filesByGroup = new Map();
+      for (const group of child.querySelectorAll(':scope > group[basepath]')) {
+        const basePath = group.getAttribute('basepath');
+        filesByGroup.set(basePath, [...(filesByGroup.get(basePath) ?? []), ...group.querySelectorAll('file')]);
+      }
 
       let i = 0;
       for (const file of child.childNodes) {
@@ -214,10 +219,10 @@ export function loadSidebar(id) {
               }
               break;
             case 'GROUP':
-              const groupFilesList = file.querySelectorAll('file');
+              const basePathForGroupFiles = file.getAttribute('basepath');
+              const groupFilesList = filesByGroup.get(basePathForGroupFiles) ?? [];
+              filesByGroup.delete(basePathForGroupFiles);
               if (groupFilesList.length) {
-                const basePathForGroupFiles = file.getAttribute('basepath');
-
                 if (!basePathForGroupFiles) {
                   throw new Error("group elements require a basepath");
                 } else {

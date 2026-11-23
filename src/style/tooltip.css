@@ -2,12 +2,12 @@ body .tooltip {
     position: fixed;
     top: calc(var(--center-y) + 49px);
     left: var(--center-x);
-    background: #161A20;
+    background: #0F1738;
     max-width: min(272px, 80vw);
     box-sizing: border-box;
     border-radius: 10px;
-    border: 1px solid rgba(93, 106, 129, 0.2);
-    box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(150, 170, 255, 0.2);
+    box-shadow: 0 12px 32px rgba(3, 6, 20, 0.55);
     opacity: 0;
     z-index: 4;
     transform-origin: 50% 0;
@@ -46,7 +46,7 @@ body .tooltip.visible.out-of-space {
 
 @media screen and (max-width: 999px) {
     body .tooltip.adapt-mobile {
-        background: #080a0e;
+        background: #060A1A;
         top: 60px;
         left: 0;
         width: 100vw;
@@ -92,7 +92,7 @@ body .tooltip .title-element {
 }
 
 body .tooltip .text-element {
-    color: rgba(255, 255, 255, 0.8);
+    color: #E3E9FF;
     font-weight: 500;
 }
 
@@ -109,7 +109,7 @@ body .tooltip .text-element {
 body .tooltip.has-tabs {
     width: auto;
     padding: 8px;
-    background: black;
+    background: #0A1028;
 }
 
 body .tooltip > .icon-container {
@@ -139,7 +139,7 @@ body .tooltip .selector {
 }
 
 body .tooltip .selector .main-title {
-    color: rgba(255, 255, 255, 0.8);
+    color: #E3E9FF;
     font-size: 25px;
     font-weight: 600;
     margin-bottom: 5px;
@@ -154,7 +154,7 @@ body .tooltip .selector .main-title {
 }
 
 body .tooltip .selector .mini-text {
-    color: rgba(255, 255, 255, 0.6);
+    color: #C9D4F5;
     font-size: 13px;
 }
 
@@ -171,7 +171,7 @@ body .tooltip .selector {
 }
 
 body .tooltip .selector .library {
-    background: #0e1117;
+    background: #141E48;
     padding: 10px;
     font-weight: 500;
     cursor: pointer;
@@ -201,9 +201,9 @@ body .tooltip .selector .library .title-row {
 body .tooltip .selector .library .title-row .switch {
     width: 40px;
     height: 24px;
-    background: rgb(81, 81, 84);
+    background: #1E2A55;
     border-radius: 30px;
-    outline: 1px solid rgba(255, 255, 255, 0.05);
+    outline: 1px solid rgba(150, 170, 255, 0.18);
     position: relative;
     transition: 0.2s background;
     overflow: hidden;
@@ -211,7 +211,7 @@ body .tooltip .selector .library .title-row .switch {
 }
 
 body .tooltip .selector .library .title-row .switch.selected {
-    background: #0076fe;
+    background: linear-gradient(90deg, #3D6BFF, #7B4DFF);
 }
 
 body .tooltip .selector .library .title-row .switch::after {
@@ -241,7 +241,7 @@ body .tooltip .selector .library .title {
 body .tooltip .selector .library .description {
     font-size: 11px;
     font-weight: 400;
-    color: rgba(255, 255, 255, 0.4);
+    color: #A9B6E0;
     transition: 0.2s opacity;
 }
 
@@ -251,18 +251,18 @@ body .tooltip .selector .library.has-switch .description {
 
 body .tooltip .selector .library.selected {
     pointer-events: none;
-}
-
-body .tooltip .selector .library.selected .title,
-body .tooltip .selector .library.selected .description {
-    opacity: 0.4;
+    padding-right: 44px;
+    background: linear-gradient(90deg, rgba(61, 107, 255, 0.35), rgba(123, 77, 255, 0.18));
+    box-shadow: inset 0 0 0 1px rgba(150, 170, 255, 0.25);
 }
 
 body .tooltip .selector .library .icon-container.success {
     position: absolute;
     top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
+    right: 14px;
+    transform: translateY(-50%);
+    color: #C3A6FF;
+    fill: #C3A6FF;
     pointer-events: none;
     opacity: 0;
     transition: 0.2s opacity;
@@ -296,7 +296,7 @@ body .tooltip .selector .font-size-preview {
     overflow: hidden;
     padding-inline: 15px;
     margin-bottom: 5px;
-    border: 2px dashed #0e1117;
+    border: 2px dashed #0A1028;
     color: #FFFFFF;
     border-radius: 10px;
     font-size: calc(16px + var(--font-size, 0));
@@ -312,7 +312,7 @@ body .tooltip .selector .font-size-preview {
 body .tooltip .selector .font-size {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    background: #0e1117;
+    background: #0A1028;
     margin-bottom: 5px;
     border-radius: 10px;
     color: #FFFFFF;
@@ -336,7 +336,7 @@ body .tooltip .selector .font-size .font-size-standard {
     align-items: center;
     justify-content: center;
     opacity: 0;
-    background: conic-gradient(rgba(93, 106, 129, 0.2) var(--percent), transparent 0%);
+    background: conic-gradient(rgba(150, 170, 255, 0.14) var(--percent), transparent 0%);
     transition: 0.2s opacity;
 }
 
@@ -363,7 +363,7 @@ body .tooltip .selector .font-size .font-size-standard::after {
     width: calc(100% - 4px);
     height: calc(100% - 4px);
     border-radius: 7px;
-    background: #0e1117;
+    background: #0A1028;
 }
 
 body .tooltip .selector .font-size .font-size-standard span {
@@ -392,16 +392,16 @@ body .tooltip .selector .font-size.is-standard .font-size-item {
 }
 
 body .tooltip .selector .font-size .font-size-item:not(.disabled):hover {
-    background: rgba(255, 255, 255, 0.01);
+    background: rgba(150, 170, 255, 0.016);
 }
 
 body .tooltip .selector .font-size .font-size-item:not(.disabled):active {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(150, 170, 255, 0.128);
 }
 
 body .tooltip .selector .font-size .font-size-item.disabled {
     pointer-events: none;
-    color: rgba(255, 255, 255, 0.5);
+    color: #A9B6E0;
 }
 
 body .tooltip .selector .font-size .font-size-item.smaller {
@@ -413,5 +413,5 @@ body .tooltip .selector .font-size .font-size-item.bigger {
 }
 
 body .tooltip .selector .font-size .font-size-item:first-child {
-    border-right: 1px solid rgba(93, 106, 129, 0.2);
+    border-right: 1px solid rgba(150, 170, 255, 0.14);
 }

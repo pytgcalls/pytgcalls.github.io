@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2020-2026.
  *
- *  The code in this file is part of the PyTgCalls project.
+ *  The code in this file is part of the Py-TgCalls project.
  *  Please refer to official links:
  *  * Repo: https://github.com/pytgcalls
  *  * News: https://t.me/pytgcallsnews
@@ -109,7 +109,7 @@ export function getElement() {
   headerDonate.classList.add('header-icon', 'header-donate', 'visible');
   headerDonate.target = '_blank';
   headerDonate.rel = 'noopener';
-  headerDonate.title = 'Support PyTgCalls';
+  headerDonate.title = 'Support Py-TgCalls';
   headerDonate.style.display = 'none';
   headerDonate.appendChild(iconsManager.get('main', 'heart').firstChild);
 
@@ -176,17 +176,19 @@ function appendTitleUpdateOnActiveTabUpdate() {
     callback: (id) => {
       selectedTabID = id;
 
-      if (headerLibraryValueElement.textContent === id) {
+      const title = config.getLibraryTitleSync(id);
+
+      if (headerLibraryValueElement.textContent === title) {
         return;
       }
 
-      document.title = id == null ? 'Home' : id+' Docs';
+      document.title = id == null ? 'Home' : title+' Docs';
 
       const wasEmpty = headerLibraryElement.classList.contains('is-empty');
       headerLibraryElement.classList.toggle('is-empty', id == null);
 
       if ((!headerLibraryValueElement.hasChildNodes() && !wasEmpty) || isElementHidden(headerLibraryValueElement)) {
-        headerLibraryValueElement.textContent = id;
+        headerLibraryValueElement.textContent = title;
         return;
       }
 
@@ -195,14 +197,14 @@ function appendTitleUpdateOnActiveTabUpdate() {
         headerLibraryValueElement.offsetHeight; // trigger redraw
       }
 
-      fakeHeaderLibraryValueElement.textContent = id;
+      fakeHeaderLibraryValueElement.textContent = title;
       const rect = fakeHeaderLibraryValueElement.getBoundingClientRect();
       headerLibraryValueElement.style.setProperty('--width', rect.width.toString() + 'px');
 
       headerLibraryValueElement.classList.add('updating');
       headerLibraryValueElement.addEventListener('transitionend', () => {
         headerLibraryValueElement.classList.remove('updating');
-        headerLibraryValueElement.textContent = id;
+        headerLibraryValueElement.textContent = title;
       }, { once: true });
     },
     isInternal: true
@@ -218,7 +220,7 @@ function expandLibrarySelectorTooltip(container) {
       for (const id of ids) {
         const singleLibraryTitle = document.createElement('div');
         singleLibraryTitle.classList.add('title');
-        singleLibraryTitle.textContent = id.getAttribute('id').trim();
+        singleLibraryTitle.textContent = (id.getAttribute('title') || id.getAttribute('id')).trim();
   
         const singleLibraryDescription = document.createElement('div');
         singleLibraryDescription.classList.add('description');
@@ -357,7 +359,7 @@ function expandSettingsTooltip() {
         settingsManager.updateCollapseLongCode
     ));
     selector.appendChild(createSettingsRow(
-        'Force Github API',
+        'Force GitHub API',
         'Use api.github.com instead of raw.githubusercontent.com',
         settingsManager.getForceGithubAPIStatus(),
         settingsManager.updateForceGithubAPI
@@ -557,7 +559,7 @@ export function getLibraryElement(isStatic = false) {
   headerLibrary.appendChild(headerLibraryIcon);
 
   if (isStatic && selectedTabID != null) {
-    headerLibraryValue.textContent = selectedTabID;
+    headerLibraryValue.textContent = config.getLibraryTitleSync(selectedTabID);
   }
 
   return {

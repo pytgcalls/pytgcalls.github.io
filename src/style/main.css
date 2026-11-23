@@ -13,8 +13,8 @@ html {
 }
 
 body {
-  background: #0d1117;
-  font-family: 'Poppins', sans-serif;
+  background: #070B1E;
+  font-family: 'Google Sans', 'Poppins', sans-serif;
   overflow: hidden;
   height: 100%;
   width: 100%;
@@ -61,7 +61,7 @@ body.as-home .page-container {
 }
 
 :root:hover ::-webkit-scrollbar-thumb {
-  background: #666666a1;
+  background: rgba(127, 140, 191, 0.55);
   border-radius: 10px;
 }
 
@@ -96,4 +96,26 @@ textarea:focus {
     stroke-dasharray: 89, 200;
     stroke-dashoffset: -124;
   }
+}
+input::placeholder,
+textarea::placeholder {
+  color: #7F8CBF;
+}
+
+code[class*=language-],
+pre[class*=language-] {
+  color: #E3E9FF;
+}
+
+.token.punctuation,
+.token.decorator.annotation.punctuation {
+  color: #C9D4F5;
+}
+
+.token.block-comment,
+.token.cdata,
+.token.comment,
+.token.doctype,
+.token.prolog {
+  color: #7F8CBF;
 }
