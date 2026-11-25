@@ -95,6 +95,7 @@ function composeSponsorCard() {
   body.appendChild(texts);
 
   const buttonText = document.createElement('span');
+  buttonText.classList.add('sponsor-button-text');
   const button = document.createElement('div');
   button.classList.add('sponsor-button');
   button.appendChild(buttonText);
@@ -103,6 +104,7 @@ function composeSponsorCard() {
   const disclaimer = document.createElement('div');
   disclaimer.classList.add('sponsor-disclaimer');
   disclaimer.textContent = 'Py-TgCalls is not affiliated with or endorsed by this sponsor';
+  card.title = disclaimer.textContent;
 
   card.appendChild(badge);
   card.appendChild(body);
@@ -300,10 +302,22 @@ function handleSidebarGroup(i, basePathForMainFiles, basePathForGroupFiles, grou
     elementsGroup.append(element);
   }
 
-  elementsGroup.style.setProperty('--items', elementsGroup.childNodes.length.toString());
-  element.addEventListener('click', () => elementsGroup.classList.toggle('expanded'));
+  element.addEventListener('click', () => toggleSidebarGroup(elementsGroup));
+  elementsGroup.addEventListener('transitionend', (event) => {
+    if (event.target === elementsGroup && event.propertyName === 'max-height' && elementsGroup.classList.contains('expanded')) {
+      elementsGroup.classList.add('settled');
+    }
+  });
 
   return elementsGroup;
+}
+
+function toggleSidebarGroup(elementsGroup) {
+  elementsGroup.style.setProperty('--collapsed-height', `${elementsGroup.firstElementChild.offsetHeight}px`);
+  elementsGroup.style.setProperty('--expanded-height', `${elementsGroup.scrollHeight}px`);
+  elementsGroup.classList.remove('settled');
+  void elementsGroup.offsetHeight;
+  elementsGroup.classList.toggle('expanded');
 }
 
 function createSidebarFileElement(id, textContent, contentUri = textContent) {
