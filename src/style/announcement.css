@@ -1,0 +1,162 @@
+body .announcement {
+  position: fixed;
+  right: calc(20px + env(safe-area-inset-right, 0px));
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  width: 320px;
+  z-index: 50;
+  padding: 14px;
+  border-radius: 14px;
+  background: #0C1330;
+  box-shadow: 0 0 0 1px rgba(150, 170, 255, 0.16), 0 12px 34px rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
+body .announcement.appear {
+  animation: 0.35s appearAnnouncement forwards ease-out;
+}
+
+@keyframes appearAnnouncement {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+body .announcement .announcement-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+body .announcement .announcement-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #C9D4F5;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+body .announcement .announcement-badge .icon-container {
+  display: flex;
+  align-items: center;
+}
+
+body .announcement .announcement-badge svg {
+  display: block;
+  width: 12px;
+  height: 12px;
+  fill: #C3A6FF;
+}
+
+body .announcement .announcement-close {
+  display: flex;
+  margin-left: auto;
+  padding: 2px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  cursor: pointer;
+}
+
+body .announcement .announcement-close svg {
+  width: 18px;
+  height: 18px;
+  fill: #A9B6E0;
+  transition: 0.2s fill;
+}
+
+body .announcement .announcement-close:hover svg,
+body .announcement .announcement-close:focus-visible svg {
+  fill: #FFFFFF;
+}
+
+body .announcement .announcement-link {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-decoration: none;
+}
+
+body .announcement .announcement-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 9px;
+}
+
+body .announcement .announcement-title {
+  color: #FFFFFF;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+body .announcement .announcement-description {
+  color: #C9D4F5;
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+body .announcement .announcement-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px;
+  border-radius: 999px;
+  background: rgba(127, 178, 255, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(150, 170, 255, 0.25);
+  color: #E3E9FF;
+  font-size: 13px;
+  line-height: 1;
+  font-weight: 500;
+  transition: 0.2s background;
+}
+
+body .announcement .announcement-button .icon-container {
+  display: flex;
+}
+
+body .announcement .announcement-button svg {
+  width: 13px;
+  height: 13px;
+  fill: currentColor;
+  transition: 0.2s transform;
+}
+
+body .announcement .announcement-link:hover .announcement-button {
+  background: rgba(127, 178, 255, 0.2);
+}
+
+body .announcement .announcement-link:hover .announcement-button svg {
+  transform: translateX(3px);
+}
+
+@media screen and (max-width: 600px) {
+  body .announcement {
+    right: calc(12px + env(safe-area-inset-right, 0px));
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    width: min(340px, calc(100vw - 24px - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px)));
+    padding: 12px;
+    gap: 10px;
+  }
+
+  body .announcement .announcement-description {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body .announcement.appear {
+    animation: none;
+  }
+}

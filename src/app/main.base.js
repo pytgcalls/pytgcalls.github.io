@@ -13,6 +13,7 @@
  *  With <3 by @kuogi (and the fox!)
  */
 
+import * as announcement from "./main.announcement.js";
 import * as config from "./main.config.js";
 import * as devicesManager from "./main.devices.js";
 import * as homePage from "./main.home.js";
@@ -56,6 +57,7 @@ window.addEventListener('load', () => {
       reloadScreenData();
       splashScreen.remove();
       handleSettings();
+      announcement.init();
 
       config.getRedirectDataForPath(window.location.pathname).then((data) => {
         if (data instanceof String && (data.startsWith('https://') || data.startsWith('http://'))) {
