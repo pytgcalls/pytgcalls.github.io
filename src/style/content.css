@@ -843,6 +843,10 @@ body .page-container .content:not(.is-loading) .page .alert .alert-content {
   padding: 15px;
 }
 
+body .page-container .content:not(.is-loading) .page .alert .alert-content > ul {
+  margin: 0;
+}
+
 body .page-container .content:not(.is-loading) .page .alert .alert-content .emoji-parsed img {
   height: 22px;
 }

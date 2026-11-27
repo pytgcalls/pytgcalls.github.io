@@ -253,6 +253,17 @@ export function detectLanguageByElement(element) {
         language.name = 'Rust';
         language.icon.name = '';
         break;
+
+      case 'text':
+        language.prism = {
+          comment: {
+            pattern: /(^[ \t]*)(?:DEBUG|INFO|WARNING|ERROR|CRITICAL)\S*/m,
+            lookbehind: true,
+          },
+        };
+        language.name = 'Output';
+        language.icon.name = '';
+        break;
     }
   }
 
@@ -548,6 +559,10 @@ function handlePostQueryElement(element, newElement) {
           elementHeader.prepend(iconsManager.get('main', 'warning'));
           elementHeaderText.textContent = 'Warning!';
           break;
+      }
+
+      if (element.hasAttribute('title')) {
+        elementHeaderText.textContent = element.getAttribute('title');
       }
 
     } else {
